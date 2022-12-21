@@ -52,7 +52,7 @@ function Footer() {
   const [width] = useWindowDimensions();
   const mobile = width < 460;
   return (
-    <Flex w={'100%'} mt={'50px'} pt={'24px'} px={'50px'} flexDir="column">
+    <Flex w={'100%'} px={'50px'} flexDir="column" h={'76px'} justifyContent={'center'}>
       <Flex
         fontSize={12}
         color={'gray.700'}
@@ -62,7 +62,7 @@ function Footer() {
         rowGap={mobile ? '15px' : 0}
       >
         <Flex h={'17px'} justifyContent={'space-between'}>
-          <Text color={'black.100'} mr={'25px'}>
+          <Text color={'black.100'} fontWeight={'bold'} mr={'25px'}>
             TOKAMAK NETWORK PTE.LTD
           </Text>
           <Text mr={'25px'}>111 SOMERSET ROAD #06-07O 111 SOMERSET SINGAPORE 238164</Text>

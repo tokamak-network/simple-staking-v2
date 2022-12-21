@@ -6,23 +6,71 @@ import trimAddress from '@/utils/trimAddress';
 import { useEffect, useState } from 'react';
 import useModal from '@/hooks/useModal';
 import WalletModal from '@/common/modal/Wallet/index';
-import EthereumNetwork from '@/assets/images/ethereum-network.svg';
-// import RinkebyNetwork from '@/assets/svgs/rinkeby-network.svg';
-// import etcNetwork from '@/assets/svgs/undefined-symbol.svg';
+import { useRouter } from "next/router";
+import Link from "next/link";
+
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import TOKAMAK_ICON from '@/assets/images/tnss_bi.png';
-// import { findNetwork } from '@/utils/find';
-// import { useConfig } from '@/hooks/useConfig';
 import { useRecoilValue } from 'recoil';
 import { txStatusState } from '@/atom/global/transaction';
 
 type MenuLinksProps = {
   walletopen: () => void;
   account: string | undefined | null;
-  isOpen: boolean;
 };
 
-const MenuLinks: React.FC<MenuLinksProps> = ({ isOpen, account, walletopen }) => {
+const navItemList = [
+  {
+    link: "home",
+  },
+  {
+    link: "staking",
+  },
+  {
+    link: "wallet",
+  },
+  {
+    link: "support",
+  },
+];
+
+const NavItem = () => {
+  const [isHover, setIsHover] = useState<number | undefined>(undefined);
+  const router = useRouter();
+  const { pathname } = router;
+  
+  return (
+    <>
+      {navItemList.map((item, index) => {
+        const capitalLinkName = item.link.charAt(0).toUpperCase() + item.link.slice(1)
+        return (
+          <Link href={`${item.link}`} key={`nav-item-${index}`} passHref>
+            <Flex
+              alignItems="space-between"
+              justifyContent={"space-between"}
+              color={
+                isHover === index
+                  ? pathname === '/' + item.link
+                    ? "#2a72e5"
+                    : "#3e495c"
+                  : pathname === '/' + item.link
+                  ? "#2a72e5"
+                  : "#3e495c"
+              }
+              cursor={"pointer"}
+              onMouseEnter={() => setIsHover(index)}
+              onMouseLeave={() => setIsHover(undefined)}
+            >
+              {capitalLinkName}
+            </Flex>
+          </Link>
+        )
+      })}
+    </>
+  )
+}
+
+const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
   // const {colorMode} = useColorMode();
   const theme = useTheme();
   // const match = RouteMatch('/');
@@ -31,7 +79,7 @@ const MenuLinks: React.FC<MenuLinksProps> = ({ isOpen, account, walletopen }) =>
   const txPending = useRecoilValue(txStatusState);
 
   return (
-    <Box display={{ base: isOpen ? 'block' : 'none', md: 'block' }} flexBasis={{ base: '100%', md: 'auto' }}>
+    <Box display={{ base:'none', md: 'block' }} flexBasis={{ base: '100%', md: 'auto' }}>
       <Stack
         spacing={8}
         align="center"
@@ -49,12 +97,12 @@ const MenuLinks: React.FC<MenuLinksProps> = ({ isOpen, account, walletopen }) =>
             //     ? theme.colors.gray[225]
             //     : 'white.100'
             //   : theme.colors.gray[175]
-            'gray.100'
+            '#86929d'
           }
           w={151}
           h={35}
           fontSize={14}
-          fontWeight={100}
+          fontWeight={600}
           onClick={walletopen}
           rounded={18}
           bg={
@@ -80,7 +128,7 @@ const MenuLinks: React.FC<MenuLinksProps> = ({ isOpen, account, walletopen }) =>
                 <span style={{ marginRight: '5px', top: '2px', position: 'relative' }}>
                   <Jazzicon diameter={23} seed={jsNumberForAddress(account)} />
                 </span>
-                <Text textAlign={'left'}>
+                <Text textAlign={'left'} >
                   {trimAddress({
                     address: account,
                     firstChar: 7,
@@ -115,83 +163,32 @@ export const Header = () => {
   const { openModal } = useModal('wallet_modal');
   const theme = useTheme();
   const { chainId, account } = useWeb3React();
-  const [currentNetwork, setCurrentNetwork] = useState('');
   // /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  const [isOpen, setIsOpen] = useState(false);
-  // const { config } = useConfig();
+  // const router = useRouter();
+  // const { pathname } = router;
 
-  // useEffect(() => {
-  //   const network = findNetwork(config, chainId);
-  //   if (network) setCurrentNetwork(network.name);
-  // }, [chainId, config]);
 
   return (
     <Flex
       w={'100%'}
+      h={'84px'}
       justifyContent={['space-between', 'space-between', 'end']}
+      alignItems={'center'}
       pr={[0, '11px', '35px']}
       pt={'24px'}
       pb={'20px'}
-      // px={'146px'}
     >
       <Flex flexDir={'row'} w={'95%'} justifyContent="space-between">
         <Flex fontSize={'27px'} fontWeight={900}>
           <Image src={TOKAMAK_ICON} alt="" />
         </Flex>
-        <Flex fontSize={'21px'} alignItems="center">
-          
+        <Flex fontSize={'18px'} fontWeight={'bold'} justifyContent="space-between" w={'540px'} mr={'250px'}>
+          <NavItem/>
         </Flex>
         <Flex>
-          <Flex w={'175px'} {...theme.HEADER_BUTTON_STYLE} mr={'15px'}>
-            <span style={{ paddingTop: '2px', marginRight: '10px' }}>
-              <Image
-                src={EthereumNetwork}
-                alt={''}
-                // w={"12px"}
-                // h={'12px'}
-              />
-            </span>
-            <Text textAlign={'left'} fontSize={'14px'}>
-              {currentNetwork && account ? currentNetwork : 'Not Logged In'}
-            </Text>
-          </Flex>
-          {/* <Flex
-            w={"177px"}
-            // h={"48px"}
-            {...theme.HEADER_BUTTON_STYLE}
-            cursor={"pointer"}
-            onClick={() => (account ? null : activate(injected))}
-          > */}
-          {/* <Image
-              src={account ? WALLET_ICON : WALLET_INACTIVE_ICON}
-              alt={"WALLET_ICON"}
-            ></Image> */}
-          {/* <Text w={"127px"} color={account ? "gray.200" : "#707070"}>
-              {account
-                ? trimAddress({
-                    aaddress: account,
-                    firstChar: 7,
-                    lastChar: 4,
-                    dots: "....",
-                  })
-                : "Connet Wallet"}
-            </Text> */}
-          <MenuLinks isOpen={isOpen} account={account} walletopen={openModal} />
+            
+          <MenuLinks account={account} walletopen={openModal} />
         </Flex>
-        {/* </Flex> */}
-        {/* <Flex
-          ml={"20px"}
-          w={"48px"}
-          h={"48px"}
-          borderWidth={1}
-          borderColor={"gray.300"}
-          borderRadius={8}
-          alignItems="center"
-          justifyContent={"center"}
-          cursor={"pointer"}
-        >
-          <Image src={MOON_ICON} alt={"MOON_ICON"}></Image>
-        </Flex> */}
       </Flex>
       <WalletModal />
       {/* <WalletModalTest /> */}

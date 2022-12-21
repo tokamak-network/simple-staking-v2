@@ -19,7 +19,7 @@ export const BASE_PROVIDER =
     ? ethers.getDefaultProvider("mainnet")
     : ethers.getDefaultProvider("goerli");
 
-export const MIDDLEWARE_API =
+export const API =
   REACT_APP_MODE === "PRODUCTION" ? MAINNET_API : DEV_API;
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {

@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
-      <ApolloProvider client={client}>
+      {/* <ApolloProvider client={client}> */}
         <ColorModeScript initialColorMode={theme.initialColorMode} />
         <ChakraProvider resetCSS theme={theme}>
           <RecoilRoot>
@@ -66,7 +66,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             </Flex>
           </RecoilRoot>
         </ChakraProvider>
-      </ApolloProvider>
+      {/* </ApolloProvider> */}
     </Web3ReactProvider>
   );
 }
