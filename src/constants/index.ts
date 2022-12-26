@@ -22,6 +22,27 @@ export const BASE_PROVIDER =
 export const API =
   REACT_APP_MODE === "PRODUCTION" ? MAINNET_API : DEV_API;
 
+export const NON_CANDIDATE = [
+  {
+    name: 'DXM Corp',
+    layer2: '0x41fb4bad6fba9e9b6e45f3f96ba3ad7ec2ff5b3c'
+  },
+  {
+    name: 'Danal Fintech',
+    layer2: '0x97d0a5880542ab0e699c67e7f4ff61f2e5200484'
+  },
+  {
+    name: 'Talken',
+    layer2: '0xb9d336596ea2662488641c4ac87960bfdcb94c6e'
+  },
+  {
+    name: 'staked',
+    layer2: '0xcc38c7aaf2507da52a875e93f57451e58e8c6372'
+  },
+]
+
+
+
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   INJECTED: {
     connector: injected,

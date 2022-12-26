@@ -47,7 +47,7 @@ const NavItem = () => {
           <Link href={`${item.link}`} key={`nav-item-${index}`} passHref>
             <Flex
               alignItems="space-between"
-              justifyContent={"space-between"}
+              justifyContent={"center"}
               color={
                 isHover === index
                   ? pathname === '/' + item.link
@@ -175,14 +175,14 @@ export const Header = () => {
       justifyContent={['space-between', 'space-between', 'end']}
       alignItems={'center'}
       pr={[0, '11px', '35px']}
-      pt={'24px'}
-      pb={'20px'}
+      // pt={'24px'}
+      // pb={'20px'}
     >
       <Flex flexDir={'row'} w={'95%'} justifyContent="space-between">
         <Flex fontSize={'27px'} fontWeight={900}>
           <Image src={TOKAMAK_ICON} alt="" />
         </Flex>
-        <Flex fontSize={'18px'} fontWeight={'bold'} justifyContent="space-between" w={'540px'} mr={'250px'}>
+        <Flex fontSize={'18px'} fontWeight={'bold'} justifyContent="space-between" alignItems={'center'} w={'540px'} mr={'250px'}>
           <NavItem/>
         </Flex>
         <Flex>

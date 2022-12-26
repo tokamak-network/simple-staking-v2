@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API } from '@/constants';
+import { DEFAULT_NETWORK } from '@/constants/index';
 
 function createInstatnceCandidate () {
   return axios.create({
@@ -12,11 +13,10 @@ const candidate = createInstatnceCandidate();
 export async function getDailyStakedTotal (chainId: number) {
   const res = await candidate.get('/stakedtotals', {
     params: {
-      chainId: chainId,
+      chainId: DEFAULT_NETWORK,
     },
   });
-  if (res.data === '') return [];
-  else return res.data.datas;
+  return res.data === '' ? [] : res.data.datas;
 }
 
 export async function getOperatorsInfo () {
@@ -25,21 +25,44 @@ export async function getOperatorsInfo () {
       chainId: 1,
     },
   });
-  if (res.data === '') return [];
-  else return res.data.datas;
+  
+  return res.data === '' ? [] : res.data.datas;
 }
 
-export async function getDailyWalletRewards (chainId: number, account: string, fromDate: number, toDate: number) {
+export async function getDailyWalletRewards (account: string, fromDate: number, toDate: number) {
   const res = await candidate.get('/stakedl2accounts/rewards', {
     params: {
-      chainId,
+      chainId: DEFAULT_NETWORK, 
       account: account.toLowerCase(),
       fromDate: fromDate,
       toDate: toDate,
     },
   });
-  if (res.data === '') return [];
-  else return res.data.datas;
+
+  return res.data === '' ? [] : res.data.datas;
+}
+
+export async function getEventByAccount (account: string, eventName: string) {
+  const res = await candidate.get('/events', {
+    params: {
+      chainId: DEFAULT_NETWORK, 
+      from: account.toLowerCase(),
+      eventName: eventName,
+    },
+  });
+  return res.data === '' ? [] : res.data.datas;
+}
+export async function getEventByLayer2 (layer2: string, eventName: string, pageNum?: number, pageSize?: number) {
+  const res = await candidate.get('/events', {
+    params: {
+      chainId: DEFAULT_NETWORK, 
+      layer2: layer2,
+      eventName: eventName,
+      page: pageNum,
+      pagesize: pageSize,
+    },
+  });
+  return res.data === '' ? [] : res.data.datas;
 }
 
 export async function getCandidateCreateEvent () {
@@ -48,101 +71,94 @@ export async function getCandidateCreateEvent () {
       eventNames: 'CandidateContractCreated,Layer2Registered',
     },
   });
-  if (res.data === '') return [];
-  else return res.data.datas;
+
+  return res.data === '' ? [] : res.data.datas;
 }
 
-export async function getDepositTotal (chainId: number, account: string) {
+export async function getDepositTotal (account: string) {
   const res = await candidate.get('/events',
     {
       params: {
-        chainId,
+        chainId: DEFAULT_NETWORK, 
         from: account.toLowerCase(),
         eventName: 'Deposited',
       },
     });
-  if (res.data === '') return [];
-  else return res.data.datas;
+  return res.data === '' ? [] : res.data.datas;
 }
 
-export async function getWithdrawTotal (chainId: number, account: string) {
+export async function getWithdrawTotal (account: string) {
   const res = await candidate.get('/events',
     {
       params: {
-        chainId,
+        chainId: DEFAULT_NETWORK, 
         from: account.toLowerCase(),
         eventName: 'WithdrawalRequested',
       },
     });
-  if (res.data === '') return [];
-  else return res.data.datas;
+  return res.data === '' ? [] : res.data.datas;
 }
 
-export async function getOperatorUserHistory (chainId: number, layer2: string) {
+export async function getOperatorUserHistory (layer2: string) {
   const res = await candidate.get('/events', {
     params: {
-      chainId: chainId,
+      chainId: DEFAULT_NETWORK,
       eventNames: 'Deposited,WithdrawalRequested,WithdrawalProcessed',
       layer2: layer2,
+      
     },
   });
-  if (res.data === '') return [];
-  else return res.data.datas;
+  return res.data === '' ? [] : res.data.datas;
 }
 
-export async function getCommitHistory (chainId: number, layer2: string) {
+export async function getCommitHistory (layer2: string) {
   const res = await candidate.get('/events', {
     params: {
-      chainId: chainId,
+      chainId: DEFAULT_NETWORK,
       eventName: 'Comitted',
       layer2: layer2,
       page: 1,
       pagesize: 300,
     },
   });
-  if (res.data === '') return [];
-  else return res.data.datas;
+  return res.data === '' ? [] : res.data.datas;
 }
 
-export async function getDailyWalletStaked (chainId: number, account: string, fromDate: number, toDate: number) {
+export async function getDailyWalletStaked (account: string, fromDate: number, toDate: number) {
   const res = await candidate.get('/stakedl2accounts/sum', {
     params: {
-      chainId,
+      chainId: DEFAULT_NETWORK, 
       account: account.toLowerCase(),
       fromDate: fromDate,
       toDate: toDate,
     },
   });
-  if (res.data === '') return [];
-  else return res.data.datas;
+  return res.data === '' ? [] : res.data.datas;
 }
 
-export async function getDelegators (chainId: number, layer2: string) {
+export async function getDelegators (layer2: string) {
   const res = await candidate.get('/layer2users', {
     params: {
-      chainId: chainId,
+      chainId: DEFAULT_NETWORK,
       layer2: layer2,
     },
   });
-  if (res.data === '') return [];
-  else return res.data.datas;
+  return res.data === '' ? [] : res.data.datas;
 }
 
-export async function getAccumulatedReward (chainId: number, user: string) {
+export async function getAccumulatedReward (user: string) {
   const res = await candidate.get('/stakedl2accounts/totalRewards', {
     params: {
-      chainId: chainId,
+      chainId: DEFAULT_NETWORK,
       account: user,
     },
   });
-  if (res.data === '') return [];
-  else return res.data.datas;
+  return res.data === '' ? [] : res.data.datas;
 }
 
 export async function getCandidates () {
   const res = await candidate.get('/layer2s/operators');
-  if (res.data === '') return [];
-  else return res.data.datas;
+  return res.data === '' ? [] : res.data.datas;
 }
 
 // export async function getManagers () {

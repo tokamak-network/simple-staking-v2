@@ -21,7 +21,12 @@ import {
   Button,
 } from '@chakra-ui/react';
 import {ChevronRightIcon, ChevronLeftIcon} from '@chakra-ui/icons';
-import {TriangleUpIcon, TriangleDownIcon} from '@chakra-ui/icons';
+
+import { convertNumber } from '../../../utils/number';
+import { getCircle } from '../layout/components/Circle';
+import { OperatorImage } from '../layout/components/Oval';
+import { renderBtn } from '../layout/components/RenderBTN';
+import { Info } from '../layout/components/OperatorInfo';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -56,15 +61,14 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
     useExpanded,
     usePagination,
   );
-
   const theme = useTheme();
   const focusTarget = useRef<any>([]);
-  console.log('table')
+
   const onChangeSelectBox = (e: any) => {
     const filterValue = e.target.value;
     headerGroups[0].headers.map((e) => {
       if (e.Header === filterValue) {
-        if (e.Header === 'Earning Per TON') {
+        if (e.Header === 'totalStaked') {
           return e.toggleSortBy();
         }
         e.toggleSortBy(true);
@@ -79,21 +83,28 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
     layer2 === undefined ? '' : layer2,
   );
 
-  // const clickOpen = (layer2: string, index: number) => {
-  //   setIsOpen(layer2);
-  //   setTimeout(() => {
-  //     focusTarget?.current[index]?.scrollIntoView({
-  //       behavior: 'smooth',
-  //       block: 'start',
-  //     });
-  //   }, 100);
-  // };
+  const clickOpen = (layer2: string, index: number) => {
+    setIsOpen(layer2);
+    setTimeout(() => {
+      focusTarget?.current[index]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 100);
+  };
 
   return (
     <Flex w={'1100px'} flexDir={'column'}>
-      <Flex justifyContent={'space-between'} mb={'23px'} ml={'17px'}>
-        <Flex>
-
+      <Flex justifyContent={'space-between'} mb={'15px'} ml={'17px'}>
+        <Flex fontSize={'11px'} flexDir={'row'} alignItems={'center'}>
+          {getCircle('candidate')}
+          <Flex mr={'20px'}>
+            DAO Candidate
+          </Flex>
+          {getCircle('')}
+          <Flex>
+            Operator
+          </Flex>
         </Flex>
         <Select
           w={'137px'}
@@ -102,7 +113,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
           fontSize={'13px'}
           placeholder="On Sale Sort"
           onChange={onChangeSelectBox}>
-          <option value="tatalStaked">Total Staked</option>
+          <option value="totalStaked">Total Staked</option>
           <option value="name">Name</option>
           <option value="Recent Commit">Recent Commit</option>
           <option value="User Staked">User Staked</option>
@@ -129,15 +140,15 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                 <chakra.tr
                   boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}
                   ref={(el) => (focusTarget.current[i] = el)}
-                  h={16}
+                  h={'74px'}
                   key={i}
-                  // onClick={() => {
-                  //   if (isOpen === layer2) {
-                  //     setIsOpen('');
-                  //   } else {
-                  //     clickOpen(layer2, i);
-                  //   }
-                  // }}
+                  onClick={() => {
+                    if (isOpen === layer2) {
+                      setIsOpen('');
+                    } else {
+                      clickOpen(layer2, i);
+                    }
+                  }}
                   cursor={'pointer'}
                   borderRadius={'10px'}
                   borderBottomRadius={
@@ -147,7 +158,8 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                   borderBottomColor={
                     isOpen === layer2 ? '#f4f6f8' : ''
                   }
-                  mb={'20px'}
+                  px={'16px'}
+                  mb={'12px'}
                   w="100%"
                   bg={'white.100' }
                   border={''}
@@ -160,51 +172,88 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       layer2,
                       commissionRate,
                       name,
-                      operatorAmount,
+                      kind,
+                      updateCoinageTotalString,
+                      userStaked,
                     } = cell.row.original;
                     const type = cell.column.id;
-                    console.log(name)
+                    const totalStaked = convertNumber({
+                      amount: updateCoinageTotalString, 
+                      type: 'ray',
+                      localeString: true
+                    })
                     return (
                       <chakra.td
-                      py={3}
-                      key={index}
-                      m={0}
-                      w={
-                        type === 'name'
-                          ? '362px'
-                          : type === 'period'
-                          ? '150px'
-                          : type === 'stakeBalanceTON'
-                          ? '230px'
-                          : type === 'earning_per_ton'
-                          ? '200px'
-                          : '10px'
-                      }
-                      pr={0}
-                      display="flex"
-                      alignItems="center"
-                      // color={getTextColor(type, colorMode)}
-                      fontSize={type === 'name' ? '15px' : '13px'}
-                      fontWeight={type === 'name' ? 600 : 0}
-                      {...cell.getCellProps()}
+                        py={3}
+                        key={index}
+                        m={0}
+                        w={
+                          type === 'name'
+                            ? '300px'
+                            : type === 'totalStaked'
+                            ? '235px'
+                            : type === 'commisionRate'
+                            ? '200px'
+                            : type === 'yourStaked'
+                            ? '220px'
+                            : '10px'
+                        }
+                        pr={0}
+                        display="flex"
+                        alignItems="center"
+                        // color={getTextColor(type, colorMode)}
+                        fontSize={type === 'name' ? '20px' : '13px'}
+                        fontWeight={type === 'name' ? 600 : 0}
+                        {...cell.getCellProps()}
                       >
                         {type === 'name' ? (
-                          <Text w={'176px'}>{name}</Text>
+                          <Flex alignItems={'center'} mr={'30px'}>
+                            {getCircle(kind)}
+                            <Box mr={'12px'}>
+                              <OperatorImage imageLink={''}/>
+                            </Box>
+                            <Text w={'176px'} color={'#304156'} fontWeight={500}>{name}</Text>
+                          </Flex>
                         ) : ('')}
                         {type === 'totalStaked' ? (
-                          <></>
+                          Info('Total Staked', totalStaked, 'TON')
                         ) : ('')}
                         {type === 'commisionRate' ? (
-                          <></>
+                          (commissionRate !== undefined) ? Info('Commission Rate', commissionRate, '%') : ('')
                         ) : ('')}
                         {type === 'yourStaked' ? (
-                          <></>
+                          (userStaked !== undefined) ? Info('Your Staked', userStaked, 'TON') : ('')
                         ) : ('')}
-
+                        {type === 'expander' ? (
+                          renderBtn(layer2, isOpen)
+                        ): null}
                       </chakra.td>
                     )
                   })}
-                </chakra.tr>
+                </chakra.tr>,
+                isOpen === layer2 ? (
+                  <chakra.tr
+                    boxShadow="0 1px 1px 0 rgba(96, 97, 112, 0.16)"
+                    // h={'650px'}
+                    key={i}
+                    m={0}
+                    mb={'14px'}
+                    mt={-5}
+                    bg={'white.100'}
+                    border={''}
+                    borderTopWidth={0}
+                    borderBottomRadius="10px"
+                  >
+                    <chakra.td
+                      display={'flex'}
+                      w={'100%'}
+                      margin={0}
+                      colSpan={visibleColumns.length}
+                    >
+                      {renderDetail({row})}
+                    </chakra.td>
+                  </chakra.tr>
+                ) : null,
               ]
             })}
           </chakra.tbody>
