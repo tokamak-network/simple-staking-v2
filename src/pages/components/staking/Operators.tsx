@@ -23,10 +23,10 @@ import {
 import {ChevronRightIcon, ChevronLeftIcon} from '@chakra-ui/icons';
 
 import { convertNumber } from '../../../utils/number';
-import { getCircle } from '../layout/components/Circle';
-import { OperatorImage } from '../layout/components/Oval';
-import { renderBtn } from '../layout/components/RenderBTN';
-import { Info } from '../layout/components/OperatorInfo';
+import { getCircle } from './table/Circle';
+import { OperatorImage } from './table/Oval';
+import { renderBtn } from './table//RenderBTN';
+import { Info } from './table/OperatorInfo';
 
 type OpearatorTableProps = {
   columns: Column[];

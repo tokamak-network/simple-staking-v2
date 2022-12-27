@@ -75,10 +75,44 @@ const PAGE_STYLE = {
   })
 }
 
+const STAKING_HISTORY_TABLE_STYLE = {
+  tableRow: () => ({
+    m: 0,
+    pr: 0,
+    display: "flex",
+    alignItems: "center",
+    h: '38px',
+    fontSize: '13px',
+    borderBottom: '1px dashed #e6eaee',
+  }),
+  paginationTable: () => ({
+    w: '100%',
+    h: '50px',
+    pt: '5px',
+    pr: 9,
+    bg: 'white.100',
+    border: '',
+    mb: '25px',
+    borderTopWidth: 0,
+    borderBottomRadius: "10px"
+  }),
+  paginationButton: () => ({
+    width: '24px',
+    height: '24px',
+    border: 'solid 1px #e6eaee',
+    color: '#e6eaee',
+    bg: 'white.100',
+    borderRadius: 4,
+    size: 'sm',
+    _hover: {borderColor: '#2a72e5', color: '#2a72e5'},
+  })
+}
+
 const theme = extendTheme({
   colors,
   fonts,
   PAGE_STYLE,
+  STAKING_HISTORY_TABLE_STYLE,
   // BUTTON_STYLE,
   // HEADER_BUTTON_STYLE,
   // BALANCE_CONTAINER_STYLE,

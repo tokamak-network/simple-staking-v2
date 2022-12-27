@@ -4,7 +4,7 @@ import useOperatorList from "@/hooks/staking/useOperatorList";
 import { Box, Flex, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
 import { useMemo, useCallback, useState } from 'react';
 import { moveSyntheticComments } from "typescript";
-import { OperatorDetailInfo } from "./components/layout/components/OperatorDetail";
+import { OperatorDetailInfo } from "./components/staking/table/OperatorDetail";
 import PageHeader from "./components/layout/PageHeader";
 import { OpearatorTable } from "./components/staking/Operators";
 import { WalletInformation } from "./components/staking/WalletInformation";
@@ -51,15 +51,15 @@ function Staking () {
   const historyColumns = useMemo(
     () => [
       {
-        Header: 'account',
+        Header: 'Account Address',
         accessor: 'account',
       },
       {
-        Header: 'tx hash',
+        Header: 'TX Hash',
         accessor: 'txHash',
       },
       {
-        Header: 'transaction type',
+        Header: 'Type',
         accessor: 'txType',
       },
       {
@@ -67,7 +67,7 @@ function Staking () {
         accessor: 'amount',
       },
       {
-        Header: 'date',
+        Header: 'Date',
         accessor: 'date',
       }
     ],
