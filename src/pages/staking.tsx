@@ -10,6 +10,7 @@ import { OpearatorTable } from "./components/staking/Operators";
 import { WalletInformation } from "./components/staking/WalletInformation";
 import { HistoryTable } from "./components/staking/HistoryTable";
 import moment from "moment";
+import useUserBalance from '../hooks/useUserBalance';
 
 function Staking () {
   const theme = useTheme();
@@ -75,10 +76,11 @@ function Staking () {
   );
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const { operatorList } = useOperatorList()
+  const { userTonBalance } = useUserBalance()
   console.log(operatorList)
   const renderRowSubComponent = useCallback(
     ({row}: any) => {
-    const { layer2, delegators, commit, operatorsHistory} = row.original;
+    const { layer2, delegators, commit, operatorsHistory, pendingWithdrawal } = row.original;
     const lastFinalized = commit.length !== 0 ? commit[0].blockTimestamp : '0'
     const recentCommit = lastFinalized !== '0' ? moment.unix(lastFinalized).format('YYYY.MM.DD HH:mm:ss (Z)') : 'The operator does not have any commits';
     return (
@@ -102,14 +104,16 @@ function Staking () {
             <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
               <OperatorDetailInfo 
                 title={'Pending Withdrawal'}
-                value={'10000'}
+                value={pendingWithdrawal}
                 unit={'TON'}
                 type={''}
               />
             </Flex>
           </Flex>
           <Box p={0} w={'390px'} borderRadius={'10px'} alignSelf={'flex-start'}>
-            <WalletInformation />
+            <WalletInformation 
+              data={row.original}
+            />
           </Box>
 
           <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>

@@ -4,7 +4,7 @@ export const Info = (title: string, value: string | number | undefined, unit: st
   return (
     <Flex color={'#86929d'}>
       <Text mr={'10px'}>{title}</Text>
-      <Text>{value}{unit}</Text>
+      <Text>{value}{' '}{unit}</Text>
     </Flex>
   )
 }

@@ -26,6 +26,8 @@ const colors = {
   },
   gray: {
     100: "#808992",
+    200: '#e9edf1',
+    300: '#86929d',
   },
   black: {
     100: "#3d495d",
@@ -108,11 +110,29 @@ const STAKING_HISTORY_TABLE_STYLE = {
   })
 }
 
+const btnStyle = {
+  btnAble: () => ({
+    bg: 'blue.100',
+    color: 'white.100',
+    _hover: {backgroundColor: 'blue.200'},
+  }),
+  btnDisable: () => ({
+    bg: colors.gray[300],
+    color: 'gray.200' ,
+    // color: colors.gray[200],
+    fontWeight: 'bold' ,
+    // borderWidth: p0 : 1,
+    borderColor: '',
+    _hover: {},
+  }),
+};
+
 const theme = extendTheme({
   colors,
   fonts,
   PAGE_STYLE,
   STAKING_HISTORY_TABLE_STYLE,
+  btnStyle,
   // BUTTON_STYLE,
   // HEADER_BUTTON_STYLE,
   // BALANCE_CONTAINER_STYLE,
@@ -126,7 +146,7 @@ const theme = extendTheme({
         backgroundColor: '#fafbfc',
         // props.colorMode === "light" ? "white.100" : "black.100",
         // fontFamily: fonts.Poppins,
-        color: props.colorMode === 'light' ? '#3d495d' : 'gray.100',
+        color: '#3d495d',
       },
       button: {
         backgroundColor: 'black.100',

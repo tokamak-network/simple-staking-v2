@@ -25,7 +25,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           <RecoilRoot>
             <HeadMeta></HeadMeta>
             <Flex minH={"100vh"} w={"100%"}>
-              {/* <NavBar></NavBar> */}
               {/* PC VIEW = 1440px */}
               {/* TABLET VIEW = 1040px */}
               {/* MOBILE VIEW = 360px */}

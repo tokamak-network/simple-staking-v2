@@ -105,7 +105,6 @@ export async function getOperatorUserHistory (layer2: string) {
       chainId: DEFAULT_NETWORK,
       eventNames: 'Deposited,WithdrawalRequested,WithdrawalProcessed',
       layer2: layer2,
-      
     },
   });
   return res.data === '' ? [] : res.data.datas;

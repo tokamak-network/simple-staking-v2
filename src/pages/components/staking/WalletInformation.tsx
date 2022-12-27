@@ -13,54 +13,65 @@ import {
 import React, {FC, useState, useCallback} from 'react';
 
 // import {Stake} from 'pages/Staking/types';
-// import {
-//   checkSaleClosed,
-//   checkIsUnstake,
-//   fetchManageModalPayload,
-// } from '../utils';
+
 // import {LoadingComponent} from 'components/Loading';
-// import {getUserBalance, getUserTonBalance} from 'client/getUserBalance';
+
 import {useEffect} from 'react';
 
 import {LoadingDots} from 'common/Loader/LoadingDots';
-import {useActiveWeb3React} from 'hooks/useWeb3';
+import useUserBalance from '@/hooks/useUserBalance';
+import { useWeb3React } from '@web3-react/core';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
-  // data: Stake;
+  data: any;
 };
 
 export const WalletInformation: FC<WalletInformationProps> = ({
-  // data,
+  data,
   // dispatch,
 }) => {
   const {colorMode} = useColorMode();
   const [loading, setLoading] = useState(false);
-  // const {account, library} = useActiveWeb3React();
-
-  //Balances
-  const [userTonBalance, setUserTonBalance] = useState<string | undefined>(
-    undefined,
-  );
-  const [stakeBalance, setStakeBalance] = useState<string | undefined>(
-    undefined,
-  );
-  const [tosBalance, setTosBalance] = useState<string | undefined>(undefined);
-  const [saleClosed, setSaleClosed] = useState(false);
+  const { account, library } = useWeb3React();
+  
 
   //Buttons
   const [stakeDisabled, setStakeDisabled] = useState(true);
   const [unstakeDisabled, setUnstakeDisabled] = useState(true);
-  const [claimDisabled, setClaimDisabled] = useState(true);
-  const [manageDisabled, setManageDisabled] = useState(true);
-  const [endSaleBtnDisabled, setEndSaleBtnDisabled] = useState(true);
+  const [reStakeDisabled, setReStakeDisabled] = useState(true);
+  const [withdrawDisabled, setwithdrawDisabled] = useState(true);
 
-  // const manageBtnDisabled = account === undefined ? true : false;
+  const { userTonBalance } = useUserBalance()
+
+  const btnDisabledStake = () => {
+    return account === undefined ||
+      userTonBalance === '0.00'
+      ? setStakeDisabled(true)
+      : setStakeDisabled(false);
+  };
+
+  const btnDisabledUnStake = () => {
+    return account === undefined ||
+      data.yourStaked === '0.00'
+      ? setUnstakeDisabled(true)
+      : setUnstakeDisabled(false);
+  };
+
+  useEffect(() => {
+    btnDisabledStake()
+    btnDisabledUnStake()
+  }, [])
+  // console.log(account === undefined ||
+  //   userTonBalance === '0.00')
+  // console.log('stakedisable',stakeDisabled)
+  // console.log(userTonBalance)
+  // const withdrawBtnDisabled = account === undefined ? true : false;
 
 
   // const modalPayload = async (args: any) => {
   //   const {account, library, contractAddress, vault} = args;
-  //   const result = await fetchManageModalPayload(
+  //   const result = await fetchwithdrawModalPayload(
   //     library,
   //     account,
   //     contractAddress,
@@ -70,30 +81,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   //   return result;
   // };
 
-  // const getWalletTonBalance = async () => {
-  //   if (!account || !library) {
-  //     return;
-  //   }
-
-  //   const result = await getUserTonBalance({
-  //     account,
-  //     library,
-  //   });
-  //   const userBalance = await getUserBalance(
-  //     account,
-  //     library,
-  //     data.contractAddress,
-  //   );
-
-  //   if (result && userBalance) {
-  //     const trimNum = Number(result).toLocaleString(undefined, {
-  //       minimumFractionDigits: 2,
-  //     });
-  //     setUserTonBalance(trimNum);
-  //     setStakeBalance(userBalance.totalStakedBalance);
-  //     setTosBalance(userBalance.rewardTosBalance);
-  //   }
-  // };
+  
 
   // const modalData = useCallback(
   //   async (modal: ModalType) => {
@@ -101,7 +89,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   //     let payload;
   //     const {contractAddress, vault} = data;
   //     try {
-  //       if (modal === 'manage') {
+  //       if (modal === 'withdraw') {
   //         const payloadModal = await modalPayload({
   //           account,
   //           library,
@@ -160,7 +148,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
       }>
       <Box w={'100%'} p={0} textAlign={'center'} py={10} px={5}>
         <Heading
-          color={'blue.300'}
+          color={'#2a72e5'}
           display="flex"
           alignItems="center"
           justifyContent="center">
@@ -180,10 +168,10 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         </Box>
         <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={6}>
           <Button
-            // {...(stakeDisabled === true
-            //   ? {...btnStyle.btnDisable({colorMode})}
-            //   : {...btnStyle.btnAble()})}
-            isDisabled={stakeDisabled}
+            {...(stakeDisabled
+              ? {...btnStyle.btnDisable()}
+              : {...btnStyle.btnAble()})}
+            isDisabled={btnDisabledStake}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
             // onClick={() => modalData('stake')}
@@ -191,9 +179,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             Stake
           </Button>
           <Button
-            // {...(unstakeDisabled === true
-            //   ? {...btnStyle.btnDisable({colorMode})}
-            //   : {...btnStyle.btnAble()})}
+            {...(unstakeDisabled 
+              ? {...btnStyle.btnDisable()}
+              : {...btnStyle.btnAble()})}
             isDisabled={unstakeDisabled}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
@@ -202,47 +190,27 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             Unstake
           </Button>
           <Button
-            // {...(claimDisabled === true
-            //   ? {...btnStyle.btnDisable({colorMode})}
-            //   : {...btnStyle.btnAble()})}
-            isDisabled={claimDisabled}
+            {...(reStakeDisabled === true
+              ? {...btnStyle.btnDisable({colorMode})}
+              : {...btnStyle.btnAble()})}
+            isDisabled={reStakeDisabled}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
             // onClick={() => modalData('claim')}
           >
-            Claim
+            Re-Stake
           </Button>
-          {manageDisabled === true ? (
-            <Button
-              
-              // isDisabled={endSaleBtnDisabled || data.saleClosed}
-              fontSize={'14px'}
-              opacity={loading === true ? 0.5 : 1}
-              // onClick={() =>
-              //   data.miningEndTime !== undefined
-              //     ? closeSale({
-              //         userAddress: account,
-              //         vaultContractAddress: data.vault,
-              //         library,
-              //       })
-              //     : null
-              // }
-            >
-              {status === 'start' ? 'Manage' : 'End Sale'}
-            </Button>
-          ) : (
-            <Button
-              // {...(manageBtnDisabled === true
-              //   ? {...btnStyle.btnDisable({colorMode})}
-              //   : {...btnStyle.btnAble()})}
-              // isDisabled={manageBtnDisabled}
-              fontSize={'14px'}
-              opacity={loading === true ? 0.5 : 1}
-              // onClick={() => modalData('manage')}
-            >
-              Manage
-            </Button>
-          )}
+          <Button
+            {...(withdrawDisabled === true
+              ? {...btnStyle.btnDisable({colorMode})}
+              : {...btnStyle.btnAble()})}
+            isDisabled={withdrawDisabled}
+            fontSize={'14px'}
+            opacity={loading === true ? 0.5 : 1}
+            // onClick={() => modalData('withdraw')}
+          >
+            Withdraw
+          </Button>
 
           {loading === true ? (
             <Flex

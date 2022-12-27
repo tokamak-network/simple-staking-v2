@@ -175,7 +175,9 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       kind,
                       updateCoinageTotalString,
                       userStaked,
+                      yourStaked,
                     } = cell.row.original;
+
                     const type = cell.column.id;
                     const totalStaked = convertNumber({
                       amount: updateCoinageTotalString, 
@@ -219,10 +221,10 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                           Info('Total Staked', totalStaked, 'TON')
                         ) : ('')}
                         {type === 'commisionRate' ? (
-                          (commissionRate !== undefined) ? Info('Commission Rate', commissionRate, '%') : ('')
+                          (commissionRate !== '-') ? Info('Commission Rate', (+commissionRate)/10000000, '%') : ('')
                         ) : ('')}
                         {type === 'yourStaked' ? (
-                          (userStaked !== undefined) ? Info('Your Staked', userStaked, 'TON') : ('')
+                          (yourStaked !== '0.00') ? Info('Your Staked', yourStaked, 'TON') : ('')
                         ) : ('')}
                         {type === 'expander' ? (
                           renderBtn(layer2, isOpen)
