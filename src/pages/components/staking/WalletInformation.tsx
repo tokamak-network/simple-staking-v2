@@ -143,9 +143,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
       maxW={'sm'}
       shadow={'md'}
       borderRadius={'lg'}
-      border={
-        colorMode === 'light' ? 'solid 1px #f4f6f8' : 'solid 1px #373737'
-      }>
+      border={'solid 1px #f4f6f8'}
+    >
       <Box w={'100%'} p={0} textAlign={'center'} py={10} px={5}>
         <Heading
           color={'#2a72e5'}

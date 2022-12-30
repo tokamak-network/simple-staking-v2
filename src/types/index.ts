@@ -1,7 +1,7 @@
-export type TokenTypes = "ETH" | "TON" | "WTON" | "TOS";
+export type TokenTypes = "ETH" | "TON" | "WTON";
 
-export type Pages = "Dashboard" | "Bond" | "Stake" | 'DAO';
-export type PageKey = "Stake_screen" | "Bond_screen";
+export type Pages = "Home" | "Wallet" | "Staking" | 'Support';
+export type PageKey = "Staking_screen" | "Wallet_screen";
 
 export type CheckBoxValueType = {
   page: Pages;

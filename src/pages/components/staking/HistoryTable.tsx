@@ -8,24 +8,18 @@ import {
 } from 'react-table';
 import {
   chakra,
-  Text,
   Flex,
-  IconButton,
   Box,
-  Center,
   useTheme,
-  Tooltip,
 } from '@chakra-ui/react';
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { HistoryTableHeader } from './table/HistoryTableHeader';
 import { HistoryTableRow } from './table/HIstoryTableRow';
+import { Pagination } from '@/common/table/Pagination';
 
 type HistoryTableProps = {
   columns: Column[];
   data: any[];
   tableType: string;
-  // renderDetail: Function;
-  // isLoading: boolean;
 }
 
 export const HistoryTable: FC<HistoryTableProps> = ({
@@ -36,16 +30,15 @@ export const HistoryTable: FC<HistoryTableProps> = ({
   const {
     getTableProps,
     getTableBodyProps,
-    headerGroups,
     prepareRow,
     visibleColumns,
     canPreviousPage,
     canNextPage,
     pageOptions,
     page,
-    nextPage,
-    previousPage,
     setPageSize,
+    previousPage,
+    nextPage,
     state: {pageIndex, pageSize},
   } = useTable(
     {columns, data, initialState: {pageIndex: 0}},
@@ -132,73 +125,18 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                 </chakra.tr>
               ]
             })}
-            <chakra.tr
-              w={tableType === 'Staking' ? '625px' : '285px'}
-              {...theme.STAKING_HISTORY_TABLE_STYLE.paginationTable()}
-            >
-              <chakra.td
-                display={'flex'}
-                w={'100%'}
-                margin={0}
-                justifyContent="center"
-                colSpan={visibleColumns.length}
-              >
-                <Flex justifyContent="flex-end" my={4} alignItems="center">
-                  <Flex>
-                    <Tooltip label="Previous Page">
-                      <IconButton
-                        {...theme.STAKING_HISTORY_TABLE_STYLE.paginationButton()}
-                        aria-label={'Previous Page'}
-                        onClick={goPrevPage}
-                        isDisabled={!canPreviousPage}
-                        mr={3}
-                        icon={<ChevronLeftIcon h={6} w={6} />}
-                      />
-                    </Tooltip>
-                  </Flex>
-                  {pageOptions.slice(currentPage, currentPage + 4).map((page, i) => {
-                    return [
-                      // eslint-disable-next-line react/jsx-key
-                      <Flex
-                        alignItems="center"
-                        p={0}
-                        fontSize={'13px'}
-                        // fontFamily={theme.fonts.roboto}
-                        color={'#3a495f'}
-                        pb={'3px'}
-                      >
-                        <Text flexShrink={0}>
-                          <Text
-                            fontWeight="bold"
-                            as="span"
-                            color={pageIndex === page ? '#2a72e5' : '#94a5b7'}
-                            mr={'8px'}
-                            ml={'8px'}
-                          >
-                            {page + 1}
-                          </Text>
-                        </Text>
-                      </Flex>
-                    ];
-                  })}
-                  <Flex >
-                    <Tooltip label="Next Page">
-                      <Center>
-                        <IconButton
-                          {...theme.STAKING_HISTORY_TABLE_STYLE.paginationButton()}
-                          aria-label={'Next Page'}
-                          onClick={goNextPage}
-                          isDisabled={!canNextPage}
-                          ml={3}
-                          mr={'1.5625em'}
-                          icon={<ChevronRightIcon h={6} w={6} />}
-                        />
-                      </Center>
-                    </Tooltip>
-                  </Flex>
-                </Flex> 
-              </chakra.td>
-            </chakra.tr>
+            <Pagination 
+              columns={columns}
+              data={data}
+              currentPage={currentPage}
+              prevPage={goPrevPage}
+              nextPage={goNextPage}
+              visibleColumns={visibleColumns}
+              canPreviousPage={canPreviousPage}
+              canNextPage={canNextPage}
+              pageOptions={pageOptions}
+              pageIndex={pageIndex}
+            />
           </chakra.tbody>
         </chakra.table>
       </Box>

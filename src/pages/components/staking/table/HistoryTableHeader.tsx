@@ -1,6 +1,6 @@
 import { chakra } from "@chakra-ui/react";
 import { FC } from "react";
-import { getColumnWidth } from '../../../../utils/getColumnWidth';
+import { getColumnWidthStaking } from '../../../../utils/getColumnWidth';
 
 type HistoryTableHeaderProps = {
   tableType: string
@@ -36,7 +36,7 @@ export const HistoryTableHeader: FC<HistoryTableHeaderProps> = ({
 const HeaderColumn = (tableType: string, columnName: string) => {
   return (
     <chakra.th
-      w={ getColumnWidth(tableType, columnName) }
+      w={ getColumnWidthStaking(tableType, columnName) }
       textAlign={columnName === 'Account' || columnName === 'TX Hash'? 'left' : 'center'}
     >
       {

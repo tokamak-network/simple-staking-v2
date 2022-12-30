@@ -99,12 +99,13 @@ export async function getWithdrawTotal (account: string) {
   return res.data === '' ? [] : res.data.datas;
 }
 
-export async function getOperatorUserHistory (layer2: string) {
+export async function getOperatorUserHistory (layer2: string, from?: string) {
   const res = await candidate.get('/events', {
     params: {
       chainId: DEFAULT_NETWORK,
       eventNames: 'Deposited,WithdrawalRequested,WithdrawalProcessed',
       layer2: layer2,
+      from: from,
     },
   });
   return res.data === '' ? [] : res.data.datas;

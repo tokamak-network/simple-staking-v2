@@ -74,7 +74,7 @@ const PAGE_STYLE = {
     color: '#808992',
     mt: '15px',
     mb: '60px',
-  })
+  }),
 }
 
 const STAKING_HISTORY_TABLE_STYLE = {
@@ -92,7 +92,6 @@ const STAKING_HISTORY_TABLE_STYLE = {
     h: '50px',
     pt: '5px',
     pr: 9,
-    bg: 'white.100',
     border: '',
     mb: '25px',
     borderTopWidth: 0,

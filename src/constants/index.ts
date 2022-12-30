@@ -9,18 +9,18 @@ export const REACT_APP_MODE = process.env.NEXT_PUBLIC_MODE as string;
 
 export const NetworkContextName = `${new Date().getTime()}-NETWORK`;
 export const DEFAULT_NETWORK: string | undefined =
-  REACT_APP_MODE === "PRODUCTION" ? "1" : "5";
+REACT_APP_MODE === "PRODUCTION" ? "1" : "5";
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const MAINNET_API = process.env.NEXT_PUBLIC_API_PRODUCTION;
 const DEV_API = process.env.NEXT_PUBLIC_API_DEV;
 
 export const BASE_PROVIDER =
-  REACT_APP_MODE === "PRODUCTION"
+REACT_APP_MODE === "PRODUCTION"
     ? ethers.getDefaultProvider("mainnet")
     : ethers.getDefaultProvider("goerli");
 
 export const API =
-  REACT_APP_MODE === "PRODUCTION" ? MAINNET_API : DEV_API;
+REACT_APP_MODE === "PRODUCTION" ? MAINNET_API : DEV_API;
 
 export const NON_CANDIDATE = [
   {
