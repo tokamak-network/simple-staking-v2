@@ -124,6 +124,58 @@ const btnStyle = {
     borderColor: '',
     _hover: {},
   }),
+  btnWalletPeriodSelected: () => ({
+    width: '100px',
+    height: '25px',
+    // margin: 4px 10px 24px 50px;
+    padding: '4px 35px 5px',
+    borderRadius: '4px',
+    border: 'solid 1px #2a72e5',
+    backgroundColor: '#fff',
+    fontSize: '12px',
+    fontWeight: 500,
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    lineHeight: 1.33,
+    letterSpacing: 'normal',
+    textAlign: 'center',
+    color: '#2a72e5'
+  }),
+  btnWalletPeriod: () => ({
+    width: '100px',
+    height: '25px',
+    // margin: 4px 10px 24px 50px;
+    padding: '4px 35px 5px',
+    borderRadius: '4px',
+    border: 'solid 1px #dfe4ee',
+    backgroundColor: '#fff',
+    fontSize: '12px',
+    fontWeight: 500,
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    lineHeight: 1.33,
+    letterSpacing: 'normal',
+    textAlign: 'center',
+    color: '#86929d'
+  })
+  ,
+  btnWalletSearch: () => ({
+    width: '100px',
+    height: '32px',
+    // margin: 4px 10px 24px 50px;
+    padding: '4px 35px 5px',
+    borderRadius: '4px',
+    border: 'solid 1px #dfe4ee',
+    backgroundColor: '#257eee',
+    fontSize: '14px',
+    fontWeight: 500,
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    lineHeight: 1.33,
+    letterSpacing: 'normal',
+    textAlign: 'center',
+    color: '#fff'
+  })
 };
 
 const theme = extendTheme({

@@ -16,6 +16,9 @@ export function useUserHistory () {
           myHistory = [...myHistory, ...history]
           return await myHistory
         }))
+        myHistory.sort(function(a: any, b: any) {
+          return b.blockNumber - a.blockNumber
+        })
         setUserHistory(myHistory)
       }
     }

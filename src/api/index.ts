@@ -29,7 +29,7 @@ export async function getOperatorsInfo () {
   return res.data === '' ? [] : res.data.datas;
 }
 
-export async function getDailyWalletRewards (account: string, fromDate: number, toDate: number) {
+export async function getDailyWalletRewards (account: string, fromDate: string, toDate: string) {
   const res = await candidate.get('/stakedl2accounts/rewards', {
     params: {
       chainId: DEFAULT_NETWORK, 

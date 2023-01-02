@@ -1,6 +1,6 @@
 import { chakra } from "@chakra-ui/react";
 import { FC } from "react";
-import { getColumnWidthStaking } from '../../../../utils/getColumnWidth';
+import { getColumnWidthStaking } from '@/utils/getColumnWidth';
 
 type HistoryTableHeaderProps = {
   tableType: string

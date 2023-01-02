@@ -61,6 +61,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   useEffect(() => {
     btnDisabledStake()
     btnDisabledUnStake()
+    /*eslint-disable*/
   }, [])
   // console.log(account === undefined ||
   //   userTonBalance === '0.00')
@@ -212,7 +213,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           </Button>
 
           {loading === true ? (
-            <Flex
+          <Flex
               pos="absolute"
               zIndex={100}
               w="100%"
