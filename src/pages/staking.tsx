@@ -3,14 +3,12 @@ import { IconOpen } from "@/common/Icons/IconOpen";
 import useOperatorList from "@/hooks/staking/useOperatorList";
 import { Box, Flex, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
 import { useMemo, useCallback, useState } from 'react';
-import { moveSyntheticComments } from "typescript";
 import { OperatorDetailInfo } from "./components/staking/table/OperatorDetail";
 import PageHeader from "./components/layout/PageHeader";
 import { OpearatorTable } from "./components/staking/Operators";
 import { WalletInformation } from "./components/staking/WalletInformation";
 import { HistoryTable } from "./components/staking/HistoryTable";
 import moment from "moment";
-import useUserBalance from '../hooks/useUserBalance';
 
 function Staking () {
   const theme = useTheme();
@@ -74,9 +72,10 @@ function Staking () {
     ],
     [],
   );
+
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const { operatorList } = useOperatorList()
-  const { userTonBalance } = useUserBalance()
+
   console.log(operatorList)
   const renderRowSubComponent = useCallback(
     ({row}: any) => {

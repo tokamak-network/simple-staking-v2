@@ -4,7 +4,7 @@ import trimAddress from "@/components/trimAddress";
 import { chakra, Flex, Link, Text } from "@chakra-ui/react";
 import moment from "moment";
 import { FC } from "react";
-import { getColumnWidth } from '@/utils/getColumnWidth';
+import { getColumnWidthStaking } from '@/utils/getColumnWidth';
 import { useTheme } from '@chakra-ui/react';
 
 type HistoryTableRowProps = {
@@ -33,7 +33,7 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   return  (
     <chakra.td
       key={index}
-      w={ getColumnWidth(tableType, type) }
+      w={ getColumnWidthStaking(tableType, type) }
       {...theme.STAKING_HISTORY_TABLE_STYLE.tableRow()}
       {...cell.getCellProps()}
     >

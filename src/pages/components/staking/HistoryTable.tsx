@@ -13,7 +13,7 @@ import {
   useTheme,
 } from '@chakra-ui/react';
 import { HistoryTableHeader } from './table/HistoryTableHeader';
-import { HistoryTableRow } from './table/HIstoryTableRow';
+import { HistoryTableRow } from './table/HistoryTableRow';
 import { Pagination } from '@/common/table/Pagination';
 
 type HistoryTableProps = {

@@ -28,7 +28,7 @@ function useModal<T>(
   const closeModal = () => {
     setSelectedModal(undefined);
     setSelectedModalData(undefined);
-    setValue(defaultValue);
+    setValue('');
     setIsModalLoading(false);
   };
 

@@ -1,11 +1,13 @@
 import useInput from '@/hooks/useInput';
 import useUserBalance from '@/hooks/useUserBalance';
-import { Flex, Modal, ModalBody, ModalContent, ModalOverlay, useTheme, Text } from '@chakra-ui/react';
+import { Flex, Modal, ModalBody, ModalContent, ModalOverlay, useTheme, Text, Button } from '@chakra-ui/react';
 import useModal from '@/hooks/useModal';
 import { StakeCardProps } from '@/types/staking';
 import { useCallback } from 'react';
 import Image from "next/image";
 import CLOSE_ICON from "assets/images/popup-close-icon.svg";
+import { BalanceInput } from '@/common/input/CustomInput';
+import { getStakeModalComponent } from '../../../utils/getStakeModalComponent';
 
 
 function StakeModal () {
@@ -14,11 +16,16 @@ function StakeModal () {
   const { selectedModalData, selectedModal, closeModal, isModalLoading } =
     useModal<StakeCardProps>();
 
-  const { userTonBalance } = useUserBalance();
+  // const { userTonBalance } = useUserBalance();
+
   const { inputValue, setValue, setResetValue } = useInput(
     "Staking_screen",
     "stake_modal"
   );
+  let modalComponent = undefined
+  if (selectedModal && selectedModalData) {
+    modalComponent = getStakeModalComponent(selectedModal, selectedModalData)
+  }
 
   const closeThisModal = useCallback(() => {
     setResetValue();
@@ -27,23 +34,25 @@ function StakeModal () {
 
   return (
     <Modal
-      isOpen={selectedModal === "stake_stake_modal"}
+      isOpen={selectedModal === "staking" || selectedModal === "unstaking" || selectedModal === "restaking" || selectedModal === "withdraw"}
       isCentered
       onClose={closeThisModal}
     >
       <ModalOverlay>
         <ModalContent
           bg={'#fff'}
-          minW={'350px'}
+          w={'350px'}
           borderRadius={'15px'}
           boxShadow={'0 2px 6px 0 rgba(61, 73, 93, 0.1)'}
         >
-          <ModalBody>
-            <Flex w="100%" flexDir={'column'}>
-              <Flex pos={'relative'}>
+          {modalComponent ?
+            <ModalBody>
+            <Flex w="100%" flexDir={'column'} alignItems={'center'} py={'20px'}>
+              <Flex pos={'relative'} flexDir={'column'} alignItems={'center'}>
                 <Flex
                   pos={"absolute"}
-                  right={"1.56em"}
+                  right={"-8em"}
+                  top={'-60px'}
                   cursor={"pointer"}
                   onClick={() => closeThisModal()}
                 >
@@ -51,31 +60,53 @@ function StakeModal () {
                 </Flex>
                 <Text
                   color={"gray.800"}
-                  fontSize={20}
-                  fontWeight={600}
+                  fontSize={'20px'}
+                  fontWeight={'bold'}
+                  h={"31px"}
+                  mt={'6px'}
                 >
-                  Staking
+                  {modalComponent.header}
                 </Text>
                 <Text
-                  color={"gray.800"}
-                  fontSize={20}
-                  fontWeight={600}
+                  color={"#86929d"}
+                  fontSize={'12px'}
+                  fontWeight={'normal'}
+                  mb={'20px'}
                 >
-                  You can earn TON and Power
+                  {modalComponent.subHeader}
                 </Text>
               </Flex>
-              <Flex w={'350px'} borderY={'1px'} borderColor={'#f4f6f8'}>
-                <Flex>
+              {/* modal body */}
+              <Flex w={'350px'} borderY={'1px'} py={'14px'} borderColor={'#f4f6f8'} flexDir={'column'} alignItems={'center'}>
+                <Flex h={'84px'} alignItems={'center'} flexDir={'row'} justifyContent={'center'} w={'100%'} >
+                  <BalanceInput 
+                    w={'220px'}
+                    placeHolder={'0'}
+                    maxValue={selectedModalData}
+                  />
                   {/* input field */}
                 </Flex>
-                <Flex>
-                  <Text>Ton Balance</Text>
-                  <Text>Ton Balance</Text>
-                  {/* balance field field */}
+                <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
+                  <Text fontSize={'12px'} fontWeight={500} color={'#808992'}>{modalComponent.balanceInfo}</Text>
+                  {/* @ts-ignore */}
+                  <Text mt={'5px'}>{modalComponent.balance} TON</Text>
                 </Flex>
+              </Flex>
+              {/* modal footer */}
+              <Flex flexDir={'column'} alignItems={'center'}>
+                <Text my={'25px'} color={'#2a72e5'} fontSize={'12px'} fontWeight={500}>
+                  {modalComponent.bottomComment}
+                </Text>
+                <Button
+                  w={'150px'}
+                > 
+                  {modalComponent.buttonName}
+                </Button>
               </Flex>
             </Flex>
           </ModalBody>
+          : ''}
+          
         </ModalContent>
       </ModalOverlay>
       

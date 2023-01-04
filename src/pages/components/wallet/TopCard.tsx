@@ -3,7 +3,7 @@ import { FC } from "react";
 
 type TopCardProps = {
   title: string;
-  value: string | number;
+  value: string | undefined;
 }
 
 export const TopCard: FC<TopCardProps> = ({
@@ -39,7 +39,7 @@ export const TopCard: FC<TopCardProps> = ({
           color={'#304156'}
           mr={'5px'}
         >
-          {value}
+          {value ? value : '0.00'}
         </Text>
         <Text
           h={'16px'}

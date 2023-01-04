@@ -9,7 +9,7 @@ const defaultValue = {
 
 const inputState = atom({
   key: `inputState/${v1()}`,
-  default: defaultValue,
+  default: '',
 });
 
 const inputBalanceState = selector({
