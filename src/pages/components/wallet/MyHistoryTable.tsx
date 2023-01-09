@@ -112,6 +112,7 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
                       //@ts-ignore
                       // eslint-disable-next-line react/jsx-key
                       <TableRow 
+                      key={index}
                         index={i}
                         cell={cell}
                       />
