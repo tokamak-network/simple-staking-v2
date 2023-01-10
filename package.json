@@ -30,6 +30,7 @@
     "react": "^18.2.0",
     "react-animated-dots": "^1.1.0",
     "react-calendar": "^4.0.0",
+    "react-chartjs-2": "^5.1.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "18.2.0",
     "react-jazzicon": "^1.0.4",
@@ -41,6 +42,7 @@
     "web3-utils": "^1.8.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@swc/cli": "^0.1.57",
     "@swc/core": "^1.2.222",
     "@types/node": "18.0.0",
