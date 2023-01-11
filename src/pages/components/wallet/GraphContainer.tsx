@@ -4,6 +4,7 @@ import { GraphSideContainer } from "./graph/GraphSideContainer";
 import { useAccumulatedReward } from "@/hooks/wallet/useAccumulatedReward";
 import { useDailyWalletRewards } from "@/hooks/wallet/useDailyWalletRewards";
 import { useDailyStaked } from "@/hooks/wallet/useDailyStaked";
+import { useDailyWithdrawals } from "@/hooks/wallet/useDailyWithdrawals";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useState, useEffect } from "react";
@@ -23,8 +24,10 @@ function GraphContainer() {
   const { library } = useWeb3React();
   const { accumulatedReward } = useAccumulatedReward();
   const { dailyStakedAmnts } = useDailyStaked();
+  const { dailyWithdrawAmnts } = useDailyWithdrawals();
   const [calculatedReward, setCalculatedReward] = useState<string>("");
   const [calculatedStakes, setCalculatedStakes] = useState<string>("");
+  const [calculatedWithdrawals, setCalculatedWithdrawals] = useState<string>("");
   const [showYear, setShowYear] = useState(false);
   const [showMonths, setShowMonths] = useState(false);
   const [startDate, setStartDate] = useState(
@@ -55,7 +58,7 @@ function GraphContainer() {
     convertedWTon !== undefined && setCalculatedReward(convertedWTon);
   };
 
-  const calcTotalStaked = (dailyStakes: any) => {
+  const calcTotal = (dailyStakes: any) => {
     const initialAmount = new BigNumber("0");
     const reducer = (amount: any, day: any) =>
       amount.plus(new BigNumber(day.value.toString()));
@@ -66,10 +69,10 @@ function GraphContainer() {
       amount: stakes.toString(),
       localeString: true,
     });
-    convertedWTon !== undefined && setCalculatedStakes(convertedWTon);
-    console.log(convertedWTon);
-    
+    return convertedWTon;
   };
+
+
 
   useEffect(() => {
     calcTotalReward();
@@ -133,11 +136,9 @@ function GraphContainer() {
     );
   };
 
-  const search = async () => {
-    getData();
-    calcTotalReward();
+  const formatFilter = async (array: any) => {
     const formatted = await Promise.all(
-      dailyStakedAmnts.map(async (item: any) => {
+      array.map(async (item: any) => {
         const block = await library.getBlock(item.blockNumber);
         item.blkTimestamp = block.timestamp;
         return item;
@@ -149,8 +150,20 @@ function GraphContainer() {
       (item: any) => start <= item.blkTimestamp && item.blkTimestamp <= end
     );
 
-    calcTotalStaked(filtered);
+    return filtered;
   };
+
+  const search = async () => {
+    getData();
+    calcTotalReward();
+    const filteredStakes = await formatFilter(dailyStakedAmnts);
+    const filteredWithdrawals = await formatFilter(dailyWithdrawAmnts);    
+   const calcTotalStakes =  calcTotal(filteredStakes);
+   calcTotalStakes !== undefined && setCalculatedStakes(calcTotalStakes)
+   const calcTotalWithdrawals = calcTotal(filteredWithdrawals);
+   calcTotalWithdrawals !== undefined && setCalculatedWithdrawals(calcTotalWithdrawals)
+  };
+
   const displayAmount = (amount: any) => {
     const displayAmounts = parseFloat(amount) / Math.pow(10, 27);
     return Math.round(displayAmounts * 10) / 10;
@@ -707,7 +720,7 @@ input {
           <GraphSideContainer
             totalReward={calculatedReward}
             totalStaked={calculatedStakes}
-            totalWithdraw={""}
+            totalWithdraw={calculatedWithdrawals}
           />
         </Flex>
       </Flex>
