@@ -1,8 +1,9 @@
-import { Button, Flex, Text, useTheme } from "@chakra-ui/react";
+import { Button, calc, Flex, Text, useTheme } from "@chakra-ui/react";
 import Image from "next/image";
 import { GraphSideContainer } from "./graph/GraphSideContainer";
 import { useAccumulatedReward } from "@/hooks/wallet/useAccumulatedReward";
 import { useDailyWalletRewards } from "@/hooks/wallet/useDailyWalletRewards";
+import { useDailyStaked } from "@/hooks/wallet/useDailyStaked";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useState, useEffect } from "react";
@@ -12,35 +13,18 @@ import select1_arrow_inactive from "assets/images/select-1-arrow-inactive@3x.png
 import select1_arrow_active from "assets/images/select1_arrow_active@3x.png";
 import { range } from "lodash";
 import { convertNumber } from "utils/number";
-
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
 import moment from "moment";
 import BigNumber from "bignumber.js";
 import { LineGraphContainer } from "./graph/LineGraphContainer";
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { useWeb3React } from "@web3-react/core";
 
 function GraphContainer() {
   const theme = useTheme();
+  const { library } = useWeb3React();
   const { accumulatedReward } = useAccumulatedReward();
+  const { dailyStakedAmnts } = useDailyStaked();
   const [calculatedReward, setCalculatedReward] = useState<string>("");
+  const [calculatedStakes, setCalculatedStakes] = useState<string>("");
   const [showYear, setShowYear] = useState(false);
   const [showMonths, setShowMonths] = useState(false);
   const [startDate, setStartDate] = useState(
@@ -56,18 +40,35 @@ function GraphContainer() {
   );
 
   const [dailyRewards, setDailyRewards] = useState<any[]>([]);
+
   const calcTotalReward = () => {
     const initialAmount = new BigNumber("0");
     const reducer = (amount: any, day: any) =>
       amount.plus(new BigNumber(day.rewards.toString()));
-    const xxx = dailyRewards.reduce(reducer, initialAmount);
+    const rewards = dailyRewards.reduce(reducer, initialAmount);
     const convertedWTon = convertNumber({
       type: "ray",
-      amount: xxx.toString(),
+      amount: rewards.toString(),
       localeString: true,
     });
 
     convertedWTon !== undefined && setCalculatedReward(convertedWTon);
+  };
+
+  const calcTotalStaked = (dailyStakes: any) => {
+    const initialAmount = new BigNumber("0");
+    const reducer = (amount: any, day: any) =>
+      amount.plus(new BigNumber(day.value.toString()));
+
+    const stakes = dailyStakes.reduce(reducer, initialAmount);
+    const convertedWTon = convertNumber({
+      type: "ray",
+      amount: stakes.toString(),
+      localeString: true,
+    });
+    convertedWTon !== undefined && setCalculatedStakes(convertedWTon);
+    console.log(convertedWTon);
+    
   };
 
   useEffect(() => {
@@ -110,7 +111,6 @@ function GraphContainer() {
       ),
       moment(endDate).format("YYYYMMDD")
     );
-    // useDailyWalletRewards(moment(new Date(new Date().setDate(new Date().getDate() - 7))).format('YYYYMMDD'), moment(endDate).format('YYYYMMDD'))
   };
   const setMonth = () => {
     setPeriod("month");
@@ -121,7 +121,6 @@ function GraphContainer() {
       ),
       moment(endDate).format("YYYYMMDD")
     );
-    // useDailyWalletRewards(moment(new Date(new Date().setDate(new Date().getDate() - 30))).format('YYYYMMDD'), moment(endDate).format('YYYYMMDD'))
   };
 
   const formatDate = (date: Number) => {
@@ -134,9 +133,23 @@ function GraphContainer() {
     );
   };
 
-  const search = () => {
+  const search = async () => {
     getData();
     calcTotalReward();
+    const formatted = await Promise.all(
+      dailyStakedAmnts.map(async (item: any) => {
+        const block = await library.getBlock(item.blockNumber);
+        item.blkTimestamp = block.timestamp;
+        return item;
+      })
+    );
+    const start = moment(startDate).unix();
+    const end = moment(endDate).unix();
+    const filtered = formatted.filter(
+      (item: any) => start <= item.blkTimestamp && item.blkTimestamp <= end
+    );
+
+    calcTotalStaked(filtered);
   };
   const displayAmount = (amount: any) => {
     const displayAmounts = parseFloat(amount) / Math.pow(10, 27);
@@ -693,7 +706,7 @@ input {
         <Flex w={"230px"} flexDir={"column"}>
           <GraphSideContainer
             totalReward={calculatedReward}
-            totalStaked={""}
+            totalStaked={calculatedStakes}
             totalWithdraw={""}
           />
         </Flex>
