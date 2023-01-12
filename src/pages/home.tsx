@@ -207,6 +207,7 @@ function Home() {
     tooltipEl.style.left = positionX + tooltip.caretX + 'px';
     tooltipEl.style.top = positionY + tooltip.caretY + 'px';
     tooltipEl.style.font = tooltip.options.bodyFont.string;
+    tooltipEl.style.width = typeAPY? '100px':'200px'
     tooltipEl.style.background = typeAPY? "#84919e":'#2a72e5';
     tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px';
     triangle.style.borderTop = typeAPY? '6px solid #84919e':'6px solid #2a72e5' ;
