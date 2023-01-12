@@ -73,6 +73,7 @@ function Support() {
           position={"fixed"}
           bottom="90px"
           right="50px"
+          _hover={{ cursor: "pointer" }}
           onClick={() => scrollToTop()}
         >
           <Image src={top_arrow_icon} alt={"top_arrow_icon"} />
