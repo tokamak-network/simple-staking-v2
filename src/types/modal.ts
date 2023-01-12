@@ -7,6 +7,8 @@ export type StakeModalType =
   | "unstaking"
   | "restaking"
   | "withdraw"
-  | "calculator";
+  | "calculator"
+  | "layer2"
+  | "wallet"
 
 export type ModalType = GlobalType | BondModalType | StakeModalType;

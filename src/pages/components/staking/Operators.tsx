@@ -27,6 +27,8 @@ import { getCircle } from './table/Circle';
 import { OperatorImage } from './table/Oval';
 import { renderBtn } from './table//RenderBTN';
 import { Info } from './table/OperatorInfo';
+import { useRecoilState } from 'recoil';
+import { toggleState } from '@/atom/staking/toggle';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -82,9 +84,11 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   const [isOpen, setIsOpen] = useState(
     layer2 === undefined ? '' : layer2,
   );
+  const [toggle, setToggle] = useRecoilState(toggleState)
 
   const clickOpen = (layer2: string, index: number) => {
     setIsOpen(layer2);
+    setToggle('All')
     setTimeout(() => {
       focusTarget?.current[index]?.scrollIntoView({
         behavior: 'smooth',

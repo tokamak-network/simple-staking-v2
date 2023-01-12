@@ -20,6 +20,16 @@ type ConverNumberFunc = {
   decimalPoints?: number;
 };
 
+export const floatParser = (num: string) => {
+  try {
+    if (num === '0') return;
+    const parsed: number = parseFloat(num.replaceAll(',', ''));
+    return parsed;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 //temp
 export const parseFromRayToWei = (num: BigNumber) => {
   const argBigNum = BigNumber.from(num);

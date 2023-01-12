@@ -2,35 +2,112 @@ import useInput from '@/hooks/useInput';
 import useUserBalance from '@/hooks/useUserBalance';
 import { Flex, Modal, ModalBody, ModalContent, ModalOverlay, useTheme, Text, Button } from '@chakra-ui/react';
 import useModal from '@/hooks/useModal';
-import { StakeCardProps } from '@/types/staking';
+// import { StakeCardProps } from '@/types/staking';
 import { useCallback } from 'react';
 import Image from "next/image";
 import CLOSE_ICON from "assets/images/popup-close-icon.svg";
 import { BalanceInput } from '@/common/input/CustomInput';
-import { getStakeModalComponent } from '../../../utils/getStakeModalComponent';
+import { getStakeModalComponent } from '@/utils/getStakeModalComponent';
+import CONTRACT_ADDRESS from '@/services/addresses/contract';
+import { marshalString, unmarshalString } from '@/utils/marshalString';
+import { padLeft } from 'web3-utils';
+import useCallContract from '@/hooks/useCallContract';
+import { convertToRay, convertToWei, floatParser } from '@/utils/number';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { inputBalanceState, inputState } from '@/atom/global/input';
+import { useWeb3React } from '@web3-react/core';
+import { txState } from '@/atom/global/transaction';
 
 
 function StakeModal () {
   const theme = useTheme()
+  const {btnStyle} = theme;
 
-  const { selectedModalData, selectedModal, closeModal, isModalLoading } =
-    useModal<StakeCardProps>();
+  const { selectedModalData, selectedModal, closeModal, isModalLoading } = useModal();
+  const { account, library } = useWeb3React();
 
-  // const { userTonBalance } = useUserBalance();
+  const {
+    TON_ADDRESS,
+    WTON_ADDRESS,
+    DepositManager_ADDRESS,
+  } = CONTRACT_ADDRESS;
 
-  const { inputValue, setValue, setResetValue } = useInput(
-    "Staking_screen",
-    "stake_modal"
-  );
+  const {
+    TON_CONTRACT,
+    WTON_CONTRACT,
+    DepositManager_CONTRACT
+  } = useCallContract();
+
+  const [input, setInput] = useRecoilState(inputState)
+  const [tx, setTx] = useRecoilState(txState)
+
   let modalComponent = undefined
   if (selectedModal && selectedModalData) {
     modalComponent = getStakeModalComponent(selectedModal, selectedModalData)
   }
 
   const closeThisModal = useCallback(() => {
-    setResetValue();
+    // setResetValue();
+    setInput('0')
     closeModal();
-  }, [setResetValue, closeModal]);
+  }, [setInput, closeModal]);
+
+  const getData = useCallback(() => {
+    if (selectedModalData) return marshalString(
+      //@ts-ignore
+      [DepositManager_ADDRESS, selectedModalData.layer2]
+        .map(unmarshalString)
+        .map(str => padLeft(str, 64)).join('')
+    )
+  }, [DepositManager_ADDRESS, selectedModalData])
+
+  const staking = useCallback(async () => {
+    const amount = floatParser(input)
+    //@ts-ignore
+    if (selectedModalData && Number(amount) > Number(floatParser(selectedModalData.tonBalance))) {
+      return alert('Please check input amount.');
+    }
+    console.log('111')
+    if (confirm('Current withdrawal delay is 2 weeks. Are you sure you want to delegate?')){
+      const data = getData()
+      if (TON_CONTRACT && amount) {
+        const tx = await TON_CONTRACT.approveAndCall(
+          WTON_ADDRESS,
+          convertToWei(amount.toString()),
+          data
+        )
+        setTx(true);
+        return closeThisModal();
+      }
+    }
+  }, [TON_CONTRACT, WTON_ADDRESS, closeThisModal, getData, input, selectedModalData, setTx])
+
+  const unStaking = useCallback(async () => {
+    const amount = floatParser(input)
+    if (DepositManager_CONTRACT && amount) {
+      //@ts-ignore
+      const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, )
+      //@ts-ignore
+      const tx = await DepositManager_CONTRACT.requestWithdrawal(selectedModalData.layer2, convertToRay(amount.toString()))  
+      setTx(true);
+      return closeThisModal();
+    }
+  }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx])
+
+  const reStaking = useCallback(async () => {
+    const amount = floatParser(input)
+    if (DepositManager_CONTRACT && account) {
+      //@ts-ignore
+      const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account)
+      //@ts-ignore
+      const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest)  
+      setTx(true);
+      return closeThisModal();
+    }
+  }, [input, DepositManager_CONTRACT, account, selectedModalData, setTx, closeThisModal])
+  const withdraw = useCallback(async () => {
+    const amount = floatParser(input)
+  }, [input])
 
   return (
     <Modal
@@ -79,12 +156,18 @@ function StakeModal () {
               {/* modal body */}
               <Flex w={'350px'} borderY={'1px'} py={'14px'} borderColor={'#f4f6f8'} flexDir={'column'} alignItems={'center'}>
                 <Flex h={'84px'} alignItems={'center'} flexDir={'row'} justifyContent={'center'} w={'100%'} >
+                  {selectedModal === 'restaking' ? 
+                  <Text
+                    fontSize={'38px'}
+                    fontWeight={500}
+                  >
+                    {modalComponent.balance}
+                  </Text> : 
                   <BalanceInput 
                     w={'220px'}
                     placeHolder={'0'}
-                    maxValue={selectedModalData}
-                  />
-                  {/* input field */}
+                    maxValue={modalComponent.balance}
+                  />}
                 </Flex>
                 <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
                   <Text fontSize={'12px'} fontWeight={500} color={'#808992'}>{modalComponent.balanceInfo}</Text>
@@ -99,6 +182,16 @@ function StakeModal () {
                 </Text>
                 <Button
                   w={'150px'}
+                  {...(input && input !== '0' ? 
+                    {...btnStyle.btnAble()} : selectedModal === "restaking" ? 
+                    {...btnStyle.btnAble()} : {...btnStyle.btnDisable()})
+                  }
+                  onClick={
+                    selectedModal === "staking" ? staking :
+                    selectedModal === "unstaking" ? unStaking :
+                    selectedModal === "restaking" ? reStaking :
+                    withdraw
+                  }
                 > 
                   {modalComponent.buttonName}
                 </Button>

@@ -1,6 +1,5 @@
 
 export function getStakeModalComponent (type: string | undefined, data: any) {
-  console.log(data)
   const modalComponent = {
     staking: {
       header: 'Staking',
@@ -39,12 +38,4 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
   }
   //@ts-ignore
   return modalComponent[type]
-}
-
-const component = {
-  header: '',
-  subHeader: '',
-  balanceInfo: '',
-  bottomComment: '',
-  buttonName: ''
 }

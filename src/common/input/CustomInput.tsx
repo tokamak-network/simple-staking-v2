@@ -51,7 +51,7 @@ function BalanceInput(props: InputProp) {
     const { value: inputValue } = target;
     setValue(addComma(inputValue));
   };
-  console.log(value)
+
   return (
     <InputGroup w={'200px'}>
       <NumberInput
@@ -85,7 +85,7 @@ function BalanceInput(props: InputProp) {
             w={5} 
             h={2} 
             borderBottom={value==='' ? 'solid 2px #2a72e5' : ''}
-            animation={'blink 1s'}
+            animation={'blink'}
           />
         </Flex>
         

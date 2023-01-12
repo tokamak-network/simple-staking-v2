@@ -33,7 +33,6 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   data,
   // dispatch,
 }) => {
-  const {colorMode} = useColorMode();
   const [loading, setLoading] = useState(false);
   const { account, library } = useWeb3React();
   
@@ -76,13 +75,14 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     btnDisabledUnStake()
     btnDisabledReStake()
     /*eslint-disable*/
-  }, [account])
+  }, [account, pendingUnstaked])
   
   const dataModal = {
     tonBalance: userTonBalance,
     pendingUnstaked: pendingUnstaked,
     stakedAmount: data.yourStaked,
-    withdrawable: ''
+    withdrawable: '',
+    layer2: data.layer2,
   }
   const modalButton = useCallback(
     async (modalType: ModalType, data: any) => {
@@ -109,6 +109,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           display="flex"
           alignItems="center"
           justifyContent="center"
+          fontWeight={500}
+          // fontSize={'42px'}
           h={'55px'}
         >
           {userTonBalance === undefined 
@@ -120,12 +122,12 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           )}{' '}
           TON
         </Heading>
-        <Box pt={'15px'} pb={'30px'}>
+        <Box pt={'5px'} pb={'30px'}>
           <Text fontSize={'15px'} color={'gray.400'}>
             Available in wallet
           </Text>
         </Box>
-        <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={6}>
+        <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
           <Button
             {...(stakeDisabled
               ? {...btnStyle.btnDisable()}
@@ -149,8 +151,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             Unstake
           </Button>
           <Button
-            {...(reStakeDisabled === true
-              ? {...btnStyle.btnDisable({colorMode})}
+            {...(reStakeDisabled
+              ? {...btnStyle.btnDisable()}
               : {...btnStyle.btnAble()})}
             isDisabled={reStakeDisabled}
             fontSize={'14px'}
@@ -161,7 +163,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           </Button>
           <Button
             {...(withdrawDisabled === true
-              ? {...btnStyle.btnDisable({colorMode})}
+              ? {...btnStyle.btnDisable()}
               : {...btnStyle.btnAble()})}
             isDisabled={withdrawDisabled}
             fontSize={'14px'}

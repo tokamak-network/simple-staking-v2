@@ -40,7 +40,7 @@ export function useUserHistory () {
       }
     }
     fetchList()
-  }, [account])
+  }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account])
 
   return { userHistory }
 }
