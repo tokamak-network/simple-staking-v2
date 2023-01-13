@@ -18,7 +18,7 @@ import moment from "moment";
 import BigNumber from "bignumber.js";
 import { LineGraphContainer } from "./graph/LineGraphContainer";
 import { useWeb3React } from "@web3-react/core";
-
+import Calendar from "./Calendar";
 function GraphContainer() {
   const theme = useTheme();
   const { library } = useWeb3React();
@@ -27,7 +27,8 @@ function GraphContainer() {
   const { dailyWithdrawAmnts } = useDailyWithdrawals();
   const [calculatedReward, setCalculatedReward] = useState<string>("");
   const [calculatedStakes, setCalculatedStakes] = useState<string>("");
-  const [calculatedWithdrawals, setCalculatedWithdrawals] = useState<string>("");
+  const [calculatedWithdrawals, setCalculatedWithdrawals] =
+    useState<string>("");
   const [showYear, setShowYear] = useState(false);
   const [showMonths, setShowMonths] = useState(false);
   const [startDate, setStartDate] = useState(
@@ -71,8 +72,6 @@ function GraphContainer() {
     });
     return convertedWTon;
   };
-
-
 
   useEffect(() => {
     calcTotalReward();
@@ -157,11 +156,12 @@ function GraphContainer() {
     getData();
     calcTotalReward();
     const filteredStakes = await formatFilter(dailyStakedAmnts);
-    const filteredWithdrawals = await formatFilter(dailyWithdrawAmnts);    
-   const calcTotalStakes =  calcTotal(filteredStakes);
-   calcTotalStakes !== undefined && setCalculatedStakes(calcTotalStakes)
-   const calcTotalWithdrawals = calcTotal(filteredWithdrawals);
-   calcTotalWithdrawals !== undefined && setCalculatedWithdrawals(calcTotalWithdrawals)
+    const filteredWithdrawals = await formatFilter(dailyWithdrawAmnts);
+    const calcTotalStakes = calcTotal(filteredStakes);
+    calcTotalStakes !== undefined && setCalculatedStakes(calcTotalStakes);
+    const calcTotalWithdrawals = calcTotal(filteredWithdrawals);
+    calcTotalWithdrawals !== undefined &&
+      setCalculatedWithdrawals(calcTotalWithdrawals);
   };
 
   const displayAmount = (amount: any) => {
@@ -442,270 +442,24 @@ input {
 `}
         </style>
         <Flex>
-          <Flex
-            border={"1px solid #dfe4ee"}
-            h="32px"
-            w="105px"
-            borderRadius={"4px"}
-            justifyContent="center"
-            alignItems={"center"}
-            fontSize="13px"
-            mr="5px"
-          >
-            <DatePicker
-              selectsStart
-              selected={startDate}
-              showYearPicker={showYear}
-              showMonthYearPicker={showMonths}
-              showMonthDropdown
-              showYearDropdown
-              showFullMonthYearPicker
-              onChange={(date: Date) => setStartDate(date)}
-              dateFormat="yyyy.MM.dd"
-              renderCustomHeader={({
-                date,
-                changeYear,
-                changeMonth,
-                decreaseMonth,
-                decreaseYear,
-                increaseMonth,
-                increaseYear,
-                prevMonthButtonDisabled,
-                nextMonthButtonDisabled,
-              }) => (
-                <div
-                  style={{
-                    height: 47,
-                    marginTop: "-10px",
-                    borderBottom: "1px solid #dfe3e9",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <button
-                    onClick={showYear ? decreaseYear : decreaseMonth}
-                    disabled={prevMonthButtonDisabled}
-                    style={{ background: "transparent", marginLeft: "13px" }}
-                  >
-                    <Image
-                      src={calender_back_icon_inactive}
-                      alt={"back"}
-                      width={16}
-                      height={16}
-                    />
-                  </button>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <button
-                      onClick={() => setShowMonths(!showMonths)}
-                      style={{
-                        display: "flex",
-                        background: "transparent",
-                        alignItems: "center",
-                        flexDirection: "row",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        marginRight: "10px",
-                      }}
-                    >
-                      {months[date.getMonth()]}
-                      <Flex ml={"5px"}>
-                        <Image
-                          src={
-                            showMonths
-                              ? select1_arrow_active
-                              : select1_arrow_inactive
-                          }
-                          alt={""}
-                          width={9}
-                          height={9}
-                        />
-                      </Flex>
-                    </button>
-
-                    <button
-                      onClick={() => setShowYear(!showYear)}
-                      style={{
-                        display: "flex",
-                        background: "transparent",
-                        alignItems: "center",
-                        flexDirection: "row",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        marginRight: "10px",
-                      }}
-                    >
-                      {date.getFullYear()}
-                      <Flex ml={"5px"}>
-                        <Image
-                          src={
-                            showYear
-                              ? select1_arrow_active
-                              : select1_arrow_inactive
-                          }
-                          alt={""}
-                          width={9}
-                          height={9}
-                        />
-                      </Flex>
-                    </button>
-                  </div>
-
-                  <button
-                    onClick={showYear ? increaseYear : increaseMonth}
-                    disabled={nextMonthButtonDisabled}
-                    style={{ background: "transparent", marginRight: "13px" }}
-                  >
-                    <Image
-                      src={calender_Forward_icon_inactive}
-                      alt={"back"}
-                      width={16}
-                      height={16}
-                    />
-                  </button>
-                </div>
-              )}
-            />
-          </Flex>
+          <Calendar
+            date={startDate}
+            selectsEnd={false}
+            selectsStart={true}
+            setDate={setStartDate}
+          />
           <Text mr="5px"> ~ </Text>
-          <Flex
-            border={"1px solid #dfe4ee"}
-            h="32px"
-            w="105px"
-            borderRadius={"4px"}
-            justifyContent="center"
-            alignItems={"center"}
-            fontSize="13px"
-            mr="5px"
-          >
-            <DatePicker
-              selected={endDate}
-              selectsEnd
-              startDate={startDate}
-              endDate={endDate}
-              minDate={startDate}
-              showFullMonthYearPicker
-              onChange={(date: Date) => setEndDate(date)}
-              dateFormat="yyyy.MM.dd"
-              renderCustomHeader={({
-                date,
-                changeYear,
-                changeMonth,
-                decreaseMonth,
-                decreaseYear,
-                increaseMonth,
-                increaseYear,
-                prevMonthButtonDisabled,
-                nextMonthButtonDisabled,
-              }) => (
-                <div
-                  style={{
-                    height: 47,
-                    marginTop: "-10px",
-                    borderBottom: "1px solid #dfe3e9",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <button
-                    onClick={showYear ? decreaseYear : decreaseMonth}
-                    disabled={prevMonthButtonDisabled}
-                    style={{ background: "transparent", marginLeft: "13px" }}
-                  >
-                    <Image
-                      src={calender_back_icon_inactive}
-                      alt={"back"}
-                      width={16}
-                      height={16}
-                    />
-                  </button>
+          <Calendar
+            date={endDate}
+            selectsEnd={true}
+            selectsStart={false}
+            setDate={setEndDate}
+            startDate={startDate}
+            endDate={endDate}
+            minDate={startDate}
+          />
 
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <button
-                      onClick={() => setShowMonths(!showMonths)}
-                      style={{
-                        display: "flex",
-                        background: "transparent",
-                        alignItems: "center",
-                        flexDirection: "row",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        marginRight: "10px",
-                      }}
-                    >
-                      {months[date.getMonth()]}
-                      <Flex ml={"5px"}>
-                        <Image
-                          src={
-                            showMonths
-                              ? select1_arrow_active
-                              : select1_arrow_inactive
-                          }
-                          alt={""}
-                          width={9}
-                          height={9}
-                        />
-                      </Flex>
-                    </button>
-
-                    <button
-                      onClick={() => setShowYear(!showYear)}
-                      style={{
-                        display: "flex",
-                        background: "transparent",
-                        alignItems: "center",
-                        flexDirection: "row",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        marginRight: "10px",
-                      }}
-                    >
-                      {date.getFullYear()}
-                      <Flex ml={"5px"}>
-                        <Image
-                          src={
-                            showYear
-                              ? select1_arrow_active
-                              : select1_arrow_inactive
-                          }
-                          alt={""}
-                          width={9}
-                          height={9}
-                        />
-                      </Flex>
-                    </button>
-                  </div>
-
-                  <button
-                    onClick={showYear ? increaseYear : increaseMonth}
-                    disabled={nextMonthButtonDisabled}
-                    style={{ background: "transparent", marginRight: "13px" }}
-                  >
-                    <Image
-                      src={calender_Forward_icon_inactive}
-                      alt={"back"}
-                      width={16}
-                      height={16}
-                    />
-                  </button>
-                </div>
-              )}
-            />
-          </Flex>
+   
           <Button
             {...theme.btnStyle.btnWalletSearch()}
             onClick={() => search()}

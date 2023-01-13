@@ -128,7 +128,7 @@ function Home() {
         triangle.style.borderRight = '6px solid transparent';
        
         triangle.style.position='absolute'
-        triangle.style.top='56px'
+        triangle.style.top='51px'
 
         tooltipEl.appendChild(table);
         tooltipEl.appendChild(triangle)
@@ -151,7 +151,8 @@ function Home() {
       const tr = document.createElement('tr');
       tr.style.borderWidth = '0';
       tr.style.fontSize = '12px';
-      tr.style.textAlign = 'left'
+      tr.style.textAlign = 'left';
+      tr.style.fontWeight = 'normal';
       const th = document.createElement('th');
       th.style.borderWidth = '0';
       const text = document.createTextNode(title);
@@ -180,6 +181,7 @@ function Home() {
       td.style.borderWidth = '0';
       tr.style.fontSize = '16px';
       tr.style.fontWeight = '600'
+      tr.style.padding = '0px'
       const text = document.createTextNode(textFormatted);      
 
       td.appendChild(text);
@@ -207,7 +209,8 @@ function Home() {
     tooltipEl.style.left = positionX + tooltip.caretX + 'px';
     tooltipEl.style.top = positionY + tooltip.caretY + 'px';
     tooltipEl.style.font = tooltip.options.bodyFont.string;
-    tooltipEl.style.width = typeAPY? '100px':'200px'
+    tooltipEl.style.width = typeAPY? '100px':'170px'
+    tooltipEl.style.height = '52px'
     tooltipEl.style.background = typeAPY? "#84919e":'#2a72e5';
     tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px';
     triangle.style.borderTop = typeAPY? '6px solid #84919e':'6px solid #2a72e5' ;
@@ -314,7 +317,7 @@ function Home() {
               </Text>
             </Flex>
           </Flex>
-          <Flex height={250} width={"100%"}>
+          <Flex height={250} width={"100%"} >
             <Line data={getData()} options={getOptions()} />
           </Flex>
         </Flex>
