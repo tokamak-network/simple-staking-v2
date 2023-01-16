@@ -23,6 +23,7 @@ import StakeModal from './StakeModal';
 import { ModalType } from '@/types/modal';
 import { modalData, modalState } from '@/atom/global/modal';
 import { useRecoilState } from 'recoil';
+import CalculatorModal from './CalculatorModal';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -76,7 +77,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     btnDisabledReStake()
     /*eslint-disable*/
   }, [account, pendingUnstaked])
-  
+
   const dataModal = {
     tonBalance: userTonBalance,
     pendingUnstaked: pendingUnstaked,
@@ -86,6 +87,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   }
   const modalButton = useCallback(
     async (modalType: ModalType, data: any) => {
+      
       setSelectedModal(modalType)
       setSelectedModalData(data)
     }, [])
@@ -101,7 +103,15 @@ export const WalletInformation: FC<WalletInformationProps> = ({
       border={'solid 1px #f4f6f8'}
     >
       <Box w={'100%'} p={0} textAlign={'center'} pb={'30px'} px={5}>
-        <Flex mt={'20px'} fontSize={'11px'} color={'#2a72e5'} w={'100%'} justifyContent={'end'}>
+        <Flex 
+          mt={'20px'} 
+          fontSize={'11px'} 
+          color={'#2a72e5'} 
+          w={'100%'} 
+          justifyContent={'end'} 
+          cursor={'pointer'}
+          onClick={() => modalButton('calculator', dataModal)}
+        >
           Simulator
         </Flex>
         <Heading
@@ -190,6 +200,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         </Grid>
       </Box>
       <StakeModal />
+      <CalculatorModal />
     </Container>
   );
 };

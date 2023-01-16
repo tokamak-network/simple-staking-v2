@@ -1,4 +1,4 @@
-import { InputGroup, useColorMode, NumberInput, NumberInputField, Button, Flex } from '@chakra-ui/react';
+import { InputGroup, useColorMode, NumberInput, Text, NumberInputField, Button, Flex, useTheme } from '@chakra-ui/react';
 import { inputState } from '@/atom/global/input';
 import React from 'react';
 import { useRecoilState } from 'recoil';
@@ -11,6 +11,7 @@ type InputProp = {
   value?: string | number;
   isError?: boolean;
   maxValue: any;
+  type?: string;
   // atomKey: string;
   
 };
@@ -42,9 +43,11 @@ const addComma = (inputVal: any) => {
 };
 
 function BalanceInput(props: InputProp) {
-  const { placeHolder, h, isError, maxValue } = props;
+  const { placeHolder, h, isError, maxValue, type, w } = props;
   const { colorMode } = useColorMode();
   const [value, setValue] = useRecoilState(inputState);
+  const theme = useTheme()
+  const {INPUT_STYLE} = theme
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
@@ -53,61 +56,46 @@ function BalanceInput(props: InputProp) {
   };
 
   return (
-    <InputGroup w={'200px'}>
+    <InputGroup >
       <NumberInput
         isInvalid={isError}
-        // w={'200px'}
+        w={w}
         h={h || 45}
-        fontSize={'32px'}
-        color={colorMode === 'light' ? '#3D495D' : '#313442'}
-        // _hover={{ borderColor: colorMode === "light" ? "blue.100" : "#535353" }}
         focusBorderColor={'#fff'}
-        border={'none'}
+        border={type === 'staking' ? 'none' : '1px solid #dfe4ee'}
+        borderRadius={'4px'}
         value={addComma(value)}
+        ml={type==='staking' ? '65px' : ''}
       >
-        <Flex flexDir={'column'} alignItems={'center'}>
+        <Flex flexDir={type === 'staking' ? 'column' : 'row'} alignItems={'center'}>
           <NumberInputField
-            fontSize={'32px'}
-            h={'100%'}
-            // w={'10px'}
-            borderRadius={0}
-            // mr={'30px'}/
-            textAlign={'center'}
-            overflow={'auto'}
-            fontWeight={600}
+            {...(type === 'staking' ? {...INPUT_STYLE.inputStaking()}: {...INPUT_STYLE.inputCalc()})}
             placeholder={placeHolder}
-            _placeholder={{ color: '#304156' }}
             onChange={onChange}
-            border={{}}
-            ml={'15px'}
           /> 
-          <Flex 
-            w={5} 
-            h={2} 
-            borderBottom={value==='' ? 'solid 2px #2a72e5' : ''}
-            animation={'blink'}
-          />
+          {type === 'staking' ? 
+            <Flex 
+              w={5} 
+              h={2} 
+              borderBottom={value==='' ? 'solid 2px #2a72e5' : ''}
+              animation={'blink'}
+            />
+            : 
+            <Text
+              fontSize={'13px'}
+              fontWeight={'normal'}
+              mr={'10px'}
+              ml={'7px'}
+              mt={'1px'}
+            >
+              TON
+            </Text>
+          }
         </Flex>
-        
       </NumberInput>
       <Button
         zIndex={100}
-        pos="absolute"
-        right={'-60px'}
-        w={'50px'}
-        h={'26px'}
-        mt={'10px'}
-        bg={'none'}
-        fontSize={'12px'}
-        color={'#2a72e5'}
-        fontWeight={'normal'}
-        cursor={'pointer'}
-        border={
-            '1px solid #2a72e5'
-        }
-        _hover={{
-          border: '1px solid #2a72e5',
-        }}
+        {...(type === 'staking' ? {...INPUT_STYLE.maxStaking()}: {...INPUT_STYLE.maxCalc()})}
         onClick={() => {
           setValue(String(maxValue));
         }}>
