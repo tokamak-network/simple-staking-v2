@@ -76,7 +76,6 @@ function Staking () {
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const { operatorList } = useOperatorList()
 
-  console.log(operatorList)
   const renderRowSubComponent = useCallback(
     ({row}: any) => {
     const { layer2, delegators, commit, operatorsHistory, pendingWithdrawal } = row.original;
