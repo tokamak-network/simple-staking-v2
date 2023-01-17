@@ -48,13 +48,13 @@ function MobileHeader() {
       link: "home",
     },
     {
+      link: "operators",
+    },
+    {
       link: "staking",
     },
     {
-      link: "wallet",
-    },
-    {
-      link: "support",
+      link: "account",
     },
   ];
 
@@ -90,7 +90,7 @@ function MobileHeader() {
               //   : theme.colors.gray[175]
               "#86929d"
             }
-            w={151}
+            w={121}
             h={35}
             fontSize={14}
             fontWeight={600}
@@ -138,10 +138,10 @@ function MobileHeader() {
                       seed={jsNumberForAddress(account)}
                     />
                   </span>
-                  <Text textAlign={"left"}>
+                  <Text textAlign={"left"} fontSize='13px'>
                     {trimAddress({
                       address: account,
-                      firstChar: 7,
+                      firstChar: 4,
                       lastChar: 4,
                       dots: "....",
                     })}
@@ -236,6 +236,7 @@ function MobileHeader() {
                       href={`${item.link}`}
                       key={`nav-item-${index}`}
                       passHref
+                      onClick={onClose}
                     >
                       <Flex
                         fontSize={"20px"}
