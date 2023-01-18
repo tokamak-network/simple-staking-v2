@@ -42,6 +42,7 @@ function TableHeader() {
       h={"29px"}
       alignItems={"center"}
       justifyContent={"center"}
+      mb='9px'
     >
       <chakra.tr fontSize={"12px"} color={"#3e495c"} h={"29px"} >
         {HeaderColumn("txHash")}

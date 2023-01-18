@@ -85,8 +85,8 @@ alignItems={'center'}
             amount: data.amount,
             type: "ray",
             localeString: true,
-          })}{" "}
-          TON
+          })}
+       
         </Text>
       ) : (
         ""

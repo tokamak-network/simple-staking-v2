@@ -18,6 +18,7 @@ function Account() {
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const { userHistory } = useUserHistory()
   const [selectedTab, setSelectedTab] = useState("account");
+  
   const historyColumns = useMemo(
     () => [
      

@@ -9,7 +9,6 @@ function AccountTab() {
   const { account } = useWeb3React();
 
   const { userETHBalance, userTonBalance } = useUserBalance(account);
-console.log(userETHBalance, userTonBalance);
 
   return (
     <Flex w="100%" flexDir={"column"} px='20px'>
