@@ -52,7 +52,6 @@ function CalculatorModal () {
     const maxCompensate = 26027.39726
     const pSeigDeduction = 40
     const KRW = await axios('https://api.upbit.com/v1/ticker?markets=KRW-TON').then((response: any) => {
-      console.log(response.data)
       return JSON.parse(JSON.stringify(response.data).replace(/]|[[]/g, '')).trade_price
     })
     const usdRates = await axios('https://api.frankfurter.app/latest?from=KRW').then((response): any => {
