@@ -24,6 +24,8 @@ import { ModalType } from '@/types/modal';
 import { modalData, modalState } from '@/atom/global/modal';
 import { useRecoilState } from 'recoil';
 import CalculatorModal from './CalculatorModal';
+import { useUserHistory } from '@/hooks/wallet/useUserHIstory';
+import { useWithdrawable } from '../../../hooks/staking/useWithdrawable';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -45,6 +47,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 
   const { userTonBalance } = useUserBalance(account)
   const { pendingUnstaked } = usePendingUnstaked(data.layer2, account)
+  const { withdrawable, withdrawableLength } = useWithdrawable(data.layer2)
+
 
   // const { openModal } = useModal('stake_stake_modal', userTonBalance)
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
@@ -71,23 +75,32 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         : setUnstakeDisabled(false);
   };
 
+  const btnDisabledWithdraw = () => {
+    return account === undefined ||
+      withdrawable === '0.00'
+        ? setwithdrawDisabled(true)
+        : setwithdrawDisabled(false);
+  };
+
   useEffect(() => {
     btnDisabledStake()
     btnDisabledUnStake()
     btnDisabledReStake()
+    btnDisabledWithdraw()
     /*eslint-disable*/
-  }, [account, pendingUnstaked])
+  }, [account, pendingUnstaked, userTonBalance, withdrawable])
 
   const dataModal = {
     tonBalance: userTonBalance,
     pendingUnstaked: pendingUnstaked,
     stakedAmount: data.yourStaked,
-    withdrawable: '',
+    withdrawable: withdrawable,
     layer2: data.layer2,
+    withdrawableLength: withdrawableLength,
   }
+  
   const modalButton = useCallback(
-    async (modalType: ModalType, data: any) => {
-      
+    async (modalType: ModalType, data: any) => {   
       setSelectedModal(modalType)
       setSelectedModalData(data)
     }, [])
@@ -178,7 +191,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             isDisabled={withdrawDisabled}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
-            // onClick={() => modalData('withdraw')}
+            onClick={() => modalButton('withdraw', dataModal)}
           >
             Withdraw
           </Button>

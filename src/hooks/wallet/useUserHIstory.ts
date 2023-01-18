@@ -3,9 +3,12 @@ import { useWeb3React } from '@web3-react/core';
 import { useEffect, useState } from 'react';
 import useCallContract from '../useCallContract';
 import { BigNumber } from 'ethers';
+import { range } from 'lodash'
+import { useBlockNumber } from '../useBlockNumber';
 
 export function useUserHistory () {
   const [userHistory, setUserHistory] = useState([])
+  const { blockNumber } = useBlockNumber()
   // const [totalStaked, setTotalStaked] = useState('0.00')
   const { DepositManager_CONTRACT , SeigManager_CONTRACT} = useCallContract();
   const { account } = useWeb3React();
@@ -20,13 +23,11 @@ export function useUserHistory () {
 
         await Promise.all(data.map(async (obj: any) => {
           let stakeOf = '0'
-          let numPendingRequests
 
           const history = await getOperatorUserHistory(obj.layer2.toLowerCase(), account.toLowerCase())
-
+          
           if (account && SeigManager_CONTRACT && DepositManager_CONTRACT) {
             stakeOf = await SeigManager_CONTRACT.stakeOf(obj.layer2, account)
-            numPendingRequests = await DepositManager_CONTRACT.numPendingRequests(obj.layer2, account)
           }
           staked = staked.add(stakeOf)
 
@@ -40,7 +41,7 @@ export function useUserHistory () {
       }
     }
     fetchList()
-  }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account])
+  }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account, blockNumber])
 
   return { userHistory }
 }

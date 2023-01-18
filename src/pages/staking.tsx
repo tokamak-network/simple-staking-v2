@@ -23,7 +23,7 @@ function Staking () {
         accessor: 'name',
       },
       {
-        Header: 'total staked',
+        Header: 'Total Staked',
         accessor: 'totalStaked',
       },
       {
@@ -31,8 +31,12 @@ function Staking () {
         accessor: 'commisionRate',
       },
       {
-        Header: 'your staked',
+        Header: 'User Staked',
         accessor: 'yourStaked',
+      },
+      {
+        Header: 'Recent Commit',
+        accessor: 'recentCommit',
       },
       {
         // Make an expander cell

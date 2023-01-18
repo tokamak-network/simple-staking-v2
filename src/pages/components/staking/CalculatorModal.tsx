@@ -3,8 +3,8 @@ import useModal from '@/hooks/useModal';
 import { useCallback, useState } from 'react';
 import { ModalHeader } from './modal/ModalHeader';
 import { CalculatorBody } from './modal/CalculatorBody';
-import { useRecoilValue } from 'recoil';
-import { selectedDurationState } from '@/atom/staking/duration';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { durationState, selectedDurationState } from '@/atom/staking/duration';
 import useOperatorList from '@/hooks/staking/useOperatorList';
 import { convertNumber } from '@/components/number';
 import useUserBalance from '@/hooks/useUserBalance';
@@ -17,7 +17,8 @@ function CalculatorModal () {
   const { account } = useWeb3React();
   const { selectedModalData, selectedModal, closeModal, isModalLoading } = useModal();
   
-  const duration = useRecoilValue(selectedDurationState)
+  const [duration, setDuration] = useRecoilState(durationState)
+  // const duration = useRecoilValue(selectedDurationState)
   const input = useRecoilValue(inputBalanceState)
 
   const [type, setType] = useState<'calculate' | 'result'>('calculate')
@@ -29,31 +30,28 @@ function CalculatorModal () {
   const { totalStaked, userTotalStaked } = useOperatorList();
   const { userTonBalance } = useUserBalance(account)
   
-  // const Staked = totalStaked ? convertNumber({
-  //   amount: totalStaked,
-  //   type: 'ray',
-  //   localeString: true
-  // }) : '0.00' 
-
-  const Staked = '13,978,930.15'
-
-  const userStaked = userTotalStaked ? convertNumber({
-    amount: userTotalStaked,
+  const Staked = totalStaked ? convertNumber({
+    amount: totalStaked,
     type: 'ray',
     localeString: true
   }) : '0.00' 
 
-  // console.log(Staked)
+  // const userStaked = userTotalStaked ? convertNumber({
+  //   amount: userTotalStaked,
+  //   type: 'ray',
+  //   localeString: true
+  // }) : '0.00' 
+
 
   const closeThisModal = useCallback(() => {
     // setResetValue();
     // setInput('0')
     setType('calculate');
+    setDuration('Year')
     closeModal();
-  }, [closeModal]);
+  }, [closeModal, setDuration]);
 
   const calButton = useCallback(() => {
-    console.log(duration)
     const inputBalance = Number(input.replace(/,/g, ''))
     const maxCompensate = 26027.39726
     const pSeigDeduction = 40
@@ -63,21 +61,24 @@ function CalculatorModal () {
       
       const stakedRatio = total/40000000
       const compensatePeraDay = stakedRatio * maxCompensate
-      const dailyNotMintedSeig = maxCompensate - maxCompensate*(stakedRatio);
+      const dailyNotMintedSeig = maxCompensate - maxCompensate * (stakedRatio);
       const proportionalSeig = dailyNotMintedSeig * (pSeigDeduction / 100)
-      const expectedSeig = (inputBalance/total) * (Number(compensatePeraDay) + proportionalSeig) * unit;
+      const expectedSeig = (inputBalance / total) * (Number(compensatePeraDay) + proportionalSeig) * unit;
       const my = inputBalance + expectedSeig
       const returnRate = (my / inputBalance * 100 - 100);
       const roi = returnRate.toLocaleString(undefined, { maximumFractionDigits: 2})
       const rewardTON = expectedSeig.toLocaleString(undefined, { maximumFractionDigits: 4})
+
       setRewardTON(rewardTON)
       setROI(roi)
       setType('result')
     }
   }, [Staked, duration, input])
+
   const recalcButton = useCallback(() => {
     setType('calculate')
-  }, [])
+    setDuration('Year')
+  }, [setDuration])
 
   return (
     <Modal

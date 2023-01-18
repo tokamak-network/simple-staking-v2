@@ -29,9 +29,9 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
       header: 'Withdraw',
       subHeader: 'Do you really want withdraw your TON now?',
       balanceInfo1: 'Staked Balance',
-      // balance1: data.tonBalance,
+      balance1: data.stakedAmount,
       balanceInfo2: 'Withdrawable Balance',
-      // balance2: data.tonBalance,
+      balance: data.withdrawable,
       bottomComment: '',
       buttonName: 'Withdraw'
     }

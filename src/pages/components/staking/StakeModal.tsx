@@ -1,7 +1,7 @@
 import { Flex, Modal, ModalBody, ModalContent, ModalOverlay, useTheme, Text, Button } from '@chakra-ui/react';
 import useModal from '@/hooks/useModal';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BalanceInput } from '@/common/input/CustomInput';
 import { getStakeModalComponent } from '@/utils/getStakeModalComponent';
 import CONTRACT_ADDRESS from '@/services/addresses/contract';
@@ -14,6 +14,7 @@ import { inputBalanceState, inputState } from '@/atom/global/input';
 import { useWeb3React } from '@web3-react/core';
 import { txState } from '@/atom/global/transaction';
 import { ModalHeader } from './modal/ModalHeader';
+import { WithdrawModalBody } from './modal/WithdrawModalBody';
 
 
 function StakeModal () {
@@ -36,7 +37,9 @@ function StakeModal () {
   } = useCallContract();
 
   const [input, setInput] = useRecoilState(inputState)
-  const [tx, setTx] = useRecoilState(txState)
+  const [txPending, setTxPending] = useRecoilState(txState)
+  const [tx, setTx] = useState()
+
 
   let modalComponent = undefined
   if (selectedModal && selectedModalData) {
@@ -72,11 +75,12 @@ function StakeModal () {
           convertToWei(amount.toString()),
           data
         )
-        setTx(true);
+        setTx(tx);
+        setTxPending(true)
         return closeThisModal();
       }
     }
-  }, [TON_CONTRACT, WTON_ADDRESS, closeThisModal, getData, input, selectedModalData, setTx])
+  }, [TON_CONTRACT, WTON_ADDRESS, closeThisModal, getData, input, selectedModalData, setTx, setTxPending])
 
   const unStaking = useCallback(async () => {
     const amount = floatParser(input)
@@ -85,10 +89,11 @@ function StakeModal () {
       const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, )
       //@ts-ignore
       const tx = await DepositManager_CONTRACT.requestWithdrawal(selectedModalData.layer2, convertToRay(amount.toString()))  
-      setTx(true);
+      setTx(tx);
+      setTxPending(true)
       return closeThisModal();
     }
-  }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx])
+  }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending])
 
   const reStaking = useCallback(async () => {
     const amount = floatParser(input)
@@ -97,13 +102,38 @@ function StakeModal () {
       const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account)
       //@ts-ignore
       const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest)  
-      setTx(true);
+      setTx(tx);
+      setTxPending(true)
       return closeThisModal();
     }
-  }, [input, DepositManager_CONTRACT, account, selectedModalData, setTx, closeThisModal])
+  }, [input, DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal])
+
   const withdraw = useCallback(async () => {
-    const amount = floatParser(input)
-  }, [input])
+    if (selectedModalData && DepositManager_CONTRACT) {
+      //@ts-ignore
+      const tx = await DepositManager_CONTRACT.processRequests(selectedModalData.layer2, selectedModalData.withdrawableLength, true)
+      setTx(tx);
+      setTxPending(true)
+      return closeThisModal();
+    }
+    
+  }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending])
+
+  useEffect(() => {
+    async function waitReceipt() {
+      if (tx && !tx['status']) {
+        //@ts-ignore
+        await tx.wait().then((receipt: any) => {
+          if (receipt.status) {
+            setTxPending(false);
+            setTx(undefined);
+          }
+        });
+      }
+    }
+    waitReceipt();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tx]);
 
   return (
     <Modal
@@ -128,26 +158,42 @@ function StakeModal () {
                 />
                 {/* modal body */}
                 <Flex w={'350px'} borderY={'1px'} py={'14px'} borderColor={'#f4f6f8'} flexDir={'column'} alignItems={'center'}>
+                  
                   <Flex h={'84px'} alignItems={'center'} flexDir={'row'} justifyContent={'center'} w={'100%'} >
-                    {selectedModal === 'restaking' ? 
-                    <Text
-                      fontSize={'38px'}
-                      fontWeight={500}
-                    >
-                      {modalComponent.balance}
-                    </Text> : 
-                    <BalanceInput 
-                      w={'220px'}
-                      placeHolder={'0'}
-                      type={'staking'}
-                      maxValue={modalComponent.balance}
-                    />}
+                    {selectedModal === 'restaking' || selectedModal === 'withdraw' ? 
+                      <Text
+                        fontSize={'38px'}
+                        fontWeight={500}
+                      >
+                        {modalComponent.balance}
+                      </Text> : 
+                      <BalanceInput 
+                        w={'220px'}
+                        placeHolder={'0'}
+                        type={'staking'}
+                        maxValue={modalComponent.balance}
+                      />
+                    }
                   </Flex>
-                  <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
-                    <Text fontSize={'12px'} fontWeight={500} color={'#808992'}>{modalComponent.balanceInfo}</Text>
-                    {/* @ts-ignore */}
-                    <Text mt={'5px'}>{modalComponent.balance} TON</Text>
-                  </Flex>
+                    {
+                      selectedModal === 'withdraw' ?
+                      <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
+                        <WithdrawModalBody 
+                          title={modalComponent.balanceInfo1}
+                          value={modalComponent.balance1}
+                        />
+                        <WithdrawModalBody 
+                          title={modalComponent.balanceInfo2}
+                          value={modalComponent.balance}
+                        />
+                      </Flex>
+                       : 
+                      <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
+                        <Text fontSize={'12px'} fontWeight={500} color={'#808992'}>{modalComponent.balanceInfo}</Text>
+                        {/* @ts-ignore */}
+                        <Text mt={'5px'}>{modalComponent.balance} TON</Text>
+                      </Flex>
+                    }
                 </Flex>
                 {/* modal footer */}
                 <Flex flexDir={'column'} alignItems={'center'}>
@@ -157,7 +203,7 @@ function StakeModal () {
                   <Button
                     w={'150px'}
                     {...(input && input !== '0' ? 
-                      {...btnStyle.btnAble()} : selectedModal === "restaking" ? 
+                      {...btnStyle.btnAble()} : selectedModal === "restaking" || selectedModal === 'withdraw' ? 
                       {...btnStyle.btnAble()} : {...btnStyle.btnDisable()})
                     }
                     onClick={

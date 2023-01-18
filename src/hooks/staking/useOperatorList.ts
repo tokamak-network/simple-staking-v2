@@ -5,6 +5,8 @@ import { useWeb3React } from '@web3-react/core';
 import { convertNumber } from '../../utils/number';
 import useCallContract from '../useCallContract';
 import { BigNumber } from 'ethers';
+import { useRecoilValue } from 'recoil';
+import { txState } from '@/atom/global/transaction';
 
 export function useOperatorList() {
   const [operatorList, setOperatorList] = useState([]);
@@ -12,6 +14,7 @@ export function useOperatorList() {
   const [totalStaked, setTotalStaked] = useState<string>()
   const { account, library } = useWeb3React();
   const { DepositManager_CONTRACT , SeigManager_CONTRACT} = useCallContract();
+  const tx = useRecoilValue(txState)
 
   useEffect(() => {
     async function fetchList () {
@@ -67,8 +70,10 @@ export function useOperatorList() {
         return find ? 
           await { ...fetchedData, name: find.name } : await fetchedData
       }))
+
       setTotalStaked(totalStake.toString())
       setUserTotalStaked(staked.toString())
+
       if (operators) {
         operators.sort(function(a: any, b: any) {
           return b.updateCoinageTotalString - a.updateCoinageTotalString
@@ -80,7 +85,7 @@ export function useOperatorList() {
     fetchList()
   }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account, setTotalStaked])
 
-  return { operatorList, userTotalStaked, totalStaked }
+  return { operatorList, userTotalStaked, totalStaked, tx }
 }
 
 export default useOperatorList

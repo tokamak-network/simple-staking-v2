@@ -46,7 +46,8 @@ export const CalculatorBodyRow = (args: {
           </Flex>
           : 
           <Select 
-            h={'32px'} 
+            h={'32px'}
+            fontSize={'13px'}
             onChange={(e) => {
               setDuration(e.target.value)
             }}
