@@ -10,16 +10,19 @@ import { convertNumber } from '@/components/number';
 import useUserBalance from '@/hooks/useUserBalance';
 import { useWeb3React } from '@web3-react/core';
 import { inputBalanceState } from '@/atom/global/input';
+import { modalState } from '@/atom/global/modal';
+import axios from 'axios';
 
 function CalculatorModal () {
   const theme = useTheme()
   const {btnStyle} = theme;
   const { account } = useWeb3React();
-  const { selectedModalData, selectedModal, closeModal, isModalLoading } = useModal();
+  const {  closeModal, isModalLoading } = useModal();
   
   const [duration, setDuration] = useRecoilState(durationState)
   // const duration = useRecoilValue(selectedDurationState)
   const input = useRecoilValue(inputBalanceState)
+  const [selectedModal, setSelectedModal] = useRecoilState(modalState);
 
   const [type, setType] = useState<'calculate' | 'result'>('calculate')
   const [roi, setROI] = useState('0')
@@ -36,13 +39,6 @@ function CalculatorModal () {
     localeString: true
   }) : '0.00' 
 
-  // const userStaked = userTotalStaked ? convertNumber({
-  //   amount: userTotalStaked,
-  //   type: 'ray',
-  //   localeString: true
-  // }) : '0.00' 
-
-
   const closeThisModal = useCallback(() => {
     // setResetValue();
     // setInput('0')
@@ -51,10 +47,19 @@ function CalculatorModal () {
     closeModal();
   }, [closeModal, setDuration]);
 
-  const calButton = useCallback(() => {
+  const calButton = useCallback(async () => {
     const inputBalance = Number(input.replace(/,/g, ''))
     const maxCompensate = 26027.39726
     const pSeigDeduction = 40
+    const KRW = await axios('https://api.upbit.com/v1/ticker?markets=KRW-TON').then((response: any) => {
+      console.log(response.data)
+      return JSON.parse(JSON.stringify(response.data).replace(/]|[[]/g, '')).trade_price
+    })
+    const usdRates = await axios('https://api.frankfurter.app/latest?from=KRW').then((response): any => {
+      //@ts-ignore
+      return response.data.rates.USD
+    })
+    const USD = KRW * usdRates
     if (Staked) {
       const total = Number(Staked.replace(/,/g, '')) + inputBalance
       const unit = duration === 'Year' ? 365 : duration === 'Month' ? 30 : 7
@@ -68,7 +73,11 @@ function CalculatorModal () {
       const returnRate = (my / inputBalance * 100 - 100);
       const roi = returnRate.toLocaleString(undefined, { maximumFractionDigits: 2})
       const rewardTON = expectedSeig.toLocaleString(undefined, { maximumFractionDigits: 4})
+      const rewardUSD = (expectedSeig * USD).toLocaleString(undefined, { maximumFractionDigits: 2 })
+      const rewardKRW = (expectedSeig * KRW).toLocaleString(undefined, { maximumFractionDigits: 0 })
 
+      setRewardKRW(rewardKRW)
+      setRewardUSD(rewardUSD)
       setRewardTON(rewardTON)
       setROI(roi)
       setType('result')
@@ -79,6 +88,12 @@ function CalculatorModal () {
     setType('calculate')
     setDuration('Year')
   }, [setDuration])
+
+  const toStakeButton = useCallback(async () => {
+    setSelectedModal('staking')
+    setType('calculate')
+    setDuration('Year')
+  }, [setDuration, setSelectedModal])
 
   return (
     <Modal
@@ -173,6 +188,7 @@ function CalculatorModal () {
                     fontSize={'14px'}
                     {...btnStyle.btnAble()}
                     mr={'10px'}
+                    onClick={() => toStakeButton()}
                   >
                     Stake
                   </Button>

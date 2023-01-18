@@ -49,13 +49,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
     headerGroups,
     prepareRow,
     visibleColumns,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
     page,
-    nextPage,
-    previousPage,
-    setPageSize,
     state: {pageIndex, pageSize},
   } = useTable(
     {columns, data, initialState: {pageIndex: 0}},
