@@ -138,10 +138,9 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                 >
                   {row.cells.map((cell: any, index: number) => {
                     return (
-                      //@ts-ignore
-                      // eslint-disable-next-line react/jsx-key
+                      
                       <HistoryTableRow 
-                        index={index}
+                        key={index}
                         cell={cell}
                         tableType={tableType}
                       />
