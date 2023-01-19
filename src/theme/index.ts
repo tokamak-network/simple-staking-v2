@@ -7,7 +7,7 @@ interface THEME_PROPS {
 }
 
 const fonts = {
-  TitilliumWeb: "TitilliumWeb",
+  TitilliumWeb: 'Titillium Web, sans-serif',
   Roboto: "Roboto",
   Nanum: `'NanumSquareEB', sans-serif`
 }
@@ -80,6 +80,75 @@ const PAGE_STYLE = {
   }),
 }
 
+const SUPPORT_PARAGRAPH_STYLE = {
+  paragraphText:() => ({
+    fontFamily: fonts.Roboto,
+  fontSize: '17px',
+  color: '#3d495d',
+  fontWeight: 'normal',
+  marginBottom: '20px',
+  textAlign: 'justify'
+  })
+  
+}
+
+const INPUT_STYLE = {
+  inputStaking: () => ({
+    fontSize:'32px',
+    height:'100%',
+    borderRadius: 0,
+    textAlign:'center',
+    overflow:'auto',
+    fontWeight:600,
+    _placeholder:{ color: '#304156' },
+    border: '',
+    ml:'15px'
+  }),
+  inputCalc: () => ({
+    fontSize:'13px',
+    fontWeight: 'normal',
+    height: '28px',
+    border: 'none',
+    textAlign: 'right',
+    color: '#3e495c',
+    _placeholder:{ color: '#86929d' },
+    padding: '0px',
+    width: '70px',
+    marginLeft: '5px',
+    marginTop: '1px'
+  }),
+  maxStaking: () => ({
+    // pos: "absolute",
+    // right:'-60px',
+    w:'50px',
+    h:'26px',
+    mt:'10px',
+    bg:'none',
+    fontSize:'12px',
+    color:'#2a72e5',
+    fontWeight:'normal',
+    cursor:'pointer',
+    border: '1px solid #2a72e5',
+    _hover:{
+      border: '1px solid #2a72e5',
+    },
+  }),
+  maxCalc: () => ({
+    h: '32px',
+    w: '56px',
+    ml: '5px',
+    border: '1px solid #dfe4ee',
+    _hover:{
+      border: '1px solid #dfe4ee',
+    },
+    bg:'none',
+    fontSize: '12px',
+    fontWeight: 'normal',
+    color: '#86929d'
+  })
+}
+
+
 const STAKING_HISTORY_TABLE_STYLE = {
   tableRow: () => ({
     m: 0,
@@ -117,12 +186,13 @@ const btnStyle = {
     bg: 'blue.100',
     color: 'white.100',
     _hover: { backgroundColor: 'blue.200' },
+    fontWeight: 500,
   }),
   btnDisable: () => ({
     bg: colors.gray[300],
     color: 'gray.200',
     // color: colors.gray[200],
-    fontWeight: 'bold',
+    fontWeight: 500,
     // borderWidth: p0 : 1,
     borderColor: '',
     _hover: {},
@@ -186,7 +256,9 @@ const theme = extendTheme({
   fonts,
   PAGE_STYLE,
   STAKING_HISTORY_TABLE_STYLE,
+  SUPPORT_PARAGRAPH_STYLE,
   btnStyle,
+  INPUT_STYLE,
   // BUTTON_STYLE,
   // HEADER_BUTTON_STYLE,
   // BALANCE_CONTAINER_STYLE,

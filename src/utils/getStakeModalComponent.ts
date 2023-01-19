@@ -1,6 +1,5 @@
 
 export function getStakeModalComponent (type: string | undefined, data: any) {
-  console.log(data)
   const modalComponent = {
     staking: {
       header: 'Staking',
@@ -30,21 +29,13 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
       header: 'Withdraw',
       subHeader: 'Do you really want withdraw your TON now?',
       balanceInfo1: 'Staked Balance',
-      // balance1: data.tonBalance,
+      balance1: data.stakedAmount,
       balanceInfo2: 'Withdrawable Balance',
-      // balance2: data.tonBalance,
+      balance: data.withdrawable,
       bottomComment: '',
       buttonName: 'Withdraw'
     }
   }
   //@ts-ignore
   return modalComponent[type]
-}
-
-const component = {
-  header: '',
-  subHeader: '',
-  balanceInfo: '',
-  bottomComment: '',
-  buttonName: ''
 }

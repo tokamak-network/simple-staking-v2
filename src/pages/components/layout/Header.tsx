@@ -128,7 +128,7 @@ const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
                 <span style={{ marginRight: '5px', top: '2px', position: 'relative' }}>
                   <Jazzicon diameter={23} seed={jsNumberForAddress(account)} />
                 </span>
-                <Text textAlign={'left'} >
+                <Text textAlign={'left'} fontWeight={'normal'}>
                   {trimAddress({
                     address: account,
                     firstChar: 7,
@@ -149,7 +149,7 @@ const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
               color="blue.500"
               pos="absolute"
               left={'14px'}
-            ></CircularProgress>
+            />
           ) : null}
         </Button>
       </Stack>
@@ -160,7 +160,7 @@ const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
 export const Header = () => {
   // const { pcView } = useMediaView();
   // const {  } = useActiveWeb3React();
-  const { openModal } = useModal('wallet_modal');
+  const { openModal } = useModal('wallet');
   const theme = useTheme();
   const { chainId, account } = useWeb3React();
   // /* eslint-disable-next-line @typescript-eslint/no-unused-vars */

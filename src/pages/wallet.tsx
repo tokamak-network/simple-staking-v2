@@ -16,10 +16,10 @@ function Wallet () {
   const { userHistory } = useUserHistory()
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const { accumulatedReward } = useAccumulatedReward()
-  const { totalStaked } = useOperatorList()
+  const { userTotalStaked } = useOperatorList()
   // const staked = useRecoilValue(userStakedStatusState)
-  const myTotalStaked = totalStaked ? convertNumber({
-    amount: totalStaked,
+  const myTotalStaked = userTotalStaked ? convertNumber({
+    amount: userTotalStaked,
     type: 'ray',
     localeString: true
   }) : '0.00' 
