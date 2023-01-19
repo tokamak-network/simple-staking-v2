@@ -52,7 +52,7 @@ function Footer() {
   const [width] = useWindowDimensions();
   const mobile = width < 460;
   return (
-    <Flex w={'100%'} px={'50px'} flexDir="column" h={'76px'} justifyContent={'center'}>
+    <Flex w={'100%'} px={'50px'} flexDir="column" h={'76px'} justifyContent={'center'} mt={'50px'}>
       <Flex
         fontSize={12}
         color={'gray.700'}
