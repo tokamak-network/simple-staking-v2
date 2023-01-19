@@ -71,6 +71,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.8",
     "react-device-detect": "^2.2.2",
-    "typescript": "4.7.4"
+    "typescript": "4.9.3"
   }
 }
