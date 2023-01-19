@@ -16,6 +16,7 @@ import {
 import moment from "moment";
 import { orderBy } from "lodash";
 import { useEffect, useState } from "react";
+import RollingNumbers from "./components/home/RollingNumbers";
 
 ChartJS.register(
   CategoryScale,
@@ -256,7 +257,7 @@ function Home() {
         fontSize={"32px"}
         fontWeight={600}
         pos={"relative"}
-
+        height={'70vh'}
       >
         <Image src={MAP} alt={"map"}></Image>
         <Flex
@@ -264,19 +265,20 @@ function Home() {
           flexDir={"column"}
           alignItems={"center"}
           width={"100%"}
-          height={"100%"}
+       
         >
           <Text h={"58px"} fontFamily={theme.fonts.TitilliumWeb}>
             There is currently
           </Text>
-          <Text
+          {/* <Text
             color={"#2a72e5"}
             h={"76px"}
             mt={"25px"}
             fontFamily={theme.fonts.TitilliumWeb}
           >
             {} TON
-          </Text>
+          </Text> */}
+          <RollingNumbers totalStaked={totalStaked}/>
           <Text
             h={"48px"}
             color={"#3d495d"}
