@@ -116,11 +116,11 @@ function Introduction(props: {reef:any}) {
             <ListItem>
               <Text {...theme.SUPPORT_PARAGRAPH_STYLE.paragraphText()}>
                 {" "}
-                You can see information about our operators on the staking page.
-                Click on the blue arrow to the right of each operator to see
-                detailed information about the operator and staking buttons when
-                you have connected your wallet. When you haven't connected your
-                wallet, you can only see the details of the operator.
+                {"You can see information about our operators on the staking page."}
+                {"Click on the blue arrow to the right of each operator to see"}
+                {"detailed information about the operator and staking buttons when"}
+                {"you have connected your wallet. When you haven\'t connected your"}
+                {"wallet, you can only see the details of the operator."}
               </Text>
             </ListItem>
             <ListItem>

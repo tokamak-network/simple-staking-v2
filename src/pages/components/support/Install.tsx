@@ -69,8 +69,9 @@ function Install(props: { reef: any }) {
             <Image src={metamask_firefox} alt={"metamask_firefox"} />
           </Flex>
         </Flex>
-        <ListItem {...theme.SUPPORT_PARAGRAPH_STYLE.paragraphText()}>
-          To add TON on your wallet, make sure you're connected to the{" "}
+        
+        <ListItem {...theme.SUPPORT_PARAGRAPH_STYLE.paragraphText()}> 
+          {'To add TON on your wallet, make sure you\'re connected to the '}
           <span style={{ fontWeight: "bold" }}>Ethereum Mainnet</span> network.
           Then click the <span style={{ fontWeight: "bold" }}>Add Token</span>{" "}
           button.

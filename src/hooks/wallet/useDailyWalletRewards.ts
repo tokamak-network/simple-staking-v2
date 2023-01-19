@@ -9,21 +9,17 @@ export function useDailyWalletRewards (start: string, end: string) {
 
   useEffect (() => {
     fetchData(start, end)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[account])
 
     async function fetchData (start: string, end: string) {
       if (account) {
         const data = await getDailyWalletRewards(account?.toLowerCase(), start, end);        
         if (data.length !== 0) {
-          setDailyWalletRewards(data)
-        //  console.log(data);
-         
-          return data
-        
+          setDailyWalletRewards(data)    
+          return data        
         }
       }
-    
     }
-
   return { fetchData, dailyWalletRewards}
 }
