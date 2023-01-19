@@ -50,7 +50,6 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
     useExpanded,
     usePagination,
   );
-  console.log(data)
 
   const [currentPage, setCurrentPage] = useState(0)
   const [buttonClick, setButtonClick] = useState(Boolean)

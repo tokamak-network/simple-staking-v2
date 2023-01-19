@@ -1,8 +1,8 @@
 import { atom, selector } from 'recoil';
-import { SelectBoxValuesType } from '@/types';
+// import { SelectBoxValuesType } from '@/types';
 import { v1 } from 'uuid';
 
-const selectboxState = atom<SelectBoxValuesType>({
+const selectboxState = atom({
   key: `selectValues/${v1()}`,
   default: undefined,
 });

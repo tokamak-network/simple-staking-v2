@@ -22,13 +22,6 @@ function useInput(key: PageKey, subKey: InputKey) {
         setValue,
         setResetValue: resetValue,
       };
-    // case "Bond_screen":
-    //   return {
-    //     inputValue: bondInputValue,
-    //     value: bondValue,
-    //     setValue: setBondvalue,
-    //     setResetValue: setResetBondValue,
-    //   };
     default:
       return {
         inputValue: undefined,

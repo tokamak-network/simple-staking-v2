@@ -1,8 +1,10 @@
 import { Button, Flex, Text, useTheme } from '@chakra-ui/react';
 import { GraphSideContainer } from './graph/GraphSideContainer';
+import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
 
 function GraphContainer () {
   const theme = useTheme();
+  const { accumulatedReward } = useAccumulatedReward()
   return (
     <Flex
       flexDir={'column'}
@@ -50,7 +52,7 @@ function GraphContainer () {
         </Flex>
         <Flex w={'230px'} flexDir={'column'}>
           <GraphSideContainer 
-            totalReward={''}
+            totalReward={accumulatedReward}
             totalStaked={''}
             totalWithdraw={''}
           />

@@ -1,20 +1,31 @@
 import { Flex } from "@chakra-ui/react";
 import TopCard from "./TopCard";
+import { FC } from "react";
 
-function TopCardContainer () {
+type TopCardContainerProps = {
+  totalStaked: string | undefined
+  pendingWithdrawal: string | undefined
+  accumulatedReward: string | undefined
+}
+
+export const TopCardContainer: FC<TopCardContainerProps> = ({
+  totalStaked,
+  pendingWithdrawal,
+  accumulatedReward,
+}) => {
   return (
     <Flex flexDir={'row'} justifyContent={'space-between'} maxW={'1100px'}>
       <TopCard
         title={'Total Staked'}
-        value={'100'}
+        value={totalStaked}
       />
       <TopCard
         title={'Pending Withdrawal'}
-        value={'1000'}
+        value={pendingWithdrawal}
       />
       <TopCard
         title={'Total Accumulated Reward'}
-        value={'100'}
+        value={accumulatedReward}
       />
     </Flex>
   )

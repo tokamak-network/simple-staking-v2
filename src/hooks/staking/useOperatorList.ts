@@ -2,19 +2,25 @@ import { getEventByLayer2, getOperatorsInfo, getDelegators, getOperatorUserHisto
 import { useEffect, useState } from 'react';
 import { NON_CANDIDATE } from "@/constants";
 import { useWeb3React } from '@web3-react/core';
-import { ConsoleView } from "react-device-detect";
 import { convertNumber } from '../../utils/number';
 import useCallContract from '../useCallContract';
+import { BigNumber } from 'ethers';
+import { useRecoilValue } from 'recoil';
+import { txState } from '@/atom/global/transaction';
 
 export function useOperatorList() {
   const [operatorList, setOperatorList] = useState([]);
+  const [userTotalStaked, setUserTotalStaked] = useState('0.00')
+  const [totalStaked, setTotalStaked] = useState<string>()
   const { account, library } = useWeb3React();
   const { DepositManager_CONTRACT , SeigManager_CONTRACT} = useCallContract();
+  const tx = useRecoilValue(txState)
 
   useEffect(() => {
     async function fetchList () {
       const data = await getOperatorsInfo();
-
+      let staked = BigNumber.from('0')
+      let totalStake = BigNumber.from('0')
       const operators = await Promise.all(data.map(async (obj: any) => {
         const history = await getOperatorUserHistory(obj.layer2.toLowerCase())
         const commitHistory = await getEventByLayer2(obj.layer2.toLowerCase(), 'Comitted', 1, 300)
@@ -39,6 +45,8 @@ export function useOperatorList() {
           type: 'ray',
           localeString: true,
         }) : '-'
+        totalStake = totalStake.add(obj.updateCoinageTotalString)
+        staked = staked.add(stakeOf)
         const yourStaked =  convertNumber({
           amount: stakeOf.toString(),
           type: 'ray',
@@ -62,7 +70,10 @@ export function useOperatorList() {
         return find ? 
           await { ...fetchedData, name: find.name } : await fetchedData
       }))
-      
+
+      setTotalStaked(totalStake.toString())
+      setUserTotalStaked(staked.toString())
+
       if (operators) {
         operators.sort(function(a: any, b: any) {
           return b.updateCoinageTotalString - a.updateCoinageTotalString
@@ -72,9 +83,9 @@ export function useOperatorList() {
       }
     }
     fetchList()
-  }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account])
+  }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account, setTotalStaked])
 
-  return { operatorList }
+  return { operatorList, userTotalStaked, totalStaked, tx }
 }
 
 export default useOperatorList

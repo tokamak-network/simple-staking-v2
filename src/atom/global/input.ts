@@ -1,15 +1,9 @@
 import { atom, selector } from "recoil";
 import { v1 } from 'uuid';
 
-const defaultValue = {
-  stake_stake_modal_period: 39312,
-  stake_stake_modal_balance: "",
-  stake_unstake_modal_balance: "",
-};
-
 const inputState = atom({
   key: `inputState/${v1()}`,
-  default: defaultValue,
+  default: '0',
 });
 
 const inputBalanceState = selector({
@@ -20,4 +14,4 @@ const inputBalanceState = selector({
   },
 });
 
-export { inputState, inputBalanceState, defaultValue };
+export { inputState, inputBalanceState };

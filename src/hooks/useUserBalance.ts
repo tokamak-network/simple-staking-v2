@@ -4,8 +4,8 @@ import { convertNumber } from "utils/number";
 import useCallContract from "hooks/useCallContract";
 import { useBlockNumber } from "./useBlockNumber";
 
-const useUserBalance = () => {
-  const { account, library } = useWeb3React();
+const useUserBalance = (account: string | null | undefined) => {
+  const { library } = useWeb3React();
   const {
     TON_CONTRACT,
     WTON_CONTRACT,

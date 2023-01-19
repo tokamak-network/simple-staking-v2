@@ -18,7 +18,7 @@ const HeadMeta: NextPage = () => {
           property="og:description"
           content="Easier UI for Tokamak Staking"
         />
-        <link rel="icon" href="/images/favicon.ico" />
+        <link rel="icon" href="/tokamak_favicon_8tt.ico" />
       </Head>
     </div>
   );

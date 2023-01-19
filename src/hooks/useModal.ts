@@ -1,4 +1,4 @@
-import { defaultValue, inputState } from "atom/global/input";
+import { inputState } from "atom/global/input";
 import { modalData, modalLoadingState, modalState } from "atom/global/modal";
 import React, { SetStateAction, useEffect } from "react";
 import { useRecoilState } from "recoil";
@@ -28,7 +28,7 @@ function useModal<T>(
   const closeModal = () => {
     setSelectedModal(undefined);
     setSelectedModalData(undefined);
-    setValue(defaultValue);
+    setValue('');
     setIsModalLoading(false);
   };
 

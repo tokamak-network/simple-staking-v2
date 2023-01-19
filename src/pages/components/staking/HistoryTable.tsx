@@ -11,10 +11,16 @@ import {
   Flex,
   Box,
   useTheme,
+  Switch,
+  Text,
+  FormControl,
+  FormLabel
 } from '@chakra-ui/react';
 import { HistoryTableHeader } from './table/HistoryTableHeader';
-import { HistoryTableRow } from './table/HIstoryTableRow';
+import { HistoryTableRow } from './table/HistoryTableRow';
 import { Pagination } from '@/common/table/Pagination';
+import { useRecoilState } from 'recoil';
+import { toggleState } from '@/atom/staking/toggle';
 
 type HistoryTableProps = {
   columns: Column[];
@@ -48,6 +54,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
   );
   const [currentPage, setCurrentPage] = useState(0)
   const [buttonClick, setButtonClick] = useState(Boolean)
+  const [toggle, setToggle] = useRecoilState(toggleState)
   const theme = useTheme();
 
   useEffect(() => {
@@ -76,8 +83,27 @@ export const HistoryTable: FC<HistoryTableProps> = ({
       mr={'30px'}
       fontFamily={theme.fonts.Roboto}
     >
-      <Flex fontSize={'15px'} fontWeight={'bold'} mb={'15px'}>
-        {tableType}
+      <Flex fontSize={'15px'} fontWeight={'bold'} mb={'5px'} flexDir={'row'} w={'100%'} justifyContent={'space-between'}>
+        <Text>
+          {tableType}
+        </Text>
+        {
+          tableType === 'Staking' ? 
+          <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
+            <FormLabel color={'#828d99'} fontSize={'11px'} mt={'7px'}>
+              {toggle} Tx Hash
+            </FormLabel>
+            <Switch 
+              colorScheme={'green'} 
+              onChange={() =>
+                toggle === 'All'
+                  ? setToggle('My')
+                  : setToggle('All')
+              }
+            /> 
+          </FormControl>       
+          : ''
+        }
       </Flex>
       <Box overflowX={'auto'}>
         <chakra.table
@@ -103,7 +129,6 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                   boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}
                   h={'38px'}
                   key={i}
-                  // px={'16px'}
                   w="100%"
                   bg={'white.100' }
                   border={''}

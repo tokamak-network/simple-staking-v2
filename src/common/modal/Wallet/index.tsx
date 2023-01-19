@@ -34,6 +34,10 @@ import { useRecoilValue } from 'recoil';
 import { selectedModalState } from '@/atom/global/modal';
 import useModal from '@/hooks/useModal';
 // import { useConfig } from '@/hooks/useConfig';
+import Image from 'next/image';
+
+import ACCOUNT_COPY from '@/assets/images/account_copy_icon.png'
+import ETHERSCAN_LINK from '@/assets/images/etherscan_link_icon.png'
 
 const WALLET_VIEWS = {
   OPTIONS: 'options',
@@ -142,9 +146,24 @@ function WalletModal() {
       )
       .map((k) => SUPPORTED_WALLETS[k].name)[0];
     return (
-      <Text colorScheme="gray.200" fontSize="sm">
-        Connected with {name.toString()}
-      </Text>
+      <Flex flexDir={'row'}>
+        <Text colorScheme="gray.200" fontSize="13px" mr={'10px'} mt={'2px'}>
+          Connected with {name.toString()} 
+        </Text>
+        <Button 
+          onClick={handleWalletChange} 
+          w={'58px'} 
+          h={'22px'} 
+          bgColor={'#257eee'} 
+          color={'#fff'} 
+          fontWeight={600} 
+          fontSize={'12px'} 
+          outline="none" 
+          variant="outline"
+        >
+          Change
+        </Button>
+      </Flex>
     );
   }
 
@@ -171,6 +190,7 @@ function WalletModal() {
           !(window?.web3 || window?.ethereum)
         ) {
           if (option.name === "MetaMask") {
+            console.log('1')
             return (
               <WalletOption
                 id={`connect-${key}`}
@@ -180,6 +200,7 @@ function WalletModal() {
                 subheader={option.description}
                 link={"https://metamask.io/"}
                 icon={require("../../../assets/images/" + option.iconName).default}
+                size={'20px'}
               />
             );
           } else {
@@ -210,95 +231,90 @@ function WalletModal() {
           link={option.href}
           header={option.name}
           subheader={option.description} //use option.descriptio to bring back multi-line
-          icon={require("../../../assets/images/" + option.iconName).default}
+          icon={require("@/assets/images/" + option.iconName).default}
         />
       );
     });
   };
 
   return (
-    <Modal closeOnOverlayClick={false} isCentered isOpen={selectedModal === 'wallet_modal'} onClose={closeModal}>
-      <ModalOverlay />
+    <Modal isOpen={selectedModal === 'wallet'} onClose={closeModal}>
       {walletView === WALLET_VIEWS.ACCOUNT && account ? (
-        <ModalContent>
-          <ModalHeader>Account</ModalHeader>
+        <ModalContent
+          w={'280px'}
+          px={'0px'}
+          position={'absolute'}
+          right={'45px'}
+        >
+          <ModalHeader
+            fontFamily={'TitilliumWeb'}
+          >
+            <Text>
+              Account
+            </Text>
+            <Text
+              fontSize={'12px'}
+              color={'#86929d'}
+              fontWeight={'normal'}
+            >
+              My account & connect change
+            </Text>
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <Box px={1} py={5} rounded={5} borderWidth={1}>
-              <Box px={3}>
-                <Flex justify="space-between">
-                  {formatConnectorName()}
-                  <Flex>
-                    {/* {connector !== injected && connector !== walletlink && (
-                      <Button
-                        size="xs"
-                        mr={3}
-                        outline="none"
-                        colorScheme="red"
-                        onClick={() => {
-                          deactivate();
-                          (connector as any).close();
-
-                          // setAccountValue({signIn: false});
-                        }}>
-                        Disconnect
-                      </Button>
-                    )} */}
-                    {(active || error) && (
-                      <Button
-                        size="xs"
-                        mr={3}
-                        outline="none"
-                        colorScheme="red"
-                        onClick={() => {
-                          deactivate();
-                          closeModal();
-                        }}
-                      >
-                        Disconnect
-                      </Button>
-                    )}
-                    <Button onClick={handleWalletChange} size="xs" outline="none" variant="outline">
-                      Change
-                    </Button>
+          <ModalBody p={0} fontFamily={'TitilliumWeb'}>
+            <Flex w={'280px'} borderY={'1px'} borderColor={'#f4f6f8'} ml={0}>
+              {account && (
+                <Flex my={'24px'} ml={'25px'}>
+                  <Text fontSize="15px" fontWeight={600} mr={'12px'}>
+                    {trimAddress({
+                      address: account,
+                      firstChar: 7,
+                      lastChar: 4,
+                      dots: '....',
+                    })}
+                  </Text>
+                  <Flex w={'22px'} h={'22px'} mr={'7px'} onClick={handleCopyAction} cursor="pointer">
+                    <Image src={ACCOUNT_COPY} alt={'alt'} />
                   </Flex>
+                  <Link
+                    isExternal
+                    href={`https://etherscan.io/address/${account}`}
+                    fontSize="sm"
+                    _hover={{
+                      textDecoration: 'none',
+                    }}
+                  >
+                    <Image src={ETHERSCAN_LINK} alt={'alt'} />
+                  </Link>
                 </Flex>
-                <Flex direction="column">
-                  {account && (
-                    <Text fontSize="2xl" fontWeight={600}>
-                      {trimAddress({
-                        address: account,
-                        firstChar: 7,
-                        lastChar: 4,
-                        dots: '....',
-                      })}
-                    </Text>
-                  )}
-                  <Flex pt={5} justify="flex-start">
-                    <Text onClick={handleCopyAction} cursor="pointer" fontSize="sm" mr={3}>
-                      {copyText}
-                    </Text>
-                    {/* {explorerLinkLoading ? (
-                      <Skeleton />
-                    ) : (
-                      <Link
-                        isExternal
-                        href={`https://etherscan.io/address/${account}`}
-                        fontSize="sm"
-                        _hover={{
-                          textDecoration: 'none',
-                        }}>
-                        View on Etherscan
-                      </Link>
-                    )} */}
-                  </Flex>
-                </Flex>
-              </Box>
-            </Box>
+              )}
+            </Flex>
+            <Flex w={'280px'} borderY={'1px'} borderColor={'#f4f6f8'} h={'50px'} justifyContent={'center'} alignItems={'center'}>
+              {formatConnectorName()}
+            </Flex>
+            <Flex h={'64px'} justifyContent={'center'} alignItems={'center'}>
+              <Flex 
+                fontSize={'15px'} 
+                color={'#2a72e5'} 
+                fontWeight={600}
+                cursor={'pointer'}
+                onClick={() => {
+                  deactivate();
+                  closeModal();
+                }}
+              >
+                Logout
+              </Flex>
+            </Flex>
           </ModalBody>
         </ModalContent>
       ) : error ? (
-        <ModalContent>
+        <ModalContent
+          w={'280px'}
+          px={'0px'}
+          position={'absolute'}
+          right={'45px'}
+        >
           <ModalHeader>
             {error instanceof UnsupportedChainIdError ? (
               <Text>
@@ -330,10 +346,28 @@ function WalletModal() {
           </ModalBody> */}
         </ModalContent>
       ) : (
-        <ModalContent>
-          <ModalHeader>Connect Wallet</ModalHeader>
+        <ModalContent
+          w={'280px'}
+          px={'0px'}
+          position={'absolute'}
+          right={'45px'}
+        >
+          <ModalHeader
+            fontFamily={'TitilliumWeb'}
+          >
+            <Text>
+              Connect Wallet
+            </Text>
+            <Text
+              fontSize={'12px'}
+              color={'#86929d'}
+              fontWeight={'normal'}
+            >
+              To start using Staking
+            </Text>
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody pb={6}>
+          <ModalBody pb={6} fontFamily={'TitilliumWeb'} px={0}>
             {walletView === WALLET_VIEWS.PENDING ? (
               <WalletPending
                 connector={pendingWallet}
@@ -345,12 +379,17 @@ function WalletModal() {
               <>{getOptions()}</>
             )}
             {walletView !== WALLET_VIEWS.PENDING && (
-              <Text pt={3} fontSize="sm">
-                New to Ethereum?{' '}
-                <Link isExternal href="https://ethereum.org/wallets/">
+              <Flex flexDir={'column'} fontSize={'13px'} fontFamily={'TitilliumWeb'} ml={'25px'}>
+                <Text pt={3} >
+                  New to Ethereum?{' '}
+                </Text>
+                <Link 
+                  isExternal href="https://ethereum.org/wallets/"
+                  color={'#2a72e5'}
+                >
                   Learn more about wallets
                 </Link>
-              </Text>
+              </Flex>
             )}
           </ModalBody>
         </ModalContent>

@@ -3,14 +3,15 @@ import { IconOpen } from "@/common/Icons/IconOpen";
 import useOperatorList from "@/hooks/staking/useOperatorList";
 import { Box, Flex, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
 import { useMemo, useCallback, useState } from 'react';
-import { moveSyntheticComments } from "typescript";
 import { OperatorDetailInfo } from "./components/staking/table/OperatorDetail";
 import PageHeader from "./components/layout/PageHeader";
 import { OpearatorTable } from "./components/staking/Operators";
 import { WalletInformation } from "./components/staking/WalletInformation";
 import { HistoryTable } from "./components/staking/HistoryTable";
 import moment from "moment";
-import useUserBalance from '../hooks/useUserBalance';
+import { useRecoilValue } from 'recoil';
+import { selectedToggleState } from "@/atom/staking/toggle";
+import { useWeb3React } from '@web3-react/core';
 
 function Staking () {
   const theme = useTheme();
@@ -22,7 +23,7 @@ function Staking () {
         accessor: 'name',
       },
       {
-        Header: 'total staked',
+        Header: 'Total Staked',
         accessor: 'totalStaked',
       },
       {
@@ -30,8 +31,12 @@ function Staking () {
         accessor: 'commisionRate',
       },
       {
-        Header: 'your staked',
+        Header: 'User Staked',
         accessor: 'yourStaked',
+      },
+      {
+        Header: 'Recent Commit',
+        accessor: 'recentCommit',
       },
       {
         // Make an expander cell
@@ -74,13 +79,20 @@ function Staking () {
     ],
     [],
   );
+  const { account } = useWeb3React();
+
   const [tableLoading, setTableLoading] = useState<boolean>(true);
+  const toggleState = useRecoilValue(selectedToggleState)
   const { operatorList } = useOperatorList()
-  const { userTonBalance } = useUserBalance()
+
   console.log(operatorList)
   const renderRowSubComponent = useCallback(
     ({row}: any) => {
     const { layer2, delegators, commit, operatorsHistory, pendingWithdrawal } = row.original;
+
+    const myHistory = operatorsHistory.filter((history: any) => history.from.toLowerCase() === account?.toLowerCase())
+
+    const history = toggleState === 'All' ? operatorsHistory : myHistory
     const lastFinalized = commit.length !== 0 ? commit[0].blockTimestamp : '0'
     const recentCommit = lastFinalized !== '0' ? moment.unix(lastFinalized).format('YYYY.MM.DD HH:mm:ss (Z)') : 'The operator does not have any commits';
     return (
@@ -136,7 +148,7 @@ function Staking () {
         <Flex flexDir={'row'} mt={'60px'} ml={'70px'} justifyContent={'center'} alignItems={'center'}>
           <HistoryTable 
             columns={historyColumns}
-            data={operatorsHistory}
+            data={history}
             tableType={'Staking'}
           />
           <HistoryTable 
@@ -147,7 +159,7 @@ function Staking () {
         </Flex>
       </Flex>
     )
-  }, [historyColumns]);
+  }, [account, historyColumns, toggleState]);
   
   
   return (
