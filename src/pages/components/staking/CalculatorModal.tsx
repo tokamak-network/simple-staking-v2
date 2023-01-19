@@ -12,6 +12,7 @@ import { useWeb3React } from '@web3-react/core';
 import { inputBalanceState } from '@/atom/global/input';
 import { modalState } from '@/atom/global/modal';
 import axios from 'axios';
+import { getTotalSupply } from '@/api';
 
 function CalculatorModal () {
   const theme = useTheme()
@@ -58,12 +59,13 @@ function CalculatorModal () {
       //@ts-ignore
       return response.data.rates.USD
     })
+    const totalSup = await getTotalSupply()
     const USD = KRW * usdRates
     if (Staked) {
       const total = Number(Staked.replace(/,/g, '')) + inputBalance
       const unit = duration === 'Year' ? 365 : duration === 'Month' ? 30 : 7
       
-      const stakedRatio = total/40000000
+      const stakedRatio = total/totalSup
       const compensatePeraDay = stakedRatio * maxCompensate
       const dailyNotMintedSeig = maxCompensate - maxCompensate * (stakedRatio);
       const proportionalSeig = dailyNotMintedSeig * (pSeigDeduction / 100)
