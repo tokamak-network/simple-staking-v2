@@ -28,6 +28,9 @@ const colors = {
     100: "#808992",
     200: '#e9edf1',
     300: '#86929d',
+    400: '#dfe4ee',
+    500: '#84919e',
+    600: '#c7d1d8'
   },
   black: {
     100: "#3d495d",
@@ -174,7 +177,7 @@ const STAKING_HISTORY_TABLE_STYLE = {
     bg: 'white.100',
     borderRadius: 4,
     size: 'sm',
-    _hover: {borderColor: '#2a72e5', color: '#2a72e5'},
+    _hover: { borderColor: '#2a72e5', color: '#2a72e5' },
   })
 }
 
@@ -182,12 +185,12 @@ const btnStyle = {
   btnAble: () => ({
     bg: 'blue.100',
     color: 'white.100',
+    _hover: { backgroundColor: 'blue.200' },
     fontWeight: 500,
-    _hover: {backgroundColor: 'blue.200'},
   }),
   btnDisable: () => ({
     bg: colors.gray[300],
-    color: 'gray.200' ,
+    color: 'gray.200',
     // color: colors.gray[200],
     fontWeight: 500,
     // borderWidth: p0 : 1,

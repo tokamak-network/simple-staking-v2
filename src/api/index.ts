@@ -10,7 +10,7 @@ function createInstatnceCandidate () {
 
 const candidate = createInstatnceCandidate();
 
-export async function getDailyStakedTotal (chainId: number) {
+export async function getDailyStakedTotal () {
   const res = await candidate.get('/stakedtotals', {
     params: {
       chainId: DEFAULT_NETWORK,
@@ -161,6 +161,8 @@ export async function getCandidates () {
   return res.data === '' ? [] : res.data.datas;
 }
 
+
+
 // export async function getManagers () {
 //   const res = await instance.get('/managers');
 //   if (res.data === '') return [];
@@ -197,6 +199,12 @@ export async function getCandidates () {
 export async function getTotalSupply () {
   const res =  await axios.get('https://price-api.tokamak.network/totalsupply');
   return res.data;
+}
+
+export async function getTotalStaked() {
+  const res = await axios.get('https://price-api.tokamak.network/staking/current');
+  return res.data;
+  
 }
 
 // export async function addHistory (user, history) {

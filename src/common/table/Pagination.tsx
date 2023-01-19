@@ -106,6 +106,7 @@ export const Pagination: FC<PaginationProps> = ({
             return [
               // eslint-disable-next-line react/jsx-key
               <Flex
+              key={i}
                 alignItems="center"
                 p={0}
                 fontSize={'13px'}

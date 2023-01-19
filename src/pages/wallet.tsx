@@ -23,7 +23,7 @@ function Wallet () {
     type: 'ray',
     localeString: true
   }) : '0.00' 
-
+  
   const historyColumns = useMemo(
     () => [
       {
