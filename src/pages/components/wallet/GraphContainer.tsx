@@ -76,6 +76,7 @@ function GraphContainer() {
 
   useEffect(() => {
     calcTotalReward();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate, endDate, dailyRewards]);
 
   const getData = async () => {
