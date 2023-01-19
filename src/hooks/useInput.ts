@@ -3,7 +3,6 @@ import { PageKey } from "types";
 import { InputKey } from "types/atom";
 // import useBondInput from "./bond/useBondInput";
 import useStakeInput from "./staking/useStakingInput";
-import useModal from "./useModal";
 
 function useInput(key: PageKey, subKey: InputKey) {
   const { inputValue, value, setValue, resetValue } = useStakeInput(subKey);

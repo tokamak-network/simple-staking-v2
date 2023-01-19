@@ -2,8 +2,8 @@ import { getEventByLayer2, getOperatorsInfo, getDelegators, getOperatorUserHisto
 import { useEffect, useState } from 'react';
 import { NON_CANDIDATE } from "@/constants";
 import { useWeb3React } from '@web3-react/core';
-import { convertNumber } from '../../utils/number';
-import useCallContract from '../useCallContract';
+import { convertNumber } from '@/utils/number';
+import useCallContract from '@/hooks/useCallContract';
 import { BigNumber } from 'ethers';
 import { useRecoilValue } from 'recoil';
 import { txState } from '@/atom/global/transaction';
