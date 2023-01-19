@@ -7,7 +7,7 @@ interface THEME_PROPS {
 }
 
 const fonts = {
-  TitilliumWeb: "TitilliumWeb",
+  TitilliumWeb: 'Titillium Web, sans-serif',
   Roboto: "Roboto",
   Nanum: `'NanumSquareEB', sans-serif`
 }
@@ -77,6 +77,18 @@ const PAGE_STYLE = {
   }),
 }
 
+const SUPPORT_PARAGRAPH_STYLE = {
+  paragraphText:() => ({
+    fontFamily: fonts.Roboto,
+  fontSize: '17px',
+  color: '#3d495d',
+  fontWeight: 'normal',
+  marginBottom: '20px',
+  textAlign: 'justify'
+  })
+  
+}
+
 const INPUT_STYLE = {
   inputStaking: () => ({
     fontSize:'32px',
@@ -132,6 +144,7 @@ const INPUT_STYLE = {
     color: '#86929d'
   })
 }
+
 
 const STAKING_HISTORY_TABLE_STYLE = {
   tableRow: () => ({
@@ -240,6 +253,7 @@ const theme = extendTheme({
   fonts,
   PAGE_STYLE,
   STAKING_HISTORY_TABLE_STYLE,
+  SUPPORT_PARAGRAPH_STYLE,
   btnStyle,
   INPUT_STYLE,
   // BUTTON_STYLE,
