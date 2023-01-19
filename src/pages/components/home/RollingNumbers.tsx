@@ -32,14 +32,14 @@ function RollingNumbers(props: { totalStaked: Number }) {
   //       maximumFractionDigits: 0,
   //       minimumFractionDigits: 0,
   //     }).split("");
+
   setTimeout(() => {
     setReady(true);
   }, 100);
 
-  const newLocal = "flex";
   return (
     <Flex
-      display={newLocal}
+      display={"flex"}
       flexDir="row"
       justifyContent={"center"}
       h={'76px'}
@@ -99,6 +99,7 @@ function RollingNumbers(props: { totalStaked: Number }) {
             `}
           </style>
           {split.map((item: string, index: number) => (
+            
             <UnorderedList
               className="digits digits-first rolling"
               key={index}
