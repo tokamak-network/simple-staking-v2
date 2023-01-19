@@ -23,7 +23,7 @@ export const TableRow: FC<TableRowProps> = ({
     eventName,
     from,
     blockNumber
-  } = cell.row.original;
+  } = cell?.row.original;
 
   const theme = useTheme()
   const type = cell.column.id;
@@ -47,7 +47,7 @@ export const TableRow: FC<TableRowProps> = ({
           {index}
         </Text>
       ) : ('')}
-      {type === 'txHash' ? (
+      {type === 'txHash' && transactionHash ? (
         <Link
           isExternal
           href={`https://etherscan.io/tx/${transactionHash}`}

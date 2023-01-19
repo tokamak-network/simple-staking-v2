@@ -12,14 +12,26 @@ import { useEffect, useState } from "react";
 function RollingNumbers(props: { totalStaked: Number }) {
   const { totalStaked } = props;
   const [ready, setReady] = useState(false);
+  const [split, setSplit] = useState<string[]>(['0']);
   const twentyone = Array.from(Array(22).keys());
-  const split = totalStaked
-    .toLocaleString(undefined, {
-      maximumFractionDigits: 0,
-      minimumFractionDigits: 0,
-    })
-    .split("");
+  
+  useEffect(() => {
+    if (totalStaked) {
+      const splitNumber = totalStaked
+      .toLocaleString(undefined, {
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      }).split("");
+      
+      setSplit(splitNumber)
+    }
+  }, [totalStaked])
 
+  // const split = totalStaked
+  //     .toLocaleString(undefined, {
+  //       maximumFractionDigits: 0,
+  //       minimumFractionDigits: 0,
+  //     }).split("");
   setTimeout(() => {
     setReady(true);
   }, 100);
@@ -29,6 +41,7 @@ function RollingNumbers(props: { totalStaked: Number }) {
       display={"flex"}
       flexDir="row"
       justifyContent={"center"}
+      h={'76px'}
       width="500px"
     >
       {ready ? (

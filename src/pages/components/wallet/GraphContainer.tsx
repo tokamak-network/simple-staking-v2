@@ -27,6 +27,7 @@ function GraphContainer() {
   const { dailyWithdrawAmnts } = useDailyWithdrawals();
   const [calculatedReward, setCalculatedReward] = useState<string>("");
   const [calculatedStakes, setCalculatedStakes] = useState<string>("");
+  const [labels, setLabels] = useState<string[]>();
   const [calculatedWithdrawals, setCalculatedWithdrawals] =
     useState<string>("");
   const [showYear, setShowYear] = useState(false);
@@ -196,9 +197,18 @@ function GraphContainer() {
       },
     },
   };
-  const labels = dailyRewards
-    .map((reward: any) => formatDate(reward._id.dateUTC))
-    .reverse();
+
+  useEffect(() => {
+    if (dailyRewards) {
+      const label = dailyRewards
+        .map((reward: any) => formatDate(reward._id.dateUTC))
+        .reverse();
+
+      setLabels(label)
+    }
+  }, [dailyRewards])
+  
+
   const data = {
     labels,
     datasets: [
@@ -211,6 +221,7 @@ function GraphContainer() {
       },
     ],
   };
+
   return (
     <Flex
       flexDir={"column"}

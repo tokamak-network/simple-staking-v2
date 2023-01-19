@@ -12,8 +12,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import moment from "moment";
-import BigNumber from "bignumber.js";
 
 ChartJS.register(
   CategoryScale,

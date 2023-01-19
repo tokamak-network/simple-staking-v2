@@ -46,11 +46,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [withdrawDisabled, setwithdrawDisabled] = useState(true);
 
   const { userTonBalance } = useUserBalance(account)
-  const { pendingUnstaked } = usePendingUnstaked(data.layer2, account)
-  const { withdrawable, withdrawableLength } = useWithdrawable(data.layer2)
+  const { pendingUnstaked } = usePendingUnstaked(data?.layer2, account)
+  const { withdrawable, withdrawableLength } = useWithdrawable(data?.layer2)
 
-
-  // const { openModal } = useModal('stake_stake_modal', userTonBalance)
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
 
@@ -70,7 +68,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 
   const btnDisabledUnStake = () => {
     return account === undefined ||
-      data.yourStaked === '0.00'
+      data?.yourStaked === '0.00'
         ? setUnstakeDisabled(true)
         : setUnstakeDisabled(false);
   };
@@ -93,9 +91,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const dataModal = {
     tonBalance: userTonBalance,
     pendingUnstaked: pendingUnstaked,
-    stakedAmount: data.yourStaked,
+    stakedAmount: data?.yourStaked,
     withdrawable: withdrawable,
-    layer2: data.layer2,
+    layer2: data?.layer2,
     withdrawableLength: withdrawableLength,
   }
   

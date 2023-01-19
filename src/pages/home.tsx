@@ -267,22 +267,15 @@ function Home() {
           width={"100%"}
        
         >
-          <Text h={"58px"} fontFamily={theme.fonts.TitilliumWeb}>
+          <Text h={"58px"} fontFamily={theme.fonts.TitilliumWeb} mb={'25px'}>
             There is currently
           </Text>
-          {/* <Text
-            color={"#2a72e5"}
-            h={"76px"}
-            mt={"25px"}
-            fontFamily={theme.fonts.TitilliumWeb}
-          >
-            {} TON
-          </Text> */}
           <RollingNumbers totalStaked={totalStaked}/>
           <Text
             h={"48px"}
             color={"#3d495d"}
             mt={"25px"}
+            mb={'25px'}
             fontFamily={theme.fonts.TitilliumWeb}
           >
             Staked in the
@@ -291,11 +284,12 @@ function Home() {
             h={"42px"}
             mt={"20px"}
             fontSize={"38px"}
+            mb={'30px'}
             fontFamily={theme.fonts.Nanum}
           >
             Tokamak Network
           </Text>
-          <Flex flexDir={"column"} mt="30px">
+          <Flex flexDir={"column"} mt="30px" mb={'20px'}>
             <Flex alignItems={"center"}>
               <Flex h="2px" w="15px" bg={"blue.200"} mr="10px" />
               <Text

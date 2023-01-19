@@ -135,7 +135,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
             display="flex"
             flexDirection="column"
           >
-            {page.map((row: any, i) => {
+            {page?.map((row: any, i) => {
               const {layer2} = row.original;
               prepareRow(row);
 
@@ -170,7 +170,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                   alignItems="center"
                   {...row.getRowProps()}
                 >
-                  {row.cells.map((cell: any, index: number) => {
+                  {row.cells?.map((cell: any, index: number) => {
                     const {
                       layer2,
                       commissionRate,

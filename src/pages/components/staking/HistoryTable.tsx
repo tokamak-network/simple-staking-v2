@@ -17,10 +17,11 @@ import {
   FormLabel
 } from '@chakra-ui/react';
 import { HistoryTableHeader } from '@/pages/components/staking/table/HistoryTableHeader';
-import { HistoryTableRow } from '@/pages/components/staking/table/HistoryTableRow';
+// import { HistoryTableRow } from './table/HistoryTableRow';
 import { Pagination } from '@/common/table/Pagination';
 import { useRecoilState } from 'recoil';
 import { toggleState } from '@/atom/staking/toggle';
+import HistoryTableRow from './table/HIstoryTableRow';
 
 type HistoryTableProps = {
   columns: Column[];
@@ -121,7 +122,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
             display="flex"
             flexDirection="column"
           >
-            {page.map((row: any, i) => {
+            {page?.map((row: any, i) => {
               prepareRow(row);
 
               return [
@@ -136,7 +137,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                   alignItems="center"
                   {...row.getRowProps()}
                 >
-                  {row.cells.map((cell: any, index: number) => {
+                  {row?.cells?.map((cell: any, index: number) => {
                     return (
                       
                       <HistoryTableRow 

@@ -94,7 +94,7 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
             display="flex"
             flexDirection="column"
           >
-            {page.map((row: any, i) => {
+            {page?.map((row: any, i) => {
               prepareRow(row);
 
               return [
@@ -107,7 +107,7 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
                   alignItems="center"
                   {...row.getRowProps()}
                 >
-                  {row.cells.map((cell: any, index: number) => {
+                  {row?.cells?.map((cell: any, index: number) => {
                     return (
                       //@ts-ignore
                       // eslint-disable-next-line react/jsx-key
