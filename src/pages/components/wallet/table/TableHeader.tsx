@@ -53,3 +53,5 @@ const HeaderColumn = ( columnName: string) => {
     </chakra.th>
   )
 }
+
+export default TableHeader

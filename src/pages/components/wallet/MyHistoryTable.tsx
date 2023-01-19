@@ -140,4 +140,4 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
   )
 }
 
-export default MyHistoryTableProps
+export default MyHistoryTable

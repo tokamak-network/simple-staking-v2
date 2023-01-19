@@ -33,6 +33,8 @@ export const HistoryTableHeader: FC<HistoryTableHeaderProps> = ({
   )
 }
 
+export default HistoryTableHeader
+
 const HeaderColumn = (tableType: string, columnName: string) => {
   return (
     <chakra.th

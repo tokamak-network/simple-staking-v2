@@ -61,3 +61,5 @@ export const CalculatorBodyRow = (args: {
     </Flex>
   )
 }
+
+export default CalculatorBodyRow

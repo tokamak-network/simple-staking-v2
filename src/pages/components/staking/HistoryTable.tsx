@@ -167,5 +167,6 @@ export const HistoryTable: FC<HistoryTableProps> = ({
       </Box>
     </Flex>
   )
-
 }
+
+export default HistoryTable

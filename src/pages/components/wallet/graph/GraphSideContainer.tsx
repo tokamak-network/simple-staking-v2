@@ -33,3 +33,5 @@ export const GraphSideContainer: FC<GraphSideContainerProps> = ({
     </Flex>
   )
 }
+
+export default GraphSideContainer

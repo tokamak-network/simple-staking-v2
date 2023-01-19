@@ -8,3 +8,5 @@ export const Info = (title: string, value: string | number | undefined, unit: st
     </Flex>
   )
 }
+
+export default Info

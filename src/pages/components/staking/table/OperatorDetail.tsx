@@ -38,3 +38,5 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
     </Flex>
   )
 }
+
+export default OperatorDetailInfo

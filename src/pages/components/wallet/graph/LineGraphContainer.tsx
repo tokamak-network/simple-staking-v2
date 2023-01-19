@@ -40,3 +40,5 @@ export const LineGraphContainer: FC<LineGraphContainerProps> = ({
     </Flex>
   );
 };
+
+export default LineGraphContainer

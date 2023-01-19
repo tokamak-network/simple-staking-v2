@@ -40,3 +40,5 @@ export const ModalHeader = (args: {
     </Flex>
   )
 }
+
+export default ModalHeader

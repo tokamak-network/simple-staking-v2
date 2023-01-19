@@ -16,7 +16,7 @@ import {
 import moment from "moment";
 import { orderBy } from "lodash";
 import { useEffect, useState } from "react";
-import RollingNumbers from "./components/home/RollingNumbers";
+import RollingNumbers from "@/pages/components/home/RollingNumbers";
 
 ChartJS.register(
   CategoryScale,

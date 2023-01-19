@@ -33,3 +33,5 @@ export const WithdrawModalBody = (args: {
     </Flex>
   )
 }
+
+export default WithdrawModalBody

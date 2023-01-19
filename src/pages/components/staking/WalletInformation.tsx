@@ -217,3 +217,5 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     </Container>
   );
 };
+
+export default WalletInformation

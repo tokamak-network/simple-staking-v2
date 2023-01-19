@@ -28,3 +28,5 @@ export const CalculatorBody = (args: {
     </Flex>
   )
 }
+
+export default CalculatorBody

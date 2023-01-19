@@ -34,3 +34,5 @@ export const GraphSideComponent: FC<GraphSideComponentProps> = ({
     </Flex>
   )
 }
+
+export default GraphSideComponent

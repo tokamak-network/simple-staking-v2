@@ -267,3 +267,5 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
     </Flex>
   );
 }
+
+export default OpearatorTable

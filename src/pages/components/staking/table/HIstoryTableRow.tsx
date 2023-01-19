@@ -88,3 +88,5 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
     </chakra.td>
   )
 }
+
+export default HistoryTableRow

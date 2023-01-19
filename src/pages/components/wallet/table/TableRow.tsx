@@ -108,3 +108,5 @@ export const TableRow: FC<TableRowProps> = ({
     </chakra.td>
   )
 }
+
+export default TableRow
