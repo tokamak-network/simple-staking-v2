@@ -6,17 +6,24 @@ export function useDailyWalletRewards (start: string, end: string) {
   const [dailyWalletRewards, setDailyWalletRewards] = useState()
   const {account} = useWeb3React();
 
-  useEffect(()=> {
-    async function fetchData () {
+
+  useEffect (() => {
+    fetchData(start, end)
+  },[account])
+
+    async function fetchData (start: string, end: string) {
       if (account) {
-        const data = await getDailyWalletRewards(account?.toLowerCase(), start, end)
+        const data = await getDailyWalletRewards(account?.toLowerCase(), start, end);        
         if (data.length !== 0) {
-          
+          setDailyWalletRewards(data)
+        //  console.log(data);
+         
+          return data
+        
         }
       }
-      
+    
     }
-    fetchData()
-    return dailyWalletRewards
-  }, [])
+
+  return { fetchData, dailyWalletRewards}
 }
