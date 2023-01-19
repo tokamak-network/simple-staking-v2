@@ -16,8 +16,8 @@ import {
   FormControl,
   FormLabel
 } from '@chakra-ui/react';
-import { HistoryTableHeader } from './table/HistoryTableHeader';
-import { HistoryTableRow } from './table/HistoryTableRow';
+import { HistoryTableHeader } from '@/pages/components/staking/table/HistoryTableHeader';
+import { HistoryTableRow } from '@/pages/components/staking/table/HistoryTableRow';
 import { Pagination } from '@/common/table/Pagination';
 import { useRecoilState } from 'recoil';
 import { toggleState } from '@/atom/staking/toggle';

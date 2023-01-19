@@ -1,6 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { FC } from 'react';
-import { GraphSideComponent } from './GraphSideComponent';
+import { GraphSideComponent } from '@/pages/components/wallet/graph/GraphSideComponent';
 
 type GraphSideContainerProps = {
   totalReward: string;
