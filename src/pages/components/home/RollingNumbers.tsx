@@ -36,9 +36,10 @@ function RollingNumbers(props: { totalStaked: Number }) {
     setReady(true);
   }, 100);
 
+  const newLocal = "flex";
   return (
     <Flex
-      display={"flex"}
+      display={newLocal}
       flexDir="row"
       justifyContent={"center"}
       h={'76px'}
