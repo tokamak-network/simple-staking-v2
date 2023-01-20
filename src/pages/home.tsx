@@ -16,7 +16,7 @@ import {
 import moment from "moment";
 import { orderBy } from "lodash";
 import { useEffect, useState } from "react";
-import RollingNumbers from "@/pages/components/home/RollingNumbers";
+// import RollingNumbers from "@/pages/components/home/RollingNumbers";
 
 ChartJS.register(
   CategoryScale,
@@ -270,7 +270,7 @@ function Home() {
           <Text h={"58px"} fontFamily={theme.fonts.TitilliumWeb} mb={'25px'}>
             There is currently
           </Text>
-          <RollingNumbers totalStaked={totalStaked}/>
+          {/* <RollingNumbers totalStaked={totalStaked}/> */}
           <Text
             h={"48px"}
             color={"#3d495d"}

@@ -4,9 +4,9 @@ import { useDisclosure } from "@chakra-ui/react";
 import { Web3ReactProvider } from "@web3-react/core";
 import getLibrary from "utils/getLibrary";
 import theme from "theme";
-import Footer from "pages/components/layout/Footer";
+// import Footer from "pages/components/layout/Footer";
 import { RecoilRoot } from "recoil";
-import Header from "pages/components/layout/Header";
+// import Header from "pages/components/layout/Header";
 import Entry from "./entry";
 import HeadMeta from "./Header";
 // import NetworkModal from "./components/global/NetworkModal";
@@ -29,9 +29,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               {/* TABLET VIEW = 1040px */}
               {/* MOBILE VIEW = 360px */}
               <Flex flexDir={"column"} w={"100%"} alignItems={"center"} justifyContent={'space-between'}>
-                <Header
+                {/* <Header
                   // walletopen={() => handleWalletModalOpen("wallet")}
-                />
+                /> */}
                 <Flex
                   justifyContent="center"
                   w={"100%"}
@@ -46,7 +46,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                     minH={"90vh"}
                   >
                     <Entry Component={Component} {...pageProps} />
-                    <Footer/>
+                    {/* <Footer/> */}
                     {/* <NetworkModal /> */}
                     {/* <TermsOfUse /> */}
                     {/* Use when it does need to pop Notice Modal up */}

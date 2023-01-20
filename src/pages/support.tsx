@@ -1,18 +1,18 @@
 import { Box, Flex, useTheme } from "@chakra-ui/react";
 import { useRef } from "react";
 import Image from "next/image";
-import PageHeader from "./components/layout/PageHeader";
-import TopButtonContainer from "./components/support/TopButtonContainer";
+// import PageHeader from "./components/layout/PageHeader";
+// import TopButtonContainer from "./components/support/TopButtonContainer";
 import logo from "assets/images/tokamak-staking-simple.png";
-import SupportImage from "./components/support/SupportImage";
-import Introduction from "./components/support/Introduction";
-import Install from "./components/support/Install";
-import Login from "./components/support/Login";
-import Stake from "./components/support/Stake";
-import Unstake from "./components/support/Unstake";
-import Restake from "./components/support/Restake";
-import Withdraw from "./components/support/Withdraw";
-import Wallet from "./components/support/Wallet";
+// import SupportImage from "./components/support/SupportImage";
+// import Introduction from "./components/support/Introduction";
+// import Install from "./components/support/Install";
+// import Login from "./components/support/Login";
+// import Stake from "./components/support/Stake";
+// import Unstake from "./components/support/Unstake";
+// import Restake from "./components/support/Restake";
+// import Withdraw from "./components/support/Withdraw";
+// import Wallet from "./components/support/Wallet";
 import top_arrow_icon from "assets/images/top_arrow_icon.png";
 function Support() {
   const theme = useTheme();
@@ -38,7 +38,7 @@ function Support() {
       alignItems={"center"}
       ref={topRef}
     >
-      <PageHeader
+      {/* <PageHeader
         title={"Support"}
         subtitle={"We will guide you on how to stake TON in Tokamak Network"}
       />
@@ -78,7 +78,7 @@ function Support() {
         >
           <Image src={top_arrow_icon} alt={"top_arrow_icon"} />
         </Flex>
-      </Box>
+      </Box> */}
     </Flex>
   );
 }

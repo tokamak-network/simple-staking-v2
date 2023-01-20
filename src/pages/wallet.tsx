@@ -1,8 +1,8 @@
 import { Box, Flex, Text, useMediaQuery, useColorMode, useTheme } from '@chakra-ui/react';
-import PageHeader from "./components/layout/PageHeader";
-import TopCardContainer from './components/wallet/TopCardContainer';
-import GraphContainer from './components/wallet/GraphContainer';
-import { MyHistoryTable } from './components/wallet/MyHistoryTable';
+// import PageHeader from "./components/layout/PageHeader";
+// import TopCardContainer from './components/wallet/TopCardContainer';
+// import GraphContainer from './components/wallet/GraphContainer';
+// import { MyHistoryTable } from './components/wallet/MyHistoryTable';
 import { useMemo, useState } from 'react';
 import { useUserHistory } from '../hooks/wallet/useUserHIstory';
 import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
@@ -60,7 +60,7 @@ function Wallet () {
 
   return (
     <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
-      <PageHeader title={'Wallet'} subtitle={'Check the status of your assets in the wallet'}/>
+      {/* <PageHeader title={'Wallet'} subtitle={'Check the status of your assets in the wallet'}/>
       <Box fontFamily={theme.fonts.roboto}>
         <TopCardContainer
           totalStaked={myTotalStaked}
@@ -73,7 +73,7 @@ function Wallet () {
           data={userHistory}
           isLoading={tableLoading}
         />
-      </Box>
+      </Box> */}
     </Flex>
   );
 }
