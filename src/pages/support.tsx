@@ -14,6 +14,7 @@ import Restake from "./components/support/Restake";
 import Withdraw from "./components/support/Withdraw";
 import Wallet from "./components/support/Wallet";
 import top_arrow_icon from "assets/images/top_arrow_icon.png";
+
 function Support() {
   const theme = useTheme();
   const topRef = useRef<null | HTMLDivElement>(null);

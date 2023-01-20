@@ -9,15 +9,13 @@ import { useState, useEffect } from 'react';
 import { range } from 'lodash';
 import { convertNumber } from 'utils/number';
 import moment from 'moment';
-import { BigNumber } from 'ethers';
+import BigNumber from 'bignumber.js';
 import { LineGraphContainer } from '@/common/graph/LineGraphContainer';
 import { useWeb3React } from '@web3-react/core';
 import Calendar from './Calendar';
-
 function GraphContainer() {
   const theme = useTheme();
   const { library } = useWeb3React();
-  const { accumulatedReward } = useAccumulatedReward();
   const { dailyStakedAmnts } = useDailyStaked();
   const { dailyWithdrawAmnts } = useDailyWithdrawals();
   const [calculatedReward, setCalculatedReward] = useState<string>('');
@@ -25,8 +23,6 @@ function GraphContainer() {
   const [labels, setLabels] = useState<string[]>();
   const [calculatedWithdrawals, setCalculatedWithdrawals] =
     useState<string>('');
-  const [showYear, setShowYear] = useState(false);
-  const [showMonths, setShowMonths] = useState(false);
   const [startDate, setStartDate] = useState(
     new Date(new Date().setDate(new Date().getDate() - 7))
   );
@@ -42,9 +38,9 @@ function GraphContainer() {
   const [dailyRewards, setDailyRewards] = useState<any[]>([]);
 
   const calcTotalReward = () => {
-    const initialAmount = BigNumber.from('0');
+    const initialAmount = new BigNumber('0');
     const reducer = (amount: any, day: any) =>
-      amount.plus(BigNumber.from(day.rewards.toString()));
+      amount.plus(new BigNumber(day.rewards.toString()));
     const rewards = dailyRewards.reduce(reducer, initialAmount);
     const convertedWTon = convertNumber({
       type: 'ray',
@@ -56,9 +52,9 @@ function GraphContainer() {
   };
 
   const calcTotal = (dailyStakes: any) => {
-    const initialAmount = BigNumber.from('0');
+    const initialAmount = new BigNumber('0');
     const reducer = (amount: any, day: any) =>
-      amount.plus(BigNumber.from(day.value.toString()));
+      amount.plus(new BigNumber(day.value.toString()));
 
     const stakes = dailyStakes.reduce(reducer, initialAmount);
     const convertedWTon = convertNumber({
