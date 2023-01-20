@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@0x/subproviders": "^7.0.0",
     "@apollo/client": "^3.7.2",
     "@chakra-ui/icons": "^2.0.14",
     "@chakra-ui/react": "^2.4.3",
@@ -49,9 +48,6 @@
     "web3-utils": "^1.8.1"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0",
-    "@swc/cli": "^0.1.57",
-    "@swc/core": "^1.2.222",
     "@types/node": "18.0.0",
     "@types/react": "18.0.14",
     "@types/react-datepicker": "^4.8.0",

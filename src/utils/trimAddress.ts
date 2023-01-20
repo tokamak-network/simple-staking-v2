@@ -1,11 +1,4 @@
-import { isArgumentsObject } from "util/types";
-
-function trimAddress(args: {
-  address: string;
-  firstChar: number;
-  lastChar: number;
-  dots: string;
-}): string {
+function trimAddress(args: { address: string; firstChar: number; lastChar: number; dots: string }): string {
   const { address, firstChar, lastChar, dots } = args;
   const firstChatAt = address.substring(0, firstChar);
   const lastCharAt = address.substring(address.length - lastChar);

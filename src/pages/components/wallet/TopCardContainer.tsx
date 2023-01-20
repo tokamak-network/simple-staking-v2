@@ -1,6 +1,6 @@
-import { Flex } from "@chakra-ui/react";
-import TopCard from "./TopCard";
-import { FC } from "react";
+import { Flex } from '@chakra-ui/react';
+import TopCard from './TopCard';
+import { FC } from 'react';
 
 type TopCardContainerProps = {
   totalStaked: string | undefined

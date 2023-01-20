@@ -1,31 +1,31 @@
-import { extendTheme } from '@chakra-ui/react'
-import '@fontsource/titillium-web'
-import '@fontsource/roboto'
+import { extendTheme } from '@chakra-ui/react';
+import '@fontsource/titillium-web';
+import '@fontsource/roboto';
 
 interface THEME_PROPS {
-  colorMode: 'light' | 'dark',
+  colorMode: 'light' | 'dark';
 }
 
 const fonts = {
   TitilliumWeb: 'Titillium Web, sans-serif',
-  Roboto: "Roboto",
-  Nanum: `'NanumSquareEB', sans-serif`
+  Roboto: 'Roboto',
+  Nanum: `'NanumSquareEB', sans-serif`,
 }
 
 const breakpoints = ['0px', '1024px', '1440px'];
 
 const colors = {
   blue: {
-    100: "#257eee",
-    200: "#2a72e5",
+    100: '#257eee',
+    200: '#2a72e5',
   },
   white: {
-    100: "#ffffff",
-    200: "#f1f1f1",
-    300: "#fafbfc",
+    100: '#ffffff',
+    200: '#f1f1f1',
+    300: '#fafbfc',
   },
   gray: {
-    100: "#808992",
+    100: '#808992',
     200: '#e9edf1',
     300: '#86929d',
     400: '#dfe4ee',
@@ -33,14 +33,14 @@ const colors = {
     600: '#c7d1d8'
   },
   black: {
-    100: "#3d495d",
-    200: "#121318",
+    100: '#3d495d',
+    200: '#121318',
   },
   red: {
-    100: "#e23738",
+    100: '#e23738',
   },
   green: {
-    100: "#5eea8d",
+    100: '#5eea8d',
   },
 }
 
@@ -83,11 +83,11 @@ const PAGE_STYLE = {
 const SUPPORT_PARAGRAPH_STYLE = {
   paragraphText:() => ({
     fontFamily: fonts.Roboto,
-  fontSize: '17px',
-  color: '#3d495d',
-  fontWeight: 'normal',
-  marginBottom: '20px',
-  textAlign: 'justify'
+    fontSize: '17px',
+    color: '#3d495d',
+    fontWeight: 'normal',
+    marginBottom: '20px',
+    textAlign: 'justify',
   })
   
 }
@@ -102,7 +102,7 @@ const INPUT_STYLE = {
     fontWeight:600,
     _placeholder:{ color: '#304156' },
     border: '',
-    ml:'15px'
+    ml:'15px',
   }),
   inputCalc: () => ({
     fontSize:'13px',
@@ -115,10 +115,10 @@ const INPUT_STYLE = {
     padding: '0px',
     width: '70px',
     marginLeft: '5px',
-    marginTop: '1px'
+    marginTop: '1px',
   }),
   maxStaking: () => ({
-    // pos: "absolute",
+    // pos: 'absolute',
     // right:'-60px',
     w:'50px',
     h:'26px',
@@ -144,7 +144,7 @@ const INPUT_STYLE = {
     bg:'none',
     fontSize: '12px',
     fontWeight: 'normal',
-    color: '#86929d'
+    color: '#86929d',
   })
 }
 
@@ -153,8 +153,8 @@ const STAKING_HISTORY_TABLE_STYLE = {
   tableRow: () => ({
     m: 0,
     pr: 0,
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     h: '38px',
     fontSize: '13px',
     borderBottom: '1px dashed #e6eaee',
@@ -167,7 +167,7 @@ const STAKING_HISTORY_TABLE_STYLE = {
     border: '',
     mb: '25px',
     borderTopWidth: 0,
-    borderBottomRadius: "10px"
+    borderBottomRadius: '10px',
   }),
   paginationButton: () => ({
     width: '24px',
@@ -212,7 +212,7 @@ const btnStyle = {
     lineHeight: 1.33,
     letterSpacing: 'normal',
     textAlign: 'center',
-    color: '#2a72e5'
+    color: '#2a72e5',
   }),
   btnWalletPeriod: () => ({
     width: '100px',
@@ -229,7 +229,7 @@ const btnStyle = {
     lineHeight: 1.33,
     letterSpacing: 'normal',
     textAlign: 'center',
-    color: '#86929d'
+    color: '#86929d',
   })
   ,
   btnWalletSearch: () => ({
@@ -247,7 +247,7 @@ const btnStyle = {
     lineHeight: 1.33,
     letterSpacing: 'normal',
     textAlign: 'center',
-    color: '#fff'
+    color: '#fff',
   })
 };
 
@@ -270,7 +270,7 @@ const theme = extendTheme({
     global: (props: THEME_PROPS) => ({
       'html, body': {
         backgroundColor: '#fafbfc',
-        // props.colorMode === "light" ? "white.100" : "black.100",
+        // props.colorMode === 'light' ? 'white.100' : 'black.100',
         // fontFamily: fonts.Poppins,
         color: '#3d495d',
       },

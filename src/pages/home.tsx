@@ -1,8 +1,8 @@
-import { Box, Flex, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
-import MAP from "@/assets/images/map.png";
-import Image from "next/image";
-import { useDailyStaked } from "@/hooks/home/useDailyStaked";
-import { Line } from "react-chartjs-2";
+import { Box, Flex, Text, useMediaQuery, useTheme } from '@chakra-ui/react';
+import MAP from '@/assets/images/map.png';
+import Image from 'next/image';
+import { useDailyStaked } from '@/hooks/home/useDailyStaked';
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,11 +12,11 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js";
-import moment from "moment";
-import { orderBy } from "lodash";
-import { useEffect, useState } from "react";
-import RollingNumbers from "@/pages/components/home/RollingNumbers";
+} from 'chart.js';
+import moment from 'moment';
+import { orderBy } from 'lodash';
+import { useEffect, useState } from 'react';
+import RollingNumbers from '@/pages/components/home/RollingNumbers';
 
 ChartJS.register(
   CategoryScale,
@@ -36,7 +36,7 @@ function Home() {
   useEffect(() => {
     if (dailyStaked !== undefined) {
       const ordered = orderBy(dailyStaked, (staked: any) => staked.blockTime, [
-        "asc",
+        'asc',
       ]);
       setDailyStakes(ordered);
     }
@@ -56,7 +56,7 @@ function Home() {
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         });
-        return result.push(Number(test.replace(/,/g, "")));
+        return result.push(Number(test.replace(/,/g, '')));
       }
       result.push(displayAmount(item.totalSupply));
     });
@@ -68,30 +68,30 @@ function Home() {
 
     return {
       labels: dailyStakes?.map((item: any) =>
-        moment(item.blockTime).format("YYYY.MM.DD")
+        moment(item.blockTime).format('YYYY.MM.DD')
       ),
       datasets: [
         {
         
           data: latesData,
-          borderColor: "#2a72e5",
-          backgroundColor: "transparent",
+          borderColor: '#2a72e5',
+          backgroundColor: 'transparent',
           borderWidth: 2,
           pointRadius: 0,
           lineTension: 0,
           pointHitRadius: 10,
-          yAxisID: "y",
+          yAxisID: 'y',
         },
         {
          
           data: roi,
-          borderColor: "#C7D1D8",
-          backgroundColor: "transparent",
+          borderColor: '#C7D1D8',
+          backgroundColor: 'transparent',
           borderWidth: 2,
           pointRadius: 0,
           lineTension: 0,
           pointHitRadius: 10,
-          yAxisID: "y1",
+          yAxisID: 'y1',
         },
       ],
     };
@@ -212,7 +212,7 @@ function Home() {
     tooltipEl.style.font = tooltip.options.bodyFont.string;
     tooltipEl.style.width = typeAPY? '100px':'170px'
     tooltipEl.style.height = '52px'
-    tooltipEl.style.background = typeAPY? "#84919e":'#2a72e5';
+    tooltipEl.style.background = typeAPY? '#84919e':'#2a72e5';
     tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px';
     triangle.style.borderTop = typeAPY? '6px solid #84919e':'6px solid #2a72e5' ;
   }
@@ -250,70 +250,70 @@ function Home() {
 
   // getLatestData()
   return (
-    <Box  w={"100%"} mt={"36px"}>
+    <Box  w={'100%'} mt={'36px'}>
       <Flex
-        flexDir={"column"}
-        alignItems={"center"}
-        fontSize={"32px"}
+        flexDir={'column'}
+        alignItems={'center'}
+        fontSize={'32px'}
         fontWeight={600}
-        pos={"relative"}
+        pos={'relative'}
         height={'70vh'}
       >
-        <Image src={MAP} alt={"map"}></Image>
+        <Image src={MAP} alt={'map'}></Image>
         <Flex
-          position={"absolute"}
-          flexDir={"column"}
-          alignItems={"center"}
-          width={"100%"}
+          position={'absolute'}
+          flexDir={'column'}
+          alignItems={'center'}
+          width={'100%'}
        
         >
-          <Text h={"58px"} fontFamily={theme.fonts.TitilliumWeb} mb={'25px'}>
+          <Text h={'58px'} fontFamily={theme.fonts.TitilliumWeb} mb={'25px'}>
             There is currently
           </Text>
           <RollingNumbers totalStaked={totalStaked}/>
           <Text
-            h={"48px"}
-            color={"#3d495d"}
-            mt={"25px"}
+            h={'48px'}
+            color={'#3d495d'}
+            mt={'25px'}
             mb={'25px'}
             fontFamily={theme.fonts.TitilliumWeb}
           >
             Staked in the
           </Text>
           <Text
-            h={"42px"}
-            mt={"20px"}
-            fontSize={"38px"}
+            h={'42px'}
+            mt={'20px'}
+            fontSize={'38px'}
             mb={'30px'}
             fontFamily={theme.fonts.Nanum}
           >
             Tokamak Network
           </Text>
-          <Flex flexDir={"column"} mt="30px" mb={'20px'}>
-            <Flex alignItems={"center"}>
-              <Flex h="2px" w="15px" bg={"blue.200"} mr="10px" />
+          <Flex flexDir={'column'} mt='30px' mb={'20px'}>
+            <Flex alignItems={'center'}>
+              <Flex h='2px' w='15px' bg={'blue.200'} mr='10px' />
               <Text
-                color={"gray.500"}
-                mr="20px"
-                fontSize="13px"
+                color={'gray.500'}
+                mr='20px'
+                fontSize='13px'
                 fontFamily={theme.fonts.TitilliumWeb}
               >
-                {" "}
+                {' '}
                 Total Stake
               </Text>
-              <Flex h="2px" w="15px" bg={"gray.600"} mr="10px" />
+              <Flex h='2px' w='15px' bg={'gray.600'} mr='10px' />
               <Text
-                color={"gray.500"}
-                mr="20px"
-                fontSize="13px"
+                color={'gray.500'}
+                mr='20px'
+                fontSize='13px'
                 fontFamily={theme.fonts.TitilliumWeb}
               >
-                {" "}
+                {' '}
                 Actual APY
               </Text>
             </Flex>
           </Flex>
-          <Flex height={250} width={"100%"} >
+          <Flex height={250} width={'100%'} >
             <Line data={getData()} options={getOptions()} />
           </Flex>
         </Flex>

@@ -1,7 +1,5 @@
-import { useWeb3React } from "@web3-react/core";
-// import useClient from "hooks/useClient";
-import { AppProps } from "next/app";
-// import { useEffect } from "react";
+import { AppProps } from 'next/app';
+
 
 function Entry({ Component, pageProps }: AppProps) {
   // const { isConnectedToChain, networkName } = useClient();
