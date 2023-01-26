@@ -64,6 +64,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   const theme = useTheme();
   const focusTarget = useRef<any>([]);
 
+
   const onChangeSelectBox = (e: any) => {
     const filterValue = e.target.value;
     headerGroups[0].headers.map((e) => {
@@ -168,6 +169,8 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                   {...row.getRowProps()}
                 >
                   {row.cells.map((cell: any, index: number) => {
+                   
+                    
                     const {
                       layer2,
                       commissionRate,
