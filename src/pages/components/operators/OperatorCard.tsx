@@ -178,9 +178,9 @@ function OperatorCard(props: { operator: any }) {
             </Text>
             <Text fontSize={"13px"} color="gray.700">
               {" "}
-              {operator.isCommissionRateNegative ? "-" : ""}
+              {operator?.isCommissionRateNegative ? "-" : ""}
               {Number(
-                operator.commissionRate.toLocaleString("fullwide", {
+                operator?.commissionRate.toLocaleString("fullwide", {
                   useGrouping: false,
                 })
               ) / 10000000}
@@ -198,8 +198,8 @@ function OperatorCard(props: { operator: any }) {
               Most Recent Commit
             </Text>
             <Text fontSize={"13px"} color="gray.700">
-              {operator.commit[0]
-                ? `${moment.unix(operator.commit[0].blockTimestamp).fromNow()}`
+              {operator?.commit[0]
+                ? `${moment.unix(operator?.commit[0].blockTimestamp).fromNow()}`
                 : ""}
             </Text>
           </Flex>
@@ -214,7 +214,7 @@ function OperatorCard(props: { operator: any }) {
               My Staked
             </Text>
             <Text fontSize={"13px"} color="gray.700">
-              {operator.yourStaked} TON
+              {operator?.yourStaked} TON
             </Text>
           </Flex>
           <Flex borderBottom={"1px solid #e7ebf2"}></Flex>
@@ -299,9 +299,9 @@ function OperatorCard(props: { operator: any }) {
                 Commission Rate{" "}
                 <span>
                   {" "}
-                  {operator.isCommissionRateNegative ? "-" : ""}
+                  {operator?.isCommissionRateNegative ? "-" : ""}
                   {Number(
-                    operator.commissionRate.toLocaleString("fullwide", {
+                    operator?.commissionRate.toLocaleString("fullwide", {
                       useGrouping: false,
                     })
                   ) / 10000000}
@@ -310,9 +310,9 @@ function OperatorCard(props: { operator: any }) {
               </Text>
               <Text>
                 {" "}
-                {operator.commit[0]
+                {operator?.commit[0]
                   ? `, ${moment
-                      .unix(operator.commit[0].blockTimestamp)
+                      .unix(operator?.commit[0].blockTimestamp)
                       .fromNow()}`
                   : ""}
               </Text>
