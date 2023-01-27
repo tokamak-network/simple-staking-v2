@@ -3,7 +3,7 @@ import { useWeb3React } from "@web3-react/core";
 import trimAddress from "@/utils/trimAddress";
 import { useState, useMemo } from "react";
 import AccountTab from "./components/account/AccountTab";
-import HistoryTab from "./components/account/HistoryTab";
+// import HistoryTab from "./components/account/HistoryTab";
 import { useUserHistory } from "../hooks/wallet/useUserHIstory";
 
 function Account() {
