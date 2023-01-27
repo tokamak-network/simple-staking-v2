@@ -27,7 +27,7 @@ function MobileRestakeComponent(props: { operatorList: any }) {
   const { operatorList } = props;
   const [selectedOp, setSelectedOp] = useState<any>(undefined);
   const { isOpen, onOpen, onClose } = useDisclosure();
-console.log(operatorList[0]);
+// console.log(operatorList[0]);
 
   return (
     <Flex w="100%" px="20px">
@@ -103,9 +103,9 @@ console.log(operatorList[0]);
           <Flex alignItems={"center"}>
             <OperatorImage height="20px" width="20px" />
             <Text ml="7px" fontSize={"13px"} fontWeight="bold">
-              {selectedOp !== undefined && operatorList[0] !== undefined
+              {selectedOp !== undefined && operatorList !== undefined
                 ? selectedOp?.name
-                : operatorList[0]?.name}
+                : operatorList[0].name}
             </Text>
             <Flex height={"9px"} width={"8px"} ml="10px" onClick={onOpen}>
               <Image
