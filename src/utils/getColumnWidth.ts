@@ -1,5 +1,5 @@
 export function getColumnWidthStaking(tableType: string, columnName: string) {
-  
+
   return tableType === 'Staking' && (columnName === 'Account' || columnName === 'account') ? '110px' :
     columnName === 'TX Hash' || columnName === 'txHash' ? '110px' :
       tableType === 'Staking' && (columnName === 'Type' || columnName === 'txType') ? '80px' :
