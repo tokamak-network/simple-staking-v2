@@ -23,10 +23,12 @@ import {
 import {ChevronRightIcon, ChevronLeftIcon} from '@chakra-ui/icons';
 
 import { convertNumber } from '../../../utils/number';
-import { getCircle } from './table/Circle';
-import { OperatorImage } from './table/Oval';
-import { renderBtn } from './table//RenderBTN';
-import { Info } from './table/OperatorInfo';
+import { getCircle } from '@/common/table/staking/Circle';
+import { OperatorImage } from '@/common/table/staking/Oval';
+import { renderBtn } from '@/common/table/staking/RenderBTN';
+import { Info } from '@/common/table/staking/OperatorInfo';
+import { useRecoilState } from 'recoil';
+import { toggleState } from '@/atom/staking/toggle';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -47,13 +49,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
     headerGroups,
     prepareRow,
     visibleColumns,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
     page,
-    nextPage,
-    previousPage,
-    setPageSize,
     state: {pageIndex, pageSize},
   } = useTable(
     {columns, data, initialState: {pageIndex: 0}},
@@ -64,15 +60,14 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   const theme = useTheme();
   const focusTarget = useRef<any>([]);
 
-
   const onChangeSelectBox = (e: any) => {
     const filterValue = e.target.value;
     headerGroups[0].headers.map((e) => {
       if (e.Header === filterValue) {
-        if (e.Header === 'totalStaked') {
+        if (e.Header === 'Total Staked') {
           return e.toggleSortBy();
         }
-        e.toggleSortBy(true);
+        e.toggleSortBy();
       }
       return null;
     });
@@ -83,9 +78,11 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   const [isOpen, setIsOpen] = useState(
     layer2 === undefined ? '' : layer2,
   );
+  const [toggle, setToggle] = useRecoilState(toggleState)
 
   const clickOpen = (layer2: string, index: number) => {
     setIsOpen(layer2);
+    setToggle('All')
     setTimeout(() => {
       focusTarget?.current[index]?.scrollIntoView({
         behavior: 'smooth',
@@ -108,13 +105,18 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
           </Flex>
         </Flex>
         <Select
-          w={'137px'}
+          w={'145px'}
           h={'32px'}
           color={'#86929d'}
           fontSize={'13px'}
-          placeholder="On Sale Sort"
-          onChange={onChangeSelectBox}>
-          <option value="totalStaked">Total Staked</option>
+          bgColor={'#fff'}
+          boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.14)'}
+          borderRadius={'4px'}
+          border={'none'}
+          placeholder="Operator Sort"
+          onChange={onChangeSelectBox}
+        >
+          <option value="Total Staked">Total Staked</option>
           <option value="name">Name</option>
           <option value="Recent Commit">Recent Commit</option>
           <option value="User Staked">User Staked</option>
@@ -133,7 +135,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
             display="flex"
             flexDirection="column"
           >
-            {page.map((row: any, i) => {
+            {page && page.map((row: any, i) => {
               const {layer2} = row.original;
               prepareRow(row);
 
@@ -168,9 +170,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                   alignItems="center"
                   {...row.getRowProps()}
                 >
-                  {row.cells.map((cell: any, index: number) => {
-                   
-                    
+                  {row.cells && row.cells.map((cell: any, index: number) => {
                     const {
                       layer2,
                       commissionRate,
@@ -267,3 +267,5 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
     </Flex>
   );
 }
+
+export default OpearatorTable

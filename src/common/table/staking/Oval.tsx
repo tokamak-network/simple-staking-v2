@@ -39,3 +39,5 @@ export const OperatorImage: React.FC<OperatorImageProps> = (props) => {
     />
   );
 };
+
+export default OperatorImage

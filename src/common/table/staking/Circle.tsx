@@ -34,3 +34,5 @@ export const getCircle = (kind: string) => {
     </Flex>
   )
 }
+
+export default getCircle

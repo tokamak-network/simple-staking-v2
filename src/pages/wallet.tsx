@@ -1,25 +1,23 @@
-import { Box, Flex, Text, useMediaQuery, useColorMode, useTheme } from '@chakra-ui/react';
-import PageHeader from "./components/layout/PageHeader";
+import { Box, Flex, useTheme } from '@chakra-ui/react';
+import PageHeader from './components/layout/PageHeader';
 import TopCardContainer from './components/wallet/TopCardContainer';
 import GraphContainer from './components/wallet/GraphContainer';
-import { MyHistoryTable } from './components/wallet/MyHistoryTable';
+import { MyHistoryTable } from '../common/table/wallet/MyHistoryTable';
 import { useMemo, useState } from 'react';
 import { useUserHistory } from '../hooks/wallet/useUserHIstory';
 import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
-import { useRecoilValue } from 'recoil';
-import { userStakedStatusState } from '@/atom/wallet/totalStaked';
 import { convertNumber } from '../utils/number';
 import useOperatorList from '../hooks/staking/useOperatorList';
 
 function Wallet () {
-  const theme = useTheme()
-  const { userHistory } = useUserHistory()
+  const theme = useTheme();
+  const { userHistory } = useUserHistory();
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const { accumulatedReward } = useAccumulatedReward()
-  const { totalStaked } = useOperatorList()
+  const { userTotalStaked } = useOperatorList()
   // const staked = useRecoilValue(userStakedStatusState)
-  const myTotalStaked = totalStaked ? convertNumber({
-    amount: totalStaked,
+  const myTotalStaked = userTotalStaked ? convertNumber({
+    amount: userTotalStaked,
     type: 'ray',
     localeString: true
   }) : '0.00' 

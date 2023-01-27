@@ -1,43 +1,35 @@
-import { Button, calc, Flex, Text, useTheme } from "@chakra-ui/react";
-import Image from "next/image";
-import { GraphSideContainer } from "./graph/GraphSideContainer";
-import { useAccumulatedReward } from "@/hooks/wallet/useAccumulatedReward";
-import { useDailyWalletRewards } from "@/hooks/wallet/useDailyWalletRewards";
-import { useDailyStaked } from "@/hooks/wallet/useDailyStaked";
-import { useDailyWithdrawals } from "@/hooks/wallet/useDailyWithdrawals";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { useState, useEffect } from "react";
-import calender_back_icon_inactive from "assets/images/calender_back_icon_inactive@3x.png";
-import calender_Forward_icon_inactive from "assets/images/calender_Forward_icon_inactive@3x.png";
-import select1_arrow_inactive from "assets/images/select-1-arrow-inactive@3x.png";
-import select1_arrow_active from "assets/images/select1_arrow_active@3x.png";
-import { range } from "lodash";
-import { convertNumber } from "utils/number";
-import moment from "moment";
-import BigNumber from "bignumber.js";
-import { LineGraphContainer } from "./graph/LineGraphContainer";
-import { useWeb3React } from "@web3-react/core";
-import Calendar from "./Calendar";
+import { Button, calc, Flex, Text, useTheme } from '@chakra-ui/react';
+import { GraphSideContainer } from '@/common/graph/GraphSideContainer';
+import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
+import { useDailyWalletRewards } from '@/hooks/wallet/useDailyWalletRewards';
+import { useDailyStaked } from '@/hooks/wallet/useDailyStaked';
+import { useDailyWithdrawals } from '@/hooks/wallet/useDailyWithdrawals';
+import 'react-datepicker/dist/react-datepicker.css';
+import { useState, useEffect } from 'react';
+import { range } from 'lodash';
+import { convertNumber } from 'utils/number';
+import moment from 'moment';
+import BigNumber from 'bignumber.js';
+import { LineGraphContainer } from '@/common/graph/LineGraphContainer';
+import { useWeb3React } from '@web3-react/core';
+import Calendar from './Calendar';
 function GraphContainer() {
   const theme = useTheme();
   const { library } = useWeb3React();
-  const { accumulatedReward } = useAccumulatedReward();
   const { dailyStakedAmnts } = useDailyStaked();
   const { dailyWithdrawAmnts } = useDailyWithdrawals();
-  const [calculatedReward, setCalculatedReward] = useState<string>("");
-  const [calculatedStakes, setCalculatedStakes] = useState<string>("");
+  const [calculatedReward, setCalculatedReward] = useState<string>('');
+  const [calculatedStakes, setCalculatedStakes] = useState<string>('');
+  const [labels, setLabels] = useState<string[]>();
   const [calculatedWithdrawals, setCalculatedWithdrawals] =
-    useState<string>("");
-  const [showYear, setShowYear] = useState(false);
-  const [showMonths, setShowMonths] = useState(false);
+    useState<string>('');
   const [startDate, setStartDate] = useState(
     new Date(new Date().setDate(new Date().getDate() - 7))
   );
-  const [period, setPeriod] = useState("week");
+  const [period, setPeriod] = useState('week');
   const [endDate, setEndDate] = useState(new Date());
-  const periodStart = moment(startDate).format("YYYYMMDD");
-  const periodEnd = moment(endDate).format("YYYYMMDD");
+  const periodStart = moment(startDate).format('YYYYMMDD');
+  const periodEnd = moment(endDate).format('YYYYMMDD');
   const { fetchData, dailyWalletRewards } = useDailyWalletRewards(
     periodStart,
     periodEnd
@@ -46,12 +38,12 @@ function GraphContainer() {
   const [dailyRewards, setDailyRewards] = useState<any[]>([]);
 
   const calcTotalReward = () => {
-    const initialAmount = new BigNumber("0");
+    const initialAmount = new BigNumber('0');
     const reducer = (amount: any, day: any) =>
       amount.plus(new BigNumber(day.rewards.toString()));
     const rewards = dailyRewards.reduce(reducer, initialAmount);
     const convertedWTon = convertNumber({
-      type: "ray",
+      type: 'ray',
       amount: rewards.toString(),
       localeString: true,
     });
@@ -60,13 +52,13 @@ function GraphContainer() {
   };
 
   const calcTotal = (dailyStakes: any) => {
-    const initialAmount = new BigNumber("0");
+    const initialAmount = new BigNumber('0');
     const reducer = (amount: any, day: any) =>
       amount.plus(new BigNumber(day.value.toString()));
 
     const stakes = dailyStakes.reduce(reducer, initialAmount);
     const convertedWTon = convertNumber({
-      type: "ray",
+      type: 'ray',
       amount: stakes.toString(),
       localeString: true,
     });
@@ -75,6 +67,7 @@ function GraphContainer() {
 
   useEffect(() => {
     calcTotalReward();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate, endDate, dailyRewards]);
 
   const getData = async () => {
@@ -88,49 +81,49 @@ function GraphContainer() {
   }, [dailyWalletRewards]);
 
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   const years = range(1990, new Date().getFullYear() + 1, 1);
 
   const setWeek = () => {
-    setPeriod("week");
+    setPeriod('week');
     setStartDate(new Date(new Date().setDate(new Date().getDate() - 7)));
     fetchData(
       moment(new Date(new Date().setDate(new Date().getDate() - 7))).format(
-        "YYYYMMDD"
+        'YYYYMMDD'
       ),
-      moment(endDate).format("YYYYMMDD")
+      moment(endDate).format('YYYYMMDD')
     );
   };
   const setMonth = () => {
-    setPeriod("month");
+    setPeriod('month');
     setStartDate(new Date(new Date().setDate(new Date().getDate() - 30)));
     fetchData(
       moment(new Date(new Date().setDate(new Date().getDate() - 30))).format(
-        "YYYYMMDD"
+        'YYYYMMDD'
       ),
-      moment(endDate).format("YYYYMMDD")
+      moment(endDate).format('YYYYMMDD')
     );
   };
 
   const formatDate = (date: Number) => {
     return (
       date.toString().substring(0, 4) +
-      "/" +
+      '/' +
       date.toString().substring(4, 6) +
-      "/" +
+      '/' +
       date.toString().substring(6, 8)
     );
   };
@@ -177,28 +170,37 @@ function GraphContainer() {
       },
       title: {
         display: false,
-        text: "Chart.js Line Chart",
+        text: 'Chart.js Line Chart',
       },
     },
     scales: {
       x: {
         grid: {
           display: true,
-          color: "#f0f1f2",
+          color: '#f0f1f2',
         },
       },
       y: {
         grid: {
           display: true,
-          color: "#f0f1f2",
+          color: '#f0f1f2',
         },
         min: 0,
       },
     },
   };
-  const labels = dailyRewards
-    .map((reward: any) => formatDate(reward._id.dateUTC))
-    .reverse();
+
+  useEffect(() => {
+    if (dailyRewards) {
+      const label = dailyRewards
+        .map((reward: any) => formatDate(reward._id.dateUTC))
+        .reverse();
+
+      setLabels(label)
+    }
+  }, [dailyRewards])
+  
+
   const data = {
     labels,
     datasets: [
@@ -206,71 +208,72 @@ function GraphContainer() {
         data: dailyRewards
           .map((reward: any) => displayAmount(reward.rewards))
           .reverse(),
-        borderColor: "#2a72e5",
-        backgroundColor: "#2a72e5",
+        borderColor: '#2a72e5',
+        backgroundColor: '#2a72e5',
       },
     ],
   };
+
   return (
     <Flex
-      flexDir={"column"}
-      w={"1100px"}
-      h={"467px"}
-      paddingY={"15px"}
-      bg={"#fff"}
-      borderRadius={"10px"}
-      boxShadow={"0 1px 1px 0 rgba(96, 97, 112, 0.16)"}
-      justifyContent={"center"}
-      alignItems={"center"}
-      mt={"30px"}
+      flexDir={'column'}
+      w={'1100px'}
+      h={'467px'}
+      paddingY={'15px'}
+      bg={'#fff'}
+      borderRadius={'10px'}
+      boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      mt={'30px'}
     >
       <Flex
-        flexDir={"row"}
-        h={"73px"}
-        w={"100%"}
-        px={"24px"}
-        pb={"6px"}
-        justifyContent={"space-between"}
-        alignItems={"center"}
+        flexDir={'row'}
+        h={'73px'}
+        w={'100%'}
+        px={'24px'}
+        pb={'6px'}
+        justifyContent={'space-between'}
+        alignItems={'center'}
       >
-        <Flex alignItems={"space-around"}>
-          <Text mr="50px" fontSize={"20px"} fontWeight={500}>
+        <Flex alignItems={'space-around'}>
+          <Text mr='50px' fontSize={'20px'} fontWeight={500}>
             Reward
           </Text>
           <Flex>
             <Button
               {...theme.btnStyle.btnWalletPeriod()}
-              color={period === "week" && "blue.200"}
-              borderColor={period === "week" && "blue.200"}
-              mr={"10px"}
+              color={period === 'week' && 'blue.200'}
+              borderColor={period === 'week' && 'blue.200'}
+              mr={'10px'}
               onClick={() => setWeek()}
               _hover={{
-                bg: "transparent",
-                borderColor: "blue.200",
-                color: "blue.200",
+                bg: 'transparent',
+                borderColor: 'blue.200',
+                color: 'blue.200',
               }}
               _focus={{
-                bg: "transparent",
-                borderColor: "blue.200",
-                color: "blue.200",
+                bg: 'transparent',
+                borderColor: 'blue.200',
+                color: 'blue.200',
               }}
             >
               Week
             </Button>
             <Button
               {...theme.btnStyle.btnWalletPeriod()}
-              color={period === "month" && "blue.200"}
-              borderColor={period === "month" && "blue.200"}
+              color={period === 'month' && 'blue.200'}
+              borderColor={period === 'month' && 'blue.200'}
               onClick={() => setMonth()}
               _hover={{
-                bg: "transparent",
-                borderColor: "blue.200",
-                color: "blue.200",
+                bg: 'transparent',
+                borderColor: 'blue.200',
+                color: 'blue.200',
               }}
               _focus={{
-                bg: "transparent",
-                borderColor: "blue.200",
-                color: "blue.200",
+                bg: 'transparent',
+                borderColor: 'blue.200',
+                color: 'blue.200',
               }}
             >
               Month
@@ -448,7 +451,7 @@ input {
             selectsStart={true}
             setDate={setStartDate}
           />
-          <Text mr="5px"> ~ </Text>
+          <Text mr='5px'> ~ </Text>
           <Calendar
             date={endDate}
             selectsEnd={true}
@@ -468,9 +471,9 @@ input {
           </Button>
         </Flex>
       </Flex>
-      <Flex h={"393px"} borderTop={"1px"} borderColor={"#f4f6f8"} w={"100%"}>
+      <Flex h={'393px'} borderTop={'1px'} borderColor={'#f4f6f8'} w={'100%'}>
         <LineGraphContainer options={options} data={data} />
-        <Flex w={"230px"} flexDir={"column"}>
+        <Flex w={'230px'} flexDir={'column'}>
           <GraphSideContainer
             totalReward={calculatedReward}
             totalStaked={calculatedStakes}

@@ -23,6 +23,9 @@ import StakeModal from './StakeModal';
 import { ModalType } from '@/types/modal';
 import { modalData, modalState } from '@/atom/global/modal';
 import { useRecoilState } from 'recoil';
+import CalculatorModal from './CalculatorModal';
+import { useUserHistory } from '@/hooks/wallet/useUserHIstory';
+import { useWithdrawable } from '../../../hooks/staking/useWithdrawable';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -33,7 +36,6 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   data,
   // dispatch,
 }) => {
-  const {colorMode} = useColorMode();
   const [loading, setLoading] = useState(false);
   const { account, library } = useWeb3React();
   
@@ -44,9 +46,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [withdrawDisabled, setwithdrawDisabled] = useState(true);
 
   const { userTonBalance } = useUserBalance(account)
-  const { pendingUnstaked } = usePendingUnstaked(data.layer2, account)
+  const { pendingUnstaked } = usePendingUnstaked(data?.layer2, account)
+  const { withdrawable, withdrawableLength } = useWithdrawable(data?.layer2)
 
-  // const { openModal } = useModal('stake_stake_modal', userTonBalance)
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
 
@@ -66,26 +68,37 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 
   const btnDisabledUnStake = () => {
     return account === undefined ||
-      data.yourStaked === '0.00'
+      data?.yourStaked === '0.00'
         ? setUnstakeDisabled(true)
         : setUnstakeDisabled(false);
+  };
+
+  const btnDisabledWithdraw = () => {
+    return account === undefined ||
+      withdrawable === '0.00'
+        ? setwithdrawDisabled(true)
+        : setwithdrawDisabled(false);
   };
 
   useEffect(() => {
     btnDisabledStake()
     btnDisabledUnStake()
     btnDisabledReStake()
+    btnDisabledWithdraw()
     /*eslint-disable*/
-  }, [account])
-  
+  }, [account, pendingUnstaked, userTonBalance, withdrawable])
+
   const dataModal = {
     tonBalance: userTonBalance,
     pendingUnstaked: pendingUnstaked,
-    stakedAmount: data.yourStaked,
-    withdrawable: ''
+    stakedAmount: data?.yourStaked,
+    withdrawable: withdrawable,
+    layer2: data?.layer2,
+    withdrawableLength: withdrawableLength,
   }
+  
   const modalButton = useCallback(
-    async (modalType: ModalType, data: any) => {
+    async (modalType: ModalType, data: any) => {   
       setSelectedModal(modalType)
       setSelectedModalData(data)
     }, [])
@@ -101,7 +114,15 @@ export const WalletInformation: FC<WalletInformationProps> = ({
       border={'solid 1px #f4f6f8'}
     >
       <Box w={'100%'} p={0} textAlign={'center'} pb={'30px'} px={5}>
-        <Flex mt={'20px'} fontSize={'11px'} color={'#2a72e5'} w={'100%'} justifyContent={'end'}>
+        <Flex 
+          mt={'20px'} 
+          fontSize={'11px'} 
+          color={'#2a72e5'} 
+          w={'100%'} 
+          justifyContent={'end'} 
+          cursor={'pointer'}
+          onClick={() => modalButton('calculator', dataModal)}
+        >
           Simulator
         </Flex>
         <Heading
@@ -109,6 +130,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           display="flex"
           alignItems="center"
           justifyContent="center"
+          fontWeight={500}
+          // fontSize={'42px'}
           h={'55px'}
         >
           {userTonBalance === undefined 
@@ -120,12 +143,12 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           )}{' '}
           TON
         </Heading>
-        <Box pt={'15px'} pb={'30px'}>
+        <Box pt={'5px'} pb={'30px'}>
           <Text fontSize={'15px'} color={'gray.400'}>
             Available in wallet
           </Text>
         </Box>
-        <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={6}>
+        <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
           <Button
             {...(stakeDisabled
               ? {...btnStyle.btnDisable()}
@@ -149,8 +172,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             Unstake
           </Button>
           <Button
-            {...(reStakeDisabled === true
-              ? {...btnStyle.btnDisable({colorMode})}
+            {...(reStakeDisabled
+              ? {...btnStyle.btnDisable()}
               : {...btnStyle.btnAble()})}
             isDisabled={reStakeDisabled}
             fontSize={'14px'}
@@ -161,12 +184,12 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           </Button>
           <Button
             {...(withdrawDisabled === true
-              ? {...btnStyle.btnDisable({colorMode})}
+              ? {...btnStyle.btnDisable()}
               : {...btnStyle.btnAble()})}
             isDisabled={withdrawDisabled}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
-            // onClick={() => modalData('withdraw')}
+            onClick={() => modalButton('withdraw', dataModal)}
           >
             Withdraw
           </Button>
@@ -188,6 +211,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         </Grid>
       </Box>
       <StakeModal />
+      <CalculatorModal />
     </Container>
   );
 };
+
+export default WalletInformation

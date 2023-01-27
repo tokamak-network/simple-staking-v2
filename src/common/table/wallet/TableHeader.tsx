@@ -1,37 +1,33 @@
-import { chakra } from "@chakra-ui/react";
-import { FC } from "react";
+import { chakra } from '@chakra-ui/react';
 import { getColumnWidthWallet } from '@/utils/getColumnWidth';
 
-type TableHeaderProps = {
 
-}
-
-export const TableHeader: FC<TableHeaderProps> = ({
+export const TableHeader = ({
 
 }) => {
   return  (
     <chakra.thead
-        borderBottom={'1px dashed #e6eaee'}
-        // mr={'30px'}
-        w={'1110px'}
+      borderBottom={'1px dashed #e6eaee'}
+      // mr={'30px'}
+      w={'1110px'}
+      h={'40px'}
+      alignItems={'center'}
+      justifyContent={'center'}
+    >
+      <chakra.tr 
+        fontSize={'13px'}
+        color={'#808992'}
         h={'40px'}
-        alignItems={'center'}
-        justifyContent={'center'}
       >
-        <chakra.tr 
-          fontSize={'13px'}
-          color={'#808992'}
-          h={'40px'}
-        >
-          { HeaderColumn('index') }
-          { HeaderColumn('txHash') }
-          { HeaderColumn('contractAddress') }
-          { HeaderColumn('txType') }
-          { HeaderColumn('amount') }
-          { HeaderColumn('blockNumber') }
-          { HeaderColumn('status') }
-        </chakra.tr>
-      </chakra.thead>
+        { HeaderColumn('index') }
+        { HeaderColumn('txHash') }
+        { HeaderColumn('contractAddress') }
+        { HeaderColumn('txType') }
+        { HeaderColumn('amount') }
+        { HeaderColumn('blockNumber') }
+        { HeaderColumn('status') }
+      </chakra.tr>
+    </chakra.thead>
   )
 }
 
@@ -53,3 +49,5 @@ const HeaderColumn = ( columnName: string) => {
     </chakra.th>
   )
 }
+
+export default TableHeader

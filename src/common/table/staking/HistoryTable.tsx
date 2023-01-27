@@ -1,4 +1,4 @@
-import {FC, useState, useRef, Fragment, useEffect} from 'react';
+import { FC, useState, useRef, Fragment, useEffect } from 'react';
 import {
   Column,
   useExpanded,
@@ -8,41 +8,44 @@ import {
 } from 'react-table';
 import {
   chakra,
-  Text,
   Flex,
-  Select,
   Box,
-  Center,
   useTheme,
+  Switch,
+  Text,
+  FormControl,
+  FormLabel
 } from '@chakra-ui/react';
+import { HistoryTableHeader } from '@/common/table/staking/HistoryTableHeader';
+// import { HistoryTableRow } from './table/HistoryTableRow';
 import { Pagination } from '@/common/table/Pagination';
-import { TableRow } from './table/TableRow';
-import { TableHeader } from './table/TableHeader';
+import { useRecoilState } from 'recoil';
+import { toggleState } from '@/atom/staking/toggle';
+import HistoryTableRow from '@/common/table/staking/HIstoryTableRow';
 
-type MyHistoryTableProps = {
+type HistoryTableProps = {
   columns: Column[];
   data: any[];
-  isLoading: boolean;
-};
+  tableType: string;
+}
 
-export const MyHistoryTable: FC<MyHistoryTableProps> = ({
+export const HistoryTable: FC<HistoryTableProps> = ({
   columns,
   data,
-  isLoading
+  tableType,
 }) => {
   const {
     getTableProps,
     getTableBodyProps,
-    headerGroups,
+    prepareRow,
     visibleColumns,
     canPreviousPage,
     canNextPage,
     pageOptions,
+    page,
     setPageSize,
-    prepareRow,
     previousPage,
     nextPage,
-    page,
     state: {pageIndex, pageSize},
   } = useTable(
     {columns, data, initialState: {pageIndex: 0}},
@@ -50,9 +53,9 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
     useExpanded,
     usePagination,
   );
-
   const [currentPage, setCurrentPage] = useState(0)
   const [buttonClick, setButtonClick] = useState(Boolean)
+  const [toggle, setToggle] = useRecoilState(toggleState)
   const theme = useTheme();
 
   useEffect(() => {
@@ -73,12 +76,35 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
     nextPage();
     setButtonClick(true)
   };
- 
 
   return (
-    <Flex flexDir={'column'} mt={'50px'}>
-      <Flex fontSize={'18px'} fontWeight={'bold'} mb={'15px'} justifyContent={'center'}>
-        History
+    <Flex 
+      w={tableType === 'Staking' ? '625px' : '285px'}
+      flexDir={'column'}
+      mr={'30px'}
+      fontFamily={theme.fonts.Roboto}
+    >
+      <Flex fontSize={'15px'} fontWeight={'bold'} mb={'5px'} flexDir={'row'} w={'100%'} justifyContent={'space-between'}>
+        <Text>
+          {tableType}
+        </Text>
+        {
+          tableType === 'Staking' ? 
+          <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
+            <FormLabel color={'#828d99'} fontSize={'11px'} mt={'7px'}>
+              {toggle} Tx Hash
+            </FormLabel>
+            <Switch 
+              colorScheme={'green'} 
+              onChange={() =>
+                toggle === 'All'
+                  ? setToggle('My')
+                  : setToggle('All')
+              }
+            /> 
+          </FormControl>       
+          : ''
+        }
       </Flex>
       <Box overflowX={'auto'}>
         <chakra.table
@@ -88,39 +114,42 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
           flexDirection="column"
           mr={'30px'}
         >
-          <TableHeader />
+          <HistoryTableHeader
+            tableType={tableType}
+          />
           <chakra.tbody
             {...getTableBodyProps()}
             display="flex"
             flexDirection="column"
           >
-            {page.map((row: any, i) => {
+            {page ? page.map((row: any, i) => {
               prepareRow(row);
 
               return [
                 <chakra.tr
+                  boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}
                   h={'38px'}
                   key={i}
                   w="100%"
+                  bg={'white.100' }
                   border={''}
                   display="flex"
                   alignItems="center"
                   {...row.getRowProps()}
                 >
-                  {row.cells.map((cell: any, index: number) => {
+                  {row.cells ? row.cells.map((cell: any, index: number) => {
                     return (
-                      //@ts-ignore
-                      // eslint-disable-next-line react/jsx-key
-                      <TableRow 
-                      key={index}
-                        index={i}
+                      
+                      <HistoryTableRow 
+                        key={index}
                         cell={cell}
+                        tableType={tableType}
                       />
                     )
-                  })}
+                  }) : ''}
                 </chakra.tr>
               ]
-            })}
+            }) : ''}
             <Pagination 
               columns={columns}
               data={data}
@@ -140,4 +169,4 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
   )
 }
 
-export default MyHistoryTableProps
+export default HistoryTable

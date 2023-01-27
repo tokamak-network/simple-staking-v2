@@ -1,4 +1,4 @@
-import { FC, useState, useRef, Fragment, useEffect } from 'react';
+import {FC, useState, useEffect} from 'react';
 import {
   Column,
   useExpanded,
@@ -12,33 +12,34 @@ import {
   Box,
   useTheme,
 } from '@chakra-ui/react';
-import { HistoryTableHeader } from './table/HistoryTableHeader';
-import { HistoryTableRow } from './table/HIstoryTableRow';
 import { Pagination } from '@/common/table/Pagination';
+import { TableRow } from '@/common/table/wallet/TableRow';
+import { TableHeader } from '@/common/table/wallet/TableHeader';
 
-type HistoryTableProps = {
+type MyHistoryTableProps = {
   columns: Column[];
   data: any[];
-  tableType: string;
-}
+  isLoading: boolean;
+};
 
-export const HistoryTable: FC<HistoryTableProps> = ({
+export const MyHistoryTable: FC<MyHistoryTableProps> = ({
   columns,
   data,
-  tableType,
+  isLoading
 }) => {
   const {
     getTableProps,
     getTableBodyProps,
-    prepareRow,
+    headerGroups,
     visibleColumns,
     canPreviousPage,
     canNextPage,
     pageOptions,
-    page,
     setPageSize,
+    prepareRow,
     previousPage,
     nextPage,
+    page,
     state: {pageIndex, pageSize},
   } = useTable(
     {columns, data, initialState: {pageIndex: 0}},
@@ -46,6 +47,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
     useExpanded,
     usePagination,
   );
+
   const [currentPage, setCurrentPage] = useState(0)
   const [buttonClick, setButtonClick] = useState(Boolean)
   const theme = useTheme();
@@ -68,63 +70,54 @@ export const HistoryTable: FC<HistoryTableProps> = ({
     nextPage();
     setButtonClick(true)
   };
+ 
 
   return (
-    <Flex 
-      w={tableType === 'Staking' ? '625px' : '285px'}
-      flexDir={'column'}
-      mr={'30px'}
-      fontFamily={theme.fonts.Roboto}
-    >
-      <Flex fontSize={'15px'} fontWeight={'bold'} mb={'15px'}>
-        {tableType}
+    <Flex flexDir={'column'} mt={'50px'}>
+      <Flex fontSize={'18px'} fontWeight={'bold'} mb={'15px'} justifyContent={'center'}>
+        History
       </Flex>
       <Box overflowX={'auto'}>
         <chakra.table
           width={'full'}
           {...getTableProps()}
-          display="flex"
-          flexDirection="column"
+          display='flex'
+          flexDirection='column'
           mr={'30px'}
         >
-          <HistoryTableHeader
-            tableType={tableType}
-          />
+          <TableHeader />
           <chakra.tbody
             {...getTableBodyProps()}
-            display="flex"
-            flexDirection="column"
+            display='flex'
+            flexDirection='column'
           >
-            {page.map((row: any, i) => {
+            {page && page.map((row: any, i) => {
               prepareRow(row);
 
               return [
                 <chakra.tr
-                  boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}
                   h={'38px'}
                   key={i}
-                  // px={'16px'}
-                  w="100%"
-                  bg={'white.100' }
+                  w='100%'
                   border={''}
-                  display="flex"
-                  alignItems="center"
+                  display='flex'
+                  alignItems='center'
                   {...row.getRowProps()}
                 >
-                  {row.cells.map((cell: any, index: number) => {
+                  {row.cells && row.cells.map((cell: any, index: number) => {
                     return (
                       //@ts-ignore
                       // eslint-disable-next-line react/jsx-key
-                      <HistoryTableRow 
-                        index={index}
+                      <TableRow 
+                        key={index}
+                        index={i}
                         cell={cell}
-                        tableType={tableType}
                       />
                     )
                   })}
                 </chakra.tr>
               ]
-            })}
+            }) }
             <Pagination 
               columns={columns}
               data={data}
@@ -142,5 +135,6 @@ export const HistoryTable: FC<HistoryTableProps> = ({
       </Box>
     </Flex>
   )
-
 }
+
+export default MyHistoryTable

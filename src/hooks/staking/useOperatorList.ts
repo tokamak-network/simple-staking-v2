@@ -2,8 +2,8 @@ import { getEventByLayer2, getOperatorsInfo, getDelegators, getCandidateCreateEv
 import { useEffect, useState } from 'react';
 import { NON_CANDIDATE } from "@/constants";
 import { useWeb3React } from '@web3-react/core';
-import { convertNumber } from '../../utils/number';
-import useCallContract from '../useCallContract';
+import { convertNumber } from '@/utils/number';
+import useCallContract from '@/hooks/useCallContract';
 import { BigNumber } from 'ethers';
 import { calculateExpectedSeig } from "tokamak-staking-lib";
 import { toBN } from 'web3-utils';
@@ -15,23 +15,26 @@ import CONTRACT_ADDRESS from "services/addresses/contract";
 import { BASE_PROVIDER } from "@/constants";
 import { range } from 'lodash'
 import BN from 'bn.js';
+import { useRecoilValue } from 'recoil';
+import { txState } from '@/atom/global/transaction';
 
 export function useOperatorList() {
   const [operatorList, setOperatorList] = useState([]);
-  const [totalStaked, setTotalStaked] = useState('0.00')
+  const [userTotalStaked, setUserTotalStaked] = useState('0.00')
+  const [totalStaked, setTotalStaked] = useState<string>()
   const { account, library } = useWeb3React();
   const { DepositManager_CONTRACT, SeigManager_CONTRACT, TON_CONTRACT, WTON_CONTRACT } = useCallContract();
-  const {
+  const { WTON_ADDRESS} = CONTRACT_ADDRESS;
+  const tx = useRecoilValue(txState)
 
-    WTON_ADDRESS,
-
-  } = CONTRACT_ADDRESS;
+   
   useEffect(() => {
     async function fetchList() {
       const data = await getOperatorsInfo();
       const provider = BASE_PROVIDER;
 
       let staked = BigNumber.from('0')
+      let totalStake = BigNumber.from('0')
       const operators = await Promise.all(data.map(async (obj: any) => {
         const history = await getOperatorUserHistory(obj.layer2.toLowerCase())
         const commitHistory = await getEventByLayer2(obj.layer2.toLowerCase(), 'Comitted', 1, 300)
@@ -91,6 +94,7 @@ export function useOperatorList() {
           type: 'ray',
           localeString: true,
         }) : '-'
+        totalStake = totalStake.add(obj.updateCoinageTotalString)
         staked = staked.add(stakeOf)
         const yourStaked = convertNumber({
           amount: stakeOf.toString(),
@@ -192,7 +196,9 @@ export function useOperatorList() {
           await { ...fetchedData, name: find.name } : await fetchedData
       }))
 
-      setTotalStaked(staked.toString())
+      setTotalStaked(totalStake.toString())
+      setUserTotalStaked(staked.toString())
+
       if (operators) {
         operators.sort(function (a: any, b: any) {
           return b.updateCoinageTotalString - a.updateCoinageTotalString
@@ -204,7 +210,7 @@ export function useOperatorList() {
     fetchList()
   }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account, setTotalStaked])
 
-  return { operatorList, totalStaked }
+  return { operatorList, userTotalStaked, totalStaked, tx }
 }
 
 export default useOperatorList

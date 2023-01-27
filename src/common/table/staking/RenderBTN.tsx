@@ -23,3 +23,6 @@ export const renderBtn = (layer2: string, isOpen: string) => {
     </Flex>
   );
 };
+
+
+export default renderBtn

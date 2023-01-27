@@ -1,7 +1,7 @@
-import { Flex, Text } from "@chakra-ui/react";
-import { FC } from "react";
+import { Flex, Text } from '@chakra-ui/react';
+import { FC } from 'react';
 
-import { Line } from "react-chartjs-2";
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,9 +11,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js";
-import moment from "moment";
-import BigNumber from "bignumber.js";
+} from 'chart.js';
 
 ChartJS.register(
   CategoryScale,
@@ -35,8 +33,10 @@ export const LineGraphContainer: FC<LineGraphContainerProps> = ({
   data,
 }) => {
   return (
-    <Flex w={"982px"} p={"30px 30px 15px 30px"}>
-      <Line options={options} data={data} style={{ width: "854px" }} />
+    <Flex w={'982px'} p={'30px 30px 15px 30px'}>
+      <Line options={options} data={data} style={{ width: '854px' }} />
     </Flex>
   );
 };
+
+export default LineGraphContainer

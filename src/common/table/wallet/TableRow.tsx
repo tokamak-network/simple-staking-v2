@@ -1,10 +1,8 @@
-import { getEventName } from "@/components/getEventName";
-import { convertNumber } from "@/components/number";
-import trimAddress from "@/components/trimAddress";
-import { chakra, Flex, Link, Text } from "@chakra-ui/react";
-import moment from "moment";
-import { FC } from "react";
-import { getColumnWidthWallet } from '@/utils/getColumnWidth';
+import { getEventName } from '@/components/getEventName';
+import { convertNumber } from '@/components/number';
+import trimAddress from '@/components/trimAddress';
+import { chakra, Link, Text } from '@chakra-ui/react';
+import { FC } from 'react';
 import { useTheme } from '@chakra-ui/react';
 
 type TableRowProps = {
@@ -23,7 +21,7 @@ export const TableRow: FC<TableRowProps> = ({
     eventName,
     from,
     blockNumber
-  } = cell.row.original;
+  } = cell?.row.original;
 
   const theme = useTheme()
   const type = cell.column.id;
@@ -47,7 +45,7 @@ export const TableRow: FC<TableRowProps> = ({
           {index}
         </Text>
       ) : ('')}
-      {type === 'txHash' ? (
+      {transactionHash && type === 'txHash' ? (
         <Link
           isExternal
           href={`https://etherscan.io/tx/${transactionHash}`}
@@ -108,3 +106,5 @@ export const TableRow: FC<TableRowProps> = ({
     </chakra.td>
   )
 }
+
+export default TableRow

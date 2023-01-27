@@ -1,31 +1,31 @@
-import { extendTheme } from '@chakra-ui/react'
-import '@fontsource/titillium-web'
-import '@fontsource/roboto'
+import { extendTheme } from '@chakra-ui/react';
+import '@fontsource/titillium-web';
+import '@fontsource/roboto';
 
 interface THEME_PROPS {
-  colorMode: 'light' | 'dark',
+  colorMode: 'light' | 'dark';
 }
 
 const fonts = {
-  TitilliumWeb: "TitilliumWeb",
-  Roboto: "Roboto",
-  Nanum: `'NanumSquareEB', sans-serif`
+  TitilliumWeb: 'Titillium Web, sans-serif',
+  Roboto: 'Roboto',
+  Nanum: `'NanumSquareEB', sans-serif`,
 }
 
 const breakpoints = ['0px', '1024px', '1440px'];
 
 const colors = {
   blue: {
-    100: "#257eee",
-    200: "#2a72e5",
+    100: '#257eee',
+    200: '#2a72e5',
   },
   white: {
-    100: "#ffffff",
-    200: "#f1f1f1",
-    300: "#fafbfc",
+    100: '#ffffff',
+    200: '#f1f1f1',
+    300: '#fafbfc',
   },
   gray: {
-    100: "#808992",
+    100: '#808992',
     200: '#e9edf1',
     300: '#86929d',
     400: '#dfe4ee',
@@ -43,10 +43,10 @@ const colors = {
     300: '#131315'
   },
   red: {
-    100: "#e23738",
+    100: '#e23738',
   },
   green: {
-    100: "#5eea8d",
+    100: '#5eea8d',
   },
 }
 
@@ -86,12 +86,81 @@ const PAGE_STYLE = {
   }),
 }
 
+const SUPPORT_PARAGRAPH_STYLE = {
+  paragraphText:() => ({
+    fontFamily: fonts.Roboto,
+    fontSize: '17px',
+    color: '#3d495d',
+    fontWeight: 'normal',
+    marginBottom: '20px',
+    textAlign: 'justify',
+  })
+  
+}
+
+const INPUT_STYLE = {
+  inputStaking: () => ({
+    fontSize:'32px',
+    height:'100%',
+    borderRadius: 0,
+    textAlign:'center',
+    overflow:'auto',
+    fontWeight:600,
+    _placeholder:{ color: '#304156' },
+    border: '',
+    ml:'15px',
+  }),
+  inputCalc: () => ({
+    fontSize:'13px',
+    fontWeight: 'normal',
+    height: '28px',
+    border: 'none',
+    textAlign: 'right',
+    color: '#3e495c',
+    _placeholder:{ color: '#86929d' },
+    padding: '0px',
+    width: '70px',
+    marginLeft: '5px',
+    marginTop: '1px',
+  }),
+  maxStaking: () => ({
+    // pos: 'absolute',
+    // right:'-60px',
+    w:'50px',
+    h:'26px',
+    mt:'10px',
+    bg:'none',
+    fontSize:'12px',
+    color:'#2a72e5',
+    fontWeight:'normal',
+    cursor:'pointer',
+    border: '1px solid #2a72e5',
+    _hover:{
+      border: '1px solid #2a72e5',
+    },
+  }),
+  maxCalc: () => ({
+    h: '32px',
+    w: '56px',
+    ml: '5px',
+    border: '1px solid #dfe4ee',
+    _hover:{
+      border: '1px solid #dfe4ee',
+    },
+    bg:'none',
+    fontSize: '12px',
+    fontWeight: 'normal',
+    color: '#86929d',
+  })
+}
+
+
 const STAKING_HISTORY_TABLE_STYLE = {
   tableRow: () => ({
     m: 0,
     pr: 0,
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     h: '38px',
     fontSize: '13px',
     borderBottom: '1px dashed #e6eaee',
@@ -104,7 +173,7 @@ const STAKING_HISTORY_TABLE_STYLE = {
     border: '',
     mb: '25px',
     borderTopWidth: 0,
-    borderBottomRadius: "10px"
+    borderBottomRadius: '10px',
   }),
   paginationButton: () => ({
     width: '24px',
@@ -123,12 +192,13 @@ const btnStyle = {
     bg: 'blue.100',
     color: 'white.100',
     _hover: { backgroundColor: 'blue.200' },
+    fontWeight: 500,
   }),
   btnDisable: () => ({
     bg: colors.gray[300],
     color: 'gray.200',
     // color: colors.gray[200],
-    fontWeight: 'bold',
+    fontWeight: 500,
     // borderWidth: p0 : 1,
     borderColor: '',
     _hover: {},
@@ -148,7 +218,7 @@ const btnStyle = {
     lineHeight: 1.33,
     letterSpacing: 'normal',
     textAlign: 'center',
-    color: '#2a72e5'
+    color: '#2a72e5',
   }),
   btnWalletPeriod: () => ({
     width: '100px',
@@ -165,7 +235,7 @@ const btnStyle = {
     lineHeight: 1.33,
     letterSpacing: 'normal',
     textAlign: 'center',
-    color: '#86929d'
+    color: '#86929d',
   })
   ,
   btnWalletSearch: () => ({
@@ -183,7 +253,7 @@ const btnStyle = {
     lineHeight: 1.33,
     letterSpacing: 'normal',
     textAlign: 'center',
-    color: '#fff'
+    color: '#fff',
   })
 };
 
@@ -192,7 +262,9 @@ const theme = extendTheme({
   fonts,
   PAGE_STYLE,
   STAKING_HISTORY_TABLE_STYLE,
+  SUPPORT_PARAGRAPH_STYLE,
   btnStyle,
+  INPUT_STYLE,
   // BUTTON_STYLE,
   // HEADER_BUTTON_STYLE,
   // BALANCE_CONTAINER_STYLE,
@@ -204,7 +276,7 @@ const theme = extendTheme({
     global: (props: THEME_PROPS) => ({
       'html, body': {
         backgroundColor: '#fafbfc',
-        // props.colorMode === "light" ? "white.100" : "black.100",
+        // props.colorMode === 'light' ? 'white.100' : 'black.100',
         // fontFamily: fonts.Poppins,
         color: '#3d495d',
       },

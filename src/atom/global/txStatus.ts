@@ -4,14 +4,8 @@ import { v1 } from 'uuid';
 const txProcessState = atom({
   key: `txProcessState/${v1()}`,
   default: {
-    network: {},
-    target: {},
     hash: '',
-    targetHash: '',
     txType: '',
-    processOnL1: false,
-    waitFinalized: false,
-    open: false,
   },
 });
 

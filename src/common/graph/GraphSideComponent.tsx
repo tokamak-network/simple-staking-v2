@@ -7,8 +7,7 @@ type GraphSideComponentProps = {
 }
 
 export const GraphSideComponent: FC<GraphSideComponentProps> = ({
-  title,
-  value
+  title, value
 }) => {
   return(
     <Flex 
@@ -34,3 +33,5 @@ export const GraphSideComponent: FC<GraphSideComponentProps> = ({
     </Flex>
   )
 }
+
+export default GraphSideComponent

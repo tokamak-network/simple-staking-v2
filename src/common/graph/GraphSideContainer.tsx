@@ -9,9 +9,7 @@ type GraphSideContainerProps = {
 }
 
 export const GraphSideContainer: FC<GraphSideContainerProps> = ({
-  totalReward,
-  totalStaked,
-  totalWithdraw
+  totalReward, totalStaked, totalWithdraw
 }) => {
   return(
     <Flex flexDir={'column'} w={'100%'} mt={'70px'}>
@@ -33,3 +31,5 @@ export const GraphSideContainer: FC<GraphSideContainerProps> = ({
     </Flex>
   )
 }
+
+export default GraphSideContainer

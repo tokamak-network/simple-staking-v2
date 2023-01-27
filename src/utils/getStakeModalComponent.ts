@@ -1,6 +1,4 @@
-
 export function getStakeModalComponent (type: string | undefined, data: any) {
-  console.log(data)
   const modalComponent = {
     staking: {
       header: 'Staking',
@@ -8,7 +6,7 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
       balanceInfo: 'TON Balance',
       balance: data.tonBalance,
       bottomComment: 'Minimum staking amount is 5',
-      buttonName: 'Stake'
+      buttonName: 'Stake',
     },
     unstaking: {
       header: 'Unstake',
@@ -16,7 +14,7 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
       balanceInfo: 'Available Balance',
       balance: data.stakedAmount,
       bottomComment: 'Withdrawal delay is about 2 weeks',
-      buttonName: 'UnStake'
+      buttonName: 'UnStake',
     },
     restaking: {
       header: 'Re-Staking',
@@ -24,27 +22,19 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
       balanceInfo: 'Re-stake Amount',
       balance: data.pendingUnstaked,
       bottomComment: '',
-      buttonName: 'Re-Stake'
+      buttonName: 'Re-Stake',
     },
     withdraw: {
       header: 'Withdraw',
       subHeader: 'Do you really want withdraw your TON now?',
       balanceInfo1: 'Staked Balance',
-      // balance1: data.tonBalance,
+      balance1: data.stakedAmount,
       balanceInfo2: 'Withdrawable Balance',
-      // balance2: data.tonBalance,
+      balance: data.withdrawable,
       bottomComment: '',
       buttonName: 'Withdraw'
     }
   }
   //@ts-ignore
   return modalComponent[type]
-}
-
-const component = {
-  header: '',
-  subHeader: '',
-  balanceInfo: '',
-  bottomComment: '',
-  buttonName: ''
 }
