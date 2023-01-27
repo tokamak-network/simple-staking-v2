@@ -124,9 +124,7 @@ function MobileUnstakeComponent (props: { operatorList: any }) {
           <Flex alignItems={"center"}>
             <OperatorImage height="20px" width="20px" />
             <Text ml="7px" fontSize={"13px"} fontWeight="bold">
-              {selectedOp !== undefined
-                ? selectedOp?.name
-                : operatorList[0]?.name}
+            {selectedOp }
             </Text>
             <Flex height={"9px"} width={"8px"} ml="10px" onClick={onOpen}>
               <Image
