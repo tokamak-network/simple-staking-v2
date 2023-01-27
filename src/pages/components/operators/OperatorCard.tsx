@@ -53,7 +53,7 @@ function OperatorCard(props: { operator: any }) {
       value:
         operator?.name === "tokamak1"
           ? "https://tokamak.network"
-          : operator.website,
+          : operator?.website,
     },
     { title: "Description", value: operator.description },
     { title: "Operator Address", value: operator.operator },
@@ -346,15 +346,16 @@ function OperatorCard(props: { operator: any }) {
                     borderTop={"1px solid #dfe4ee"}
                     pt="20px"
                   >
-                    {/* <Text>{operator.website}</Text> */}
-                    <iframe
+                    {/* <Text>{operator.website}</Text> */} 
+                    {operator.website && operator.name ?   <iframe
                       style={{ height: "100vh", width: "100%" }}
                       src={
                         operator?.name === "tokamak1"
                           ? "https://tokamak.network"
                           : operator?.website
                       }
-                    ></iframe>
+                    ></iframe>: null}
+                  
                   </Flex>
                 </DrawerBody>
               </>
