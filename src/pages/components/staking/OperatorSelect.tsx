@@ -43,7 +43,7 @@ function OperatorSelect(props: {
           </Flex>
         </DrawerHeader>
         <DrawerBody pt="10px">
-          {operatorList.map((operator: any, index:number) => {
+          {operatorList?.map((operator: any, index:number) => {
             return (
               <Flex
                 h="58px"
