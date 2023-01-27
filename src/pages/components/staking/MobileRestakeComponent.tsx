@@ -102,7 +102,7 @@ function MobileRestakeComponent(props: { operatorList: any }) {
           <Flex alignItems={"center"}>
             <OperatorImage height="20px" width="20px" />
             <Text ml="7px" fontSize={"13px"} fontWeight="bold">
-              {selectedOp !== undefined
+              {selectedOp !== undefined && operatorList !== undefined
                 ? selectedOp?.name
                 : operatorList[0]?.name}
             </Text>
