@@ -24,10 +24,10 @@ function TableRow(props: { index: number; cell: any }) {
   const { index, cell } = props;
 
   const { transactionHash, layer2, data, eventName, from, blockNumber } =
-    cell.row.original;
+    cell?.row.original;
 
   const theme = useTheme();
-  const type = cell.column.id;
+  const type = cell?.column.id;
   const typeName = getEventName(eventName);
   return (
     <chakra.td
