@@ -9,7 +9,7 @@ export const MotionBox: React.FC<MotionBoxProps> = motion(chakra.div);
 
 export const Loader = () => {
   return (
-    <Container h="100vh" d="flex" alignItems="center" justifyContent="center">
+    <Container h="100vh" display="flex" alignItems="center" justifyContent="center">
       <MotionBox
         as="aside"
         animate={{
