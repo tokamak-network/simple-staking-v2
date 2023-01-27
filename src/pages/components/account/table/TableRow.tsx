@@ -22,7 +22,6 @@ type TableRowProps = {
 
 function TableRow(props: { index: number; cell: any }) {
   const { index, cell } = props;
-console.log(cell.row.original);
 
 
   const { eventName,transactionHash, layer2, data, from, blockNumber } =
