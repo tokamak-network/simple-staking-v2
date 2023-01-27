@@ -22,9 +22,10 @@ type TableRowProps = {
 
 function TableRow(props: { index: number; cell: any }) {
   const { index, cell } = props;
+console.log(cell);
 
   const { transactionHash, layer2, data, eventName, from, blockNumber } =
-    cell?.row.original;
+    cell.row?.original;
 
   const theme = useTheme();
   const type = cell?.column.id;
