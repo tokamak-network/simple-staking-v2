@@ -352,7 +352,7 @@ function OperatorCard(props: { operator: any }) {
                       src={
                         operator?.name === "tokamak1"
                           ? "https://tokamak.network"
-                          : operator.website
+                          : operator?.website
                       }
                     ></iframe>
                   </Flex>
