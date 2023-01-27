@@ -39,7 +39,7 @@ function MobileHeader() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef<any>([]);
   const { chainId, account } = useWeb3React();
-  const { openModal } = useModal("wallet_modal");
+  const { openModal } = useModal("wallet");
   const [isHover, setIsHover] = useState<number | undefined>(undefined);
   const router = useRouter();
   const { pathname } = router;
