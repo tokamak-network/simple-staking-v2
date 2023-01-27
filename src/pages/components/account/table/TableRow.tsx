@@ -23,9 +23,9 @@ type TableRowProps = {
 function TableRow(props: { index: number; cell: any }) {
   const { index, cell } = props;
 
-  const { transactionHash, layer2, data, eventName, from, blockNumber } =
-    cell?.row?.original;
 
+  const { transactionHash, layer2, data, eventName, from, blockNumber } =
+    cell.row?.original;
   const theme = useTheme();
   const type = cell?.column.id;
   const typeName = getEventName(eventName);
