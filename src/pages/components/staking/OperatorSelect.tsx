@@ -17,7 +17,7 @@ import {
 import icon_close from "assets/images/icon_close.png";
 import Image from "next/image";
 import React, { SetStateAction, useEffect } from "react";
-import { OperatorImage } from "../staking/table/Oval";
+import OperatorImage from "@/common/table/staking/Oval";
 
 function OperatorSelect(props: {
   operatorList: any;

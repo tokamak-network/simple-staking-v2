@@ -3,11 +3,11 @@ import { IconOpen } from "@/common/Icons/IconOpen";
 import useOperatorList from "@/hooks/staking/useOperatorList";
 import { Box, Flex, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
 import { useMemo, useCallback, useState } from 'react';
-import { OperatorDetailInfo } from "./table/OperatorDetail";
+import OperatorDetailInfo from "@/common/table/staking/OperatorDetail";
 import PageHeader from "../layout/PageHeader";
-import { OpearatorTable } from "./Operators";
+import OpearatorTable from "@/common/table/staking/Operators";
 import { WalletInformation } from "./WalletInformation";
-import { HistoryTable } from "./HistoryTable";
+import HistoryTable from "@/common/table/staking/HistoryTable";
 import moment from "moment";
 
 function DesktopStaking () {

@@ -17,7 +17,7 @@ import {
 import Image from "next/image";
 import useUserBalance from "@/hooks/useUserBalance";
 import { useWeb3React } from "@web3-react/core";
-import { OperatorImage } from "../staking/table/Oval";
+import OperatorImage from "@/common/table/staking/Oval";
 import select1_arrow_inactive from "assets/images/select1_arrow_inactive.png";
 import icon_close from "assets/images/icon_close.png";
 import { useState } from "react";

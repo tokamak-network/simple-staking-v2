@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import useOperatorList from "@/hooks/staking/useOperatorList";
-import { OperatorImage } from "../staking/table/Oval";
+import { OperatorImage } from "@/common/table/staking/Oval";
 import moment from "moment";
 import { useState } from "react";
 import icon_close from "assets/images/icon_close.png";
