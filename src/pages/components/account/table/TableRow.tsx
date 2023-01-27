@@ -24,7 +24,7 @@ function TableRow(props: { index: number; cell: any }) {
   const { index, cell } = props;
 
   const { transactionHash, layer2, data, eventName, from, blockNumber } =
-    cell.row?.original;
+    cell?.row?.original;
 
   const theme = useTheme();
   const type = cell?.column.id;
@@ -47,7 +47,7 @@ function TableRow(props: { index: number; cell: any }) {
     display='flex'
 alignItems={'center'}
     //   {...theme.STAKING_HISTORY_TABLE_STYLE.tableRow()}
-      {...cell.getCellProps()}
+      {...cell?.getCellProps()}
       fontSize="11px"
    
     >
