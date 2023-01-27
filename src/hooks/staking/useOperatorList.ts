@@ -6,14 +6,15 @@ import { convertNumber } from '../../utils/number';
 import useCallContract from '../useCallContract';
 import { BigNumber } from 'ethers';
 import { calculateExpectedSeig } from "tokamak-staking-lib";
-import { BN, toBN } from 'web3-utils';
+import { toBN } from 'web3-utils';
 import useContract from "hooks/useContract";
 import AutoRefactorCoinageABI from 'services/abi/AutoRefactorCoinage.json';
 import Layer2ABI from 'services/abi/Layer2.json'
 import { getContract } from "utils/getContract";
 import CONTRACT_ADDRESS from "services/addresses/contract";
 import { BASE_PROVIDER } from "@/constants";
-import { range } from 'lodash';
+import { range } from 'lodash'
+import BN from 'bn.js';
 
 export function useOperatorList() {
   const [operatorList, setOperatorList] = useState([]);
