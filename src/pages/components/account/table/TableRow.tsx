@@ -25,7 +25,7 @@ function TableRow(props: { index: number; cell: any }) {
 
 
   const { eventName,transactionHash, layer2, data, from, blockNumber } =
-    cell?.row?.original;
+    cell?.row?.original || {};
   const theme = useTheme();
   const type = cell?.column.id;
   const typeName = getEventName(eventName);
