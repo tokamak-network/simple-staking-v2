@@ -83,7 +83,7 @@ export const HistoryTab: FC<MyHistoryTableProps> = ({
             overflowY={"scroll"}
           >
           
-              {page?.map((row: any, i) => {
+              {page && page.map((row: any, i) => {
                 prepareRow(row);
                 return [
                   <chakra.tr
@@ -94,7 +94,7 @@ export const HistoryTab: FC<MyHistoryTableProps> = ({
                     alignItems="center"
                     {...row.getRowProps()}
                   >
-                    {row.cells?.map((cell: any, index: number) => {
+                    {row.cells && row.cells.map((cell: any, index: number) => {
                       return (
                         //@ts-ignore
                         // eslint-disable-next-line react/jsx-key
