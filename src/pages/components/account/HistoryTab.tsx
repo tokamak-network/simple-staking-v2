@@ -1,11 +1,19 @@
-import { Box, Flex, Text, useTheme, Button, chakra , Drawer,
+import {
+  Box,
+  Flex,
+  Text,
+  useTheme,
+  Button,
+  chakra,
+  Drawer,
   DrawerBody,
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  useDisclosure} from "@chakra-ui/react";
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import trimAddress from "@/utils/trimAddress";
 import {
@@ -54,15 +62,14 @@ export const HistoryTab: FC<MyHistoryTableProps> = ({
   );
 
   const theme = useTheme();
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     setPageSize(data.length);
   }, [setPageSize]);
   return (
-    <Flex w="100%" flexDir={'column'} mt='10px'>
+    <Flex w="100%" flexDir={"column"} mt="10px">
       <Box w="100%">
-        
         <chakra.table
           {...getTableProps()}
           display="flex"
@@ -71,7 +78,7 @@ export const HistoryTab: FC<MyHistoryTableProps> = ({
           w="100%"
         >
           <TableHeader />
-        
+
           <chakra.tbody
             {...getTableBodyProps()}
             display="flex"
@@ -82,31 +89,32 @@ export const HistoryTab: FC<MyHistoryTableProps> = ({
             height={"308px"}
             overflowY={"scroll"}
           >
-          
-          {page ? page.map((row: any, i) => {
-                prepareRow(row);
-                return [
-                  <chakra.tr
-                    h={"36px"}
-                    key={i}
-                    w="100%"
-                    display="flex"
-                    alignItems="center"
-                    {...row.getRowProps()}
-                  >
-                    {row.cells ? row.cells.map((cell: any, index: number) => {
-                      return (
-                        //@ts-ignore
-                        // eslint-disable-next-line react/jsx-key
-                        <TableRow key={index} index={i} cell={cell} onOpen={onOpen}/>
-                      );
-                    }):''}
-                  </chakra.tr>,
-                ];
-              }): ''}
-        
+            {page
+              ? page.map((row: any, i) => {
+                  prepareRow(row);
+                  return [
+                    <chakra.tr
+                      h={"36px"}
+                      key={i}
+                      w="100%"
+                      display="flex"
+                      alignItems="center"
+                      {...row.getRowProps()}
+                    >
+                      {row.cells
+                        ? row.cells.map((cell: any, index: number) => {
+                            return (
+                              //@ts-ignore
+                              // eslint-disable-next-line react/jsx-key
+                              <TableRow key={index} index={i} cell={cell} />
+                            );
+                          })
+                        : ""}
+                    </chakra.tr>,
+                  ];
+                })
+              : ""}
           </chakra.tbody>
-       
         </chakra.table>
       </Box>
       {/* <Drawer placement={'bottom'} onClose={onClose} isOpen={isOpen} size='md'>

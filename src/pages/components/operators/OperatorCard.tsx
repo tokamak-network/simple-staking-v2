@@ -51,7 +51,7 @@ function OperatorCard(props: { operator: any }) {
     {
       title: "Website",
       value:
-        operator.name === "tokamak1"
+        operator?.name === "tokamak1"
           ? "https://tokamak.network"
           : operator.website,
     },
@@ -154,7 +154,7 @@ function OperatorCard(props: { operator: any }) {
                   fontWeight={"bold"}
                 >
                   {" "}
-                  {operator.name}
+                  {operator?.name}
                 </Text>
                 <Text fontSize={"10px"} color="#2a72e5" onClick={onOpen}>
                   More Information
@@ -291,7 +291,7 @@ function OperatorCard(props: { operator: any }) {
               color={"black.300"}
               fontWeight={"bold"}
             >
-              {operator.name}
+              {operator?.name}
             </Text>
 
             <Flex fontSize="11px" color={"gray.300"}>
@@ -350,7 +350,7 @@ function OperatorCard(props: { operator: any }) {
                     <iframe
                       style={{ height: "100vh", width: "100%" }}
                       src={
-                        operator.name === "tokamak1"
+                        operator?.name === "tokamak1"
                           ? "https://tokamak.network"
                           : operator.website
                       }
@@ -365,7 +365,7 @@ function OperatorCard(props: { operator: any }) {
                     <Flex alignItems={"center"}>
                       <OperatorImage />
                       <Text color="black.300" fontSize={"20px"} ml="18px">
-                        {operator.name}
+                        {operator?.name}
                       </Text>
                     </Flex>
                     <Flex h="24px" w="24px" onClick={onClose} ml={"15px"}>
