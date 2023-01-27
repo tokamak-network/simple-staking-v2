@@ -38,8 +38,8 @@ function OperatorCard(props: { operator: any }) {
   const [open, setOpen] = useState(false);
 
   const delay = () => {
-    const operatorDelay = parseInt(operator.withdrawalDelay);
-    const globalDelay = parseInt(operator.globalWithdrawalDelay);
+    const operatorDelay = parseInt(operator?.withdrawalDelay);
+    const globalDelay = parseInt(operator?.globalWithdrawalDelay);
     if (operatorDelay > globalDelay) {
       return operatorDelay;
     } else {
@@ -55,29 +55,29 @@ function OperatorCard(props: { operator: any }) {
           ? "https://tokamak.network"
           : operator?.website,
     },
-    { title: "Description", value: operator.description },
-    { title: "Operator Address", value: operator.operator },
-    { title: "Operator Contract", value: operator.layer2 },
-    { title: "Chain ID", value: operator.chainId },
-    { title: "Commit Count", value: operator.commit.length },
+    { title: "Description", value: operator?.description },
+    { title: "Operator Address", value: operator?.operator },
+    { title: "Operator Contract", value: operator?.layer2 },
+    { title: "Chain ID", value: operator?.chainId },
+    { title: "Commit Count", value: operator?.commit.length },
     {
       title: "Recent Commit",
-      value: operator.commit[0]
-        ? `${moment.unix(operator.commit[0].blockTimestamp).fromNow()}`
+      value: operator?.commit[0]
+        ? `${moment.unix(operator?.commit[0].blockTimestamp).fromNow()}`
         : "",
     },
     {
       title: "Running Time",
-      value: operator.commit[0]
-        ? `${moment.unix(operator.deployedAt).fromNow(true)}`
+      value: operator?.commit[0]
+        ? `${moment.unix(operator?.deployedAt).fromNow(true)}`
         : "",
     },
     {
       title: "Commission Rate",
-      value: ` ${operator.isCommissionRateNegative ? "-" : ""}
+      value: ` ${operator?.isCommissionRateNegative ? "-" : ""}
     ${
       Number(
-        operator.commissionRate.toLocaleString("fullwide", {
+        operator?.commissionRate.toLocaleString("fullwide", {
           useGrouping: false,
         })
       ) / 10000000
@@ -87,16 +87,16 @@ function OperatorCard(props: { operator: any }) {
     {
       title: "Total Staked",
       value: `${convertNumber({
-        amount: operator.updateCoinageTotalString,
+        amount: operator?.updateCoinageTotalString,
         type: "ray",
         localeString: true,
       })} TON`,
     },
-    { title: "My Staked", value: `${operator.yourStaked} TON` },
+    { title: "My Staked", value: `${operator?.yourStaked} TON` },
     {
       title: "Not Withdrawable",
       value: `${convertNumber({
-        amount: operator.userNotWithdrawable,
+        amount: operator?.userNotWithdrawable,
         type: "ray",
         localeString: true,
       })} TON`,
@@ -104,17 +104,17 @@ function OperatorCard(props: { operator: any }) {
     {
       title: "Withdrawable",
       value: `${convertNumber({
-        amount: operator.userWithdrawable,
+        amount: operator?.userWithdrawable,
         type: "ray",
         localeString: true,
       })} TON`,
     },
     {
       title: "New Commission Rate",
-      value: ` ${operator.delayedCommissionRateNegative ? "-" : ""}
+      value: ` ${operator?.delayedCommissionRateNegative ? "-" : ""}
     ${
       Number(
-        operator.delayedCommissionRate.toLocaleString("fullwide", {
+        operator?.delayedCommissionRate.toLocaleString("fullwide", {
           useGrouping: false,
         })
       ) / 10000000
@@ -123,7 +123,7 @@ function OperatorCard(props: { operator: any }) {
     },
     {
       title: "New Commission Rate Changed At",
-      value: operator.delayedCommissionBlock.toString(),
+      value: operator?.delayedCommissionBlock.toString(),
     },
     { title: "Withdrawal Delay", value: delay() },
   ];
