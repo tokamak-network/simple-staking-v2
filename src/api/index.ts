@@ -2,11 +2,17 @@ import axios from 'axios';
 import { API } from '@/constants';
 import { DEFAULT_NETWORK } from '@/constants/index';
 
+
+console.log(DEFAULT_NETWORK,'DEFAULT_NETWORK');
+console.log(API,'API');
+
 function createInstatnceCandidate () {
   return axios.create({
     baseURL: API,
   });
 }
+
+
 
 const candidate = createInstatnceCandidate();
 
