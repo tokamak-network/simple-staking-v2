@@ -10,30 +10,8 @@ import {
 import { getColumnWidthWalletMobile } from "@/utils/getColumnWidth";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 
-function TableHeader() {
-  const HeaderColumn = (columnName: string) => {
-    return (
-      <chakra.th
-        w={getColumnWidthWalletMobile(columnName)}
-        textAlign={
-          columnName === "Account" || columnName === "TX Hash"
-            ? "left"
-            : "center"
-        }
-      
-      >
-        {columnName === "txHash"
-          ? "Tx Hash"
-          : columnName === "txType"
-          ? "Type"
-          : columnName === "amount"
-          ? "Amount TON"
-          : columnName === "status"
-          ? "Status"
-          : ""}
-      </chakra.th>
-    );
-  };
+export const TableHeader = ({}) => {
+ 
   return (
     <chakra.thead
       width={"100%"}
@@ -55,5 +33,29 @@ function TableHeader() {
     </chakra.thead>
   );
 }
+
+const HeaderColumn = (columnName: string) => {
+  return (
+    <chakra.th
+      w={getColumnWidthWalletMobile(columnName)}
+      textAlign={
+        columnName === "Account" || columnName === "TX Hash"
+          ? "left"
+          : "center"
+      }
+    
+    >
+      {columnName === "txHash"
+        ? "Tx Hash"
+        : columnName === "txType"
+        ? "Type"
+        : columnName === "amount"
+        ? "Amount TON"
+        : columnName === "status"
+        ? "Status"
+        : ""}
+    </chakra.th>
+  );
+};
 
 export default TableHeader;

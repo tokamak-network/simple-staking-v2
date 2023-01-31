@@ -5,7 +5,15 @@ import { useState, useMemo } from "react";
 import AccountTab from "./components/account/AccountTab";
 // import HistoryTab from "./components/account/HistoryTab";
 import { useUserHistory } from "../hooks/wallet/useUserHIstory";
-// import MyHistoryTable from "@/common/table/wallet/MyHistoryTable";
+import MyHistoryTable from "@/common/table/wallet/MyHistoryTable";
+import { MyHistoryTab } from "./components/account/MyHistoryTab";
+import {
+  Column,
+  useExpanded,
+  usePagination,
+  useTable,
+  useSortBy,
+} from "react-table";
 function Account() {
   const theme = useTheme();
   const { account } = useWeb3React();
@@ -13,9 +21,7 @@ function Account() {
   const { userHistory } = useUserHistory();
   const [selectedTab, setSelectedTab] = useState("account");
 
-  console.log(userHistory, typeof userHistory);
-
-  const historyColumns = useMemo(
+  const historyCols: Column<any>[] = useMemo(
     () => [
       {
         Header: "Transaction Hash",
@@ -123,22 +129,12 @@ function Account() {
         </Flex>
       </Flex>
 
-      {/* { userHistory ? selectedTab === "account"? (
+      {selectedTab === "account" ? (
         <AccountTab />
       ) : (
-    
-        <HistoryTab
-          columns={historyColumns}
-          data={userHistory}
-         
-        
-        />
-      ):null} */}
-      {/* <MyHistoryTable
-        columns={historyColumns}
-        data={userHistory}
-        isLoading={tableLoading}
-      /> */}
+        <MyHistoryTab isLoading={tableLoading} />
+      )}
+
       {/* <HistoryTab columns={historyColumns} data={userHistory} /> */}
     </Flex>
   );
