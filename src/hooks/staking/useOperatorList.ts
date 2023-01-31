@@ -50,15 +50,15 @@ export function useOperatorList() {
         const isCandidate = candidates.find(
           (candidate: any) => candidate.layer2 === obj.layer2.toLowerCase()
         );
-
+        
         let deployedAt;
         if (isCandidate.kind === 'candidate') {
           const candi = candidateContractCreated.filter(
             (candidate: any) =>
               candidate.data.candidateContract.toLowerCase() === obj.layer2.toLowerCase()
           );
-          const block = await provider.getBlock(candi[0]?.txInfo.blockNumber)
-          deployedAt = block.timestamp;
+          const block = library &&  await library.getBlock(candi[0]?.txInfo.blockNumber);
+          deployedAt = block? block.timestamp:0;
         }
         else if (isCandidate.kind !== 'candidate' ||
           isCandidate.kind === '' ||
@@ -179,11 +179,11 @@ export function useOperatorList() {
           userSeigs: seigniorage,
           commissionRate: commissionRate,
           deployedAt: deployedAt,
-          userNotWithdrawable: userNotWithdrawable.toString(),
-          userWithdrawable: userWithdrawable.toString(),
+          userNotWithdrawable: userNotWithdrawable?.toString(),
+          userWithdrawable: userWithdrawable?.toString(),
           delayedCommissionRateNegative:delayedCommissionRateNegative,
           delayedCommissionRate:convertNumber({
-            amount: delayedCommissionRate.toString(),
+            amount: delayedCommissionRate?.toString(),
             type: 'wei',
           }),
           delayedCommissionBlock: delayedCommissionBlock,

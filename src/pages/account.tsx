@@ -3,14 +3,17 @@ import { useWeb3React } from "@web3-react/core";
 import trimAddress from "@/utils/trimAddress";
 import { useState, useMemo } from "react";
 import AccountTab from "./components/account/AccountTab";
+// import HistoryTab from "./components/account/HistoryTab";
 import { useUserHistory } from "../hooks/wallet/useUserHIstory";
-
+// import MyHistoryTable from "@/common/table/wallet/MyHistoryTable";
 function Account() {
   const theme = useTheme();
   const { account } = useWeb3React();
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const { userHistory } = useUserHistory();
   const [selectedTab, setSelectedTab] = useState("account");
+
+  console.log(userHistory, typeof userHistory);
 
   const historyColumns = useMemo(
     () => [
@@ -120,12 +123,23 @@ function Account() {
         </Flex>
       </Flex>
 
-      {selectedTab === "account" ? (
+      {/* { userHistory ? selectedTab === "account"? (
         <AccountTab />
       ) : (
-        <></>
-       
-      )}
+    
+        <HistoryTab
+          columns={historyColumns}
+          data={userHistory}
+         
+        
+        />
+      ):null} */}
+      {/* <MyHistoryTable
+        columns={historyColumns}
+        data={userHistory}
+        isLoading={tableLoading}
+      /> */}
+      {/* <HistoryTab columns={historyColumns} data={userHistory} /> */}
     </Flex>
   );
 }
