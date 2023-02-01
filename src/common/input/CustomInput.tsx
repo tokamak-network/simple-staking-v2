@@ -54,9 +54,6 @@ function BalanceInput(props: InputProp) {
     const { value: inputValue } = target;
     setValue(addComma(inputValue));
   };
-
-
-  console.log('maxValue',maxValue);
   
   return (
     <InputGroup >

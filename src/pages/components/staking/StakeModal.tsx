@@ -86,7 +86,7 @@ function StakeModal () {
     const amount = floatParser(input)
     if (DepositManager_CONTRACT && amount) {
       //@ts-ignore
-      const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, )
+      const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2,account )
       //@ts-ignore
       const tx = await DepositManager_CONTRACT.requestWithdrawal(selectedModalData.layer2, convertToRay(amount.toString()))  
       setTx(tx);

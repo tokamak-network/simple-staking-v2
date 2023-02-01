@@ -9,7 +9,7 @@ import { inputBalanceState, inputState } from '@/atom/global/input';
 
 
 const getData = (layer2: any) => {
-    const {DepositManager_ADDRESS} = CONTRACT_ADDRESS;
+    const { DepositManager_ADDRESS } = CONTRACT_ADDRESS;
 
     if (layer2) return marshalString(
         //@ts-ignore
@@ -63,11 +63,11 @@ export const staking = async (userTonBalance: any, TON_CONTRACT: any, amount: an
 
 }
 
-export const reStaking = async(account: any, DepositManager_CONTRACT:any, layer2: string, setTxPending: any, setTx: any) => {
+export const reStaking = async (account: any, DepositManager_CONTRACT: any, layer2: string, setTxPending: any, setTx: any) => {
     if (DepositManager_CONTRACT && account && layer2) {
-        try{ 
-            const numPendRequest = await DepositManager_CONTRACT.numRequests(layer2, account) 
-            const tx = await DepositManager_CONTRACT.redepositMulti(layer2, numPendRequest)  
+        try {
+            const numPendRequest = await DepositManager_CONTRACT.numRequests(layer2, account)
+            const tx = await DepositManager_CONTRACT.redepositMulti(layer2, numPendRequest)
             setTxPending(true)
             setTx(tx)
 
@@ -86,4 +86,28 @@ export const reStaking = async(account: any, DepositManager_CONTRACT:any, layer2
         }
     }
 
+}
+
+export const unstake = async (account: any, layer2: string, DepositManager_CONTRACT: any, setTxPending: any, setTx: any, amount: number) => {
+    if (DepositManager_CONTRACT && account && layer2) {
+
+        try {
+            const numPendRequest = await DepositManager_CONTRACT.numRequests(layer2, account)
+            const tx = await DepositManager_CONTRACT.requestWithdrawal(layer2, convertToRay(amount.toString()))
+            setTx(tx);
+            setTxPending(true)
+            if (tx) {
+                await tx.wait().then((receipt: any) => {
+                    if (receipt.status) {
+                        setTxPending(false);
+                        setTx(undefined);
+                    }
+                })
+            }
+        }
+        catch (e) {
+            setTxPending(false);
+            setTx(undefined);
+        }
+    }
 }
