@@ -22,6 +22,12 @@ import select1_arrow_inactive from "assets/images/select1_arrow_inactive.png";
 import icon_close from "assets/images/icon_close.png";
 import { useState } from "react";
 import OperatorSelect from "./OperatorSelect";
+import MobileCustomInput from "@/common/input/MobileCustomInput";
+import { staking } from "@/actions/StakeActions";
+import useCallContract from "@/hooks/useCallContract";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { txState } from "@/atom/global/transaction";
+import { floatParser } from "@/components/number";
 
 function MobileStakeComponent(props: { operatorList: any }) {
   const { account } = useWeb3React();
@@ -29,7 +35,15 @@ function MobileStakeComponent(props: { operatorList: any }) {
   const { userTonBalance } = useUserBalance(account);
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedOp, setSelectedOp] = useState<any>(undefined);
+  const [selectedOp, setSelectedOp] = useState<any>(operatorList?.[0]);
+  const [amount, setAmount] = useState(0);
+  const [txPending, setTxPending] = useRecoilState(txState);
+  const [tx, setTx] = useState();
+
+  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } =
+    useCallContract();
+
+    const tonB = userTonBalance? floatParser(userTonBalance): 0
 
   return (
     <Flex w="100%" px="20px">
@@ -51,66 +65,14 @@ function MobileStakeComponent(props: { operatorList: any }) {
             {userTonBalance} TON
           </Text>
         </Flex>
-        <Flex h="40px" justifyContent={"space-between"}>
-          <Flex
-            w="190px"
-            border={"solid 1px #dfe4ee"}
-            borderRadius="4px"
-            h="40px"
-            justifyContent={"flex-end"}
-            alignItems="center"
-            px="10px"
-            fontSize={"13px"}
-          >
-            <NumberInput
-              borderColor={"transparent"}
-              _focus={{
-                borderColor: "transparent",
-              }}
-              _active={{
-                borderColor: "transparent",
-              }}
-              _hover={{
-                borderColor: "transparent",
-              }}
-              focusBorderColor="transparent"
-            >
-              <NumberInputField
-                textAlign={"right"}
-                fontSize={"13px"}
-                border="none"
-                _focus={{
-                  borderWidth: 0,
-                }}
-                pr="0px"
-                _active={{
-                  borderWidth: 0,
-                }}
-              ></NumberInputField>
-            </NumberInput>
-            <Text fontSize={"13px"} ml="7px">
-              TON
-            </Text>
-          </Flex>
-          <Button
-            bg="transparent"
-            border={"solid 1px #2a72e5"}
-            fontSize="13px"
-            h="40px"
-            color={"blue.200"}
-            _focus={{
-              bg: "transparent",
-            }}
-            _active={{
-              bg: "transparent",
-            }}
-            _hover={{
-              bg: "transparent",
-            }}
-          >
-            MAX
-          </Button>
-        </Flex>
+        <MobileCustomInput
+          w={"147px"}
+          placeHolder={"0.00"}
+          type={"staking"}
+          maxValue={userTonBalance}
+          setAmount={setAmount}
+        />
+
         <Flex
           mt="10px"
           h="40px"
@@ -124,7 +86,7 @@ function MobileStakeComponent(props: { operatorList: any }) {
           <Flex alignItems={"center"}>
             <OperatorImage height="20px" width="20px" />
             <Text ml="7px" fontSize={"13px"} fontWeight="bold">
-            {selectedOp }
+              {selectedOp?.name}
             </Text>
             <Flex height={"9px"} width={"8px"} ml="10px" onClick={onOpen}>
               <Image
@@ -147,6 +109,25 @@ function MobileStakeComponent(props: { operatorList: any }) {
           _hover={{
             bg: "blue.200",
           }}
+          isDisabled={
+            userTonBalance === "0.00" ||
+            amount === 0 ||
+            Number.isNaN(amount) ||
+            amount === undefined  || (tonB?  amount > tonB: false)
+          }
+          _disabled={{ bg: "#86929d", color: "#e9edf1" }}
+          onClick={() =>
+            staking(
+              userTonBalance,
+              TON_CONTRACT,
+              WTON_CONTRACT,
+              DepositManager_CONTRACT,
+              amount,
+              selectedOp.layer2,
+              setTxPending,
+              setTx
+            )
+          }
         >
           Stake
         </Button>
