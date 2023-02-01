@@ -120,8 +120,6 @@ function MobileStakeComponent(props: { operatorList: any }) {
             staking(
               userTonBalance,
               TON_CONTRACT,
-              WTON_CONTRACT,
-              DepositManager_CONTRACT,
               amount,
               selectedOp.layer2,
               setTxPending,

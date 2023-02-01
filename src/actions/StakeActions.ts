@@ -9,11 +9,7 @@ import { inputBalanceState, inputState } from '@/atom/global/input';
 
 
 const getData = (layer2: any) => {
-    const {
-        TON_ADDRESS,
-        WTON_ADDRESS,
-        DepositManager_ADDRESS,
-    } = CONTRACT_ADDRESS;
+    const {DepositManager_ADDRESS} = CONTRACT_ADDRESS;
 
     if (layer2) return marshalString(
         //@ts-ignore
@@ -23,14 +19,9 @@ const getData = (layer2: any) => {
     )
 }
 
-export const staking = async (userTonBalance: any, TON_CONTRACT: any,
-    WTON_CONTRACT: any, DepositManager_CONTRACT: any, amount: any, layer2: string, setTxPending: any, setTx: any) => {
+export const staking = async (userTonBalance: any, TON_CONTRACT: any, amount: any, layer2: string, setTxPending: any, setTx: any) => {
 
-    const {
-        TON_ADDRESS,
-        WTON_ADDRESS,
-        DepositManager_ADDRESS,
-    } = CONTRACT_ADDRESS;
+    const { WTON_ADDRESS } = CONTRACT_ADDRESS;
 
     if (userTonBalance) {
         const tonBalance = floatParser(userTonBalance)
@@ -40,7 +31,6 @@ export const staking = async (userTonBalance: any, TON_CONTRACT: any,
         }
         if (confirm('Current withdrawal delay is 2 weeks. Are you sure you want to delegate?')) {
             const data = getData(layer2)
-            console.log(amount);
             if (TON_CONTRACT && amount) {
 
                 try {
@@ -70,5 +60,30 @@ export const staking = async (userTonBalance: any, TON_CONTRACT: any,
         }
     }
 
+
+}
+
+export const reStaking = async(account: any, DepositManager_CONTRACT:any, layer2: string, setTxPending: any, setTx: any) => {
+    if (DepositManager_CONTRACT && account && layer2) {
+        try{ 
+            const numPendRequest = await DepositManager_CONTRACT.numRequests(layer2, account) 
+            const tx = await DepositManager_CONTRACT.redepositMulti(layer2, numPendRequest)  
+            setTxPending(true)
+            setTx(tx)
+
+            if (tx) {
+                await tx.wait().then((receipt: any) => {
+                    if (receipt.status) {
+                        setTxPending(false);
+                        setTx(undefined);
+                    }
+                })
+            }
+        }
+        catch (e) {
+            setTxPending(false);
+            setTx(undefined);
+        }
+    }
 
 }

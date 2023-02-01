@@ -11,7 +11,7 @@ import {
   DrawerContent,
   DrawerCloseButton,
   useDisclosure,
-  Button
+  Button,
 } from "@chakra-ui/react";
 import useUserBalance from "@/hooks/useUserBalance";
 import { useWeb3React } from "@web3-react/core";
@@ -21,14 +21,22 @@ import Image from "next/image";
 import select1_arrow_inactive from "assets/images/select1_arrow_inactive.png";
 import icon_close from "assets/images/icon_close.png";
 import OperatorSelect from "./OperatorSelect";
+import { usePendingUnstaked } from "@/hooks/staking/usePendingUnstaked";
+import { reStaking } from "@/actions/StakeActions";
+import useCallContract from "@/hooks/useCallContract";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { txState } from "@/atom/global/transaction";
 
 function MobileRestakeComponent(props: { operatorList: any }) {
   const { account } = useWeb3React();
   const { operatorList } = props;
-  const [selectedOp, setSelectedOp] = useState<any>(undefined);
+  const [selectedOp, setSelectedOp] = useState<any>(operatorList?.[0]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-// console.log(operatorList[0]);
-
+  const { pendingUnstaked } = usePendingUnstaked(selectedOp?.layer2, account);
+  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } =
+    useCallContract();
+  const [txPending, setTxPending] = useRecoilState(txState);
+  const [tx, setTx] = useState();
   return (
     <Flex w="100%" px="20px">
       <Flex
@@ -60,32 +68,9 @@ function MobileRestakeComponent(props: { operatorList: any }) {
           <Text fontSize={"13px"} w="160px">
             Re-stake Amount
           </Text>
-          <NumberInput
-            borderColor={"transparent"}
-            _focus={{
-              borderColor: "transparent",
-            }}
-            _active={{
-              borderColor: "transparent",
-            }}
-            _hover={{
-              borderColor: "transparent",
-            }}
-            focusBorderColor="transparent"
-          >
-            <NumberInputField
-              textAlign={"right"}
-              fontSize={"13px"}
-              border="none"
-              _focus={{
-                borderWidth: 0,
-              }}
-              pr="0px"
-              _active={{
-                borderWidth: 0,
-              }}
-            ></NumberInputField>
-          </NumberInput>
+          <Text textAlign={"right"} w="110px">
+            {pendingUnstaked}
+          </Text>
           <Text fontSize={"13px"} ml="7px">
             TON
           </Text>
@@ -103,7 +88,7 @@ function MobileRestakeComponent(props: { operatorList: any }) {
           <Flex alignItems={"center"}>
             <OperatorImage height="20px" width="20px" />
             <Text ml="7px" fontSize={"13px"} fontWeight="bold">
-              {selectedOp }
+              {selectedOp?.name}
             </Text>
             <Flex height={"9px"} width={"8px"} ml="10px" onClick={onOpen}>
               <Image
@@ -126,6 +111,17 @@ function MobileRestakeComponent(props: { operatorList: any }) {
           _hover={{
             bg: "blue.200",
           }}
+          isDisabled={pendingUnstaked === "0.00"}
+          _disabled={{ bg: "#86929d", color: "#e9edf1" }}
+          onClick={() =>
+            reStaking(
+              account,
+              DepositManager_CONTRACT,
+              selectedOp.layer2,
+              setTxPending,
+              setTx
+            )
+          }
         >
           Re-Stake
         </Button>
