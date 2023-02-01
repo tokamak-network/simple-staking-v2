@@ -111,3 +111,27 @@ export const unstake = async (account: any, layer2: string, DepositManager_CONTR
         }
     }
 }
+
+export const withdraw = async (account: any, layer2: string, DepositManager_CONTRACT: any, withdrawableLength: any, setTxPending: any, setTx: any) => {
+    if (DepositManager_CONTRACT && account && layer2) {
+
+        try {
+            const tx = await DepositManager_CONTRACT.processRequests(layer2, withdrawableLength, true)
+            setTx(tx);
+            setTxPending(true)
+            if (tx) {
+                await tx.wait().then((receipt: any) => {
+                    if (receipt.status) {
+                        setTxPending(false);
+                        setTx(undefined);
+                    }
+                })
+            }
+        }
+        catch (e) {
+            setTxPending(false);
+            setTx(undefined);
+        }
+    }
+
+}

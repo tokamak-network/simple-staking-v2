@@ -22,6 +22,11 @@ import select1_arrow_inactive from "assets/images/select1_arrow_inactive.png";
 import icon_close from "assets/images/icon_close.png";
 import { useState } from "react";
 import OperatorSelect from "./OperatorSelect";
+import { useWithdrawable } from "@/hooks/staking/useWithdrawable";
+import { withdraw } from "@/actions/StakeActions";
+import useCallContract from "@/hooks/useCallContract";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { txState } from "@/atom/global/transaction";
 
 function MobileWithdrawComponent(props: { operatorList: any }) {
   const { account } = useWeb3React();
@@ -29,8 +34,15 @@ function MobileWithdrawComponent(props: { operatorList: any }) {
   const { userTonBalance } = useUserBalance(account);
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedOp, setSelectedOp] = useState<any>(undefined);
+  const [selectedOp, setSelectedOp] = useState<any>(operatorList?.[0]);
+  const { withdrawable, withdrawableLength } = useWithdrawable(selectedOp?.layer2)
+  const [txPending, setTxPending] = useRecoilState(txState);
+  const [tx, setTx] = useState();
 
+  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } =
+    useCallContract();
+
+  
   return (
     <Flex w="100%" px="20px">
       <Flex
@@ -57,7 +69,7 @@ function MobileWithdrawComponent(props: { operatorList: any }) {
           alignItems={'center'}
           px='10px'
         >
-            <Text fontSize={'13px'}>{} TON</Text>
+            <Text fontSize={'13px'}>{withdrawable} TON</Text>
         </Flex>
         <Flex
           mt="10px"
@@ -72,7 +84,7 @@ function MobileWithdrawComponent(props: { operatorList: any }) {
           <Flex alignItems={"center"}>
             <OperatorImage height="20px" width="20px" />
             <Text ml="7px" fontSize={"13px"} fontWeight="bold">
-            {selectedOp }
+            {selectedOp?.name }
             </Text>
             <Flex height={"9px"} width={"8px"} ml="10px" onClick={onOpen}>
               <Image
@@ -95,6 +107,9 @@ function MobileWithdrawComponent(props: { operatorList: any }) {
           _hover={{
             bg: "blue.200",
           }}
+          _disabled={{ bg: "#86929d", color: "#e9edf1" }}
+          isDisabled={withdrawable === '0.00' || selectedOp === undefined}
+          onClick={() => withdraw(account, selectedOp.layer2, DepositManager_CONTRACT,withdrawableLength, setTxPending, setTx)}
         >
           Withdraw
         </Button>
