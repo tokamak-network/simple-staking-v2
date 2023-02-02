@@ -51,6 +51,7 @@ function MobileUnstakeComponent(props: { operatorList: any }) {
           type={"staking"}
           maxValue={selectedOp ? selectedOp.yourStaked : "0.00"}
           setAmount={setAmount}
+          maxButton={true}
         />
         <Flex
           mt="10px"

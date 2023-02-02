@@ -22,6 +22,8 @@ type InputProp = {
   maxValue: any;
   type?: string;
   setAmount: React.Dispatch<SetStateAction<any>>;
+  maxButton?: boolean;
+  txt?: string;
   // atomKey: string;
 };
 
@@ -57,7 +59,17 @@ const addComma = (inputVal: any) => {
 };
 
 function MobileCustomInput(props: InputProp) {
-  const { placeHolder, h, isError, maxValue, type, w, setAmount } = props;
+  const {
+    placeHolder,
+    h,
+    isError,
+    maxValue,
+    type,
+    w,
+    setAmount,
+    maxButton,
+    txt,
+  } = props;
   const [value, setValue] = useRecoilState(inputState);
   const theme = useTheme();
   const { INPUT_STYLE } = theme;
@@ -67,21 +79,20 @@ function MobileCustomInput(props: InputProp) {
     const { target } = event;
     const { value: inputValue } = target;
     setValue(addComma(inputValue));
-   
   };
 
   useEffect(() => {
     // console.log(value.replaceAll(',',''));
     const valueWithoutCommas = floatParser(value ? value : "");
     const balanceWithoutComas = floatParser(maxValue ? maxValue : "");
-    setError(Number(valueWithoutCommas) > Number(balanceWithoutComas));    
-    setAmount(valueWithoutCommas)
+    setError(Number(valueWithoutCommas) > Number(balanceWithoutComas));
+    setAmount(valueWithoutCommas);
   }, [value]);
 
   return (
     <InputGroup h="40px" justifyContent={"space-between"}>
       <Flex
-        w="190px"
+        w={!maxButton? '280px': "190px"}
         border={error ? "solid 1px red" : "solid 1px #dfe4ee"}
         borderRadius="4px"
         h="40px"
@@ -90,6 +101,8 @@ function MobileCustomInput(props: InputProp) {
         px="10px"
         fontSize={"13px"}
       >
+        {txt ? <Text>Amount</Text> : <></>}
+
         <NumberInput
           w={w}
           h={h || "40px"}
@@ -123,28 +136,32 @@ function MobileCustomInput(props: InputProp) {
           </Flex>
         </NumberInput>
       </Flex>
-      <Button
-        bg="transparent"
-        border={"solid 1px #2a72e5"}
-        fontSize="13px"
-        h="40px"
-        w="80px"
-        color={"blue.200"}
-        _focus={{
-          bg: "transparent",
-        }}
-        _active={{
-          bg: "transparent",
-        }}
-        _hover={{
-          bg: "transparent",
-        }}
-        onClick={() => {
-          setValue(String(maxValue));
-        }}
-      >
-        MAX
-      </Button>
+      {maxButton ? (
+        <Button
+          bg="transparent"
+          border={"solid 1px #2a72e5"}
+          fontSize="13px"
+          h="40px"
+          w="80px"
+          color={"blue.200"}
+          _focus={{
+            bg: "transparent",
+          }}
+          _active={{
+            bg: "transparent",
+          }}
+          _hover={{
+            bg: "transparent",
+          }}
+          onClick={() => {
+            setValue(String(maxValue));
+          }}
+        >
+          MAX
+        </Button>
+      ) : (
+        <></>
+      )}
     </InputGroup>
   );
 }

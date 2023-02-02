@@ -26,6 +26,13 @@ import Image from "next/image";
 import useUserBalance from "@/hooks/useUserBalance";
 import OperatorInfoSub from "./OperatorInfoSub";
 import { convertNumber } from "utils/number";
+import MobileCustomInput from "@/common/input/MobileCustomInput";
+import { floatParser } from "@/components/number";
+import { staking } from "@/actions/StakeActions";
+import useCallContract from "@/hooks/useCallContract";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { txState } from "@/atom/global/transaction";
+
 function OperatorCard(props: { operator: any }) {
   const { operator } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,6 +43,14 @@ function OperatorCard(props: { operator: any }) {
 
   const { operatorList } = useOperatorList();
   const [open, setOpen] = useState(false);
+  const [amount, setAmount] = useState(0);
+
+  const tonB = userTonBalance ? floatParser(userTonBalance) : 0;
+  const [txPending, setTxPending] = useRecoilState(txState);
+  const [tx, setTx] = useState();
+
+  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } =
+    useCallContract();
 
   const delay = () => {
     const operatorDelay = parseInt(operator?.withdrawalDelay);
@@ -232,7 +247,7 @@ function OperatorCard(props: { operator: any }) {
               {userTonBalance} TON
             </Text>
           </Flex>
-          <Flex
+          {/* <Flex
             h="40px"
             border="1px solid #dfe4ee"
             borderRadius={"4px"}
@@ -268,7 +283,17 @@ function OperatorCard(props: { operator: any }) {
               ></NumberInputField>
             </NumberInput>
             <Text ml="7px">TON</Text>
-          </Flex>
+          </Flex> */}
+
+          <MobileCustomInput
+            w="280px"
+            placeHolder={"0.00"}
+            type={"staking"}
+            maxValue={userTonBalance}
+            setAmount={setAmount}
+            maxButton={false}
+            txt={"Amount"}
+          />
           <Button
             mt="15px"
             w="100%"
@@ -277,6 +302,24 @@ function OperatorCard(props: { operator: any }) {
             fontSize={"14px"}
             _focus={{ bg: "blue.200", color: "white.100" }}
             _active={{ bg: "blue.200", color: "white.100" }}
+            isDisabled={
+              userTonBalance === "0.00" ||
+              amount === 0 ||
+              Number.isNaN(amount) ||
+              amount === undefined ||
+              (tonB ? amount > tonB : false)
+            }
+            _disabled={{ bg: "#86929d", color: "#e9edf1" }}
+            onClick={() =>
+              staking(
+                userTonBalance,
+                TON_CONTRACT,
+                amount,
+                operator?.layer2,
+                setTxPending,
+                setTx
+              )
+            }
           >
             Stake
           </Button>
@@ -339,23 +382,23 @@ function OperatorCard(props: { operator: any }) {
                     </Flex>
                   </Flex>
                 </DrawerHeader>
-                <DrawerBody pt="0px" px='0px'>
+                <DrawerBody pt="0px" px="0px">
                   <Flex
                     flexDir={"column"}
-                
                     borderTop={"1px solid #dfe4ee"}
                     pt="20px"
                   >
-                    {/* <Text>{operator.website}</Text> */} 
-                    {operator.website && operator.name ?   <iframe
-                      style={{ height: "100vh", width: "100%" }}
-                      src={
-                        operator?.name === "tokamak1"
-                          ? "https://tokamak.network"
-                          : operator?.website
-                      }
-                    ></iframe>: null}
-                  
+                    {/* <Text>{operator.website}</Text> */}
+                    {operator.website && operator.name ? (
+                      <iframe
+                        style={{ height: "100vh", width: "100%" }}
+                        src={
+                          operator?.name === "tokamak1"
+                            ? "https://tokamak.network"
+                            : operator?.website
+                        }
+                      ></iframe>
+                    ) : null}
                   </Flex>
                 </DrawerBody>
               </>

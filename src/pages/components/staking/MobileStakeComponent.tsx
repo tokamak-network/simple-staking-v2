@@ -71,6 +71,7 @@ function MobileStakeComponent(props: { operatorList: any }) {
           type={"staking"}
           maxValue={userTonBalance}
           setAmount={setAmount}
+          maxButton={true}
         />
 
         <Flex
