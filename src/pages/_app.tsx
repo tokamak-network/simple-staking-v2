@@ -11,7 +11,7 @@ import Entry from './entry';
 import HeadMeta from './Header';
 import MobileHeader from "./components/layout/MobileHeader";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
-
+import MobileFooter from './components/layout/MobileFooter';
 // import NetworkModal from './components/global/NetworkModal';
 // import 'css/gradient.css';
 // import 'css/modalOverlay.css';
@@ -41,6 +41,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             >
               <MobileHeader/>
               <Entry Component={Component} {...pageProps} />
+            <MobileFooter/>
             </Flex>
             ) : (
               <Flex
