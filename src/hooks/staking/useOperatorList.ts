@@ -73,8 +73,6 @@ export function useOperatorList() {
         let stakeOf = '0'
         let commisionRates = undefined
         let seigniorage;
-        let userNotWithdrawable;
-        let userWithdrawable;
         let delayedCommissionRateNegative;
         let delayedCommissionRate;
         let delayedCommissionBlock; 
@@ -130,34 +128,7 @@ export function useOperatorList() {
             new BN(totTotalSupply.toString()),
             new BN(tos),
             new BN(relativeSeigRate.toString())
-          );
-
-         
-          const numPendingRequests = await DepositManager_CONTRACT.numPendingRequests(obj.layer2, account)
-          let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(obj.layer2, account)
-          const pendingRequests = [];
-          for (const _ of range(numPendingRequests)) {
-            pendingRequests.push(await
-              DepositManager_CONTRACT.withdrawalRequest(obj.layer2, account, requestIndex)
-
-            );
-            requestIndex++;
-          }
-          Promise.all(pendingRequests);
-
-          const notWithdrawableRequests = pendingRequests.filter((request: any) =>
-            parseInt(request.withdrawableBlockNumber) > blockNumber
-          )
-
-          const withdrawableRequests = pendingRequests.filter((request: any) =>
-          parseInt(request.withdrawableBlockNumber) <= blockNumber
-        )
-        
-          const initialAmount = BigNumber.from('0')
-          const reducer = (amount: any, request: any) => amount.add(request.amount)
-          userNotWithdrawable = notWithdrawableRequests.reduce(reducer, initialAmount)
-          userWithdrawable = withdrawableRequests.reduce(reducer, initialAmount)
-        
+          );  
            delayedCommissionRate = await SeigManager_CONTRACT.delayedCommissionRate(obj.layer2);
            delayedCommissionRateNegative = await SeigManager_CONTRACT.delayedCommissionRateNegative(obj.layer2);
            delayedCommissionBlock = await SeigManager_CONTRACT.delayedCommissionBlock(obj.layer2);
@@ -179,8 +150,7 @@ export function useOperatorList() {
           userSeigs: seigniorage,
           commissionRate: commissionRate,
           deployedAt: deployedAt,
-          userNotWithdrawable: userNotWithdrawable?.toString(),
-          userWithdrawable: userWithdrawable?.toString(),
+        
           delayedCommissionRateNegative:delayedCommissionRateNegative,
           delayedCommissionRate:convertNumber({
             amount: delayedCommissionRate?.toString(),

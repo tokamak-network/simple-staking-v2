@@ -32,9 +32,12 @@ import { staking } from "@/actions/StakeActions";
 import useCallContract from "@/hooks/useCallContract";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { txState } from "@/atom/global/transaction";
+import { useWithdrawable } from "@/hooks/staking/useWithdrawable";
 
 function OperatorCard(props: { operator: any }) {
   const { operator } = props;
+  const { withdrawable, withdrawableLength ,notWithdrawable} = useWithdrawable(operator?.layer2)
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [clicked, setClicked] = useState(false);
   const theme = useTheme();
@@ -110,19 +113,11 @@ function OperatorCard(props: { operator: any }) {
     { title: "My Staked", value: `${operator?.yourStaked} TON` },
     {
       title: "Not Withdrawable",
-      value: `${convertNumber({
-        amount: operator?.userNotWithdrawable,
-        type: "ray",
-        localeString: true,
-      })} TON`,
+      value: notWithdrawable,
     },
     {
       title: "Withdrawable",
-      value: `${convertNumber({
-        amount: operator?.userWithdrawable,
-        type: "ray",
-        localeString: true,
-      })} TON`,
+      value: withdrawable,
     },
     {
       title: "New Commission Rate",
@@ -142,6 +137,7 @@ function OperatorCard(props: { operator: any }) {
     },
     { title: "Withdrawal Delay", value: delay() },
   ];
+  
   return (
     <Flex
       mb="15px"
