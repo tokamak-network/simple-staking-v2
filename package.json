@@ -38,6 +38,8 @@
     "react-animated-dots": "^1.1.0",
     "react-calendar": "^4.0.0",
     "react-chartjs-2": "^5.1.0",
+    "react-custom-scrollbars": "^4.2.1",
+    "react-custom-scrollbars-2": "^4.5.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "18.2.0",
     "react-jazzicon": "^1.0.4",
@@ -45,12 +47,14 @@
     "react-table": "^7.8.0",
     "recharts": "^2.2.0",
     "recoil": "^0.7.6",
+    "tokamak-staking-lib": "0.0.4",
     "typescript": "4.9.3",
-    "web3-utils": "^1.8.1"
+    "web3-utils": "^1.2.6"
   },
   "devDependencies": {
     "@types/node": "18.0.0",
     "@types/react": "18.0.14",
+    "@types/react-custom-scrollbars": "^4.0.10",
     "@types/react-datepicker": "^4.8.0",
     "@types/react-dom": "18.0.5",
     "@types/react-table": "^7.7.12",

@@ -8,6 +8,8 @@ function createInstatnceCandidate () {
   });
 }
 
+
+
 const candidate = createInstatnceCandidate();
 
 export async function getDailyStakedTotal () {

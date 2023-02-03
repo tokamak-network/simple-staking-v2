@@ -1,10 +1,20 @@
-import { getEventByLayer2, getOperatorsInfo, getDelegators, getOperatorUserHistory } from "@/api";
+import { getEventByLayer2, getOperatorsInfo, getDelegators, getCandidateCreateEvent, getOperatorUserHistory, getCandidates } from "@/api";
 import { useEffect, useState } from 'react';
 import { NON_CANDIDATE } from "@/constants";
 import { useWeb3React } from '@web3-react/core';
 import { convertNumber } from '@/utils/number';
 import useCallContract from '@/hooks/useCallContract';
 import { BigNumber } from 'ethers';
+import { calculateExpectedSeig } from "tokamak-staking-lib";
+import { toBN } from 'web3-utils';
+import useContract from "hooks/useContract";
+import AutoRefactorCoinageABI from 'services/abi/AutoRefactorCoinage.json';
+import Layer2ABI from 'services/abi/Layer2.json'
+import { getContract } from "utils/getContract";
+import CONTRACT_ADDRESS from "services/addresses/contract";
+import { BASE_PROVIDER } from "@/constants";
+import { range } from 'lodash'
+import BN from 'bn.js';
 import { useRecoilValue } from 'recoil';
 import { txState } from '@/atom/global/transaction';
 
@@ -13,24 +23,61 @@ export function useOperatorList() {
   const [userTotalStaked, setUserTotalStaked] = useState('0.00')
   const [totalStaked, setTotalStaked] = useState<string>()
   const { account, library } = useWeb3React();
-  const { DepositManager_CONTRACT , SeigManager_CONTRACT} = useCallContract();
+  const { DepositManager_CONTRACT, SeigManager_CONTRACT, TON_CONTRACT, WTON_CONTRACT } = useCallContract();
+  const { WTON_ADDRESS} = CONTRACT_ADDRESS;
   const tx = useRecoilValue(txState)
 
+   
   useEffect(() => {
-    async function fetchList () {
+    async function fetchList() {
       const data = await getOperatorsInfo();
+      const provider = BASE_PROVIDER;
+
       let staked = BigNumber.from('0')
       let totalStake = BigNumber.from('0')
       const operators = await Promise.all(data.map(async (obj: any) => {
         const history = await getOperatorUserHistory(obj.layer2.toLowerCase())
         const commitHistory = await getEventByLayer2(obj.layer2.toLowerCase(), 'Comitted', 1, 300)
-        
+        const blockNumber = library && await library.getBlockNumber();
+        const candidates = await getCandidates()
+        const events = await getCandidateCreateEvent();
+        const Layer2 = getContract(obj.layer2, Layer2ABI, library)
         const delegators = await getDelegators(obj.layer2.toLowerCase())
+        const candidateContractCreated = events.filter(
+          (event: any) => event.eventName === 'CandidateContractCreated'
+        );
+
+        const isCandidate = candidates.find(
+          (candidate: any) => candidate.layer2 === obj.layer2.toLowerCase()
+        );
         
+        let deployedAt;
+        if (isCandidate.kind === 'candidate') {
+          const candi = candidateContractCreated.filter(
+            (candidate: any) =>
+              candidate.data.candidateContract.toLowerCase() === obj.layer2.toLowerCase()
+          );
+          const block = library &&  await library.getBlock(candi[0]?.txInfo.blockNumber);
+          deployedAt = block? block.timestamp:0;
+        }
+        else if (isCandidate.kind !== 'candidate' ||
+          isCandidate.kind === '' ||
+          isCandidate.kind === 'layer2') {
+          const [firstEpoch] = await Promise.all([
+            Layer2.getEpoch(0, 0),
+          ]);
+          deployedAt = firstEpoch.timestamp.toString();
+        }
+
         let pendingUnstakedLayer2
         let stakeOf = '0'
         let commisionRates = undefined
-
+        let seigniorage;
+        let delayedCommissionRateNegative;
+        let delayedCommissionRate;
+        let delayedCommissionBlock; 
+        let withdrawalDelay;
+        let globalWithdrawalDelay;
         if (DepositManager_CONTRACT) {
           pendingUnstakedLayer2 = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.layer2)
         }
@@ -47,7 +94,7 @@ export function useOperatorList() {
         }) : '-'
         totalStake = totalStake.add(obj.updateCoinageTotalString)
         staked = staked.add(stakeOf)
-        const yourStaked =  convertNumber({
+        const yourStaked = convertNumber({
           amount: stakeOf.toString(),
           type: 'ray',
           localeString: true
@@ -57,17 +104,65 @@ export function useOperatorList() {
           type: 'wei',
         }) : '-'
 
+
+
+        if (account && SeigManager_CONTRACT && TON_CONTRACT && DepositManager_CONTRACT) {
+          const Tot = getContract(await SeigManager_CONTRACT.tot(), AutoRefactorCoinageABI, library, account)
+          const coinage = getContract(await SeigManager_CONTRACT.coinages(obj.layer2), AutoRefactorCoinageABI, library, account)
+          const Layer2 = getContract(obj.layer2, Layer2ABI, library)
+          const userStaked = await coinage.balanceOf(account)
+
+          const tonTotalSupply = await TON_CONTRACT.totalSupply();
+          const totTotalSupply = await Tot.totalSupply()
+          const tonBalanceOfWTON = await TON_CONTRACT.balanceOf(WTON_ADDRESS)
+          const relativeSeigRate = await SeigManager_CONTRACT.relativeSeigRate()
+          const tos = toBN(tonTotalSupply)
+            .mul(toBN('1000000000'))
+            .add(toBN(totTotalSupply))
+            .sub(toBN(tonBalanceOfWTON));
+          const fromBlockNumber = await SeigManager_CONTRACT.lastCommitBlock(obj.layer2)
+          seigniorage = calculateExpectedSeig(
+            new BN(fromBlockNumber.toString()),
+            new BN(blockNumber),
+            new BN(userStaked.toString()),
+            new BN(totTotalSupply.toString()),
+            new BN(tos),
+            new BN(relativeSeigRate.toString())
+          );  
+           delayedCommissionRate = await SeigManager_CONTRACT.delayedCommissionRate(obj.layer2);
+           delayedCommissionRateNegative = await SeigManager_CONTRACT.delayedCommissionRateNegative(obj.layer2);
+           delayedCommissionBlock = await SeigManager_CONTRACT.delayedCommissionBlock(obj.layer2);
+
+           withdrawalDelay = await DepositManager_CONTRACT.withdrawalDelay(obj.layer2)
+           globalWithdrawalDelay = await DepositManager_CONTRACT.globalWithdrawalDelay()
+           
+          }
+
+
+        const find = NON_CANDIDATE.find(data => data.layer2 === obj.layer2)
         const fetchedData = {
-          ...obj, 
-          operatorsHistory: history, 
+          ...obj,
+          operatorsHistory: history,
           delegators: delegators.length,
           commit: commitHistory,
           pendingWithdrawal: pendingWithdrawal,
           yourStaked: yourStaked,
-          commissionRate: commissionRate
+          userSeigs: seigniorage,
+          commissionRate: commissionRate,
+          deployedAt: deployedAt,
+        
+          delayedCommissionRateNegative:delayedCommissionRateNegative,
+          delayedCommissionRate:convertNumber({
+            amount: delayedCommissionRate?.toString(),
+            type: 'wei',
+          }),
+          delayedCommissionBlock: delayedCommissionBlock,
+          withdrawalDelay:withdrawalDelay,
+          globalWithdrawalDelay:globalWithdrawalDelay,
+   
         }
-        const find = NON_CANDIDATE.find(data => data.layer2 === obj.layer2)
-        return find ? 
+        // const find = NON_CANDIDATE.find(data => data.layer2 === obj.layer2)
+        return find ?
           await { ...fetchedData, name: find.name } : await fetchedData
       }))
 
@@ -75,7 +170,7 @@ export function useOperatorList() {
       setUserTotalStaked(staked.toString())
 
       if (operators) {
-        operators.sort(function(a: any, b: any) {
+        operators.sort(function (a: any, b: any) {
           return b.updateCoinageTotalString - a.updateCoinageTotalString
         })
         //@ts-ignore

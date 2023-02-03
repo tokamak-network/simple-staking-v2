@@ -11,6 +11,7 @@ export function useWithdrawable (layer2: string) {
   const { DepositManager_CONTRACT } = useCallContract();
   const { account } = useWeb3React();
   const [withdrawable, setWithdrawable] = useState('0.00')
+  const [notWithdrawable, setNotWithdrawable] = useState('0.00')
   const [withdrawableLength, setWithdrawableLength] = useState('0.00')
 
 
@@ -26,22 +27,36 @@ export function useWithdrawable (layer2: string) {
           pendingRequests.push(await DepositManager_CONTRACT.withdrawalRequest(layer2, account, requestIndex));
           requestIndex++;
         }
-        const withdrawbleList = pendingRequests.filter((request: any) => parseInt(request.withdrawableBlockNumber) <= blockNumber)
-        setWithdrawableLength(withdrawbleList.length)
+        
+      const withdrawbleList = pendingRequests.filter((request: any) => parseInt(request.withdrawableBlockNumber) <= blockNumber)
+       const notWithdrawableList = pendingRequests.filter((request: any) => parseInt(request.withdrawableBlockNumber) > blockNumber)
+    
+       setWithdrawableLength(withdrawbleList.length)
         const reducer = (amount:any, request: any) => amount.add(request.amount)
         const withdrawableAmount = withdrawbleList.reduce(reducer, initial)
-        // console.log(withdrawableAmount)
+        const notWithdrawableAmount = notWithdrawableList.reduce(reducer, initial) 
+        
+
         const convert = convertNumber({
           amount: withdrawableAmount.toString(),
           type: 'ray',
           localeString: true
         })
+
+        const convertNotWithdrawable = convertNumber({
+          amount: notWithdrawableAmount.toString(),
+          type: 'ray',
+          localeString: true
+        })
+        
         if (convert) setWithdrawable(convert)
+        if (convertNotWithdrawable) setNotWithdrawable(convertNotWithdrawable)
+              
       }
     }
     fetch ()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [DepositManager_CONTRACT, account, layer2, withdrawable, blockNumber])
 
-  return {withdrawable, withdrawableLength}
+  return {withdrawable, withdrawableLength, notWithdrawable}
 }

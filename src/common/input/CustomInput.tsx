@@ -54,7 +54,7 @@ function BalanceInput(props: InputProp) {
     const { value: inputValue } = target;
     setValue(addComma(inputValue));
   };
-
+  
   return (
     <InputGroup >
       <NumberInput
