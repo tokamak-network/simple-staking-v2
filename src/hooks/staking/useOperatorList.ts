@@ -52,7 +52,7 @@ export function useOperatorList() {
         );
         
         let deployedAt;
-        if (isCandidate.kind === 'candidate') {
+        if (isCandidate.kind === 'candidate'|| isCandidate.layer2==='0x2000fc16911fc044130c29c1aa49d3e0b101716a') {
           const candi = candidateContractCreated.filter(
             (candidate: any) =>
               candidate.data.candidateContract.toLowerCase() === obj.layer2.toLowerCase()
