@@ -27,7 +27,6 @@ export function useOperatorList() {
   const { WTON_ADDRESS} = CONTRACT_ADDRESS;
   const tx = useRecoilValue(txState)
 
-   
   useEffect(() => {
     async function fetchList() {
       const data = await getOperatorsInfo();
@@ -109,7 +108,7 @@ export function useOperatorList() {
         if (account && SeigManager_CONTRACT && TON_CONTRACT && DepositManager_CONTRACT) {
           const Tot = getContract(await SeigManager_CONTRACT.tot(), AutoRefactorCoinageABI, library, account)
           const coinage = getContract(await SeigManager_CONTRACT.coinages(obj.layer2), AutoRefactorCoinageABI, library, account)
-          const Layer2 = getContract(obj.layer2, Layer2ABI, library)
+
           const userStaked = await coinage.balanceOf(account)
 
           const tonTotalSupply = await TON_CONTRACT.totalSupply();

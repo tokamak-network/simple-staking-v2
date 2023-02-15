@@ -26,8 +26,6 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
     eventName,
     from
   } = cell.row?.original;
-
-  console.log('cells', cell.row);
   
   const theme = useTheme()
   const type = cell.column.id;

@@ -6,7 +6,7 @@ export async function getPendingWithdrwal (history: any) {
   const processed = history.filter((history: any) => history.eventName === 'WithdrawalProcessed');
   const stake = history.filter((history: any) => history.eventName === 'Deposited');
   let withdrawAmount = requested.filter((request:any) => request.blockNumber < block);
-  console.log(withdrawAmount.length, requested.length);
+
   withdrawAmount = requested.filter((request: any) => {
     return !processed.some((other: any) => other.data.amount === request.data.amount);
   })

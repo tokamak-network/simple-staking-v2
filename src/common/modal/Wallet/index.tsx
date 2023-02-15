@@ -190,7 +190,6 @@ function WalletModal() {
           !(window?.web3 || window?.ethereum)
         ) {
           if (option.name === "MetaMask") {
-            console.log('1')
             return (
               <WalletOption
                 id={`connect-${key}`}
