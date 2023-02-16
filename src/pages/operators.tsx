@@ -8,7 +8,6 @@ function Operators() {
   const theme = useTheme();
   const { account } = useWeb3React();
   const operatorListM = useOperatorListForMobile();
-  // console.log(operatorListM);
 
   return (
     <Flex

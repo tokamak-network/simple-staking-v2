@@ -43,7 +43,7 @@ function MobileStaking() {
         w="250px"
         color={"gray.300"}
       >
-        Stake TON ot earn TON.
+        Stake TON or earn TON.
       </Text>
       <Flex w="100%" px="20px">
         <Flex

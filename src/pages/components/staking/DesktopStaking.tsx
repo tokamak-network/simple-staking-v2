@@ -1,7 +1,7 @@
 import { IconClose } from "@/common/Icons/IconClose";
 import { IconOpen } from "@/common/Icons/IconOpen";
 import useOperatorList from "@/hooks/staking/useOperatorList";
-import { Box, Flex, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
+import { Box, Flex, Spinner, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
 import { useMemo, useCallback, useState } from 'react';
 import OperatorDetailInfo from "@/common/table/staking/OperatorDetail";
 import PageHeader from "../layout/PageHeader";
@@ -9,6 +9,7 @@ import OpearatorTable from "@/common/table/staking/Operators";
 import { WalletInformation } from "./WalletInformation";
 import HistoryTable from "@/common/table/staking/HistoryTable";
 import moment from "moment";
+import { useEffect } from 'react';
 
 function DesktopStaking () {
 
@@ -76,7 +77,11 @@ function DesktopStaking () {
   
     const [tableLoading, setTableLoading] = useState<boolean>(true);
     const { operatorList } = useOperatorList()
-  
+
+    useEffect(() => {
+      operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)
+    }, [operatorList, tableLoading])
+    
     const renderRowSubComponent = useCallback(
       ({row}: any) => {
       const { layer2, delegators, commit, operatorsHistory, pendingWithdrawal } = row.original;
@@ -153,12 +158,17 @@ function DesktopStaking () {
       <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
         <PageHeader title={'Select your Operator'} subtitle={'You can select an operator to stake, restake, unstake, your TONS.'}/>
         <Box fontFamily={theme.fonts.roboto}>
-          <OpearatorTable 
-            renderDetail={renderRowSubComponent}
-            columns={columns}
-            data={operatorList}
-            isLoading={tableLoading}
-          />
+          {tableLoading ? 
+            <Flex justifyContent="center" alignItems={"center"} h='200px'>
+              <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
+            </Flex> :
+            <OpearatorTable 
+              renderDetail={renderRowSubComponent}
+              columns={columns}
+              data={operatorList}
+              isLoading={tableLoading}
+            />
+          }
         </Box>
       </Flex>
     );

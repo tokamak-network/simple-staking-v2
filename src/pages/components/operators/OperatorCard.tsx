@@ -138,8 +138,6 @@ function OperatorCard(props: { operator: any }) {
     { title: "Withdrawal Delay", value: delay() },
   ];
   
-  // console.log(operator);
-  
   return (
     <Flex
       mb="15px"

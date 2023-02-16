@@ -82,7 +82,6 @@ function MobileCustomInput(props: InputProp) {
   };
 
   useEffect(() => {
-    // console.log(value.replaceAll(',',''));
     const valueWithoutCommas = floatParser(value ? value : "");
     const balanceWithoutComas = floatParser(maxValue ? maxValue : "");
     setError(Number(valueWithoutCommas) > Number(balanceWithoutComas));

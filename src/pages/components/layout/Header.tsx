@@ -71,11 +71,7 @@ const NavItem = () => {
 }
 
 const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
-  // const {colorMode} = useColorMode();
   const theme = useTheme();
-  // const match = RouteMatch('/');
-  // const {tx} = useAppSelector(selectTxType);
-  // console.log('wallet')
   const txPending = useRecoilValue(txStatusState);
 
   return (
