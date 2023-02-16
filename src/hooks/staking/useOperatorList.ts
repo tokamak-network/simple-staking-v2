@@ -17,6 +17,7 @@ import { range } from 'lodash'
 import BN from 'bn.js';
 import { useRecoilValue } from 'recoil';
 import { txState } from '@/atom/global/transaction';
+import { useWindowDimensions } from "../useWindowDimensions";
 
 export function useOperatorList() {
   const [operatorList, setOperatorList] = useState([]);
@@ -26,7 +27,8 @@ export function useOperatorList() {
   const { DepositManager_CONTRACT, SeigManager_CONTRACT, TON_CONTRACT, WTON_CONTRACT } = useCallContract();
   const { WTON_ADDRESS} = CONTRACT_ADDRESS;
   const tx = useRecoilValue(txState)
-
+  const [width] = useWindowDimensions();
+   
   useEffect(() => {
     async function fetchList() {
       const data = await getOperatorsInfo();
@@ -37,46 +39,15 @@ export function useOperatorList() {
       const operators = await Promise.all(data.map(async (obj: any) => {
         const history = await getOperatorUserHistory(obj.layer2.toLowerCase())
         const commitHistory = await getEventByLayer2(obj.layer2.toLowerCase(), 'Comitted', 1, 300)
-        const blockNumber = library && await library.getBlockNumber();
-        const candidates = await getCandidates()
-        const events = await getCandidateCreateEvent();
-        const Layer2 = getContract(obj.layer2, Layer2ABI, library)
+        // const blockNumber = library && await library.getBlockNumber();
+        // const candidates = await getCandidates()
+        // const events = await getCandidateCreateEvent();
+        // const Layer2 = getContract(obj.layer2, Layer2ABI, library)
         const delegators = await getDelegators(obj.layer2.toLowerCase())
-        const candidateContractCreated = events.filter(
-          (event: any) => event.eventName === 'CandidateContractCreated'
-        );
-
-        const isCandidate = candidates.find(
-          (candidate: any) => candidate.layer2 === obj.layer2.toLowerCase()
-        );
-        
-        let deployedAt;
-        if (isCandidate.kind === 'candidate'|| isCandidate.layer2==='0x2000fc16911fc044130c29c1aa49d3e0b101716a') {
-          const candi = candidateContractCreated.filter(
-            (candidate: any) =>
-              candidate.data.candidateContract.toLowerCase() === obj.layer2.toLowerCase()
-          );
-          const block = library &&  await library.getBlock(candi[0]?.txInfo.blockNumber);
-          deployedAt = block? block.timestamp:0;
-        }
-        else if (isCandidate.kind !== 'candidate' ||
-          isCandidate.kind === '' ||
-          isCandidate.kind === 'layer2') {
-          const [firstEpoch] = await Promise.all([
-            Layer2.getEpoch(0, 0),
-          ]);
-          deployedAt = firstEpoch.timestamp.toString();
-        }
 
         let pendingUnstakedLayer2
         let stakeOf = '0'
         let commisionRates = undefined
-        let seigniorage;
-        let delayedCommissionRateNegative;
-        let delayedCommissionRate;
-        let delayedCommissionBlock; 
-        let withdrawalDelay;
-        let globalWithdrawalDelay;
         if (DepositManager_CONTRACT) {
           pendingUnstakedLayer2 = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.layer2)
         }
@@ -102,42 +73,6 @@ export function useOperatorList() {
           amount: commisionRates.toString(),
           type: 'wei',
         }) : '-'
-
-
-
-        if (account && SeigManager_CONTRACT && TON_CONTRACT && DepositManager_CONTRACT) {
-          const Tot = getContract(await SeigManager_CONTRACT.tot(), AutoRefactorCoinageABI, library, account)
-          const coinage = getContract(await SeigManager_CONTRACT.coinages(obj.layer2), AutoRefactorCoinageABI, library, account)
-
-          const userStaked = await coinage.balanceOf(account)
-
-          const tonTotalSupply = await TON_CONTRACT.totalSupply();
-          const totTotalSupply = await Tot.totalSupply()
-          const tonBalanceOfWTON = await TON_CONTRACT.balanceOf(WTON_ADDRESS)
-          const relativeSeigRate = await SeigManager_CONTRACT.relativeSeigRate()
-          const tos = toBN(tonTotalSupply)
-            .mul(toBN('1000000000'))
-            .add(toBN(totTotalSupply))
-            .sub(toBN(tonBalanceOfWTON));
-          const fromBlockNumber = await SeigManager_CONTRACT.lastCommitBlock(obj.layer2)
-          seigniorage = calculateExpectedSeig(
-            new BN(fromBlockNumber.toString()),
-            new BN(blockNumber),
-            new BN(userStaked.toString()),
-            new BN(totTotalSupply.toString()),
-            new BN(tos),
-            new BN(relativeSeigRate.toString())
-          );  
-           delayedCommissionRate = await SeigManager_CONTRACT.delayedCommissionRate(obj.layer2);
-           delayedCommissionRateNegative = await SeigManager_CONTRACT.delayedCommissionRateNegative(obj.layer2);
-           delayedCommissionBlock = await SeigManager_CONTRACT.delayedCommissionBlock(obj.layer2);
-
-           withdrawalDelay = await DepositManager_CONTRACT.withdrawalDelay(obj.layer2)
-           globalWithdrawalDelay = await DepositManager_CONTRACT.globalWithdrawalDelay()
-           
-          }
-
-
         const find = NON_CANDIDATE.find(data => data.layer2 === obj.layer2)
         const fetchedData = {
           ...obj,
@@ -146,18 +81,7 @@ export function useOperatorList() {
           commit: commitHistory,
           pendingWithdrawal: pendingWithdrawal,
           yourStaked: yourStaked,
-          userSeigs: seigniorage,
           commissionRate: commissionRate,
-          deployedAt: deployedAt,
-        
-          delayedCommissionRateNegative:delayedCommissionRateNegative,
-          delayedCommissionRate:convertNumber({
-            amount: delayedCommissionRate?.toString(),
-            type: 'wei',
-          }),
-          delayedCommissionBlock: delayedCommissionBlock,
-          withdrawalDelay:withdrawalDelay,
-          globalWithdrawalDelay:globalWithdrawalDelay,
    
         }
         // const find = NON_CANDIDATE.find(data => data.layer2 === obj.layer2)
@@ -177,7 +101,7 @@ export function useOperatorList() {
       }
     }
     fetchList()
-  }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account, setTotalStaked])
+  }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account, setTotalStaked,width])
 
   return { operatorList, userTotalStaked, totalStaked, tx }
 }

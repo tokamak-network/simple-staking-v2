@@ -30,8 +30,9 @@ export function useWindowDimensions() {
   const [height, setHeight] = useState(0);
 
   const handleWindowResize = () => {
-    setWidth(window.innerWidth);
+    setWidth(screen.width);
     setHeight(window.innerHeight);
+    
   };
 
   useEffect(() => {

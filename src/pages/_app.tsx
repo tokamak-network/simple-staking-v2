@@ -20,7 +20,7 @@ import MobileFooter from './components/layout/MobileFooter';
 function MyApp({ Component, pageProps }: AppProps) {
   const { onOpen, isOpen: isModalOpen, onClose } = useDisclosure();
   const [width] = useWindowDimensions();
-  const mobile = width < 460;
+  const mobile = width < 1040;
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       {/* <ApolloProvider client={client}> */}

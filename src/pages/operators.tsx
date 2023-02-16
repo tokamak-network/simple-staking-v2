@@ -2,10 +2,13 @@ import { Box, Flex, Text, useTheme, Button, Spinner } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import useOperatorList from "@/hooks/staking/useOperatorList";
 import OperatorCard from "./components/operators/OperatorCard";
+import useOperatorListForMobile from "@/hooks/staking/useOperatorListForMobile";
+
 function Operators() {
   const theme = useTheme();
   const { account } = useWeb3React();
-  const { operatorList } = useOperatorList();
+  const operatorListM = useOperatorListForMobile();
+  // console.log(operatorListM);
 
   return (
     <Flex
@@ -35,8 +38,8 @@ function Operators() {
         Select an operator to stake, unstake, or withdraw your tokens.
       </Text>
       <Flex w="100%" px="20px" flexDir={"column"}>
-        {operatorList.length !== 0 ? (
-          operatorList.map((operator: any, index: number) => {
+        {operatorListM.length !== 0 ? (
+          operatorListM.map((operator: any, index: number) => {
             return <OperatorCard operator={operator} key={index} />;
           })
         ) : (

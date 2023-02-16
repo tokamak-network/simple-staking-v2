@@ -5,7 +5,7 @@ import MobileStaking from "./components/staking/MobileStaking";
 
 function Staking() {
   const [width] = useWindowDimensions();
-  const mobile = width < 460;
+  const mobile = width < 1040;
 
   return <>{mobile ? <MobileStaking /> : <DesktopStaking />}</>;
 }

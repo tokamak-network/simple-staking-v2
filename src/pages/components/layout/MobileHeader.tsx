@@ -29,7 +29,7 @@ import { useRef, useState } from "react";
 import Burger_close_icon from "assets/images/Burger_close_icon.png";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
+import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 type MenuLinksProps = {
   walletopen: () => void;
   account: string | undefined | null;
@@ -43,6 +43,8 @@ function MobileHeader() {
   const [isHover, setIsHover] = useState<number | undefined>(undefined);
   const router = useRouter();
   const { pathname } = router;
+  const [width] = useWindowDimensions();
+
   const navItemList = [
     {
       link: "home",
@@ -200,7 +202,7 @@ function MobileHeader() {
           placement="right"
           onClose={onClose}
           finalFocusRef={btnRef}
-          size="full"
+          size={width < 460? "full":'md'}
         >
           <DrawerContent bg="white" padding="26px 10px 10px 20px">
             <Flex w="100%" justifyContent={"flex-end"}>
