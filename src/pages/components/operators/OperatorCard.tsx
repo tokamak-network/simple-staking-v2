@@ -133,10 +133,12 @@ function OperatorCard(props: { operator: any }) {
     },
     {
       title: "New Commission Rate Changed At",
-      value: operator?.delayedCommissionBlock.toString(),
+      value: operator?.delayedCommissionBlock?.toString(),
     },
     { title: "Withdrawal Delay", value: delay() },
   ];
+  
+  // console.log(operator);
   
   return (
     <Flex
