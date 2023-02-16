@@ -50,7 +50,7 @@ const iconList = [
 ];
 function Footer() {
   const [width] = useWindowDimensions();
-  const mobile = width < 460;
+  const mobile = width < 1040;
   return (
     <Flex w={'100%'} px={'50px'} flexDir="column" h={'76px'} justifyContent={'center'} mt={'50px'}>
       <Flex
