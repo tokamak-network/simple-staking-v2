@@ -1,20 +1,10 @@
-import { getEventByLayer2, getOperatorsInfo, getDelegators, getCandidateCreateEvent, getOperatorUserHistory, getCandidates } from "@/api";
+import { getEventByLayer2, getOperatorsInfo, getDelegators, getOperatorUserHistory } from "@/api";
 import { useEffect, useState } from 'react';
 import { NON_CANDIDATE } from "@/constants";
 import { useWeb3React } from '@web3-react/core';
 import { convertNumber } from '@/utils/number';
 import useCallContract from '@/hooks/useCallContract';
 import { BigNumber } from 'ethers';
-import { calculateExpectedSeig } from "tokamak-staking-lib";
-import { toBN } from 'web3-utils';
-import useContract from "hooks/useContract";
-import AutoRefactorCoinageABI from 'services/abi/AutoRefactorCoinage.json';
-import Layer2ABI from 'services/abi/Layer2.json'
-import { getContract } from "utils/getContract";
-import CONTRACT_ADDRESS from "services/addresses/contract";
-import { BASE_PROVIDER } from "@/constants";
-import { range } from 'lodash'
-import BN from 'bn.js';
 import { useRecoilValue } from 'recoil';
 import { txState } from '@/atom/global/transaction';
 import { useWindowDimensions } from "../useWindowDimensions";
@@ -23,16 +13,16 @@ export function useOperatorList() {
   const [operatorList, setOperatorList] = useState([]);
   const [userTotalStaked, setUserTotalStaked] = useState('0.00')
   const [totalStaked, setTotalStaked] = useState<string>()
-  const { account, library } = useWeb3React();
-  const { DepositManager_CONTRACT, SeigManager_CONTRACT, TON_CONTRACT, WTON_CONTRACT } = useCallContract();
-  const { WTON_ADDRESS} = CONTRACT_ADDRESS;
+  const { account } = useWeb3React();
+  const { DepositManager_CONTRACT, SeigManager_CONTRACT } = useCallContract();
+  // const { WTON_ADDRESS} = CONTRACT_ADDRESS;
   const tx = useRecoilValue(txState)
   const [width] = useWindowDimensions();
    
   useEffect(() => {
     async function fetchList() {
       const data = await getOperatorsInfo();
-      const provider = BASE_PROVIDER;
+      // const provider = BASE_PROVIDER;
       console.log(data)
       let staked = BigNumber.from('0')
       let totalStake: BigNumber = BigNumber.from('0')

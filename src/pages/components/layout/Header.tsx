@@ -3,7 +3,7 @@ import Image from 'next/image';
 // import {NavLink, RouteMatch} from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import trimAddress from '@/utils/trimAddress';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useModal from '@/hooks/useModal';
 import WalletModal from '@/common/modal/Wallet/index';
 import { useRouter } from "next/router";
@@ -157,8 +157,8 @@ export const Header = () => {
   // const { pcView } = useMediaView();
   // const {  } = useActiveWeb3React();
   const { openModal } = useModal('wallet');
-  const theme = useTheme();
-  const { chainId, account } = useWeb3React();
+  // const theme = useTheme();
+  const { account } = useWeb3React();
   // /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   // const router = useRouter();
   // const { pathname } = router;
