@@ -33,9 +33,9 @@ export function useOperatorList() {
     async function fetchList() {
       const data = await getOperatorsInfo();
       const provider = BASE_PROVIDER;
-
+      console.log(data)
       let staked = BigNumber.from('0')
-      let totalStake = BigNumber.from('0')
+      let totalStake: BigNumber = BigNumber.from('0')
       const operators = await Promise.all(data.map(async (obj: any) => {
         const history = await getOperatorUserHistory(obj.layer2.toLowerCase())
         const commitHistory = await getEventByLayer2(obj.layer2.toLowerCase(), 'Comitted', 1, 300)
@@ -62,7 +62,8 @@ export function useOperatorList() {
           type: 'ray',
           localeString: true,
         }) : '-'
-        totalStake = totalStake.add(obj.updateCoinageTotalString)
+        
+        totalStake = obj.updateCoinageTotalString ? totalStake.add(obj.updateCoinageTotalString) : BigNumber.from('0')
         staked = staked.add(stakeOf)
         const yourStaked = convertNumber({
           amount: stakeOf.toString(),

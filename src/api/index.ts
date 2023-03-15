@@ -7,8 +7,7 @@ function createInstatnceCandidate () {
     baseURL: API,
   });
 }
-
-
+console.log(API)
 
 const candidate = createInstatnceCandidate();
 
@@ -24,7 +23,7 @@ export async function getDailyStakedTotal () {
 export async function getOperatorsInfo () {
   const res = await candidate.get('/layer2s/operators', {
     params: {
-      chainId: 1,
+      chainId: DEFAULT_NETWORK,
     },
   });
   
@@ -47,7 +46,7 @@ export async function getDailyWalletRewards (account: string, fromDate: string, 
 export async function getEventByAccount (account: string, eventName: string) {
   const res = await candidate.get('/events', {
     params: {
-      chainId: DEFAULT_NETWORK, 
+      chainId: DEFAULT_NETWORK,
       from: account.toLowerCase(),
       eventName: eventName,
     },
@@ -70,6 +69,7 @@ export async function getEventByLayer2 (layer2: string, eventName: string, pageN
 export async function getCandidateCreateEvent () {
   const res = await candidate.get('/events', {
     params: {
+      chainId: DEFAULT_NETWORK,
       eventNames: 'CandidateContractCreated,Layer2Registered',
     },
   });
@@ -159,7 +159,11 @@ export async function getAccumulatedReward (user: string) {
 }
 
 export async function getCandidates () {
-  const res = await candidate.get('/layer2s/operators');
+  const res = await candidate.get('/layer2s/operators', {
+    params: {
+      chainId: DEFAULT_NETWORK,
+    }
+  });
   return res.data === '' ? [] : res.data.datas;
 }
 
