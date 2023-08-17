@@ -53,7 +53,6 @@ const useUserBalance = (account: string | null | undefined) => {
         setUserTonBalance(convertedTon || "-");
         setUserWTonBalance(convertedWTon || "-");
         setUserETHBalance(convertedEth || "-");
-    
       } catch (e) {
         console.log("*****fetch balance err*****");
         console.log(e);
