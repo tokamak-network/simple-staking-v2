@@ -3,8 +3,6 @@ import { WalletInfo } from "@/types/wallet";
 // import { DEPLOYED_TYPE } from "./type";
 import { ethers } from "ethers";
 
-const TESTNET_CHAIN_ID = process.env.NEXT_PUBLIC_TESTNET_CHAINID;
-
 export const REACT_APP_MODE = process.env.NEXT_PUBLIC_MODE as string;
 
 export const NetworkContextName = `${new Date().getTime()}-NETWORK`;
