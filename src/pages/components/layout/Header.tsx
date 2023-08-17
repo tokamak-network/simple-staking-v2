@@ -20,10 +20,10 @@ type MenuLinksProps = {
 };
 
 const navItemList = [
-  {
-    link: "home",
-    name: "Home"
-  },
+  // {
+  //   link: "home",
+  //   name: "Home"
+  // },
   {
     link: "staking",
     name: "TON Staking v1"
@@ -70,6 +70,7 @@ const NavItem = () => {
                   : "#3e495c"
               }
               cursor={"pointer"}
+              mx={'20px'}
               onMouseEnter={() => setIsHover(index)}
               onMouseLeave={() => setIsHover(undefined)}
             >
@@ -186,11 +187,11 @@ export const Header = () => {
       // pt={'24px'}
       // pb={'20px'}
     >
-      <Flex flexDir={'row'} w={'95%'} justifyContent="space-between">
+      <Flex flexDir={'row'} w={'100%'} mx={'40px'} justifyContent="space-between">
         <Flex fontSize={'27px'} fontWeight={900}>
           <Image src={TOKAMAK_ICON} alt="" />
         </Flex>
-        <Flex fontSize={'18px'} fontWeight={'bold'} justifyContent="space-between" alignItems={'center'} w={'540px'} mr={'250px'}>
+        <Flex fontSize={'18px'} fontWeight={'bold'} justifyContent="space-between" alignItems={'center'}  >
           <NavItem/>
         </Flex>
         <Flex>
