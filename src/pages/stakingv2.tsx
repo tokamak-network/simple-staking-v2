@@ -1,8 +1,7 @@
 import { Box, Flex, Spinner, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback, useState, useEffect } from 'react';
 import { IconClose } from "@/common/Icons/IconClose";
 import { IconOpen } from "@/common/Icons/IconOpen";
-
 import { SequencerTable } from "@/common/table/stakingv2/SequencerTable";
 import PageHeader from "./components/layout/PageHeader";
 
@@ -44,6 +43,17 @@ function StakingV2 () {
   );
   const [tableLoading, setTableLoading] = useState<boolean>(true);
 
+  const data = [
+    {
+      layer2: "0xa6ccdb6b2384bbf35cfb190ce41667a1f0dbdc53",
+      name: "Titan Goerli",
+      totalStaked: "1000000000000000000000000",
+    },
+  ]
+  useEffect(() => {
+    data.length === 0 ? setTableLoading(true) : setTableLoading(false)
+  }, [data, tableLoading])
+
   return (
     <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
       <PageHeader title={'TON Staking v2'} subtitle={'Select an L2 and stake, unstatke, re-stake or withdraw TON!'}/>
@@ -54,7 +64,8 @@ function StakingV2 () {
           </Flex> :
           <SequencerTable 
             columns={columns}
-            // data={}
+            data={data}
+            // renderDetail={}
             isLoading={tableLoading}
           />
         }
