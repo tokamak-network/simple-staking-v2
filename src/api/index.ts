@@ -7,7 +7,6 @@ function createInstatnceCandidate () {
     baseURL: API,
   });
 }
-console.log(API)
 
 const candidate = createInstatnceCandidate();
 

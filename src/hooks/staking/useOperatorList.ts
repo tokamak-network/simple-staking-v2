@@ -22,8 +22,7 @@ export function useOperatorList() {
   useEffect(() => {
     async function fetchList() {
       const data = await getOperatorsInfo();
-      // const provider = BASE_PROVIDER;
-      console.log(data)
+      
       let staked = BigNumber.from('0')
       let totalStake: BigNumber = BigNumber.from('0')
       const operators = await Promise.all(data.map(async (obj: any) => {
