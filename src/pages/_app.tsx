@@ -12,6 +12,9 @@ import HeadMeta from './Header';
 import MobileHeader from './components/layout/MobileHeader';
 import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import MobileFooter from './components/layout/MobileFooter';
+import GNB from '@/common/gnb/GNB';
+import MobileTokamakGNB from '@/common/gnb/MobileGNB';
+import 'css/gnb_mobile.css'
 // import NetworkModal from './components/global/NetworkModal';
 // import 'css/gradient.css';
 // import 'css/modalOverlay.css';
@@ -33,21 +36,23 @@ function MyApp({ Component, pageProps }: AppProps) {
             {/* TABLET VIEW = 1040px */}
             {/* MOBILE VIEW = 360px */}
             {mobile ? (
-              // <Flex flexDir={'column'} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
-              //   <MobileHeader />
-              //   <Entry Component={Component} {...pageProps} />
-              //   <MobileFooter />
-              // </Flex>
-              <Flex alignItems={'left'} justifyContent={'center'} px={'15px'} flexDir={'column'}>
-                <Text mb={'10px'}>Notice: migration is still taking place</Text>
-                <Text>
-                  The current version of this service has a small number of minor UI bugs and is not supported on mobile
-                  devices. However, you can still safely stake, unstake, re-stake, and withdraw as usual. We will soon
-                  migrate to our new version.
-                </Text>
+              <Flex flexDir={'column'} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
+              <MobileTokamakGNB/>
+                <MobileHeader />
+                <Entry Component={Component} {...pageProps} />
+                <MobileFooter />
               </Flex>
+              // <Flex alignItems={'left'} justifyContent={'center'} px={'15px'} flexDir={'column'}>
+              //   <Text mb={'10px'}>Notice: migration is still taking place</Text>
+              //   <Text>
+              //     The current version of this service has a small number of minor UI bugs and is not supported on mobile
+              //     devices. However, you can still safely stake, unstake, re-stake, and withdraw as usual. We will soon
+              //     migrate to our new version.
+              //   </Text>
+              // </Flex>
             ) : (
               <Flex flexDir={'column'} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
+                <GNB/>
                 <Header
                 // walletopen={() => handleWalletModalOpen("wallet")}
                 />
