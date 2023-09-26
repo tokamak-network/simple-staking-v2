@@ -1,7 +1,7 @@
 import { Flex, Text, Image } from '@chakra-ui/react';
 import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import MEDIUM_ICON from '@/assets/images/community/medium.png';
-import TWITTER_ICON from '@/assets/images/community/twitter.png';
+import TWITTER_ICON from '@/assets/images/community/TwitterX.svg';
 import GITHUB_ICON from '@/assets/images/community/github.png';
 import TELEGRAM_ICON from '@/assets/images/community/telegram.png';
 import DISCORD_ICON from '@/assets/images/community/discord.png';
