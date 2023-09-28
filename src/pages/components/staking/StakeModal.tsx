@@ -16,108 +16,120 @@ import { txState } from '@/atom/global/transaction';
 import { ModalHeader } from './modal/ModalHeader';
 import { WithdrawModalBody } from './modal/WithdrawModalBody';
 
-
-function StakeModal () {
-  const theme = useTheme()
-  const {btnStyle} = theme;
+function StakeModal() {
+  const theme = useTheme();
+  const { btnStyle } = theme;
 
   const { selectedModalData, selectedModal, closeModal, isModalLoading } = useModal();
   const { account, library } = useWeb3React();
 
-  const {
-    TON_ADDRESS,
-    WTON_ADDRESS,
-    DepositManager_ADDRESS,
-  } = CONTRACT_ADDRESS;
+  const { TON_ADDRESS, WTON_ADDRESS, DepositManager_ADDRESS } = CONTRACT_ADDRESS;
 
-  const {
-    TON_CONTRACT,
-    WTON_CONTRACT,
-    DepositManager_CONTRACT
-  } = useCallContract();
+  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } = useCallContract();
 
-  const [input, setInput] = useRecoilState(inputState)
-  const [txPending, setTxPending] = useRecoilState(txState)
-  const [tx, setTx] = useState()
+  const [input, setInput] = useRecoilState(inputState);
+  const [txPending, setTxPending] = useRecoilState(txState);
+  const [tx, setTx] = useState();
 
-
-  let modalComponent = undefined
+  let modalComponent = undefined;
   if (selectedModal && selectedModalData) {
-    modalComponent = getStakeModalComponent(selectedModal, selectedModalData)
+    modalComponent = getStakeModalComponent(selectedModal, selectedModalData);
   }
 
   const closeThisModal = useCallback(() => {
     // setResetValue();
-    setInput('0')
+    setInput('0');
     closeModal();
   }, [setInput, closeModal]);
 
   const getData = useCallback(() => {
-    if (selectedModalData) return marshalString(
-      //@ts-ignore
-      [DepositManager_ADDRESS, selectedModalData.layer2]
-        .map(unmarshalString)
-        .map(str => padLeft(str, 64)).join('')
-    )
-  }, [DepositManager_ADDRESS, selectedModalData])
+    if (selectedModalData)
+      return marshalString(
+        //@ts-ignore
+        [DepositManager_ADDRESS, selectedModalData.layer2]
+          .map(unmarshalString)
+          .map((str) => padLeft(str, 64))
+          .join(''),
+      );
+  }, [DepositManager_ADDRESS, selectedModalData]);
 
   const staking = useCallback(async () => {
-    const amount = floatParser(input)
+    const amount = floatParser(input);
     //@ts-ignore
     if (selectedModalData && Number(amount) > Number(floatParser(selectedModalData.tonBalance))) {
       return alert('Please check input amount.');
     }
-    if (confirm('Current withdrawal delay is 2 weeks. Are you sure you want to delegate?')){
-      const data = getData()
-      if (TON_CONTRACT && amount) {
-        const tx = await TON_CONTRACT.approveAndCall(
-          WTON_ADDRESS,
-          convertToWei(amount.toString()),
-          data
-        )
-        setTx(tx);
-        setTxPending(true)
-        return closeThisModal();
-      }
+    if (
+      confirm(
+        'Stake, Unstake, and Restake functionalities are temporarily disabled. Please check our official Twitter page @tokamak_network for updates.',
+      )
+    ) {
+      // const data = getData();
+      // if (TON_CONTRACT && amount) {
+      //   const tx = await TON_CONTRACT.approveAndCall(WTON_ADDRESS, convertToWei(amount.toString()), data);
+      //   setTx(tx);
+      //   setTxPending(true);
+      //   return closeThisModal();
+      // }
     }
-  }, [TON_CONTRACT, WTON_ADDRESS, closeThisModal, getData, input, selectedModalData, setTx, setTxPending])
+  }, [TON_CONTRACT, WTON_ADDRESS, closeThisModal, getData, input, selectedModalData, setTx, setTxPending]);
 
   const unStaking = useCallback(async () => {
-    const amount = floatParser(input)
-    if (DepositManager_CONTRACT && amount) {
-      //@ts-ignore
-      const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2,account )
-      //@ts-ignore
-      const tx = await DepositManager_CONTRACT.requestWithdrawal(selectedModalData.layer2, convertToRay(amount.toString()))  
-      setTx(tx);
-      setTxPending(true)
-      return closeThisModal();
+    const amount = floatParser(input);
+     if (
+      confirm(
+        'Stake, Unstake, and Restake functionalities are temporarily disabled. Please check our official Twitter page @tokamak_network for updates.',
+      )
+    ) {
+  
     }
-  }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending])
+    // if (DepositManager_CONTRACT && amount) {
+    //   //@ts-ignore
+    //   const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account);
+    //   //@ts-ignore
+    //   const tx = await DepositManager_CONTRACT.requestWithdrawal(
+    //     selectedModalData.layer2,
+    //     convertToRay(amount.toString()),
+    //   );
+    //   setTx(tx);
+    //   setTxPending(true);
+    //   return closeThisModal();
+    // }
+  }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending]);
 
   const reStaking = useCallback(async () => {
-    const amount = floatParser(input)
-    if (DepositManager_CONTRACT && account) {
-      //@ts-ignore
-      const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account)
-      //@ts-ignore
-      const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest)  
-      setTx(tx);
-      setTxPending(true)
-      return closeThisModal();
+    if (
+      confirm(
+        'Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates',
+      )
+    ) {
+  
     }
-  }, [input, DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal])
+    // const amount = floatParser(input);
+    // if (DepositManager_CONTRACT && account) {
+    //   //@ts-ignore
+    //   const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account);
+    //   //@ts-ignore
+    //   const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest);
+    //   setTx(tx);
+    //   setTxPending(true);
+    //   return closeThisModal();
+    // }
+  }, [input, DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal]);
 
   const withdraw = useCallback(async () => {
     if (selectedModalData && DepositManager_CONTRACT) {
       //@ts-ignore
-      const tx = await DepositManager_CONTRACT.processRequests(selectedModalData.layer2, selectedModalData.withdrawableLength, true)
+      const tx = await DepositManager_CONTRACT.processRequests(
+        selectedModalData.layer2,
+        selectedModalData.withdrawableLength,
+        true,
+      );
       setTx(tx);
-      setTxPending(true)
+      setTxPending(true);
       return closeThisModal();
     }
-    
-  }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending])
+  }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending]);
 
   useEffect(() => {
     async function waitReceipt() {
@@ -132,68 +144,62 @@ function StakeModal () {
       }
     }
     waitReceipt();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx]);
 
   return (
     <Modal
-      isOpen={selectedModal === "staking" || selectedModal === "unstaking" || selectedModal === "restaking" || selectedModal === "withdraw"}
+      isOpen={
+        selectedModal === 'staking' ||
+        selectedModal === 'unstaking' ||
+        selectedModal === 'restaking' ||
+        selectedModal === 'withdraw'
+      }
       isCentered
       onClose={closeThisModal}
     >
       <ModalOverlay>
-        <ModalContent
-          bg={'#fff'}
-          w={'350px'}
-          borderRadius={'15px'}
-          boxShadow={'0 2px 6px 0 rgba(61, 73, 93, 0.1)'}
-        >
-          {modalComponent ?
+        <ModalContent bg={'#fff'} w={'350px'} borderRadius={'15px'} boxShadow={'0 2px 6px 0 rgba(61, 73, 93, 0.1)'}>
+          {modalComponent ? (
             <ModalBody>
               <Flex w="100%" flexDir={'column'} alignItems={'center'} py={'20px'}>
-                <ModalHeader 
+                <ModalHeader
                   main={modalComponent.header}
                   sub={modalComponent.subHeader}
                   closeThisModal={closeThisModal}
                 />
                 {/* modal body */}
-                <Flex w={'350px'} borderY={'1px'} py={'14px'} borderColor={'#f4f6f8'} flexDir={'column'} alignItems={'center'}>
-                  
-                  <Flex h={'84px'} alignItems={'center'} flexDir={'row'} justifyContent={'center'} w={'100%'} >
-                    {selectedModal === 'restaking' || selectedModal === 'withdraw' ? 
-                      <Text
-                        fontSize={'38px'}
-                        fontWeight={500}
-                      >
+                <Flex
+                  w={'350px'}
+                  borderY={'1px'}
+                  py={'14px'}
+                  borderColor={'#f4f6f8'}
+                  flexDir={'column'}
+                  alignItems={'center'}
+                >
+                  <Flex h={'84px'} alignItems={'center'} flexDir={'row'} justifyContent={'center'} w={'100%'}>
+                    {selectedModal === 'restaking' || selectedModal === 'withdraw' ? (
+                      <Text fontSize={'38px'} fontWeight={500}>
                         {modalComponent.balance}
-                      </Text> : 
-                      <BalanceInput 
-                        w={'220px'}
-                        placeHolder={'0'}
-                        type={'staking'}
-                        maxValue={modalComponent.balance}
-                      />
-                    }
+                      </Text>
+                    ) : (
+                      <BalanceInput w={'220px'} placeHolder={'0'} type={'staking'} maxValue={modalComponent.balance} />
+                    )}
                   </Flex>
-                    {
-                      selectedModal === 'withdraw' ?
-                      <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
-                        <WithdrawModalBody 
-                          title={modalComponent.balanceInfo1}
-                          value={modalComponent.balance1}
-                        />
-                        <WithdrawModalBody 
-                          title={modalComponent.balanceInfo2}
-                          value={modalComponent.balance}
-                        />
-                      </Flex>
-                       : 
-                      <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
-                        <Text fontSize={'12px'} fontWeight={500} color={'#808992'}>{modalComponent.balanceInfo}</Text>
-                        {/* @ts-ignore */}
-                        <Text mt={'5px'}>{modalComponent.balance} TON</Text>
-                      </Flex>
-                    }
+                  {selectedModal === 'withdraw' ? (
+                    <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
+                      <WithdrawModalBody title={modalComponent.balanceInfo1} value={modalComponent.balance1} />
+                      <WithdrawModalBody title={modalComponent.balanceInfo2} value={modalComponent.balance} />
+                    </Flex>
+                  ) : (
+                    <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
+                      <Text fontSize={'12px'} fontWeight={500} color={'#808992'}>
+                        {modalComponent.balanceInfo}
+                      </Text>
+                      {/* @ts-ignore */}
+                      <Text mt={'5px'}>{modalComponent.balance} TON</Text>
+                    </Flex>
+                  )}
                 </Flex>
                 {/* modal footer */}
                 <Flex flexDir={'column'} alignItems={'center'}>
@@ -202,28 +208,33 @@ function StakeModal () {
                   </Text>
                   <Button
                     w={'150px'}
-                    {...(input && input !== '0' ? 
-                      {...btnStyle.btnAble()} : selectedModal === "restaking" || selectedModal === 'withdraw' ? 
-                      {...btnStyle.btnAble()} : {...btnStyle.btnDisable()})
-                    }
+                    {...(input && input !== '0'
+                      ? { ...btnStyle.btnAble() }
+                      : selectedModal === 'restaking' || selectedModal === 'withdraw'
+                      ? { ...btnStyle.btnAble() }
+                      : { ...btnStyle.btnDisable() })}
                     onClick={
-                      selectedModal === "staking" ? staking :
-                      selectedModal === "unstaking" ? unStaking :
-                      selectedModal === "restaking" ? reStaking :
-                      withdraw
+                      selectedModal === 'staking'
+                        ? staking
+                        : selectedModal === 'unstaking'
+                        ? unStaking
+                        : selectedModal === 'restaking'
+                        ? reStaking
+                        : withdraw
                     }
-                  > 
+                  >
                     {modalComponent.buttonName}
                   </Button>
                 </Flex>
               </Flex>
             </ModalBody>
-          : ''}
-          
+          ) : (
+            ''
+          )}
         </ModalContent>
-      </ModalOverlay>   
+      </ModalOverlay>
     </Modal>
-  )
+  );
 }
 
-export default StakeModal
+export default StakeModal;
