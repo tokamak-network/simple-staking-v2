@@ -119,9 +119,11 @@ function StakeModal() {
 
   const withdraw = useCallback(async () => {
     if (selectedModalData && DepositManager_CONTRACT) {
-      //@ts-ignore
+     //@ts-ignore
       const tx = await DepositManager_CONTRACT.processRequests(
+          //@ts-ignore
         selectedModalData.layer2,
+          //@ts-ignore
         selectedModalData.withdrawableLength,
         true,
       );
