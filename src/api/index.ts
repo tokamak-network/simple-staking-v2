@@ -7,7 +7,6 @@ function createInstatnceCandidate () {
     baseURL: API,
   });
 }
-console.log(API)
 
 const candidate = createInstatnceCandidate();
 
@@ -158,7 +157,7 @@ export async function getAccumulatedReward (user: string) {
   return res.data === '' ? [] : res.data.datas;
 }
 
-export async function getCandidates () {
+export async function getCandidates () {  
   const res = await candidate.get('/layer2s/operators', {
     params: {
       chainId: DEFAULT_NETWORK,
