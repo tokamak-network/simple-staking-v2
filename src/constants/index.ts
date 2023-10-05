@@ -42,7 +42,6 @@ export const NON_CANDIDATE = [
 ]
 
 
-
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   INJECTED: {
     connector: injected,
