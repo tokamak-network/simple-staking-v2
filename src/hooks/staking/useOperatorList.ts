@@ -40,7 +40,7 @@ export function useOperatorList() {
         if (DepositManager_CONTRACT) {
           pendingUnstakedLayer2 = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.layer2)
         }
-
+        
         if (account && SeigManager_CONTRACT) {
           stakeOf = await SeigManager_CONTRACT.stakeOf(obj.layer2, account)
           commisionRates = await SeigManager_CONTRACT.commissionRates(obj.layer2)
