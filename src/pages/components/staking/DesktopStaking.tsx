@@ -79,7 +79,7 @@ function DesktopStaking () {
     const [tableLoading, setTableLoading] = useState<boolean>(true);
     const { operatorList } = useOperatorList()
     const dat = useCandidateList()
-
+    console.log(dat)
     useEffect(() => {
       operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)
     }, [operatorList, tableLoading])
