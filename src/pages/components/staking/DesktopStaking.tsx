@@ -10,6 +10,7 @@ import { WalletInformation } from "./WalletInformation";
 import HistoryTable from "@/common/table/staking/HistoryTable";
 import moment from "moment";
 import { useEffect } from 'react';
+import { useCandidateList } from '@/hooks/staking/useCandidateList';
 
 function DesktopStaking () {
 
@@ -77,6 +78,7 @@ function DesktopStaking () {
   
     const [tableLoading, setTableLoading] = useState<boolean>(true);
     const { operatorList } = useOperatorList()
+    const dat = useCandidateList()
 
     useEffect(() => {
       operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)

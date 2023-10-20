@@ -8,6 +8,7 @@ import { useUserHistory } from '../hooks/wallet/useUserHIstory';
 import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
 import { convertNumber } from '../utils/number';
 import useOperatorList from '../hooks/staking/useOperatorList';
+import { useCandidateList } from '../hooks/staking/useCandidateList';
 
 function Wallet () {
   const theme = useTheme();
@@ -15,6 +16,8 @@ function Wallet () {
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const { accumulatedReward } = useAccumulatedReward()
   const { userTotalStaked } = useOperatorList()
+  // const dat = useCandidateList();
+  // console.log(dat)
   // const staked = useRecoilValue(userStakedStatusState)
   const myTotalStaked = userTotalStaked ? convertNumber({
     amount: userTotalStaked,

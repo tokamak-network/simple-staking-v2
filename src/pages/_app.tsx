@@ -13,7 +13,7 @@ import MobileHeader from './components/layout/MobileHeader';
 import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import MobileFooter from './components/layout/MobileFooter';
 import { ApolloProvider } from "@apollo/client";
-import { apolloClient } from "@/apollo";
+import { apolloClient } from '../apollo';
 // import NetworkModal from './components/global/NetworkModal';
 // import 'css/gradient.css';
 // import 'css/modalOverlay.css';
@@ -25,11 +25,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   const mobile = width < 1040;
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
-      {/* <ApolloProvider client={client}> */}
+      <ApolloProvider client={apolloClient}>
       <ColorModeScript initialColorMode={theme.initialColorMode} />
       <ChakraProvider resetCSS theme={theme}>
         <RecoilRoot>
-          <ApolloProvider client={apolloClient}>
           <HeadMeta></HeadMeta>
           <Flex minH={'100vh'} w={'100%'}>
             {/* PC VIEW = 1440px */}
@@ -74,10 +73,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               </Flex>
             )}
           </Flex>
-          </ApolloProvider>
         </RecoilRoot>
       </ChakraProvider>
-      {/* </ApolloProvider> */}
+      </ApolloProvider>
     </Web3ReactProvider>
   );
 }
