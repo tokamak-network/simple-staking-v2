@@ -59,19 +59,19 @@ function StakeModal() {
     if (selectedModalData && Number(amount) > Number(floatParser(selectedModalData.tonBalance))) {
       return alert('Please check input amount.');
     }
-    if (
-      confirm(
-        'Stake, Unstake, and Restake functionalities are temporarily disabled. Please check our official Twitter page @tokamak_network for updates.',
-      )
-    ) {
-      // const data = getData();
-      // if (TON_CONTRACT && amount) {
-      //   const tx = await TON_CONTRACT.approveAndCall(WTON_ADDRESS, convertToWei(amount.toString()), data);
-      //   setTx(tx);
-      //   setTxPending(true);
-      //   return closeThisModal();
-      // }
-    }
+    // if (
+    //   confirm(
+    //     'Stake, Unstake, and Restake functionalities are temporarily disabled. Please check our official Twitter page @tokamak_network for updates.',
+    //   )
+    // ) {
+      const data = getData();
+      if (TON_CONTRACT && amount) {
+        const tx = await TON_CONTRACT.approveAndCall(WTON_ADDRESS, convertToWei(amount.toString()), data);
+        setTx(tx);
+        setTxPending(true);
+        return closeThisModal();
+      }
+    // }
   }, [TON_CONTRACT, WTON_ADDRESS, closeThisModal, getData, input, selectedModalData, setTx, setTxPending]);
 
   const unStaking = useCallback(async () => {
