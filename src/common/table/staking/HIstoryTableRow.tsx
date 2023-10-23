@@ -20,12 +20,15 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   
 }) => {
   const {
-    transactionHash,
-    blockTimestamp,
+    id,
+    timestamp,
     data,
     eventName,
-    from
+    sender,
+    amount
+  
   } = cell.row?.original;
+  console.log(cell.row?.original)
   
   const theme = useTheme()
   const type = cell.column.id;
@@ -40,11 +43,11 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
       {tableType === 'Staking' && type === 'account' ? (
         <Link
           isExternal
-          href={`https://etherscan.io/address/${from}`}
+          href={`https://etherscan.io/address/${sender}`}
           color={'#2a72e5'}
         >
           {trimAddress({
-            address: from,
+            address: sender,
             firstChar: 6,
             lastChar: 4,
             dots: '...'
@@ -54,11 +57,11 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
       {type === 'txHash' ? (
         <Link
           isExternal
-          href={`https://etherscan.io/tx/${transactionHash}`}
+          href={`https://etherscan.io/tx/${id}`}
           color={'#2a72e5'}
         >
           {trimAddress({
-            address: transactionHash,
+            address: id,
             firstChar: 6,
             lastChar: 4,
             dots: '...'
@@ -68,13 +71,13 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
       {tableType === 'Staking' && type === 'txType' ? (
         //@ts-ignore
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
-          {typeName}
+          {eventName}
         </Text>
       ) : ('')}
       {tableType === 'Staking' && type === 'amount' ? (
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
           {convertNumber({
-            amount: data.amount,
+            amount: amount,
             type: 'ray',
             localeString: true,
           })} TON
@@ -82,7 +85,7 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
       ) : ('')}
       {type === 'date' ? (
         <Flex color={'#828d99'}>
-          {moment.unix(blockTimestamp).format('YYYY.MM.DD HH:mm:ss (Z)')}
+          {moment.unix(timestamp).format('YYYY.MM.DD HH:mm:ss (Z)')}
         </Flex>
       ) : ('')}
     </chakra.td>

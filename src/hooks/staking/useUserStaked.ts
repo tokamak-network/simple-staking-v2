@@ -8,7 +8,7 @@ export function useUserStaked (id: string) {
     variables: {
       id: id
     },
-    // pollInterval: 10000,
+    pollInterval: 10000,
   });
   useEffect(() => {
     setUserStakeds(data?.userStakeds[0])

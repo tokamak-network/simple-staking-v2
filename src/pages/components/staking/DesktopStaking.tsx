@@ -11,6 +11,7 @@ import HistoryTable from "@/common/table/staking/HistoryTable";
 import moment from "moment";
 import { useEffect } from 'react';
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
+import { getTransactionHistory } from '../../../utils/getTransactionHistory';
 
 function DesktopStaking () {
 
@@ -88,9 +89,10 @@ function DesktopStaking () {
     
     const renderRowSubComponent = useCallback(
       ({row}: any) => {
-      const { candidateContracts, stakedUserList, addedSeig, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
-      const lastFinalized = '0'
-      const recentCommit = lastFinalized !== '0' ? moment.unix(lastFinalized).format('YYYY.MM.DD HH:mm:ss (Z)') : 'The operator does not have any commits';
+      const { candidateContracts, stakedUserList, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
+      const txHistory = getTransactionHistory(row.original)
+      const recentCommit = asCommit[0] ? moment.unix(asCommit[0].timestamp).format('YYYY.MM.DD HH:mm:ss (Z)') : 'The operator does not have any commits';
+      // console.log(asCommit)
       return (
         <Flex
           w="100%"
@@ -128,7 +130,7 @@ function DesktopStaking () {
               <Flex flexDir={'column'} alignItems={'space-between'}>
                 <OperatorDetailInfo 
                   title={'Recent Commit'}
-                  value={''}
+                  value={recentCommit}
                   type={'date'}
                 />
               </Flex>
@@ -142,16 +144,16 @@ function DesktopStaking () {
           </Flex>
           {/* table area */}
           <Flex flexDir={'row'} mt={'60px'} ml={'70px'} justifyContent={'center'} alignItems={'center'}>
-            {/* <HistoryTable 
+            <HistoryTable 
               columns={historyColumns}
-              data={operatorsHistory}
+              data={txHistory}
               tableType={'Staking'}
             />
             <HistoryTable 
               columns={historyColumns}
-              data={commit}
+              data={asCommit}
               tableType={'Commit'}
-            /> */}
+            />
           </Flex>
         </Flex>
       )

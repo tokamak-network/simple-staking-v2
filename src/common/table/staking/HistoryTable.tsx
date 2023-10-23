@@ -138,8 +138,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                   {...row.getRowProps()}
                 >
                   {row.cells ? row.cells.map((cell: any, index: number) => {
-                    return (
-                      
+                    return (         
                       <HistoryTableRow 
                         key={index}
                         cell={cell}

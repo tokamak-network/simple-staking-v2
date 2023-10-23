@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 
 export function useCandidateList () {
   const [candidateList, setCandidateList] = useState([]);
-  const { data } = useQuery(GET_CANDIDATE);
+  const { data } = useQuery(GET_CANDIDATE, {
+    pollInterval: 10000
+  });
   useEffect(() => {
     data ? setCandidateList(data) : ''
   }, [data, candidateList])

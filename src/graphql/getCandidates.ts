@@ -15,12 +15,24 @@ export const GET_CANDIDATE = gql`
       }
       staked {
         id
+        amount
+        timestamp
+        eventName
+        sender
       }
       unstaked {
         id
+        amount
+        timestamp
+        eventName
+        sender
       }
       withdrawal {
         id
+        amount
+        timestamp
+        eventName
+        sender
       }
       asCommit: addedSeig (orderBy: timestamp, orderDirection: desc){
         id
