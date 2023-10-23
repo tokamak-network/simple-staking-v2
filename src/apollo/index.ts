@@ -1,3 +1,4 @@
+import { GRAPHQL_API } from "@/constants";
 import {
   ApolloClient,
   InMemoryCache,
@@ -6,6 +7,6 @@ import {
 } from "@apollo/client";
 
 export const apolloClient = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_API_PRODUCTION,
+  uri: GRAPHQL_API,
   cache: new InMemoryCache(),
 });

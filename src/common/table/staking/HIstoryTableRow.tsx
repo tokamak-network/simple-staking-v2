@@ -28,11 +28,11 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
     amount
   
   } = cell.row?.original;
-  console.log(cell.row?.original)
+  // console.log(cell.row?.original)
   
   const theme = useTheme()
   const type = cell.column.id;
-  const typeName = getEventName(eventName)
+  // const typeName = getEventName(eventName)
   return  (
     <chakra.td
       key={key}
