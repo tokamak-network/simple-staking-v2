@@ -76,25 +76,26 @@ function StakeModal() {
 
   const unStaking = useCallback(async () => {
     const amount = floatParser(input);
-     if (
-      confirm(
-        'Stake, Unstake, and Restake functionalities are temporarily disabled. Please check our official Twitter page @tokamak_network for updates.',
-      )
-    ) {
+    //  if (
+    //   confirm(
+    //     'Stake, Unstake, and Restake functionalities are temporarily disabled. Please check our official Twitter page @tokamak_network for updates.',
+    //   )
+    // ) {
   
-    }
-    // if (DepositManager_CONTRACT && amount) {
-    //   //@ts-ignore
-    //   const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account);
-    //   //@ts-ignore
-    //   const tx = await DepositManager_CONTRACT.requestWithdrawal(
-    //     selectedModalData.layer2,
-    //     convertToRay(amount.toString()),
-    //   );
-    //   setTx(tx);
-    //   setTxPending(true);
-    //   return closeThisModal();
     // }
+    if (DepositManager_CONTRACT && amount) {
+      //@ts-ignore
+      const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account);
+      //@ts-ignore
+      const tx = await DepositManager_CONTRACT.requestWithdrawal(
+        //@ts-ignore
+        selectedModalData.layer2,
+        convertToRay(amount.toString()),
+      );
+      setTx(tx);
+      setTxPending(true);
+      return closeThisModal();
+    }
   }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending]);
 
   const reStaking = useCallback(async () => {
