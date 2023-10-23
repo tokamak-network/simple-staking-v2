@@ -75,19 +75,20 @@ function DesktopStaking () {
       ],
       [],
     );
-  
+
     const [tableLoading, setTableLoading] = useState<boolean>(true);
     const { operatorList } = useOperatorList()
     const { candidateList } = useCandidateList()
     console.log(candidateList)
     // console.log(operatorList)
     useEffect(() => {
-      operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)
-    }, [operatorList, tableLoading])
+      // operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)
+      candidateList ? setTableLoading(false) : setTableLoading(true)
+    }, [candidateList, tableLoading])
     
     const renderRowSubComponent = useCallback(
       ({row}: any) => {
-      const { candidateContracts, stakedUserList, addedSeig, commit, operatorsHistory, pendingWithdrawal } = row.original;
+      const { candidateContracts, stakedUserList, addedSeig, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
       const lastFinalized = '0'
       const recentCommit = lastFinalized !== '0' ? moment.unix(lastFinalized).format('YYYY.MM.DD HH:mm:ss (Z)') : 'The operator does not have any commits';
       return (
@@ -134,7 +135,7 @@ function DesktopStaking () {
               <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
                 <OperatorDetailInfo 
                   title={'Commit Count'}
-                  value={addedSeig.length}
+                  value={asCommit.length}
                 />
               </Flex>
             </Flex>
@@ -161,7 +162,7 @@ function DesktopStaking () {
       <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
         <PageHeader title={'Select your Operator'} subtitle={'You can select an operator to stake, restake, unstake, your TONS.'}/>
         <Box fontFamily={theme.fonts.roboto}>
-          {tableLoading ? 
+          {candidateList.length === 0 ? 
             <Flex justifyContent="center" alignItems={"center"} h='200px'>
               <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
             </Flex> :

@@ -44,7 +44,6 @@ function StakeModal() {
 
   const getData = useCallback(() => {
     if (selectedModalData)
-    console.log(selectedModalData)
       return marshalString(
         //@ts-ignore
         [DepositManager_ADDRESS, selectedModalData.layer2]

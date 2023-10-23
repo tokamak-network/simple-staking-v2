@@ -1,10 +1,8 @@
-import { IconDiscord } from './../common/Icons/IconDiscord';
-import { getCandidateCreateEvent } from '@/api';
 import { gql } from "@apollo/client";
 
 export const GET_CANDIDATE = gql`
   query GetCandidate($id: String) {
-    candidates(first: 10) {
+    candidates(where:{stakedAmount_gt: 0}) {
       id
       candidate
       candidateContract
@@ -24,8 +22,12 @@ export const GET_CANDIDATE = gql`
       withdrawal {
         id
       }
-      addedSeig {
+      asCommit: addedSeig (orderBy: timestamp, orderDirection: desc){
         id
+        seigs
+        layer2
+        operatorSeigs
+        timestamp
       }
     }
   }

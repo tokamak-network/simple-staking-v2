@@ -6,7 +6,7 @@ export function useCandidateList () {
   const [candidateList, setCandidateList] = useState([]);
   const { data } = useQuery(GET_CANDIDATE);
   useEffect(() => {
-    setCandidateList(data)
+    data ? setCandidateList(data) : ''
   }, [data, candidateList])
 
   return { candidateList }
