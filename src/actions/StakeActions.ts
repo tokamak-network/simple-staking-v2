@@ -22,7 +22,6 @@ const getData = (layer2: any) => {
 export const staking = async (userTonBalance: any, TON_CONTRACT: any, amount: any, layer2: string, setTxPending: any, setTx: any) => {
 
     const { WTON_ADDRESS } = CONTRACT_ADDRESS;
-    console.log('aaa')
     if (userTonBalance) {
         const tonBalance = floatParser(userTonBalance)
         if (tonBalance && amount > tonBalance) {

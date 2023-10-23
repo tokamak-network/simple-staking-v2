@@ -42,8 +42,8 @@ export function useOperatorList() {
         }
         
         if (account && SeigManager_CONTRACT) {
-          stakeOf = await SeigManager_CONTRACT.stakeOf(obj.layer2, account)
-          commisionRates = await SeigManager_CONTRACT.commissionRates(obj.layer2)
+          // stakeOf = await SeigManager_CONTRACT.stakeOf(obj.layer2, account)
+          // commisionRates = await SeigManager_CONTRACT.commissionRates(obj.layer2)
         }
 
         const pendingWithdrawal = pendingUnstakedLayer2 ? convertNumber({
@@ -59,10 +59,11 @@ export function useOperatorList() {
           type: 'ray',
           localeString: true
         })
-        const commissionRate = commisionRates ? convertNumber({
-          amount: commisionRates.toString(),
-          type: 'wei',
-        }) : '-'
+        // const commissionRate = commisionRates ? convertNumber({
+        //   amount: commisionRates.toString(),
+        //   type: 'wei',
+        // }) : '-'
+        const commissionRate = '-'
         const find = NON_CANDIDATE.find(data => data.layer2 === obj.layer2)
         const fetchedData = {
           ...obj,

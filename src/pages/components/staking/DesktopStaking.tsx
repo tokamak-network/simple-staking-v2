@@ -78,16 +78,17 @@ function DesktopStaking () {
   
     const [tableLoading, setTableLoading] = useState<boolean>(true);
     const { operatorList } = useOperatorList()
-    const dat = useCandidateList()
-    console.log(dat)
+    const { candidateList } = useCandidateList()
+    console.log(candidateList)
+    // console.log(operatorList)
     useEffect(() => {
       operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)
     }, [operatorList, tableLoading])
     
     const renderRowSubComponent = useCallback(
       ({row}: any) => {
-      const { layer2, delegators, commit, operatorsHistory, pendingWithdrawal } = row.original;
-      const lastFinalized = commit.length !== 0 ? commit[0].blockTimestamp : '0'
+      const { candidateContracts, stakedUserList, addedSeig, commit, operatorsHistory, pendingWithdrawal } = row.original;
+      const lastFinalized = '0'
       const recentCommit = lastFinalized !== '0' ? moment.unix(lastFinalized).format('YYYY.MM.DD HH:mm:ss (Z)') : 'The operator does not have any commits';
       return (
         <Flex
@@ -104,7 +105,7 @@ function DesktopStaking () {
               <Flex flexDir={'column'} alignItems={'space-between'}>
                 <OperatorDetailInfo 
                   title={'Total Delegator'}
-                  value={delegators}
+                  value={stakedUserList.length}
                 />
               </Flex>
               <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
@@ -126,21 +127,21 @@ function DesktopStaking () {
               <Flex flexDir={'column'} alignItems={'space-between'}>
                 <OperatorDetailInfo 
                   title={'Recent Commit'}
-                  value={recentCommit}
+                  value={''}
                   type={'date'}
                 />
               </Flex>
               <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
                 <OperatorDetailInfo 
                   title={'Commit Count'}
-                  value={commit.length}
+                  value={addedSeig.length}
                 />
               </Flex>
             </Flex>
           </Flex>
           {/* table area */}
           <Flex flexDir={'row'} mt={'60px'} ml={'70px'} justifyContent={'center'} alignItems={'center'}>
-            <HistoryTable 
+            {/* <HistoryTable 
               columns={historyColumns}
               data={operatorsHistory}
               tableType={'Staking'}
@@ -149,7 +150,7 @@ function DesktopStaking () {
               columns={historyColumns}
               data={commit}
               tableType={'Commit'}
-            />
+            /> */}
           </Flex>
         </Flex>
       )
@@ -167,7 +168,8 @@ function DesktopStaking () {
             <OpearatorTable 
               renderDetail={renderRowSubComponent}
               columns={columns}
-              data={operatorList}
+              // @ts-ignore
+              data={candidateList.candidates}
               isLoading={tableLoading}
             />
           }

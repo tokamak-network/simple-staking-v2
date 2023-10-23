@@ -44,10 +44,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [unstakeDisabled, setUnstakeDisabled] = useState(true);
   const [reStakeDisabled, setReStakeDisabled] = useState(true);
   const [withdrawDisabled, setwithdrawDisabled] = useState(true);
-
   const { userTonBalance } = useUserBalance(account)
-  const { pendingUnstaked } = usePendingUnstaked(data?.layer2, account)
-  const { withdrawable, withdrawableLength } = useWithdrawable(data?.layer2)
+  const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account)
+  const { withdrawable, withdrawableLength } = useWithdrawable(data?.candidateContract)
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
@@ -93,7 +92,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     pendingUnstaked: pendingUnstaked,
     stakedAmount: data?.yourStaked,
     withdrawable: withdrawable,
-    layer2: data?.layer2,
+    layer2: data?.candidateContract,
     withdrawableLength: withdrawableLength,
   }
   

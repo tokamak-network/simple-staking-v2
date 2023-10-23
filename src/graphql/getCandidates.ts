@@ -4,12 +4,13 @@ import { gql } from "@apollo/client";
 
 export const GET_CANDIDATE = gql`
   query GetCandidate($id: String) {
-    candidates(where:{stakedAmount_gt:0}) {
+    candidates(first: 10) {
       id
       candidate
       candidateContract
       name
       stakedAmount
+      commissionRate
       stakedUserList {
         id
         stakedAmount
@@ -23,7 +24,18 @@ export const GET_CANDIDATE = gql`
       withdrawal {
         id
       }
+      addedSeig {
+        id
+      }
     }
   }
 `;
 
+export const GET_MY_STAKED = gql`
+  query GetStakedPerLayer($id: String!) {
+    userStakeds(where: { id: $id }) {
+      id
+      stakedAmount
+    }
+  }
+`
