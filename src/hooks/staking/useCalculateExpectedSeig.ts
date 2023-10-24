@@ -26,28 +26,33 @@ export function useExpectedSeig (candidateContract: string) {
         DepositManager_CONTRACT &&
         account
       ) {
-        const Tot = getContract(await SeigManager_CONTRACT.tot(), Coinage, library, account)
-        const coinage = getContract(await SeigManager_CONTRACT.coinages(candidateContract), Coinage, library, account)
-        const fromBlockNumber = await SeigManager_CONTRACT.lastCommitBlock(candidateContract)
-        const userStaked = await coinage.balanceOf(account)
+        try {
+          const Tot = getContract(await SeigManager_CONTRACT.tot(), Coinage, library, account)
+          const coinage = getContract(await SeigManager_CONTRACT.coinages(candidateContract), Coinage, library, account)
+          const fromBlockNumber = await SeigManager_CONTRACT.lastCommitBlock(candidateContract)
+          const userStaked = await coinage.balanceOf(account)
+  
+          const tonTotalSupply = await TON_CONTRACT.totalSupply();
+          const totTotalSupply = await Tot.totalSupply()
+          const tonBalanceOfWTON = await TON_CONTRACT.balanceOf(CONTRACT_ADDRESS.WTON_ADDRESS)
+          const relativeSeigRate = await SeigManager_CONTRACT.relativeSeigRate()
+          const tos = toBN(tonTotalSupply)
+              .mul(toBN('1000000000'))
+              .add(toBN(totTotalSupply))
+              .sub(toBN(tonBalanceOfWTON));
+          const expectedSeig = calculateExpectedSeig(
+              new BN(fromBlockNumber.toString()),
+              new BN(blockNumber),
+              new BN(userStaked.toString()),
+              new BN(totTotalSupply.toString()),
+              new BN(tos),
+              new BN(relativeSeigRate.toString())
+          );
+          setExpectedSeig(expectedSeig.toString())
 
-        const tonTotalSupply = await TON_CONTRACT.totalSupply();
-        const totTotalSupply = await Tot.totalSupply()
-        const tonBalanceOfWTON = await TON_CONTRACT.balanceOf(CONTRACT_ADDRESS.WTON_ADDRESS)
-        const relativeSeigRate = await SeigManager_CONTRACT.relativeSeigRate()
-        const tos = toBN(tonTotalSupply)
-            .mul(toBN('1000000000'))
-            .add(toBN(totTotalSupply))
-            .sub(toBN(tonBalanceOfWTON));
-        const expectedSeig = calculateExpectedSeig(
-            new BN(fromBlockNumber.toString()),
-            new BN(blockNumber),
-            new BN(userStaked.toString()),
-            new BN(totTotalSupply.toString()),
-            new BN(tos),
-            new BN(relativeSeigRate.toString())
-        );
-        setExpectedSeig(expectedSeig.toString())
+        } catch (e) {
+          console.log(e)
+        }
       }
     }
     fetch ()

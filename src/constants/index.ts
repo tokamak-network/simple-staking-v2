@@ -21,11 +21,11 @@ REACT_APP_MODE === "PRODUCTION"
     ? ethers.getDefaultProvider("mainnet")
     : ethers.getDefaultProvider("goerli");
 
-export const API =
-REACT_APP_MODE === "PRODUCTION" ? MAINNET_API : DEV_API;
+export const API = MAINNET_API
+// REACT_APP_MODE === "PRODUCTION" ? MAINNET_API : DEV_API;
 
-export const GRAPHQL_API =
-  REACT_APP_MODE === "PRODUCTION" ? GRAPHQL_MAINNET : GRAPHQL_DEV;
+export const GRAPHQL_API = GRAPHQL_MAINNET
+  // REACT_APP_MODE === "PRODUCTION" ? GRAPHQL_MAINNET : GRAPHQL_DEV;
 
 export const NON_CANDIDATE = [
   {
