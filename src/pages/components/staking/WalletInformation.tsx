@@ -68,14 +68,14 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 
   const btnDisabledReStake = () => {
     return account === undefined ||
-      pendingUnstaked === '0.00'
+      pendingUnstaked === '0.00' 
         ? setReStakeDisabled(true)
         : setReStakeDisabled(false);
   };
-
+  console.log(yourStaked)
   const btnDisabledUnStake = () => {
     return account === undefined ||
-      yourStaked === '0.00'
+      yourStaked === '0.00' || yourStaked === '-'
         ? setUnstakeDisabled(true)
         : setUnstakeDisabled(false);
   };
