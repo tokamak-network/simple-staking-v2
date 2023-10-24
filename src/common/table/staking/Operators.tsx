@@ -190,7 +190,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       name,
                       kind,
                       stakedAmount,
-                      
+                      stakeOf
                       // yourStaked,
                     } = cell.row.original;
 
@@ -207,9 +207,9 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       localeString: true
                     })
 
-                    const yourStaked = userStakeds ? convertNumber({
+                    const yourStaked = stakeOf ? convertNumber({
                       //@ts-ignore
-                      amount: userStakeds.stakedAmount, 
+                      amount: stakeOf, 
                       type: 'ray',
                       localeString: true
                     }) : '0.00'
