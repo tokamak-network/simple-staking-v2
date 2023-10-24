@@ -15,6 +15,10 @@ export function useCandidateList () {
   useEffect(() => {
     
     async function fetch () {
+      // if (account && SeigManager_CONTRACT) {
+      //   const tokamak = await SeigManager_CONTRACT.stakeOf('0x0F42D1C40b95DF7A1478639918fc358B4aF5298D', '0x8c595DA827F4182bC0E3917BccA8e654DF8223E1')
+      //   console.log(tokamak.toString())
+      // }
       if (data) {
         const candidates = await Promise.all(data.candidates.map(async (obj: any) => {
           // console.log(obj)
@@ -23,7 +27,7 @@ export function useCandidateList () {
             const stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
             tempObj = {
               ...obj,
-              yourStaked: stakeOf.toString()
+              stakeOf: stakeOf.toString()
             }
             // console.log(stakeOf.toString())
             // console.log(tempObj)
@@ -33,7 +37,6 @@ export function useCandidateList () {
         setCandidateList(candidates)
       }
     }
-    console.log(candidateList)
     fetch()
   }, [data])
 

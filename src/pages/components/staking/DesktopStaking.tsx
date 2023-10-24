@@ -93,7 +93,7 @@ function DesktopStaking () {
     
     const renderRowSubComponent = useCallback(
       ({row}: any) => {
-      const { candidateContract, expectedSeig, candidate, yourStaked, userStakeds, stakedUserList, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
+      const { candidateContract, expectedSeig, candidate, yourStaked, stakeOf, userStakeds, stakedUserList, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
       
       const txHistory = getTransactionHistory(row.original)
       const userExpectedSeig = expectedSeig? convertNumber({
@@ -101,13 +101,15 @@ function DesktopStaking () {
         type: 'ray',
         localeString: true
       }) : '-'
-
-      const yourStake = yourStaked ? convertNumber({
+      console.log(stakeOf)
+      console.log(yourStaked)
+      const yourStake = stakeOf ? convertNumber({
         //@ts-ignore
-        amount: yourStaked.stakedAmount, 
+        amount: stakeOf.stakedAmount, 
         type: 'ray',
         localeString: true
       }) : '0.00'
+    
       return (
         <Flex
           w="100%"
