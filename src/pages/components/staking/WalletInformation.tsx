@@ -128,9 +128,10 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           w={'100%'} 
           justifyContent={'end'} 
           cursor={'pointer'}
-          onClick={() => modalButton('calculator', dataModal)}
+          h={'13px'}
+          // onClick={() => modalButton('calculator', dataModal)}
         >
-          Simulator
+          {/* Simulator */}
         </Flex>
         <Heading
           color={'#2a72e5'}
