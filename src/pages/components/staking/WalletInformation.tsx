@@ -52,9 +52,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
 
-  const yourStaked = data?.userStakeds ? convertNumber({
+  const yourStaked = data?.stakeOf ? convertNumber({
     //@ts-ignore
-    amount: data?.userStakeds.stakedAmount, 
+    amount: data?.stakeOf, 
     type: 'ray',
     localeString: true
   }) : '-'
