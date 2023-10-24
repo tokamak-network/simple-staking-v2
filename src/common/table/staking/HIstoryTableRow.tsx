@@ -25,10 +25,9 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
     data,
     eventName,
     sender,
-    amount
-  
+    amount,
+    transaction
   } = cell.row?.original;
-  // console.log(cell.row?.original)
   
   const theme = useTheme()
   const type = cell.column.id;
@@ -57,11 +56,11 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
       {type === 'txHash' ? (
         <Link
           isExternal
-          href={`https://etherscan.io/tx/${id}`}
+          href={`https://etherscan.io/tx/${transaction.id}`}
           color={'#2a72e5'}
         >
           {trimAddress({
-            address: id,
+            address: transaction.id,
             firstChar: 6,
             lastChar: 4,
             dots: '...'

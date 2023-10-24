@@ -19,6 +19,9 @@ export const GET_CANDIDATE = gql`
         timestamp
         eventName
         sender
+        transaction {
+          id
+        }
       }
       unstaked {
         id
@@ -26,6 +29,9 @@ export const GET_CANDIDATE = gql`
         timestamp
         eventName
         sender
+        transaction {
+          id
+        }
       }
       withdrawal {
         id
@@ -33,6 +39,9 @@ export const GET_CANDIDATE = gql`
         timestamp
         eventName
         sender
+        transaction {
+          id
+        }
       }
       asCommit: addedSeig (orderBy: timestamp, orderDirection: desc){
         id
@@ -40,6 +49,9 @@ export const GET_CANDIDATE = gql`
         layer2
         operatorSeigs
         timestamp
+        transaction {
+          id
+        }
       }
     }
   }

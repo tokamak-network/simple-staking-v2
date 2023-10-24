@@ -18,10 +18,9 @@ export function useOperatorList() {
   const [totalStaked, setTotalStaked] = useState<string>()
   const { account } = useWeb3React();
   const { DepositManager_CONTRACT, SeigManager_CONTRACT } = useCallContract();
-  // const { WTON_ADDRESS} = CONTRACT_ADDRESS;
   const tx = useRecoilValue(txState)
   const [width] = useWindowDimensions();
-  // const { data } = useQuery(GET_CANDIDATE);
+  
   useEffect(() => {
     async function fetchList() {
       const data = await getOperatorsInfo();

@@ -26,6 +26,7 @@ import { useRecoilState } from 'recoil';
 import CalculatorModal from './CalculatorModal';
 import { useUserHistory } from '@/hooks/wallet/useUserHIstory';
 import { useWithdrawable } from '../../../hooks/staking/useWithdrawable';
+import { convertNumber } from '@/components/number';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -51,6 +52,14 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
 
+  const yourStaked = data?.userStakeds ? convertNumber({
+    //@ts-ignore
+    amount: data?.userStakeds.stakedAmount, 
+    type: 'ray',
+    localeString: true
+  }) : '-'
+  console.log(pendingUnstaked)
+
   const btnDisabledStake = () => {
     return account === undefined ||
       userTonBalance === '0.00'
@@ -67,7 +76,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 
   const btnDisabledUnStake = () => {
     return account === undefined ||
-      data?.yourStaked === '0.00'
+      yourStaked === '0.00'
         ? setUnstakeDisabled(true)
         : setUnstakeDisabled(false);
   };
@@ -90,7 +99,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const dataModal = {
     tonBalance: userTonBalance,
     pendingUnstaked: pendingUnstaked,
-    stakedAmount: data?.yourStaked,
+    stakedAmount: yourStaked,
     withdrawable: withdrawable,
     layer2: data?.candidateContract,
     withdrawableLength: withdrawableLength,

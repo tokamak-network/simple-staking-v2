@@ -12,6 +12,10 @@ import moment from "moment";
 import { useEffect } from 'react';
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { getTransactionHistory } from '../../../utils/getTransactionHistory';
+import { useUserStaked } from "@/hooks/staking/useUserStaked";
+import { useWeb3React } from "@web3-react/core";
+import { convertNumber } from "@/components/number";
+import { useExpectedSeig } from '../../../hooks/staking/useCalculateExpectedSeig';
 
 function DesktopStaking () {
 
@@ -80,7 +84,8 @@ function DesktopStaking () {
     const [tableLoading, setTableLoading] = useState<boolean>(true);
     const { operatorList } = useOperatorList()
     const { candidateList } = useCandidateList()
-    console.log(candidateList)
+    const { account } = useWeb3React();
+    // console.log(candidateList)
     // console.log(operatorList)
     useEffect(() => {
       // operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)
@@ -89,10 +94,21 @@ function DesktopStaking () {
     
     const renderRowSubComponent = useCallback(
       ({row}: any) => {
-      const { candidateContracts, stakedUserList, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
+      const { candidateContract, expectedSeig, candidate, userStakeds, stakedUserList, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
+      
       const txHistory = getTransactionHistory(row.original)
-      const recentCommit = asCommit[0] ? moment.unix(asCommit[0].timestamp).format('YYYY.MM.DD HH:mm:ss (Z)') : 'The operator does not have any commits';
-      // console.log(asCommit)
+      const userExpectedSeig = expectedSeig? convertNumber({
+        amount: expectedSeig,
+        type: 'ray',
+        localeString: true
+      }) : '-'
+
+      const yourStaked = userStakeds ? convertNumber({
+        //@ts-ignore
+        amount: userStakeds.stakedAmount, 
+        type: 'ray',
+        localeString: true
+      }) : '-'
       return (
         <Flex
           w="100%"
@@ -129,15 +145,19 @@ function DesktopStaking () {
             <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
               <Flex flexDir={'column'} alignItems={'space-between'}>
                 <OperatorDetailInfo 
-                  title={'Recent Commit'}
-                  value={recentCommit}
-                  type={'date'}
+                  title={'Your Staked'}
+                  value={yourStaked}
+                  unit={'TON'}
+                  type={''}
                 />
               </Flex>
               <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
                 <OperatorDetailInfo 
-                  title={'Commit Count'}
-                  value={asCommit.length}
+                  title={'Unclaimed Staking Reward'}
+                  value={userExpectedSeig}
+                  unit={'TON'}
+                  type={''}
+                  contractInfo={candidateContract}
                 />
               </Flex>
             </Flex>

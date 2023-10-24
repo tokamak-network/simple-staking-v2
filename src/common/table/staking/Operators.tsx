@@ -31,6 +31,7 @@ import { useRecoilState } from 'recoil';
 import { toggleState } from '@/atom/staking/toggle';
 import { useUserStaked } from '../../../hooks/staking/useUserStaked';
 import { useWeb3React } from '@web3-react/core';
+import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -140,10 +141,17 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
           >
             {page && page.map((row: any, i) => {
               const { candidateContract } = row.original;
-              prepareRow(row);
+              
               const stakedId = candidateContract
               const { userStakeds } = useUserStaked(`${account?.toLocaleLowerCase()}-${stakedId.toLocaleLowerCase()}`)
-              
+              const expectedSeig = useExpectedSeig(candidateContract)
+
+              row.original = {
+                ...row.original,
+                userStakeds,
+                expectedSeig
+              }
+              prepareRow(row);
               return [
                 <chakra.tr
                   boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}

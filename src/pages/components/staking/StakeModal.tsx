@@ -35,6 +35,8 @@ function StakeModal() {
   if (selectedModal && selectedModalData) {
     modalComponent = getStakeModalComponent(selectedModal, selectedModalData);
   }
+  // console.log(selectedModalData)
+  // console.log(modalComponent?.balance)
 
   const closeThisModal = useCallback(() => {
     // setResetValue();
@@ -76,13 +78,7 @@ function StakeModal() {
 
   const unStaking = useCallback(async () => {
     const amount = floatParser(input);
-    //  if (
-    //   confirm(
-    //     'Stake, Unstake, and Restake functionalities are temporarily disabled. Please check our official Twitter page @tokamak_network for updates.',
-    //   )
-    // ) {
-  
-    // }
+
     if (DepositManager_CONTRACT && amount) {
       //@ts-ignore
       const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account);
@@ -99,23 +95,23 @@ function StakeModal() {
   }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending]);
 
   const reStaking = useCallback(async () => {
-    if (
-      confirm(
-        'Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates',
-      )
-    ) {
+    // if (
+    //   confirm(
+    //     'Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates',
+    //   )
+    // ) {
   
-    }
-    // const amount = floatParser(input);
-    // if (DepositManager_CONTRACT && account) {
-    //   //@ts-ignore
-    //   const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account);
-    //   //@ts-ignore
-    //   const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest);
-    //   setTx(tx);
-    //   setTxPending(true);
-    //   return closeThisModal();
     // }
+    const amount = floatParser(input);
+    if (DepositManager_CONTRACT && account) {
+      //@ts-ignore
+      const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account);
+      //@ts-ignore
+      const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest);
+      setTx(tx);
+      setTxPending(true);
+      return closeThisModal();
+    }
   }, [input, DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal]);
 
   const withdraw = useCallback(async () => {

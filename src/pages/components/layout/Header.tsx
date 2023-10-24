@@ -26,9 +26,9 @@ const navItemList = [
   {
     link: "staking",
   },
-  {
-    link: "wallet",
-  },
+  // {
+  //   link: "wallet",
+  // },
   {
     link: "support",
   },
