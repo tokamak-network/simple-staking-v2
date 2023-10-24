@@ -37,8 +37,6 @@ function StakeModal() {
   if (selectedModal && selectedModalData) {
     modalComponent = getStakeModalComponent(selectedModal, selectedModalData);
   }
-  // console.log(selectedModalData)
-  // console.log(modalComponent?.balance)
 
   const closeThisModal = useCallback(() => {
     // setResetValue();
@@ -87,14 +85,15 @@ function StakeModal() {
         // const bal = await coinage.balanceOf(account)
         // console.log(bal.toString(), convertToRay(amount.toString()))
         // operator 일 경우 minimum amount 남겨둬야함
-        
-        const tx = await DepositManager_CONTRACT.requestWithdrawal(
-          //@ts-ignore
-          selectedModalData.layer2,
-          convertToRay(amount.toString()),
-        );
-        setTx(tx);
-        setTxPending(true);
+        if (confirm(`Warning:\nYou may lose unclaimed staking reward if you unstake before claiming them.\nCome back here after 2 weeks to withdraw your unstaked TON.`)) {
+          const tx = await DepositManager_CONTRACT.requestWithdrawal(
+            //@ts-ignore
+            selectedModalData.layer2,
+            convertToRay(amount.toString()),
+          );
+          setTx(tx);
+          setTxPending(true);
+        }
         return closeThisModal();
       }
 
@@ -125,16 +124,18 @@ function StakeModal() {
 
   const withdraw = useCallback(async () => {
     if (selectedModalData && DepositManager_CONTRACT) {
-     //@ts-ignore
-      const tx = await DepositManager_CONTRACT.processRequests(
+      if (confirm('Any withdraws from the prior to patch has to be done using etherscan using the guide provided from X @tokamak_network. We will provide the frontend service as soon as we can.')) {
+        //@ts-ignore
+        const tx = await DepositManager_CONTRACT.processRequests(
           //@ts-ignore
-        selectedModalData.layer2,
+          selectedModalData.layer2,
           //@ts-ignore
-        selectedModalData.withdrawableLength,
-        true,
-      );
-      setTx(tx);
-      setTxPending(true);
+          selectedModalData.withdrawableLength,
+          true,
+        );
+        setTx(tx);
+        setTxPending(true);
+      }
       return closeThisModal();
     }
   }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending]);
