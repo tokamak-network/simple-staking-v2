@@ -108,7 +108,7 @@ function DesktopStaking () {
         amount: userStakeds.stakedAmount, 
         type: 'ray',
         localeString: true
-      }) : '-'
+      }) : '0.00'
       return (
         <Flex
           w="100%"

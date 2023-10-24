@@ -195,6 +195,12 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                     } = cell.row.original;
 
                     const type = cell.column.id;
+                    const rate = convertNumber({
+                      amount: commissionRate,
+                      type: 'ray',
+                      localeString: true
+                    })
+
                     const totalStaked = convertNumber({
                       amount: stakedAmount, 
                       type: 'ray',
@@ -245,7 +251,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                           Info('Total Staked', totalStaked, 'TON')
                         ) : ('')}
                         {type === 'commisionRate' ? (
-                          (commissionRate !== '-') ? Info('Commission Rate', (+commissionRate)/10000000, '%') : ('')
+                          (rate !== '-' && rate) ? Info('Commission Rate', (+rate) * 100, '%') : ('')
                         ) : ('')}
                         {type === 'yourStaked' ? (
                           (yourStaked !== '0.00') ? Info('Your Staked', yourStaked, 'TON') : ('')
