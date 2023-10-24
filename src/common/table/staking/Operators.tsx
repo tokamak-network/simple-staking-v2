@@ -103,12 +103,12 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
           <Flex mr={'20px'}>
             DAO Candidate
           </Flex>
-          {getCircle('')}
+          {getCircle('operator')}
           <Flex>
             Operator
           </Flex>
         </Flex>
-        <Select
+        {/* <Select
           w={'145px'}
           h={'32px'}
           color={'#86929d'}
@@ -124,7 +124,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
           <option value="name">Name</option>
           <option value="Recent Commit">Recent Commit</option>
           <option value="User Staked">User Staked</option>
-        </Select>
+        </Select> */}
       </Flex>
       <Box overflowX={'auto'}>
         <chakra.table
