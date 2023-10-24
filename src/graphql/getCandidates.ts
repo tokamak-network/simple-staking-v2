@@ -1,3 +1,4 @@
+import { orderBy } from 'lodash';
 import { gql } from "@apollo/client";
 
 export const GET_CANDIDATE = gql`
@@ -9,11 +10,11 @@ export const GET_CANDIDATE = gql`
       name
       stakedAmount
       commissionRate
-      stakedUserList {
+      stakedUserList: stakedUserList(first:1000, orderBy:stakedAmount, orderDirection: desc) {
         id
         stakedAmount
       }
-      staked {
+      staked: staked(first:1000) {
         id
         amount
         timestamp
@@ -23,7 +24,7 @@ export const GET_CANDIDATE = gql`
           id
         }
       }
-      unstaked {
+      unstaked: unstaked (first:1000) {
         id
         amount
         timestamp
@@ -33,7 +34,7 @@ export const GET_CANDIDATE = gql`
           id
         }
       }
-      withdrawal {
+      withdrawal: withdrawal (first:1000) {
         id
         amount
         timestamp
