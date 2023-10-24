@@ -130,7 +130,7 @@ function DesktopStaking () {
               <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
                 <OperatorDetailInfo 
                   title={'Pending Withdrawal'}
-                  value={pendingWithdrawal}
+                  value={'0.00'}
                   unit={'TON'}
                   type={''}
                 />
