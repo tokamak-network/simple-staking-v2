@@ -27,14 +27,14 @@ export function useOperatorList() {
       
       let staked = BigNumber.from('0')
       let totalStake: BigNumber = BigNumber.from('0')
-      if (account && SeigManager_CONTRACT) {
-        const stake = await SeigManager_CONTRACT.stakeOf(
-          '0x1f4aef3a04372cf9d738d5459f31950a53969ca3',
-          '0xf3d37602d501dc27e1bdbc841f174adf337909d2'
-        )
-        console.log('stakeOf', account, '0x1f4aef3a04372cf9d738d5459f31950a53969ca3', stake.toString())
-        // commisionRates = await SeigManager_CONTRACT.commissionRates(obj.layer2)
-      }
+      // if (account && SeigManager_CONTRACT) {
+      //   const stake = await SeigManager_CONTRACT.stakeOf(
+      //     '0x1f4aef3a04372cf9d738d5459f31950a53969ca3',
+      //     '0xf3d37602d501dc27e1bdbc841f174adf337909d2'
+      //   )
+      //   console.log('stakeOf', account, '0x1f4aef3a04372cf9d738d5459f31950a53969ca3', stake.toString())
+      //   // commisionRates = await SeigManager_CONTRACT.commissionRates(obj.layer2)
+      // }
       
       const operators = await Promise.all(data.map(async (obj: any) => {
       // const operators = await Promise.all(data?.candidates.map(async (obj: any) => {

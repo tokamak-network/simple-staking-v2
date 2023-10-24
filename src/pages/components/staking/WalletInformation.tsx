@@ -58,7 +58,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     type: 'ray',
     localeString: true
   }) : '-'
-  console.log(pendingUnstaked)
+  // console.log(pendingUnstaked)
 
   const btnDisabledStake = () => {
     return account === undefined ||

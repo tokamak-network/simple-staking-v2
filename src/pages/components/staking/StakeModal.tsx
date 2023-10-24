@@ -15,6 +15,8 @@ import { useWeb3React } from '@web3-react/core';
 import { txState } from '@/atom/global/transaction';
 import { ModalHeader } from './modal/ModalHeader';
 import { WithdrawModalBody } from './modal/WithdrawModalBody';
+import { getContract } from '@/components/getContract';
+import Coinage from "services/abi/AutoRefactorCoinage.json"
 
 function StakeModal() {
   const theme = useTheme();
@@ -25,7 +27,7 @@ function StakeModal() {
 
   const { TON_ADDRESS, WTON_ADDRESS, DepositManager_ADDRESS } = CONTRACT_ADDRESS;
 
-  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } = useCallContract();
+  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT, SeigManager_CONTRACT } = useCallContract();
 
   const [input, setInput] = useRecoilState(inputState);
   const [txPending, setTxPending] = useRecoilState(txState);
@@ -77,20 +79,27 @@ function StakeModal() {
   }, [TON_CONTRACT, WTON_ADDRESS, closeThisModal, getData, input, selectedModalData, setTx, setTxPending]);
 
   const unStaking = useCallback(async () => {
-    const amount = floatParser(input);
+    try {
+      const amount = floatParser(input);
+      if (DepositManager_CONTRACT && SeigManager_CONTRACT && amount && account && selectedModalData) {
+        //@ts-ignore 
+        // const coinage = getContract(await SeigManager_CONTRACT.coinages(selectedModalData.layer2), Coinage, library, account)
+        // const bal = await coinage.balanceOf(account)
+        // console.log(bal.toString(), convertToRay(amount.toString()))
+        // operator 일 경우 minimum amount 남겨둬야함
+        
+        const tx = await DepositManager_CONTRACT.requestWithdrawal(
+          //@ts-ignore
+          selectedModalData.layer2,
+          convertToRay(amount.toString()),
+        );
+        setTx(tx);
+        setTxPending(true);
+        return closeThisModal();
+      }
 
-    if (DepositManager_CONTRACT && amount) {
-      //@ts-ignore
-      const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account);
-      //@ts-ignore
-      const tx = await DepositManager_CONTRACT.requestWithdrawal(
-        //@ts-ignore
-        selectedModalData.layer2,
-        convertToRay(amount.toString()),
-      );
-      setTx(tx);
-      setTxPending(true);
-      return closeThisModal();
+    } catch (e) {
+      console.log(e)
     }
   }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending]);
 
