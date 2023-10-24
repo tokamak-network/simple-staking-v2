@@ -124,18 +124,17 @@ function StakeModal() {
 
   const withdraw = useCallback(async () => {
     if (selectedModalData && DepositManager_CONTRACT) {
-      if (confirm('Any withdraws from the prior to patch has to be done using etherscan using the guide provided from X @tokamak_network. We will provide the frontend service as soon as we can.')) {
+      //@ts-ignore
+      const tx = await DepositManager_CONTRACT.processRequests(
         //@ts-ignore
-        const tx = await DepositManager_CONTRACT.processRequests(
-          //@ts-ignore
-          selectedModalData.layer2,
-          //@ts-ignore
-          selectedModalData.withdrawableLength,
-          true,
-        );
-        setTx(tx);
-        setTxPending(true);
-      }
+        selectedModalData.layer2,
+        //@ts-ignore
+        selectedModalData.withdrawableLength,
+        true,
+      );
+      setTx(tx);
+      setTxPending(true);
+      
       return closeThisModal();
     }
   }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending]);
