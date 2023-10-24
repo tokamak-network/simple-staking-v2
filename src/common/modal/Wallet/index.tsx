@@ -319,7 +319,7 @@ function WalletModal() {
               <Text>
                 Network not supported.
                 <br />
-                Please change to Rinkeby or Mainnet.
+                Please change to Mainnet.
               </Text>
             ) : (
               <Text>Error connecting</Text>

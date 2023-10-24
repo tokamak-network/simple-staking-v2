@@ -142,11 +142,15 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           // fontSize={'42px'}
           h={'55px'}
         >
-          {userTonBalance === undefined 
-            || account == undefined 
-          ? (
+          { 
+          account == undefined  ?
+            (<Text>- </Text>) :
+            userTonBalance === undefined 
+          ? 
+          (
             <LoadingDots />
-          ) : (
+          ) : 
+          (
             userTonBalance
           )}{' '}
           TON

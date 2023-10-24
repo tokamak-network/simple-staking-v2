@@ -72,7 +72,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
         {unit? <Text fontSize={'13px'} fontWeight={500} ml={'6px'} mb={'5px'}>{unit}</Text> : ''}
       </Flex>
       {
-        title === 'Unclaimed Staking Reward' && value !== '0.00' ?
+        title === 'Unclaimed Staking Reward' && value !== '0.00' && account ?
         <Flex
           fontSize={'11px'}
           color={'#2a72e5'}
