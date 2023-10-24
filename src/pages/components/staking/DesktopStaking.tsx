@@ -97,15 +97,14 @@ function DesktopStaking () {
       
       const txHistory = getTransactionHistory(row.original)
       const userExpectedSeig = expectedSeig? convertNumber({
-        amount: stakeOf,
+        amount: expectedSeig,
         type: 'ray',
         localeString: true
       }) : '-'
       // console.log(stakeOf)
       // console.log(yourStaked)
       const yourStake = convertNumber({
-        //@ts-ignore
-        amount: testValue, 
+        amount: stakeOf, 
         type: 'ray',
         localeString: true
       })
