@@ -10,7 +10,7 @@ export function useCandidateList () {
     pollInterval: 10000
   });
   const { account } = useWeb3React();
-  const { SeigManager_CONTRACT } = useCallContract();
+  const { SeigManager_CONTRACT, DepositManager_CONTRACT } = useCallContract();
 
   useEffect(() => {
     
@@ -19,11 +19,14 @@ export function useCandidateList () {
       if (data) {
         const candidates = await Promise.all(data.candidates.map(async (obj: any) => {
           let tempObj = obj
-          if (account && SeigManager_CONTRACT) {
+          if (account && SeigManager_CONTRACT && DepositManager_CONTRACT) {
             const stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
+            const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
+
             tempObj = {
               ...obj,
               stakeOf: stakeOf.toString(),
+              pending: pending.toString()
             }
           }
           return tempObj

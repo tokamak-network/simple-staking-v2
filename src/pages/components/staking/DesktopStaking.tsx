@@ -93,7 +93,7 @@ function DesktopStaking () {
     
     const renderRowSubComponent = useCallback(
       ({row}: any) => {
-      const { candidateContract, expectedSeig, candidate, yourStaked, stakeOf, testValue, userStakeds, stakedUserList, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
+      const { candidateContract, expectedSeig, candidate, pending, stakeOf, testValue, userStakeds, stakedUserList, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
       
       const txHistory = getTransactionHistory(row.original)
       const userExpectedSeig = expectedSeig? convertNumber({
@@ -105,6 +105,12 @@ function DesktopStaking () {
       // console.log(yourStaked)
       const yourStake = convertNumber({
         amount: stakeOf, 
+        type: 'ray',
+        localeString: true
+      })
+
+      const pendingUnstaked = convertNumber({
+        amount: pending,
         type: 'ray',
         localeString: true
       })
@@ -130,7 +136,7 @@ function DesktopStaking () {
               <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
                 <OperatorDetailInfo 
                   title={'Pending Withdrawal'}
-                  value={'0.00'}
+                  value={pendingUnstaked}
                   unit={'TON'}
                   type={''}
                 />
