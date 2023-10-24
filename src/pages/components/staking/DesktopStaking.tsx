@@ -162,8 +162,8 @@ function DesktopStaking () {
             </Flex>
           </Flex>
           {/* table area */}
-          {/* <Flex flexDir={'row'} mt={'60px'} ml={'70px'} justifyContent={'center'} alignItems={'center'}>
-            <HistoryTable 
+          <Flex flexDir={'row'} mt={'60px'} ml={'70px'} justifyContent={'center'} alignItems={'center'}>
+            {/* <HistoryTable 
               columns={historyColumns}
               data={txHistory}
               tableType={'Staking'}
@@ -172,8 +172,8 @@ function DesktopStaking () {
               columns={historyColumns}
               data={asCommit}
               tableType={'Commit'}
-            />
-          </Flex> */}
+            /> */}
+          </Flex>
         </Flex>
       )
     }, [historyColumns]);
