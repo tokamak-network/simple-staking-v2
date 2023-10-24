@@ -22,45 +22,41 @@ const getData = (layer2: any) => {
 export const staking = async (userTonBalance: any, TON_CONTRACT: any, amount: any, layer2: string, setTxPending: any, setTx: any) => {
 
     const { WTON_ADDRESS } = CONTRACT_ADDRESS;
-
     if (userTonBalance) {
         const tonBalance = floatParser(userTonBalance)
         if (tonBalance && amount > tonBalance) {
             return alert('Please check input amount.');
 
         }
-        if (confirm('Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates')) {
-            // const data = getData(layer2)
-            // if (TON_CONTRACT && amount) {
+        // if (confirm('Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates')) {
+        const data = getData(layer2)
+        if (TON_CONTRACT && amount) {
 
-            //     try {
-            //         const tx = await TON_CONTRACT.approveAndCall(
-            //             WTON_ADDRESS,
-            //             convertToWei(amount.toString()),
-            //             data
-            //         )
-            //         setTxPending(true)
-            //         setTx(tx)
+            try {
+                const tx = await TON_CONTRACT.approveAndCall(
+                    WTON_ADDRESS,
+                    convertToWei(amount.toString()),
+                    data
+                )
+                setTxPending(true)
+                setTx(tx)
 
-            //         if (tx) {
-            //             await tx.wait().then((receipt: any) => {
-            //                 if (receipt.status) {
-            //                     setTxPending(false);
-            //                     setTx(undefined);
-            //                 }
-            //             })
-            //         }
-            //     }
-            //     catch (e) {
-            //         setTxPending(false);
-            //         setTx(undefined);
-            //     }
+                if (tx) {
+                    await tx.wait().then((receipt: any) => {
+                        if (receipt.status) {
+                            setTxPending(false);
+                            setTx(undefined);
+                        }
+                    })
+                }
+            }
+            catch (e) {
+                setTxPending(false);
+                setTx(undefined);
+            }
 
-            // }
         }
     }
-
-
 }
 
 export const reStaking = async (account: any, DepositManager_CONTRACT: any, layer2: string, setTxPending: any, setTx: any) => {

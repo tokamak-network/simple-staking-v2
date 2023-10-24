@@ -14,7 +14,6 @@ export function useWithdrawable (layer2: string) {
   const [notWithdrawable, setNotWithdrawable] = useState('0.00')
   const [withdrawableLength, setWithdrawableLength] = useState('0.00')
 
-
   useEffect(() => {
     async function fetch () {
       let numPendingRequests

@@ -16,7 +16,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
-import useOperatorList from "@/hooks/staking/useOperatorList";
+import useOperatorList from "@/hooks/staking/useOperatorList"; 
 import { OperatorImage } from "@/common/table/staking/Oval";
 import moment from "moment";
 import { useState } from "react";
@@ -44,7 +44,7 @@ function OperatorCard(props: { operator: any }) {
   const { account } = useWeb3React();
   const { userTonBalance } = useUserBalance(account);
 
-  const { operatorList } = useOperatorList();
+  // const { operatorList } = useOperatorList();
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState(0);
 

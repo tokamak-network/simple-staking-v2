@@ -11,14 +11,19 @@ REACT_APP_MODE === "PRODUCTION" ? "1" : "5";
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const MAINNET_API = process.env.NEXT_PUBLIC_API_PRODUCTION;
 const DEV_API = process.env.NEXT_PUBLIC_API_DEV;
+const GRAPHQL_MAINNET = process.env.NEXT_PUBLIC_GRAPHQL_API_PRODUCTION;
+const GRAPHQL_DEV = process.env.NEXT_PUBLIC_GRAPHQL_API_PRODUCTION;
 
 export const BASE_PROVIDER =
 REACT_APP_MODE === "PRODUCTION"
     ? ethers.getDefaultProvider("mainnet")
     : ethers.getDefaultProvider("goerli");
 
-export const API =
-REACT_APP_MODE === "PRODUCTION" ? MAINNET_API : DEV_API;
+export const API = MAINNET_API
+// REACT_APP_MODE === "PRODUCTION" ? MAINNET_API : DEV_API;
+
+export const GRAPHQL_API = GRAPHQL_MAINNET
+  // REACT_APP_MODE === "PRODUCTION" ? GRAPHQL_MAINNET : GRAPHQL_DEV;
 
 export const NON_CANDIDATE = [
   {
@@ -38,7 +43,6 @@ export const NON_CANDIDATE = [
     layer2: '0xcc38c7aaf2507da52a875e93f57451e58e8c6372'
   },
 ]
-
 
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {

@@ -15,6 +15,8 @@ import { useWeb3React } from '@web3-react/core';
 import { txState } from '@/atom/global/transaction';
 import { ModalHeader } from './modal/ModalHeader';
 import { WithdrawModalBody } from './modal/WithdrawModalBody';
+import { getContract } from '@/components/getContract';
+import Coinage from "services/abi/AutoRefactorCoinage.json"
 
 function StakeModal() {
   const theme = useTheme();
@@ -25,7 +27,7 @@ function StakeModal() {
 
   const { TON_ADDRESS, WTON_ADDRESS, DepositManager_ADDRESS } = CONTRACT_ADDRESS;
 
-  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } = useCallContract();
+  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT, SeigManager_CONTRACT } = useCallContract();
 
   const [input, setInput] = useRecoilState(inputState);
   const [txPending, setTxPending] = useRecoilState(txState);
@@ -59,76 +61,80 @@ function StakeModal() {
     if (selectedModalData && Number(amount) > Number(floatParser(selectedModalData.tonBalance))) {
       return alert('Please check input amount.');
     }
-    if (
-      confirm(
-        'Stake, Unstake, and Restake functionalities are temporarily disabled. Please check our official Twitter page @tokamak_network for updates.',
-      )
-    ) {
-      // const data = getData();
-      // if (TON_CONTRACT && amount) {
-      //   const tx = await TON_CONTRACT.approveAndCall(WTON_ADDRESS, convertToWei(amount.toString()), data);
-      //   setTx(tx);
-      //   setTxPending(true);
-      //   return closeThisModal();
-      // }
-    }
+    // if (
+    //   confirm(
+    //     'Stake, Unstake, and Restake functionalities are temporarily disabled. Please check our official Twitter page @tokamak_network for updates.',
+    //   )
+    // ) {
+      const data = getData();
+      if (TON_CONTRACT && amount) {
+        const tx = await TON_CONTRACT.approveAndCall(WTON_ADDRESS, convertToWei(amount.toString()), data);
+        setTx(tx);
+        setTxPending(true);
+        return closeThisModal();
+      }
+    // }
   }, [TON_CONTRACT, WTON_ADDRESS, closeThisModal, getData, input, selectedModalData, setTx, setTxPending]);
 
   const unStaking = useCallback(async () => {
-    const amount = floatParser(input);
-     if (
-      confirm(
-        'Stake, Unstake, and Restake functionalities are temporarily disabled. Please check our official Twitter page @tokamak_network for updates.',
-      )
-    ) {
-  
+    try {
+      const amount = floatParser(input);
+      if (DepositManager_CONTRACT && SeigManager_CONTRACT && amount && account && selectedModalData) {
+        //@ts-ignore 
+        // const coinage = getContract(await SeigManager_CONTRACT.coinages(selectedModalData.layer2), Coinage, library, account)
+        // const bal = await coinage.balanceOf(account)
+        // console.log(bal.toString(), convertToRay(amount.toString()))
+        // operator 일 경우 minimum amount 남겨둬야함
+        if (confirm(`Warning:\nYou may lose unclaimed staking reward if you unstake before claiming them.\nCome back here after 2 weeks to withdraw your unstaked TON.`)) {
+          const tx = await DepositManager_CONTRACT.requestWithdrawal(
+            //@ts-ignore
+            selectedModalData.layer2,
+            convertToRay(amount.toString()),
+          );
+          setTx(tx);
+          setTxPending(true);
+        }
+        return closeThisModal();
+      }
+
+    } catch (e) {
+      console.log(e)
     }
-    // if (DepositManager_CONTRACT && amount) {
-    //   //@ts-ignore
-    //   const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account);
-    //   //@ts-ignore
-    //   const tx = await DepositManager_CONTRACT.requestWithdrawal(
-    //     selectedModalData.layer2,
-    //     convertToRay(amount.toString()),
-    //   );
-    //   setTx(tx);
-    //   setTxPending(true);
-    //   return closeThisModal();
-    // }
   }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending]);
 
   const reStaking = useCallback(async () => {
-    if (
-      confirm(
-        'Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates',
-      )
-    ) {
+    // if (
+    //   confirm(
+    //     'Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates',
+    //   )
+    // ) {
   
-    }
-    // const amount = floatParser(input);
-    // if (DepositManager_CONTRACT && account) {
-    //   //@ts-ignore
-    //   const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account);
-    //   //@ts-ignore
-    //   const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest);
-    //   setTx(tx);
-    //   setTxPending(true);
-    //   return closeThisModal();
     // }
+    const amount = floatParser(input);
+    if (DepositManager_CONTRACT && account) {
+      //@ts-ignore
+      const numPendRequest = await DepositManager_CONTRACT.numRequests(selectedModalData.layer2, account);
+      //@ts-ignore
+      const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest);
+      setTx(tx);
+      setTxPending(true);
+      return closeThisModal();
+    }
   }, [input, DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal]);
 
   const withdraw = useCallback(async () => {
     if (selectedModalData && DepositManager_CONTRACT) {
-     //@ts-ignore
+      //@ts-ignore
       const tx = await DepositManager_CONTRACT.processRequests(
-          //@ts-ignore
+        //@ts-ignore
         selectedModalData.layer2,
-          //@ts-ignore
+        //@ts-ignore
         selectedModalData.withdrawableLength,
         true,
       );
       setTx(tx);
       setTxPending(true);
+      
       return closeThisModal();
     }
   }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending]);

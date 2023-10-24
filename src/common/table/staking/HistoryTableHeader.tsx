@@ -11,25 +11,25 @@ export const HistoryTableHeader: FC<HistoryTableHeaderProps> = ({
 }) => {
   return  (
     <chakra.thead
-        borderBottom={'1px dashed #e6eaee'}
-        // mr={'30px'}
-        w={'100%'}
+      borderBottom={'1px dashed #e6eaee'}
+      // mr={'30px'}
+      w={'100%'}
+      h={'40px'}
+      alignItems={'center'}
+      justifyContent={'center'}
+    >
+      <chakra.tr 
+        fontSize={'13px'}
+        color={'#808992'}
         h={'40px'}
-        alignItems={'center'}
-        justifyContent={'center'}
       >
-        <chakra.tr 
-          fontSize={'13px'}
-          color={'#808992'}
-          h={'40px'}
-        >
-          { HeaderColumn(tableType, 'Account') }
-          { HeaderColumn(tableType, 'TX Hash') }
-          { HeaderColumn(tableType, 'Type') }
-          { HeaderColumn(tableType, 'Amount') }
-          { HeaderColumn(tableType, 'Time') }
-        </chakra.tr>
-      </chakra.thead>
+        { HeaderColumn(tableType, 'Account') }
+        { HeaderColumn(tableType, 'TX Hash') }
+        { HeaderColumn(tableType, 'Type') }
+        { HeaderColumn(tableType, 'Amount') }
+        { HeaderColumn(tableType, 'Time') }
+      </chakra.tr>
+    </chakra.thead>
   )
 }
 

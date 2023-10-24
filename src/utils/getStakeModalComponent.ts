@@ -14,7 +14,7 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
       balanceInfo: 'Available Balance',
       balance: data.stakedAmount,
       bottomComment: 'Withdrawal delay is about 2 weeks',
-      buttonName: 'UnStake',
+      buttonName: 'Unstake',
     },
     restaking: {
       header: 'Re-Staking',

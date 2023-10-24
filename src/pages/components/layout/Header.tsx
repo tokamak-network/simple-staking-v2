@@ -26,20 +26,20 @@ const navItemList = [
   },
   {
     link: "staking",
-    name: "TON Staking v1"
+    name: "Staking"
   },
-  {
-    link: "stakingv2",
-    name: "TON Staking v2"
-  },
-  {
-    link: "fastwithdraw",
-    name: "Tokamak Fast Withdraw"
-  },
-  {
-    link: "wallet",
-    name: "Wallet"
-  },
+  // {
+  //   link: "stakingv2",
+  //   name: "TON Staking v2"
+  // },
+  // {
+  //   link: "fastwithdraw",
+  //   name: "Tokamak Fast Withdraw"
+  // },
+  // {
+  //   link: "wallet",
+  //   name: "Wallet"
+  // },
   {
     link: "support",
     name: "Support"

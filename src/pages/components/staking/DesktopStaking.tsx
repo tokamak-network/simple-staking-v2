@@ -10,6 +10,12 @@ import { WalletInformation } from "./WalletInformation";
 import HistoryTable from "@/common/table/staking/HistoryTable";
 import moment from "moment";
 import { useEffect } from 'react';
+import { useCandidateList } from '@/hooks/staking/useCandidateList';
+import { getTransactionHistory } from '../../../utils/getTransactionHistory';
+import { useUserStaked } from "@/hooks/staking/useUserStaked";
+import { useWeb3React } from "@web3-react/core";
+import { convertNumber } from "@/components/number";
+import { useExpectedSeig } from '../../../hooks/staking/useCalculateExpectedSeig';
 
 function DesktopStaking () {
 
@@ -74,19 +80,41 @@ function DesktopStaking () {
       ],
       [],
     );
-  
-    const [tableLoading, setTableLoading] = useState<boolean>(true);
-    const { operatorList } = useOperatorList()
 
+    const [tableLoading, setTableLoading] = useState<boolean>(true);
+    // const { operatorList } = useOperatorList()
+    const { candidateList } = useCandidateList()
+    const { account } = useWeb3React();
+    // console.log(operatorList)
     useEffect(() => {
-      operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)
-    }, [operatorList, tableLoading])
+      // operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)
+      candidateList ? setTableLoading(false) : setTableLoading(true)
+    }, [candidateList, tableLoading])
     
     const renderRowSubComponent = useCallback(
       ({row}: any) => {
-      const { layer2, delegators, commit, operatorsHistory, pendingWithdrawal } = row.original;
-      const lastFinalized = commit.length !== 0 ? commit[0].blockTimestamp : '0'
-      const recentCommit = lastFinalized !== '0' ? moment.unix(lastFinalized).format('YYYY.MM.DD HH:mm:ss (Z)') : 'The operator does not have any commits';
+      const { candidateContract, expectedSeig, candidate, pending, stakeOf, testValue, userStakeds, stakedUserList, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
+      
+      const txHistory = getTransactionHistory(row.original)
+      const userExpectedSeig = expectedSeig? convertNumber({
+        amount: expectedSeig,
+        type: 'ray',
+        localeString: true
+      }) : '-'
+      // console.log(stakeOf)
+      // console.log(yourStaked)
+      const yourStake = convertNumber({
+        amount: stakeOf, 
+        type: 'ray',
+        localeString: true
+      })
+
+      const pendingUnstaked = convertNumber({
+        amount: pending,
+        type: 'ray',
+        localeString: true
+      })
+    
       return (
         <Flex
           w="100%"
@@ -102,13 +130,13 @@ function DesktopStaking () {
               <Flex flexDir={'column'} alignItems={'space-between'}>
                 <OperatorDetailInfo 
                   title={'Total Delegator'}
-                  value={delegators}
+                  value={stakedUserList.length}
                 />
               </Flex>
               <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
                 <OperatorDetailInfo 
                   title={'Pending Withdrawal'}
-                  value={pendingWithdrawal}
+                  value={pendingUnstaked}
                   unit={'TON'}
                   type={''}
                 />
@@ -123,31 +151,35 @@ function DesktopStaking () {
             <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
               <Flex flexDir={'column'} alignItems={'space-between'}>
                 <OperatorDetailInfo 
-                  title={'Recent Commit'}
-                  value={recentCommit}
-                  type={'date'}
+                  title={'Your Staked'}
+                  value={yourStake}
+                  unit={'TON'}
+                  type={''}
                 />
               </Flex>
               <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
                 <OperatorDetailInfo 
-                  title={'Commit Count'}
-                  value={commit.length}
+                  title={'Unclaimed Staking Reward'}
+                  value={userExpectedSeig}
+                  unit={'TON'}
+                  type={''}
+                  contractInfo={candidateContract}
                 />
               </Flex>
             </Flex>
           </Flex>
           {/* table area */}
           <Flex flexDir={'row'} mt={'60px'} ml={'70px'} justifyContent={'center'} alignItems={'center'}>
-            <HistoryTable 
+            {/* <HistoryTable 
               columns={historyColumns}
-              data={operatorsHistory}
+              data={txHistory}
               tableType={'Staking'}
             />
             <HistoryTable 
               columns={historyColumns}
-              data={commit}
+              data={asCommit}
               tableType={'Commit'}
-            />
+            /> */}
           </Flex>
         </Flex>
       )
@@ -158,14 +190,15 @@ function DesktopStaking () {
       <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
         <PageHeader title={'Select your Operator'} subtitle={'You can select an operator to stake, restake, unstake, your TONS.'}/>
         <Box fontFamily={theme.fonts.roboto}>
-          {tableLoading ? 
+          {candidateList.length === 0 ? 
             <Flex justifyContent="center" alignItems={"center"} h='200px'>
               <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
             </Flex> :
             <OpearatorTable 
               renderDetail={renderRowSubComponent}
               columns={columns}
-              data={operatorList}
+              // @ts-ignore
+              data={candidateList}
               isLoading={tableLoading}
             />
           }

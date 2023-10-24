@@ -83,11 +83,30 @@ export const HistoryTable: FC<HistoryTableProps> = ({
       flexDir={'column'}
       mr={'30px'}
       fontFamily={theme.fonts.Roboto}
+      justifyContent={'start'}
+      h={'100%'}
     >
       <Flex fontSize={'15px'} fontWeight={'bold'} mb={'5px'} flexDir={'row'} w={'100%'} justifyContent={'space-between'}>
-        <Text>
-          {tableType}
-        </Text>
+        <Flex 
+          w={'100%'}
+          flexDir={'row'}
+          justifyContent={'space-between'}
+          mt={tableType === 'Commit' ? '9px' : ''}
+        >
+          <Text>
+            {tableType}
+          </Text>
+          {
+            tableType === 'Commit' ?
+            <Text
+              fontSize={'13px'}
+              fontWeight={'normal'}
+              color={'#808992'}
+            >
+              Commit count: {data.length}
+            </Text> : ''
+          }
+        </Flex>
         {
           tableType === 'Staking' ? 
           <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
@@ -112,6 +131,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
           {...getTableProps()}
           display="flex"
           flexDirection="column"
+          justifyContent={"start"}
           mr={'30px'}
         >
           <HistoryTableHeader
@@ -138,8 +158,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                   {...row.getRowProps()}
                 >
                   {row.cells ? row.cells.map((cell: any, index: number) => {
-                    return (
-                      
+                    return (         
                       <HistoryTableRow 
                         key={index}
                         cell={cell}

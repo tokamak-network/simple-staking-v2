@@ -29,6 +29,9 @@ import { renderBtn } from '@/common/table/staking/RenderBTN';
 import { Info } from '@/common/table/staking/OperatorInfo';
 import { useRecoilState } from 'recoil';
 import { toggleState } from '@/atom/staking/toggle';
+import { useUserStaked } from '../../../hooks/staking/useUserStaked';
+import { useWeb3React } from '@web3-react/core';
+import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -73,15 +76,16 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
     });
   };
   //@ts-ignore
-  const { layer2 } = data;
+  const { candidateContract } = data;
+  const { account } = useWeb3React();
 
   const [isOpen, setIsOpen] = useState(
-    layer2 === undefined ? '' : layer2,
+    candidateContract === undefined ? '' : candidateContract,
   );
   const [toggle, setToggle] = useRecoilState(toggleState)
 
-  const clickOpen = (layer2: string, index: number) => {
-    setIsOpen(layer2);
+  const clickOpen = (candidateContract: string, index: number) => {
+    setIsOpen(candidateContract);
     setToggle('All')
     setTimeout(() => {
       focusTarget?.current[index]?.scrollIntoView({
@@ -99,12 +103,12 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
           <Flex mr={'20px'}>
             DAO Candidate
           </Flex>
-          {getCircle('')}
+          {getCircle('operator')}
           <Flex>
             Operator
           </Flex>
         </Flex>
-        <Select
+        {/* <Select
           w={'145px'}
           h={'32px'}
           color={'#86929d'}
@@ -120,7 +124,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
           <option value="name">Name</option>
           <option value="Recent Commit">Recent Commit</option>
           <option value="User Staked">User Staked</option>
-        </Select>
+        </Select> */}
       </Flex>
       <Box overflowX={'auto'}>
         <chakra.table
@@ -136,9 +140,18 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
             flexDirection="column"
           >
             {page && page.map((row: any, i) => {
-              const {layer2} = row.original;
-              prepareRow(row);
+              const { candidateContract } = row.original;
+              
+              const stakedId = candidateContract
+              const { userStakeds } = useUserStaked(`${account?.toLocaleLowerCase()}-${stakedId.toLocaleLowerCase()}`)
+              const expectedSeig = useExpectedSeig(candidateContract)
 
+              row.original = {
+                ...row.original,
+                userStakeds,
+                expectedSeig
+              }
+              prepareRow(row);
               return [
                 <chakra.tr
                   boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}
@@ -146,20 +159,20 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                   h={'74px'}
                   key={i}
                   onClick={() => {
-                    if (isOpen === layer2) {
+                    if (isOpen === candidateContract) {
                       setIsOpen('');
                     } else {
-                      clickOpen(layer2, i);
+                      clickOpen(candidateContract, i);
                     }
                   }}
                   cursor={'pointer'}
                   borderRadius={'10px'}
                   borderBottomRadius={
-                    isOpen === layer2 ? '0px' : '10px'
+                    isOpen === candidateContract ? '0px' : '10px'
                   }
-                  borderBottom={isOpen === layer2 ? '1px' : ''}
+                  borderBottom={isOpen === candidateContract ? '1px' : ''}
                   borderBottomColor={
-                    isOpen === layer2 ? '#f4f6f8' : ''
+                    isOpen === candidateContract ? '#f4f6f8' : ''
                   }
                   px={'16px'}
                   mb={'12px'}
@@ -172,21 +185,35 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                 >
                   {row.cells && row.cells.map((cell: any, index: number) => {
                     const {
-                      layer2,
+                      candidateContract,
                       commissionRate,
                       name,
                       kind,
-                      updateCoinageTotalString,
-                      userStaked,
-                      yourStaked,
+                      stakedAmount,
+                      stakeOf
+                      // yourStaked,
                     } = cell.row.original;
 
                     const type = cell.column.id;
-                    const totalStaked = convertNumber({
-                      amount: updateCoinageTotalString, 
+                    const rate = convertNumber({
+                      amount: commissionRate,
                       type: 'ray',
                       localeString: true
                     })
+
+                    const totalStaked = convertNumber({
+                      amount: stakedAmount, 
+                      type: 'ray',
+                      localeString: true
+                    })
+
+                    const yourStaked = stakeOf ? convertNumber({
+                      //@ts-ignore
+                      amount: stakeOf, 
+                      type: 'ray',
+                      localeString: true
+                    }) : '0.00'
+
                     return (
                       <chakra.td
                         py={3}
@@ -224,19 +251,19 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                           Info('Total Staked', totalStaked, 'TON')
                         ) : ('')}
                         {type === 'commisionRate' ? (
-                          (commissionRate !== '-') ? Info('Commission Rate', (+commissionRate)/10000000, '%') : ('')
+                          (rate !== '-' && rate) ? Info('Commission Rate', (+rate) * 100, '%') : ('')
                         ) : ('')}
                         {type === 'yourStaked' ? (
                           (yourStaked !== '0.00') ? Info('Your Staked', yourStaked, 'TON') : ('')
                         ) : ('')}
                         {type === 'expander' ? (
-                          renderBtn(layer2, isOpen)
+                          renderBtn(candidateContract, isOpen)
                         ): null}
                       </chakra.td>
                     )
                   })}
                 </chakra.tr>,
-                isOpen === layer2 ? (
+                isOpen === candidateContract ? (
                   <chakra.tr
                     boxShadow="0 1px 1px 0 rgba(96, 97, 112, 0.16)"
                     // h={'650px'}

@@ -26,6 +26,7 @@ import { useRecoilState } from 'recoil';
 import CalculatorModal from './CalculatorModal';
 import { useUserHistory } from '@/hooks/wallet/useUserHIstory';
 import { useWithdrawable } from '../../../hooks/staking/useWithdrawable';
+import { convertNumber } from '@/components/number';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -44,13 +45,19 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [unstakeDisabled, setUnstakeDisabled] = useState(true);
   const [reStakeDisabled, setReStakeDisabled] = useState(true);
   const [withdrawDisabled, setwithdrawDisabled] = useState(true);
-
   const { userTonBalance } = useUserBalance(account)
-  const { pendingUnstaked } = usePendingUnstaked(data?.layer2, account)
-  const { withdrawable, withdrawableLength } = useWithdrawable(data?.layer2)
+  const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account)
+  const { withdrawable, withdrawableLength } = useWithdrawable(data?.candidateContract)
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
+
+  const yourStaked = data?.stakeOf ? convertNumber({
+    //@ts-ignore
+    amount: data?.stakeOf, 
+    type: 'ray',
+    localeString: true
+  }) : '-'
 
   const btnDisabledStake = () => {
     return account === undefined ||
@@ -61,14 +68,14 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 
   const btnDisabledReStake = () => {
     return account === undefined ||
-      pendingUnstaked === '0.00'
+      pendingUnstaked === '0.00' 
         ? setReStakeDisabled(true)
         : setReStakeDisabled(false);
   };
 
   const btnDisabledUnStake = () => {
     return account === undefined ||
-      data?.yourStaked === '0.00'
+      yourStaked === '0.00' || yourStaked === '-'
         ? setUnstakeDisabled(true)
         : setUnstakeDisabled(false);
   };
@@ -91,9 +98,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const dataModal = {
     tonBalance: userTonBalance,
     pendingUnstaked: pendingUnstaked,
-    stakedAmount: data?.yourStaked,
+    stakedAmount: yourStaked,
     withdrawable: withdrawable,
-    layer2: data?.layer2,
+    layer2: data?.candidateContract,
     withdrawableLength: withdrawableLength,
   }
   
@@ -121,9 +128,10 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           w={'100%'} 
           justifyContent={'end'} 
           cursor={'pointer'}
-          onClick={() => modalButton('calculator', dataModal)}
+          h={'13px'}
+          // onClick={() => modalButton('calculator', dataModal)}
         >
-          Simulator
+          {/* Simulator */}
         </Flex>
         <Heading
           color={'#2a72e5'}
@@ -134,11 +142,15 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           // fontSize={'42px'}
           h={'55px'}
         >
-          {userTonBalance === undefined 
-            || account == undefined 
-          ? (
+          { 
+          account == undefined  ?
+            (<Text>- </Text>) :
+            userTonBalance === undefined 
+          ? 
+          (
             <LoadingDots />
-          ) : (
+          ) : 
+          (
             userTonBalance
           )}{' '}
           TON
@@ -189,7 +201,13 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             isDisabled={withdrawDisabled}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
-            onClick={() => modalButton('withdraw', dataModal)}
+            onClick={() => {if (confirm(
+              'Any withdraws from the prior to patch has to be done using etherscan using the guide provided from X @tokamak_network. We will provide the frontend service as soon as we can.')
+              ) {
+                modalButton('withdraw', dataModal)
+              }
+            }
+            }
           >
             Withdraw
           </Button>
