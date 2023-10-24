@@ -82,7 +82,7 @@ function DesktopStaking () {
     );
 
     const [tableLoading, setTableLoading] = useState<boolean>(true);
-    const { operatorList } = useOperatorList()
+    // const { operatorList } = useOperatorList()
     const { candidateList } = useCandidateList()
     const { account } = useWeb3React();
     // console.log(candidateList)
