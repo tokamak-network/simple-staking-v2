@@ -48,7 +48,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const { userTonBalance } = useUserBalance(account)
   const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account)
   const { withdrawable, withdrawableLength } = useWithdrawable(data?.candidateContract)
-  console.log(pendingUnstaked)
+
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
 
@@ -72,7 +72,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         ? setReStakeDisabled(true)
         : setReStakeDisabled(false);
   };
-  console.log(yourStaked)
+
   const btnDisabledUnStake = () => {
     return account === undefined ||
       yourStaked === '0.00' || yourStaked === '-'
