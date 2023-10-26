@@ -42,7 +42,7 @@ export function useCandidateList () {
       }
     }
     fetch()
-  }, [data])
+  }, [data, account])
 
   return { candidateList }
 }

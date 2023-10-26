@@ -99,7 +99,6 @@ export function useWithdrawable (layer2: string) {
           if (convertNotWithdrawable) setNotWithdrawable(convertNotWithdrawable)
           if (old_convert) old_setWithdrawable(old_convert)
           if (old_convertNotWithdrawable) old_setNotWithdrawable(old_convertNotWithdrawable)
-          console.log(withdrawable, old_withdrawable)
         }
       } catch (e) {
         console.log(e)
