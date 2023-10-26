@@ -13,6 +13,7 @@ type OperatorDetailProps = {
   unit?: string; 
   type?: string;
   contractInfo?: any;
+  minimumAmount?: boolean;
 }
 
 export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
@@ -20,7 +21,8 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
   value,
   unit,
   type,
-  contractInfo
+  contractInfo,
+  minimumAmount
 }) => {
   const { library, account } = useWeb3React()
   const [tx, setTx] = useState();
@@ -72,7 +74,18 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
         {unit? <Text fontSize={'13px'} fontWeight={500} ml={'6px'} mb={'5px'}>{unit}</Text> : ''}
       </Flex>
       {
-        title === 'Unclaimed Staking Reward' && value !== '0.00' && account ?
+        title === 'Unclaimed Staking Reward' && !minimumAmount ?
+        <Flex
+          fontSize={'11px'}
+          color={'#ff2d78'}
+          cursor={'pointer'}
+          mt={'3px'}
+        >
+          No staking reward for this layer2
+        </Flex> :
+          title === 'Unclaimed Staking Reward' && 
+          value !== '0.00' && 
+          account ?
         <Flex
           fontSize={'11px'}
           color={'#2a72e5'}

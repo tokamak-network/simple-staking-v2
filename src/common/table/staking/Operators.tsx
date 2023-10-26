@@ -145,7 +145,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
               const stakedId = candidateContract
               const { userStakeds } = useUserStaked(`${account?.toLocaleLowerCase()}-${stakedId.toLocaleLowerCase()}`)
               const expectedSeig = useExpectedSeig(candidateContract)
-
+              
               row.original = {
                 ...row.original,
                 userStakeds,
@@ -193,7 +193,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       stakeOf
                       // yourStaked,
                     } = cell.row.original;
-
+                    
                     const type = cell.column.id;
                     const rate = convertNumber({
                       amount: commissionRate,
