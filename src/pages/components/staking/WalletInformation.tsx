@@ -47,7 +47,12 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [withdrawDisabled, setwithdrawDisabled] = useState(true);
   const { userTonBalance } = useUserBalance(account)
   const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account)
-  const { withdrawable, withdrawableLength } = useWithdrawable(data?.candidateContract)
+  const { 
+    withdrawable, 
+    withdrawableLength,
+    old_withdrawable, 
+    old_withdrawableLength,
+  } = useWithdrawable(data?.candidateContract)
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
@@ -81,8 +86,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   };
 
   const btnDisabledWithdraw = () => {
-    return account === undefined ||
-      withdrawable === '0.00'
+    return account === undefined || (
+      withdrawable === '0.00' &&
+      old_withdrawable === '0.00' )
         ? setwithdrawDisabled(true)
         : setwithdrawDisabled(false);
   };
@@ -93,15 +99,17 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     btnDisabledReStake()
     btnDisabledWithdraw()
     /*eslint-disable*/
-  }, [account, pendingUnstaked, userTonBalance, withdrawable])
+  }, [account, pendingUnstaked, userTonBalance, withdrawable, old_withdrawable])
 
   const dataModal = {
     tonBalance: userTonBalance,
     pendingUnstaked: pendingUnstaked,
     stakedAmount: yourStaked,
     withdrawable: withdrawable,
+    old_withdrawable: old_withdrawable,
     layer2: data?.candidateContract,
     withdrawableLength: withdrawableLength,
+    old_withdrawableLength: old_withdrawableLength,
   }
   
   const modalButton = useCallback(
@@ -111,7 +119,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     }, [])
 
   const theme = useTheme();
-  const {btnStyle} = theme;
+  const { btnStyle } = theme;
 
   return (
     <Container

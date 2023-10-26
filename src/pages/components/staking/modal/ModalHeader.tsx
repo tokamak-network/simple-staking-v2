@@ -21,7 +21,7 @@ export const ModalHeader = (args: {
         <Image src={CLOSE_ICON} alt={"CLOSE_ICON"}></Image>
       </Flex>
       <Text
-        color={"gray.800"}
+        color={"#3d495d"}
         fontSize={'20px'}
         fontWeight={'bold'}
         h={"31px"}

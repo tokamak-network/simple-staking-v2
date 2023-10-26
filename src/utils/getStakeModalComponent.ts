@@ -30,7 +30,8 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
       balanceInfo1: 'Staked Balance',
       balance1: data.stakedAmount,
       balanceInfo2: 'Withdrawable Balance',
-      balance: data.withdrawable,
+      balance2: data.old_withdrawable,
+      balance3: data.withdrawable,
       bottomComment: '',
       buttonName: 'Withdraw'
     }
