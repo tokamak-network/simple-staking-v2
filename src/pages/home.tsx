@@ -29,9 +29,11 @@ function Home() {
 
   return (
     <>
-      {mobile? <MobileHome/>: 
-      <DesktopHome/>
-    }
+      {
+        !mobile ?  
+        <DesktopHome/> :
+        <MobileHome/>
+      }
     </>
    
   );

@@ -103,12 +103,12 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
           <Flex mr={'20px'}>
             DAO Candidate
           </Flex>
-          {getCircle('')}
+          {getCircle('operator')}
           <Flex>
             Operator
           </Flex>
         </Flex>
-        <Select
+        {/* <Select
           w={'145px'}
           h={'32px'}
           color={'#86929d'}
@@ -124,7 +124,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
           <option value="name">Name</option>
           <option value="Recent Commit">Recent Commit</option>
           <option value="User Staked">User Staked</option>
-        </Select>
+        </Select> */}
       </Flex>
       <Box overflowX={'auto'}>
         <chakra.table
@@ -190,20 +190,26 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       name,
                       kind,
                       stakedAmount,
-                      
+                      stakeOf
                       // yourStaked,
                     } = cell.row.original;
 
                     const type = cell.column.id;
+                    const rate = convertNumber({
+                      amount: commissionRate,
+                      type: 'ray',
+                      localeString: true
+                    })
+
                     const totalStaked = convertNumber({
                       amount: stakedAmount, 
                       type: 'ray',
                       localeString: true
                     })
 
-                    const yourStaked = userStakeds ? convertNumber({
+                    const yourStaked = stakeOf ? convertNumber({
                       //@ts-ignore
-                      amount: userStakeds.stakedAmount, 
+                      amount: stakeOf, 
                       type: 'ray',
                       localeString: true
                     }) : '0.00'
@@ -245,7 +251,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                           Info('Total Staked', totalStaked, 'TON')
                         ) : ('')}
                         {type === 'commisionRate' ? (
-                          (commissionRate !== '-') ? Info('Commission Rate', (+commissionRate)/10000000, '%') : ('')
+                          (rate !== '-' && rate) ? Info('Commission Rate', (+rate) * 100, '%') : ('')
                         ) : ('')}
                         {type === 'yourStaked' ? (
                           (yourStaked !== '0.00') ? Info('Your Staked', yourStaked, 'TON') : ('')

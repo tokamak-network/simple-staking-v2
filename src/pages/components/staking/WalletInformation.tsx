@@ -27,6 +27,7 @@ import CalculatorModal from './CalculatorModal';
 import { useUserHistory } from '@/hooks/wallet/useUserHIstory';
 import { useWithdrawable } from '../../../hooks/staking/useWithdrawable';
 import { convertNumber } from '@/components/number';
+import { getOldLayerAddress } from '@/components/getOldLayerAddress';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -47,18 +48,22 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [withdrawDisabled, setwithdrawDisabled] = useState(true);
   const { userTonBalance } = useUserBalance(account)
   const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account)
-  const { withdrawable, withdrawableLength } = useWithdrawable(data?.candidateContract)
+  const { 
+    withdrawable, 
+    withdrawableLength,
+    old_withdrawable, 
+    old_withdrawableLength,
+  } = useWithdrawable(data?.candidateContract)
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
 
-  const yourStaked = data?.userStakeds ? convertNumber({
+  const yourStaked = data?.stakeOf ? convertNumber({
     //@ts-ignore
-    amount: data?.userStakeds.stakedAmount, 
+    amount: data?.stakeOf, 
     type: 'ray',
     localeString: true
   }) : '-'
-  // console.log(pendingUnstaked)
 
   const btnDisabledStake = () => {
     return account === undefined ||
@@ -69,21 +74,22 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 
   const btnDisabledReStake = () => {
     return account === undefined ||
-      pendingUnstaked === '0.00'
+      pendingUnstaked === '0.00' 
         ? setReStakeDisabled(true)
         : setReStakeDisabled(false);
   };
 
   const btnDisabledUnStake = () => {
     return account === undefined ||
-      yourStaked === '0.00'
+      yourStaked === '0.00' || yourStaked === '-'
         ? setUnstakeDisabled(true)
         : setUnstakeDisabled(false);
   };
 
   const btnDisabledWithdraw = () => {
-    return account === undefined ||
-      withdrawable === '0.00'
+    return account === undefined || (
+      withdrawable === '0.00' &&
+      old_withdrawable === '0.00' )
         ? setwithdrawDisabled(true)
         : setwithdrawDisabled(false);
   };
@@ -94,15 +100,18 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     btnDisabledReStake()
     btnDisabledWithdraw()
     /*eslint-disable*/
-  }, [account, pendingUnstaked, userTonBalance, withdrawable])
+  }, [account, pendingUnstaked, userTonBalance, withdrawable, old_withdrawable])
 
   const dataModal = {
     tonBalance: userTonBalance,
     pendingUnstaked: pendingUnstaked,
     stakedAmount: yourStaked,
     withdrawable: withdrawable,
+    old_withdrawable: old_withdrawable,
     layer2: data?.candidateContract,
+    old_layer2: getOldLayerAddress(data?.candidateContract),
     withdrawableLength: withdrawableLength,
+    old_withdrawableLength: old_withdrawableLength,
   }
   
   const modalButton = useCallback(
@@ -112,7 +121,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     }, [])
 
   const theme = useTheme();
-  const {btnStyle} = theme;
+  const { btnStyle } = theme;
 
   return (
     <Container
@@ -129,9 +138,10 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           w={'100%'} 
           justifyContent={'end'} 
           cursor={'pointer'}
-          onClick={() => modalButton('calculator', dataModal)}
+          h={'13px'}
+          // onClick={() => modalButton('calculator', dataModal)}
         >
-          Simulator
+          {/* Simulator */}
         </Flex>
         <Heading
           color={'#2a72e5'}
@@ -142,11 +152,15 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           // fontSize={'42px'}
           h={'55px'}
         >
-          {userTonBalance === undefined 
-            || account == undefined 
-          ? (
+          { 
+          account == undefined  ?
+            (<Text>- </Text>) :
+            userTonBalance === undefined 
+          ? 
+          (
             <LoadingDots />
-          ) : (
+          ) : 
+          (
             userTonBalance
           )}{' '}
           TON

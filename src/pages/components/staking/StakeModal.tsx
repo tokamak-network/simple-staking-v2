@@ -1,4 +1,4 @@
-import { Flex, Modal, ModalBody, ModalContent, ModalOverlay, useTheme, Text, Button } from '@chakra-ui/react';
+import { Flex, Modal, ModalBody, ModalContent, ModalOverlay, useTheme, Text, Button, Checkbox, Radio, RadioGroup } from '@chakra-ui/react';
 import useModal from '@/hooks/useModal';
 
 import { useCallback, useEffect, useState } from 'react';
@@ -27,11 +27,12 @@ function StakeModal() {
 
   const { TON_ADDRESS, WTON_ADDRESS, DepositManager_ADDRESS } = CONTRACT_ADDRESS;
 
-  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT, SeigManager_CONTRACT } = useCallContract();
+  const { TON_CONTRACT, WTON_CONTRACT, Old_DepositManager_CONTRACT, DepositManager_CONTRACT, SeigManager_CONTRACT } = useCallContract();
 
   const [input, setInput] = useRecoilState(inputState);
   const [txPending, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
+  const [withdrawType, setWithdrawType] = useState('')
 
   let modalComponent = undefined;
   if (selectedModal && selectedModalData) {
@@ -123,15 +124,23 @@ function StakeModal() {
   }, [input, DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal]);
 
   const withdraw = useCallback(async () => {
-    if (selectedModalData && DepositManager_CONTRACT) {
+    if (selectedModalData && DepositManager_CONTRACT && Old_DepositManager_CONTRACT) {
       //@ts-ignore
-      const tx = await DepositManager_CONTRACT.processRequests(
-        //@ts-ignore
-        selectedModalData.layer2,
-        //@ts-ignore
-        selectedModalData.withdrawableLength,
-        true,
-      );
+      const tx = withdrawType === 'new' ? 
+        await DepositManager_CONTRACT.processRequests(
+          //@ts-ignore
+          selectedModalData.layer2,
+          //@ts-ignore
+          selectedModalData.withdrawableLength,
+          true,
+        ) : 
+        await Old_DepositManager_CONTRACT.processRequests(
+          //@ts-ignore
+          selectedModalData.old_layer2,
+          //@ts-ignore
+          selectedModalData.old_withdrawableLength,
+          true,
+        );
       setTx(tx);
       setTxPending(true);
       
@@ -186,18 +195,87 @@ function StakeModal() {
                   alignItems={'center'}
                 >
                   <Flex h={'84px'} alignItems={'center'} flexDir={'row'} justifyContent={'center'} w={'100%'}>
-                    {selectedModal === 'restaking' || selectedModal === 'withdraw' ? (
+                    {selectedModal === 'restaking' ? (
                       <Text fontSize={'38px'} fontWeight={500}>
                         {modalComponent.balance}
+                      </Text>
+                    ) : selectedModal === 'withdraw' ? (
+                      <Text fontSize={'38px'} fontWeight={500}>
+                        {
+                          withdrawType === 'old' ? 
+                          modalComponent.balance2 : 
+                          withdrawType === 'new' ? 
+                          modalComponent.balance3 :
+                          '0.00'
+                        }
                       </Text>
                     ) : (
                       <BalanceInput w={'220px'} placeHolder={'0'} type={'staking'} maxValue={modalComponent.balance} />
                     )}
                   </Flex>
                   {selectedModal === 'withdraw' ? (
-                    <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
+                    <Flex w={'100%'} flexDir={'column'} alignItems={'center'} mb={'10px'}>
                       <WithdrawModalBody title={modalComponent.balanceInfo1} value={modalComponent.balance1} />
-                      <WithdrawModalBody title={modalComponent.balanceInfo2} value={modalComponent.balance} />
+                      {/* <WithdrawModalBody title={modalComponent.balanceInfo2} value={modalComponent.balance2} /> */}
+                      <Flex 
+                        flexDir={'column'}
+                        alignItems={'center'}
+                      >
+                        <Flex 
+                          fontSize={'13px'}
+                          fontWeight={500}
+                          color={'#808992'}
+                        >
+                          {modalComponent.balanceInfo2}
+                        </Flex>
+                        <RadioGroup
+                          onChange={(value: "old" | "new") => setWithdrawType(value)}
+                        >
+                          <Flex alignItems={'center'} my={'11px'} justifyContent={'center'}>
+                            <Radio 
+                              value="old"
+                              h={'20px'}
+                              mr={'6px'}
+                              bgColor={'#fff'}
+                              border={'solid 2px #c6cbd9'}
+                            >
+                              <Flex
+                                fontSize={'16px'} 
+                                fontWeight={500}
+                                color={'#3d495d'}
+                                flexDir={'row'}
+                                alignItems={'center'}
+                              >
+                                <Text mr={'3px'}>
+                                  {modalComponent.balance2} TON
+                                </Text>
+                                <Text
+                                  fontSize={'12px'}
+                                  color={'#2a72e5'}
+                                >(prior to patch)
+                                </Text>
+                              </Flex>
+                            </Radio>
+                          </Flex>
+                          <Flex alignItems={'center'} justifyContent={'center'}>
+                            <Radio 
+                              value="new"
+                              h={'20px'}
+                              mr={'6px'}
+                              bgColor={'#fff'}
+                              border={'solid 2px #c6cbd9'}
+                            >
+                              <Text 
+                                fontSize={'16px'} 
+                                fontWeight={500}
+                                color={'#3d495d'}
+                              >
+                                {modalComponent.balance3} TON
+                              </Text>
+                            </Radio>
+                          </Flex>
+                        </RadioGroup>
+                      </Flex>
                     </Flex>
                   ) : (
                     <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
@@ -211,10 +289,15 @@ function StakeModal() {
                 </Flex>
                 {/* modal footer */}
                 <Flex flexDir={'column'} alignItems={'center'}>
-                  <Text my={'25px'} color={'#2a72e5'} fontSize={'12px'} fontWeight={500}>
-                    {modalComponent.bottomComment}
-                  </Text>
+                  {
+                    selectedModal === 'withdraw' ?
+                    "" :
+                    <Text mt={'25px'} color={'#2a72e5'} fontSize={'12px'} fontWeight={500}>
+                      {modalComponent.bottomComment}
+                    </Text>
+                  }
                   <Button
+                    mt={'25px'}
                     w={'150px'}
                     {...(input && input !== '0'
                       ? { ...btnStyle.btnAble() }

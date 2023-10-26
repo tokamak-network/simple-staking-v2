@@ -3,8 +3,6 @@ import { WalletInfo } from "@/types/wallet";
 // import { DEPLOYED_TYPE } from "./type";
 import { ethers } from "ethers";
 
-const TESTNET_CHAIN_ID = process.env.NEXT_PUBLIC_TESTNET_CHAINID;
-
 export const REACT_APP_MODE = process.env.NEXT_PUBLIC_MODE as string;
 
 export const NetworkContextName = `${new Date().getTime()}-NETWORK`;
@@ -21,11 +19,11 @@ REACT_APP_MODE === "PRODUCTION"
     ? ethers.getDefaultProvider("mainnet")
     : ethers.getDefaultProvider("goerli");
 
-export const API =
-REACT_APP_MODE === "PRODUCTION" ? MAINNET_API : DEV_API;
+export const API = MAINNET_API
+// REACT_APP_MODE === "PRODUCTION" ? MAINNET_API : DEV_API;
 
-export const GRAPHQL_API =
-  REACT_APP_MODE === "PRODUCTION" ? GRAPHQL_MAINNET : GRAPHQL_DEV;
+export const GRAPHQL_API = GRAPHQL_MAINNET
+  // REACT_APP_MODE === "PRODUCTION" ? GRAPHQL_MAINNET : GRAPHQL_DEV;
 
 export const NON_CANDIDATE = [
   {

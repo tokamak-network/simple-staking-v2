@@ -41,11 +41,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               //   <MobileFooter />
               // </Flex>
               <Flex alignItems={'left'} justifyContent={'center'} px={'15px'} flexDir={'column'}>
-                <Text mb={'10px'}>Notice: migration is still taking place</Text>
+                <Text mb={'10px'} fontWeight={'bold'}>Notice: Service Interruption Announcement</Text>
                 <Text>
-                  The current version of this service has a small number of minor UI bugs and is not supported on mobile
-                  devices. However, you can still safely stake, unstake, re-stake, and withdraw as usual. We will soon
-                  migrate to our new version.
+                Simple Staking Service is currently not usable via mobile browsers. We recommend using it from a desktop instead. We are working to open the mobile version soon. We apologize for the inconvenience and hope to provide you with a better experience as soon as possible.
                 </Text>
               </Flex>
             ) : (

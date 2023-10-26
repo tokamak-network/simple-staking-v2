@@ -82,10 +82,9 @@ function DesktopStaking () {
     );
 
     const [tableLoading, setTableLoading] = useState<boolean>(true);
-    const { operatorList } = useOperatorList()
+    // const { operatorList } = useOperatorList()
     const { candidateList } = useCandidateList()
     const { account } = useWeb3React();
-    // console.log(candidateList)
     // console.log(operatorList)
     useEffect(() => {
       // operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)
@@ -94,7 +93,7 @@ function DesktopStaking () {
     
     const renderRowSubComponent = useCallback(
       ({row}: any) => {
-      const { candidateContract, expectedSeig, candidate, userStakeds, stakedUserList, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
+      const { candidateContract, expectedSeig, candidate, pending, stakeOf, testValue, userStakeds, stakedUserList, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
       
       const txHistory = getTransactionHistory(row.original)
       const userExpectedSeig = expectedSeig? convertNumber({
@@ -102,13 +101,20 @@ function DesktopStaking () {
         type: 'ray',
         localeString: true
       }) : '-'
-
-      const yourStaked = userStakeds ? convertNumber({
-        //@ts-ignore
-        amount: userStakeds.stakedAmount, 
+      // console.log(stakeOf)
+      // console.log(yourStaked)
+      const yourStake = convertNumber({
+        amount: stakeOf, 
         type: 'ray',
         localeString: true
-      }) : '-'
+      })
+
+      const pendingUnstaked = convertNumber({
+        amount: pending,
+        type: 'ray',
+        localeString: true
+      })
+    
       return (
         <Flex
           w="100%"
@@ -130,7 +136,7 @@ function DesktopStaking () {
               <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
                 <OperatorDetailInfo 
                   title={'Pending Withdrawal'}
-                  value={'0.00'}
+                  value={pendingUnstaked}
                   unit={'TON'}
                   type={''}
                 />
@@ -146,7 +152,7 @@ function DesktopStaking () {
               <Flex flexDir={'column'} alignItems={'space-between'}>
                 <OperatorDetailInfo 
                   title={'Your Staked'}
-                  value={yourStaked}
+                  value={yourStake}
                   unit={'TON'}
                   type={''}
                 />
@@ -164,7 +170,7 @@ function DesktopStaking () {
           </Flex>
           {/* table area */}
           <Flex flexDir={'row'} mt={'60px'} ml={'70px'} justifyContent={'center'} alignItems={'center'}>
-            <HistoryTable 
+            {/* <HistoryTable 
               columns={historyColumns}
               data={txHistory}
               tableType={'Staking'}
@@ -173,7 +179,7 @@ function DesktopStaking () {
               columns={historyColumns}
               data={asCommit}
               tableType={'Commit'}
-            />
+            /> */}
           </Flex>
         </Flex>
       )
@@ -192,7 +198,7 @@ function DesktopStaking () {
               renderDetail={renderRowSubComponent}
               columns={columns}
               // @ts-ignore
-              data={candidateList.candidates}
+              data={candidateList}
               isLoading={tableLoading}
             />
           }

@@ -22,15 +22,27 @@ type MenuLinksProps = {
 const navItemList = [
   {
     link: "home",
+    name: "Home"
   },
   {
     link: "staking",
+    name: "Staking"
   },
   // {
+  //   link: "stakingv2",
+  //   name: "TON Staking v2"
+  // },
+  // {
+  //   link: "fastwithdraw",
+  //   name: "Tokamak Fast Withdraw"
+  // },
+  // {
   //   link: "wallet",
+  //   name: "Wallet"
   // },
   {
     link: "support",
+    name: "Support"
   },
 ];
 
@@ -61,7 +73,7 @@ const NavItem = () => {
               onMouseEnter={() => setIsHover(index)}
               onMouseLeave={() => setIsHover(undefined)}
             >
-              {capitalLinkName}
+              {item.name}
             </Flex>
           </Link>
         )

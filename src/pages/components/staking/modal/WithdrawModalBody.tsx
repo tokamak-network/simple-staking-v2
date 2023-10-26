@@ -13,6 +13,7 @@ export const WithdrawModalBody = (args: {
       justifyContent={'space-between'} 
       alignItems={'center'} 
       h={'55px'}
+      mb={'10px'}
     >
       <Text
         fontSize={'13px'}
