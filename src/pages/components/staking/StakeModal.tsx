@@ -174,6 +174,13 @@ function StakeModal() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx]);
 
+  const amountForCandidate = (value: string) => {
+    let reducedValue
+    //@ts-ignore
+    if (value) reducedValue = floatParser(value) - 1000 
+    return reducedValue?.toLocaleString()
+  }
+
   return (
     <Modal
       isOpen={
@@ -196,6 +203,8 @@ function StakeModal() {
                   closeThisModal={closeThisModal}
                 />
                 {/* modal body */}
+                {
+                  modalComponent && selectedModalData ?
                 <Flex
                   w={'350px'}
                   borderY={'1px'}
@@ -225,9 +234,10 @@ function StakeModal() {
                         placeHolder={'0'} 
                         type={'staking'} 
                         maxValue={
+                          selectedModal === 'unstaking' && 
                           //@ts-ignore
-                          selectedModal === 'unstaking' && account === selectedModalData.candidate ?
-                          Number(modalComponent.balance) - 1000 :
+                          account.toLowerCase() === selectedModalData.candidate.toLowerCase() ?
+                          amountForCandidate(modalComponent.balance) :
                           modalComponent.balance
                         } 
                       />
@@ -303,8 +313,9 @@ function StakeModal() {
                         {modalComponent.balanceInfo}
                       </Text>
                       {
+                        selectedModal === 'unstaking' && 
                         //@ts-ignore
-                        selectedModal === 'unstaking' && account === selectedModalData.candidate ?
+                        account?.toLowerCase() === selectedModalData.candidate.toLowerCase() ?
                         <Text
                           fontSize={'11px'}
                           fontWeight={'normal'}
@@ -316,7 +327,7 @@ function StakeModal() {
                       <Text mt={'5px'}>{modalComponent.balance} TON</Text>
                       {
                         //@ts-ignore
-                        selectedModal === 'unstaking' && account === selectedModalData.candidate ?
+                        selectedModal === 'unstaking' && account.toLowerCase() === selectedModalData.candidate ?
                         <Text
                           fontSize={'13px'}
                           color={'#808992'}
@@ -327,7 +338,8 @@ function StakeModal() {
                       }
                     </Flex>
                   )}
-                </Flex>
+                </Flex> : ''
+                }
                 {/* modal footer */}
                 <Flex flexDir={'column'} alignItems={'center'} w={'100%'} justifyContent={'center'}>
                   {
