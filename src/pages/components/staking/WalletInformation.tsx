@@ -27,6 +27,7 @@ import CalculatorModal from './CalculatorModal';
 import { useUserHistory } from '@/hooks/wallet/useUserHIstory';
 import { useWithdrawable } from '../../../hooks/staking/useWithdrawable';
 import { convertNumber } from '@/components/number';
+import { getOldLayerAddress } from '@/components/getOldLayerAddress';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -108,6 +109,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     withdrawable: withdrawable,
     old_withdrawable: old_withdrawable,
     layer2: data?.candidateContract,
+    old_layer2: getOldLayerAddress(data?.candidateContract),
     withdrawableLength: withdrawableLength,
     old_withdrawableLength: old_withdrawableLength,
   }

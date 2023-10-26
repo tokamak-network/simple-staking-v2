@@ -126,13 +126,21 @@ function StakeModal() {
   const withdraw = useCallback(async () => {
     if (selectedModalData && DepositManager_CONTRACT && Old_DepositManager_CONTRACT) {
       //@ts-ignore
-      const tx = await DepositManager_CONTRACT.processRequests(
-        //@ts-ignore
-        selectedModalData.layer2,
-        //@ts-ignore
-        selectedModalData.withdrawableLength,
-        true,
-      );
+      const tx = withdrawType === 'new' ? 
+        await DepositManager_CONTRACT.processRequests(
+          //@ts-ignore
+          selectedModalData.layer2,
+          //@ts-ignore
+          selectedModalData.withdrawableLength,
+          true,
+        ) : 
+        await Old_DepositManager_CONTRACT.processRequests(
+          //@ts-ignore
+          selectedModalData.old_layer2,
+          //@ts-ignore
+          selectedModalData.old_withdrawableLength,
+          true,
+        );
       setTx(tx);
       setTxPending(true);
       
@@ -281,10 +289,15 @@ function StakeModal() {
                 </Flex>
                 {/* modal footer */}
                 <Flex flexDir={'column'} alignItems={'center'}>
-                  <Text mb={'25px'} color={'#2a72e5'} fontSize={'12px'} fontWeight={500}>
-                    {modalComponent.bottomComment}
-                  </Text>
+                  {
+                    selectedModal === 'withdraw' ?
+                    "" :
+                    <Text mt={'25px'} color={'#2a72e5'} fontSize={'12px'} fontWeight={500}>
+                      {modalComponent.bottomComment}
+                    </Text>
+                  }
                   <Button
+                    mt={'25px'}
                     w={'150px'}
                     {...(input && input !== '0'
                       ? { ...btnStyle.btnAble() }

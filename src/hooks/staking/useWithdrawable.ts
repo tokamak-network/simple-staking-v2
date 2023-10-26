@@ -10,7 +10,7 @@ import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
 export function useWithdrawable (layer2: string) {
   const { blockNumber } = useBlockNumber()
   const { DepositManager_CONTRACT, Old_DepositManager_CONTRACT } = useCallContract();
-  // const { account } = useWeb3React();
+  const { account } = useWeb3React();
   const [withdrawable, setWithdrawable] = useState('0.00')
   const [notWithdrawable, setNotWithdrawable] = useState('0.00')
   const [withdrawableLength, setWithdrawableLength] = useState('0.00')
@@ -18,8 +18,6 @@ export function useWithdrawable (layer2: string) {
   const [old_withdrawable, old_setWithdrawable] = useState('0.00')
   const [old_notWithdrawable, old_setNotWithdrawable] = useState('0.00')
   const [old_withdrawableLength, old_setWithdrawableLength] = useState('0.00')
-
-  const account = '0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD'
 
   useEffect(() => {
     async function fetch () {
