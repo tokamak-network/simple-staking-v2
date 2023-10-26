@@ -21,18 +21,17 @@ export function useCandidateList () {
           let tempObj = obj
           if (account && SeigManager_CONTRACT && DepositManager_CONTRACT && Old_DepositManager_CONTRACT) {
             const stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
+            const stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
+            
             const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
             const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(getOldLayerAddress(obj.candidateContract))
             const sumPending = pending.add(old_pending)
-            // console.log(obj.candidateContract)
-            // console.log(pending.toString())
-            // console.log(old_pending.toString())
-            // console.log(sumPending.toString())
-            // console.log('')
+
             tempObj = {
               ...obj,
               stakeOf: stakeOf.toString(),
-              pending: sumPending.toString()
+              pending: sumPending.toString(),
+              stakeOfCandidate: stakeOfCandidate.toString()
             }
           }
           return tempObj

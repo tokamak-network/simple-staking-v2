@@ -93,9 +93,24 @@ function DesktopStaking () {
     
     const renderRowSubComponent = useCallback(
       ({row}: any) => {
-      const { candidateContract, expectedSeig, candidate, pending, stakeOf, testValue, userStakeds, stakedUserList, asCommit, operatorsHistory, pendingWithdrawal } = row.original;
+      const { 
+        candidateContract, 
+        expectedSeig, 
+        candidate, 
+        pending, 
+        stakeOf, 
+        stakedUserList, 
+        asCommit,
+        stakeOfCandidate
+      } = row.original;
       
       const txHistory = getTransactionHistory(row.original)
+      // console.log(row.original)
+      const candidateAmount = stakeOfCandidate? convertNumber({
+        amount: stakeOfCandidate,
+        type: 'ray'
+      }) : '0.00'
+      const minimumAmount = Number(candidateAmount) > 1000
       const userExpectedSeig = expectedSeig? convertNumber({
         amount: expectedSeig,
         type: 'ray',
@@ -163,6 +178,7 @@ function DesktopStaking () {
                   unit={'TON'}
                   type={''}
                   contractInfo={candidateContract}
+                  minimumAmount={minimumAmount}
                 />
               </Flex>
             </Flex>
