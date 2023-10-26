@@ -85,7 +85,7 @@ function DesktopStaking () {
     // const { operatorList } = useOperatorList()
     const { candidateList } = useCandidateList()
     const { account } = useWeb3React();
-    // console.log(operatorList)
+    // console.log(candidateList)
     useEffect(() => {
       // operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)
       candidateList ? setTableLoading(false) : setTableLoading(true)
@@ -101,8 +101,7 @@ function DesktopStaking () {
         type: 'ray',
         localeString: true
       }) : '-'
-      // console.log(stakeOf)
-      // console.log(yourStaked)
+      
       const yourStake = convertNumber({
         amount: stakeOf, 
         type: 'ray',

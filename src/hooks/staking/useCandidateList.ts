@@ -16,7 +16,6 @@ export function useCandidateList () {
   useEffect(() => {
     
     async function fetch () {
-      
       if (data) {
         const candidates = await Promise.all(data.candidates.map(async (obj: any) => {
           let tempObj = obj
