@@ -220,7 +220,17 @@ function StakeModal() {
                         }
                       </Text>
                     ) : (
-                      <BalanceInput w={'220px'} placeHolder={'0'} type={'staking'} maxValue={modalComponent.balance} />
+                      <BalanceInput 
+                        w={'220px'} 
+                        placeHolder={'0'} 
+                        type={'staking'} 
+                        maxValue={
+                          //@ts-ignore
+                          selectedModal === 'unstaking' && account === selectedModalData.candidate ?
+                          Number(modalComponent.balance) - 1000 :
+                          modalComponent.balance
+                        } 
+                      />
                     )}
                   </Flex>
                   {selectedModal === 'withdraw' ? (
@@ -292,8 +302,29 @@ function StakeModal() {
                       <Text fontSize={'12px'} fontWeight={500} color={'#808992'}>
                         {modalComponent.balanceInfo}
                       </Text>
-                      {/* @ts-ignore */}
+                      {
+                        //@ts-ignore
+                        selectedModal === 'unstaking' && account === selectedModalData.candidate ?
+                        <Text
+                          fontSize={'11px'}
+                          fontWeight={'normal'}
+                          color={'#86929d'}
+                        >
+                          (Operator's Minimum Staked Balance)
+                        </Text> : ''
+                      }
                       <Text mt={'5px'}>{modalComponent.balance} TON</Text>
+                      {
+                        //@ts-ignore
+                        selectedModal === 'unstaking' && account === selectedModalData.candidate ?
+                        <Text
+                          fontSize={'13px'}
+                          color={'#808992'}
+                          fontWeight={500}
+                        >
+                          (1,000 TON)
+                        </Text> : ''
+                      }
                     </Flex>
                   )}
                 </Flex>
