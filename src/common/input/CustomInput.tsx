@@ -2,6 +2,7 @@ import { InputGroup, useColorMode, NumberInput, Text, NumberInputField, Button, 
 import { inputState } from '@/atom/global/input';
 import React from 'react';
 import { useRecoilState } from 'recoil';
+import { floatParser } from '@/components/number';
 
 type InputProp = {
   placeHolder?: string;
