@@ -16,7 +16,7 @@ import { txState } from '@/atom/global/transaction';
 import { ModalHeader } from './modal/ModalHeader';
 import { WithdrawModalBody } from './modal/WithdrawModalBody';
 import { getContract } from '@/components/getContract';
-import Coinage from "services/abi/AutoRefactorCoinage.json"
+import Candidate from "services/abi/Candidate.json"
 
 function StakeModal() {
   const theme = useTheme();
@@ -147,6 +147,16 @@ function StakeModal() {
       return closeThisModal();
     }
   }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending]);
+
+  const updateSeig = useCallback(async () => {
+    if (account && library && selectedModalData) {
+      //@ts-ignore
+      const Candidate_CONTRACT = getContract(selectedModalData.layer2, Candidate.abi, library, account)
+      const tx = await Candidate_CONTRACT.updateSeigniorage()
+      setTx(tx);
+      setTxPending(true);
+    }
+  }, [])
 
   useEffect(() => {
     async function waitReceipt() {
@@ -288,13 +298,45 @@ function StakeModal() {
                   )}
                 </Flex>
                 {/* modal footer */}
-                <Flex flexDir={'column'} alignItems={'center'}>
+                <Flex flexDir={'column'} alignItems={'center'} w={'100%'} justifyContent={'center'}>
                   {
                     selectedModal === 'withdraw' ?
                     "" :
-                    <Text mt={'25px'} color={'#2a72e5'} fontSize={'12px'} fontWeight={500}>
-                      {modalComponent.bottomComment}
-                    </Text>
+                    <Flex 
+                      mt={'25px'} 
+                      color={'#2a72e5'} 
+                      fontSize={'12px'} 
+                      fontWeight={500}
+                      alignItems={'center'}
+                    >
+                      {
+                        selectedModal === 'unstaking' ?
+                        <Flex
+                          color={'#2a72e5'}
+                          ml={'13px'}
+                        >
+                          <Text 
+                            mr={'3px'}
+                            cursor={'pointer'}
+                            textDecoration={'underline'}
+                            onClick={()=> updateSeig()}
+                          >
+                            Claim 
+                          </Text>
+                          <Text
+                            color={'#3e495c'}
+                          >
+                            {modalComponent.bottomComment}
+                          </Text>
+                        </Flex> : 
+                        <Text
+                          color={'#2a72e5'}
+                        >
+                          {modalComponent.bottomComment}
+                        </Text>
+                      }
+                        
+                    </Flex>
                   }
                   <Button
                     mt={'25px'}

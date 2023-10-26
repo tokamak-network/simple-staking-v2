@@ -65,6 +65,12 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     localeString: true
   }) : '-'
 
+  const expectedSeig = data?.expectedSeig ? convertNumber({
+    amount: data?.expectedSeig,
+    type: 'ray',
+    localeString: true
+  }) : '0.00'
+
   const btnDisabledStake = () => {
     return account === undefined ||
       userTonBalance === '0.00'
@@ -112,6 +118,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     old_layer2: getOldLayerAddress(data?.candidateContract),
     withdrawableLength: withdrawableLength,
     old_withdrawableLength: old_withdrawableLength,
+    seig: expectedSeig,
+    candidate: data?.candidate,
   }
   
   const modalButton = useCallback(
