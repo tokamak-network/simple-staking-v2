@@ -1,4 +1,4 @@
-import { Flex, Modal, ModalBody, ModalContent, ModalOverlay, useTheme, Text, Button, Checkbox, Radio, RadioGroup } from '@chakra-ui/react';
+import { Flex, Modal, ModalBody, ModalContent, ModalOverlay, useTheme, Text, Button, Checkbox, Radio, RadioGroup, Box } from '@chakra-ui/react';
 import useModal from '@/hooks/useModal';
 
 import { useCallback, useEffect, useState } from 'react';
@@ -372,6 +372,15 @@ function StakeModal() {
                             {modalComponent.bottomComment}
                           </Text>
                         </Flex> : 
+                        selectedModal === 'staking' && 
+                        //@ts-ignore
+                        !selectedModalData.minimumAmount ?
+                        <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
+                          <span style={{ color: "#ff2d78"}}>Warning</span>
+                          : operator have not met the minimum staked balance requirement (greater than 1,000 TON). As a result, there will be 
+                          <span style={{ color: "#2a72e5"}}> no staking reward</span> 
+                          <span> for staking on this layer2.</span>
+                        </Box> :
                         <Text
                           color={'#2a72e5'}
                         >

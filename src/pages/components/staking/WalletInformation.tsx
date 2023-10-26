@@ -47,26 +47,35 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [reStakeDisabled, setReStakeDisabled] = useState(true);
   const [withdrawDisabled, setwithdrawDisabled] = useState(true);
   const { userTonBalance } = useUserBalance(account)
-  const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account)
+  const {
+    candidateContract,
+    stakeOf,
+    candidate,
+    stakedAmountOfCandidate,
+    expectedSeig,
+    stakeOfCandidate
+  } = data
+
+  const { pendingUnstaked } = usePendingUnstaked(candidateContract, account)
   const { 
     withdrawable, 
     withdrawableLength,
     old_withdrawable, 
     old_withdrawableLength,
-  } = useWithdrawable(data?.candidateContract)
+  } = useWithdrawable(candidateContract)
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
 
-  const yourStaked = data?.stakeOf ? convertNumber({
+  const yourStaked = stakeOf ? convertNumber({
     //@ts-ignore
-    amount: data?.stakeOf, 
+    amount: stakeOf, 
     type: 'ray',
     localeString: true
   }) : '-'
 
-  const expectedSeig = data?.expectedSeig ? convertNumber({
-    amount: data?.expectedSeig,
+  const expectedSeigs = expectedSeig ? convertNumber({
+    amount: expectedSeig,
     type: 'ray',
     localeString: true
   }) : '0.00'
@@ -108,18 +117,26 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     /*eslint-disable*/
   }, [account, pendingUnstaked, userTonBalance, withdrawable, old_withdrawable])
 
+  const candidateAmount = stakeOfCandidate? convertNumber({
+    amount: stakeOfCandidate,
+    type: 'ray'
+  }) : '0.00'
+  const minimumAmount = Number(candidateAmount) > 100
+      
+
   const dataModal = {
     tonBalance: userTonBalance,
     pendingUnstaked: pendingUnstaked,
     stakedAmount: yourStaked,
     withdrawable: withdrawable,
     old_withdrawable: old_withdrawable,
-    layer2: data?.candidateContract,
-    old_layer2: getOldLayerAddress(data?.candidateContract),
+    layer2: candidateContract,
+    old_layer2: getOldLayerAddress(candidateContract),
     withdrawableLength: withdrawableLength,
     old_withdrawableLength: old_withdrawableLength,
-    seig: expectedSeig,
-    candidate: data?.candidate,
+    seig: expectedSeigs,
+    candidate: candidate,
+    minimumAmount: minimumAmount
   }
   
   const modalButton = useCallback(
@@ -127,7 +144,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
       setSelectedModal(modalType)
       setSelectedModalData(data)
     }, [])
-
+    
   const theme = useTheme();
   const { btnStyle } = theme;
 

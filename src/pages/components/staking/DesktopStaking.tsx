@@ -110,7 +110,8 @@ function DesktopStaking () {
         amount: stakeOfCandidate,
         type: 'ray'
       }) : '0.00'
-      const minimumAmount = Number(candidateAmount) > 1000
+      const minimumAmount = Number(candidateAmount) > 100
+      0
       const userExpectedSeig = expectedSeig? convertNumber({
         amount: expectedSeig,
         type: 'ray',

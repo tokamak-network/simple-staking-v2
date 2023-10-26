@@ -5,7 +5,7 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
       subHeader: 'You can earn TON and Power',
       balanceInfo: 'TON Balance',
       balance: data.tonBalance,
-      bottomComment: 'Minimum staking amount is 5',
+      bottomComment: 'Recommended minimum staking amount is 5 TON.',
       buttonName: 'Stake',
     },
     unstaking: {
