@@ -17,6 +17,7 @@ export function useCandidateList () {
     
     async function fetch () {
       if (data) {
+        console.log(data)
         const candidates = await Promise.all(data.candidates.map(async (obj: any) => {
           let tempObj = obj
           if (account && SeigManager_CONTRACT && DepositManager_CONTRACT && Old_DepositManager_CONTRACT && obj) {
@@ -36,6 +37,7 @@ export function useCandidateList () {
           }
           return tempObj
         }))
+        console.log(candidateList)
         setCandidateList(candidates)
       }
     }
