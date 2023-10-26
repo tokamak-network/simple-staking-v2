@@ -19,7 +19,7 @@ export function useCandidateList () {
       if (data) {
         const candidates = await Promise.all(data.candidates.map(async (obj: any) => {
           let tempObj = obj
-          if (account && SeigManager_CONTRACT && DepositManager_CONTRACT && Old_DepositManager_CONTRACT) {
+          if (account && SeigManager_CONTRACT && DepositManager_CONTRACT && Old_DepositManager_CONTRACT && obj) {
             const stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
             const stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
             
