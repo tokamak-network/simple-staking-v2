@@ -34,6 +34,7 @@ export function useCandidateList () {
               pending: sumPending.toString(),
               stakeOfCandidate: stakeOfCandidate.toString()
             }
+            console.log('tempObj', tempObj)
           }
           return tempObj
         }))
