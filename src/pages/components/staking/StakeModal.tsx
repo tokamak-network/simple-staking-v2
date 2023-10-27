@@ -182,6 +182,11 @@ function StakeModal() {
     return reducedValue?.toLocaleString()
   }
 
+  const seigChecker = (value: string) => {
+    //@ts-ignore
+    if (value) return floatParser(value) < 5
+  }
+
   useEffect(() => {
     if (
       selectedModal == 'withdraw' &&
@@ -255,7 +260,12 @@ function StakeModal() {
                     )}
                   </Flex>
                   {selectedModal === 'withdraw' ? (
-                    <Flex w={'100%'} flexDir={'column'} alignItems={'center'} mb={'10px'}>
+                    <Flex 
+                      w={'100%'} 
+                      flexDir={'column'} 
+                      alignItems={'center'} 
+                      mb={'10px'}
+                    >
                       <WithdrawModalBody 
                         title={modalComponent.balanceInfo1} 
                         value={modalComponent.balance1} 
@@ -296,7 +306,8 @@ function StakeModal() {
                                 <Text
                                   fontSize={'12px'}
                                   color={'#2a72e5'}
-                                >(prior to patch)
+                                >
+                                  (prior to patch)
                                 </Text>
                               </Flex>
                             </Radio>
@@ -355,7 +366,12 @@ function StakeModal() {
                 </Flex> : ''
                 }
                 {/* modal footer */}
-                <Flex flexDir={'column'} alignItems={'center'} w={'100%'} justifyContent={'center'}>
+                <Flex 
+                  flexDir={'column'} 
+                  alignItems={'center'} 
+                  w={'100%'} 
+                  justifyContent={'center'}
+                >
                   {
                     selectedModal === 'withdraw' ?
                     "" :
@@ -367,7 +383,8 @@ function StakeModal() {
                       alignItems={'center'}
                     >
                       {
-                        selectedModal === 'unstaking' ?
+                        //@ts-ignore
+                        selectedModal === 'unstaking' && !seigChecker(selectedModalData.seig) ?
                         <Flex
                           color={'#2a72e5'}
                           ml={'13px'}
@@ -394,14 +411,13 @@ function StakeModal() {
                           : operator have not met the minimum staked balance requirement (greater than 1,000 TON). As a result, there will be 
                           <span style={{ color: "#2a72e5"}}> no staking reward</span> 
                           <span> for staking on this layer2.</span>
-                        </Box> :
-                        <Text
-                          color={'#2a72e5'}
-                        >
-                          {modalComponent.bottomComment}
-                        </Text>
+                        </Box> : ''
+                        // <Text
+                        //   color={'#2a72e5'}
+                        // >
+                        //   {modalComponent.bottomComment}
+                        // </Text>
                       }
-                        
                     </Flex>
                   }
                   <Button

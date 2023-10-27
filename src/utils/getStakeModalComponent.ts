@@ -13,7 +13,7 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
       subHeader: 'Do you really want unstake your TON now?',
       balanceInfo: 'Available Balance',
       balance: data.stakedAmount,
-      bottomComment: `your unclaime stakng reward (${data.seig} TON) before unstaking to avoid losing it.`,
+      bottomComment: `your unclaimed stakng reward (${data.seig} TON) before unstaking to avoid losing it.`,
       buttonName: 'Unstake',
     },
     restaking: {

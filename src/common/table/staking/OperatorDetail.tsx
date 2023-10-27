@@ -78,7 +78,6 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
         <Flex
           fontSize={'11px'}
           color={'#ff2d78'}
-          cursor={'pointer'}
           mt={'3px'}
         >
           No staking reward for this layer2
