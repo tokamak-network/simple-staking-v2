@@ -110,6 +110,7 @@ export async function getOperatorUserHistory (layer2: string, from?: string) {
       from: from,
     },
   });
+  console.log(res)
   return res.data === '' ? [] : res.data.datas;
 }
 
