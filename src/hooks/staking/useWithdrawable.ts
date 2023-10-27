@@ -36,14 +36,14 @@ export function useWithdrawable (layer2: string) {
           old_numPendingRequests = await Old_DepositManager_CONTRACT.numPendingRequests(old_address, account)
           let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(layer2, account)
           let old_requestIndex = await Old_DepositManager_CONTRACT.withdrawalRequestIndex(old_address, account)
-  
+
           for (const _ of range(numPendingRequests)) {
             pendingRequests.push(await DepositManager_CONTRACT.withdrawalRequest(layer2, account, requestIndex));
             requestIndex++;
           }
           for (const _ of range(old_numPendingRequests)) {
             old_pendingRequests.push(
-              await Old_DepositManager_CONTRACT.withdrawalRequest(old_address, account, requestIndex)
+              await Old_DepositManager_CONTRACT.withdrawalRequest(old_address, account, old_requestIndex)
             );
             old_requestIndex++;
           }
@@ -94,7 +94,7 @@ export function useWithdrawable (layer2: string) {
             type: 'ray',
             localeString: true
           })
-          
+
           if (convert) setWithdrawable(convert)
           if (convertNotWithdrawable) setNotWithdrawable(convertNotWithdrawable)
           if (old_convert) old_setWithdrawable(old_convert)
