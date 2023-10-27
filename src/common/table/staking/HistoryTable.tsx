@@ -107,7 +107,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
             </Text> : ''
           }
         </Flex>
-        {
+        {/* {
           tableType === 'Staking' ? 
           <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
             <FormLabel color={'#828d99'} fontSize={'11px'} mt={'7px'}>
@@ -123,7 +123,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
             /> 
           </FormControl>       
           : ''
-        }
+        } */}
       </Flex>
       <Box overflowX={'auto'}>
         <chakra.table
