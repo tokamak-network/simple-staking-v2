@@ -236,13 +236,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             isDisabled={withdrawDisabled}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
-            onClick={() => {if (confirm(
-              'Any withdraws from the prior to patch has to be done using etherscan using the guide provided from X @tokamak_network. We will provide the frontend service as soon as we can.')
-              ) {
-                modalButton('withdraw', dataModal)
-              }
-            }
-            }
+            onClick={() => modalButton('withdraw', dataModal)}
           >
             Withdraw
           </Button>

@@ -34,15 +34,14 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
     from
   } = cell.row?.original;
 
-  // console.log(cell.row?.original)
   const txSender = sender ? sender : from
   const txId = transaction ? transaction.id : transactionHash
   const txTime = timestamp ? timestamp : blockTimestamp
   const values = amount ? amount : data?.amount
-  // console.log(data)
   const theme = useTheme()
   const type = cell.column.id;
   const typeName = getEventName(eventName)
+  
   return  (
     <chakra.td
       key={key}

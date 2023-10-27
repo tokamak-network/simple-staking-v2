@@ -34,6 +34,7 @@ function StakeModal() {
   const [tx, setTx] = useState();
   const [withdrawType, setWithdrawType] = useState('')
 
+  //@ts-ignore
   let modalComponent = undefined;
   if (selectedModal && selectedModalData) {
     modalComponent = getStakeModalComponent(selectedModal, selectedModalData);
@@ -181,6 +182,16 @@ function StakeModal() {
     return reducedValue?.toLocaleString()
   }
 
+  useEffect(() => {
+    if (
+      selectedModal == 'withdraw' &&
+      //@ts-ignore
+      modalComponent.balance2 !== '0.00'
+    ) {
+      setWithdrawType('old')
+    }
+  }, [selectedModal, modalComponent])
+
   return (
     <Modal
       isOpen={
@@ -245,7 +256,10 @@ function StakeModal() {
                   </Flex>
                   {selectedModal === 'withdraw' ? (
                     <Flex w={'100%'} flexDir={'column'} alignItems={'center'} mb={'10px'}>
-                      <WithdrawModalBody title={modalComponent.balanceInfo1} value={modalComponent.balance1} />
+                      <WithdrawModalBody 
+                        title={modalComponent.balanceInfo1} 
+                        value={modalComponent.balance1} 
+                      />
                       {/* <WithdrawModalBody title={modalComponent.balanceInfo2} value={modalComponent.balance2} /> */}
                       <Flex 
                         flexDir={'column'}
