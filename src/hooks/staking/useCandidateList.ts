@@ -28,7 +28,10 @@ export function useCandidateList () {
             obj
           ) {
             try{
+              console.log(account)
+              console.log('obj.candidateContract', obj.candidateContract)
               const stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
+              console.log('stakeOf', stakeOf)
               const stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
               
               const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
