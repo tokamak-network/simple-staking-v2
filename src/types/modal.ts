@@ -9,4 +9,4 @@ export type StakeModalType =
   | 'layer2'
   | 'wallet'
 
-export type ModalType = GlobalType | StakeModalType;
+export type ModalType = StakeModalType;

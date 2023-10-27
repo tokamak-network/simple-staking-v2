@@ -39,6 +39,12 @@ function StakeModal() {
   if (selectedModal && selectedModalData) {
     modalComponent = getStakeModalComponent(selectedModal, selectedModalData);
   }
+  const withdrawSetting = useCallback((value: string) => {
+    setWithdrawType(value)
+    //@ts-ignore
+    const inputTemp = withdrawType === 'new' ? modalComponent.balance2 : modalComponent.balance3
+    setInput(inputTemp)
+  }, [modalComponent, withdrawType])
 
   const closeThisModal = useCallback(() => {
     // setResetValue();
@@ -194,9 +200,11 @@ function StakeModal() {
       modalComponent.balance2 !== '0.00'
     ) {
       setWithdrawType('old')
+      //@ts-ignore
+      setInput(modalComponent.balance2)
     }
-  }, [selectedModal, modalComponent])
-
+  }, [selectedModal])
+  
   return (
     <Modal
       isOpen={
@@ -283,7 +291,8 @@ function StakeModal() {
                           {modalComponent.balanceInfo2}
                         </Flex>
                         <RadioGroup
-                          onChange={(value: "old" | "new") => setWithdrawType(value)}
+                          onChange={(value: "old" | "new") => withdrawSetting(value)}
+                          value={withdrawType}
                         >
                           <Flex alignItems={'center'} my={'11px'} justifyContent={'center'}>
                             <Radio 
@@ -292,6 +301,7 @@ function StakeModal() {
                               mr={'6px'}
                               bgColor={'#fff'}
                               border={'solid 2px #c6cbd9'}
+                              isChecked={true}
                             >
                               <Flex
                                 fontSize={'16px'} 
@@ -423,11 +433,15 @@ function StakeModal() {
                   <Button
                     mt={'25px'}
                     w={'150px'}
-                    {...(input && input !== '0'
+                    //@ts-ignore
+                    {...(input && floatParser(input) > 0
                       ? { ...btnStyle.btnAble() }
                       : selectedModal === 'restaking' || selectedModal === 'withdraw'
                       ? { ...btnStyle.btnAble() }
-                      : { ...btnStyle.btnDisable() })}
+                      : { ...btnStyle.btnDisable() })
+                    }
+                    //@ts-ignore
+                    isDisabled={floatParser(input) === 0}
                     onClick={
                       selectedModal === 'staking'
                         ? staking
