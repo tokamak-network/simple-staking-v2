@@ -7,8 +7,8 @@ export const REACT_APP_MODE = process.env.NEXT_PUBLIC_MODE as string;
 
 export const NetworkContextName = `${new Date().getTime()}-NETWORK`;
 export const DEFAULT_NETWORK: string | undefined =
-"1"
-// REACT_APP_MODE === "PRODUCTION" ? "1" : "5";
+// "1"
+REACT_APP_MODE === "PRODUCTION" ? "1" : "5";
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const MAINNET_API = process.env.NEXT_PUBLIC_API_PRODUCTION;
 const DEV_API = process.env.NEXT_PUBLIC_API_DEV;
@@ -21,12 +21,12 @@ REACT_APP_MODE === "PRODUCTION"
     : ethers.getDefaultProvider("goerli");
 
 export const API = 
-MAINNET_API
-// REACT_APP_MODE === "PRODUCTION" ? MAINNET_API : DEV_API;
+// MAINNET_API
+REACT_APP_MODE === "PRODUCTION" ? MAINNET_API : DEV_API;
 
 export const GRAPHQL_API = 
-GRAPHQL_MAINNET
-  // REACT_APP_MODE === "PRODUCTION" ? GRAPHQL_MAINNET : GRAPHQL_DEV;
+// GRAPHQL_MAINNET
+  REACT_APP_MODE === "PRODUCTION" ? GRAPHQL_MAINNET : GRAPHQL_DEV;
 
 export const NON_CANDIDATE = [
   {

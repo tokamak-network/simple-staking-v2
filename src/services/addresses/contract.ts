@@ -38,8 +38,8 @@ const GOERLI: CONTRACT_ADDRESSES_TYPE = {
 };
 
 const CONTRACT_ADDRESS: CONTRACT_ADDRESSES_TYPE = 
-  MAINNET 
-  // REACT_APP_MODE === 'PRODUCTION' ? MAINNET : GOERLI;
+  // MAINNET 
+  REACT_APP_MODE === 'PRODUCTION' ? MAINNET : GOERLI;
 
 const info = [
   {
@@ -126,6 +126,6 @@ const info_goerli = [
 ]
 
 export const OLD_CONTRACT = 
-  info
-  // REACT_APP_MODE === 'PRODUCTION' ? info : info_goerli;
+  // info
+  REACT_APP_MODE === 'PRODUCTION' ? info : info_goerli;
 export default CONTRACT_ADDRESS;
