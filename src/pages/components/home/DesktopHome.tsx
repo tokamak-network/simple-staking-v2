@@ -249,10 +249,6 @@ function DesktopHome () {
     
     };
   };
-  useEffect(() => {
-    confirm(`Stake, unstake, restake, withdraw is working again\n\nWallet area is closed, and data from old contract will be added later\n\nAny withdraws from the prior to patch has to be done using etherscan using the guide provided from X @tokamak_network. We will provide the frontend service as soon as we can.`)
-  }, [])
-
       
   return (
     <Box  w={"100%"} mt={"36px"}>
