@@ -1,6 +1,7 @@
 
 export function getEventName (eventName: string) {
-  return eventName === 'WithdrawalRequested' ? 'Unstaked'
-    : eventName === 'Deposited' ? 'Staked'
-    : 'Withdraw'
+  return eventName === 'WithdrawalRequested' ? 'Unstake'
+    : eventName === 'Deposited' ? 'Stake'
+    : eventName === 'WithdrawalProcessed' ? 'Withdraw' :
+    eventName
 }

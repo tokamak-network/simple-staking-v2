@@ -4,6 +4,7 @@ import { useWeb3React } from "@web3-react/core";
 import { useState, useEffect } from "react";
 import useCallContract from "../useCallContract";
 import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
+import { getOperatorUserHistory } from "@/api";
 
 export function useCandidateList () {
   const [candidateList, setCandidateList] = useState<any[]>([]);
@@ -27,19 +28,22 @@ export function useCandidateList () {
             obj
           ) {
             try{
-              
+              const oldCandidate = getOldLayerAddress(obj.candidateContract)
               const stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
               const stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
               const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
               const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(getOldLayerAddress(obj.candidateContract))
               
+              let oldHistory
+              if (oldCandidate) oldHistory = await getOperatorUserHistory(oldCandidate)
               const sumPending = pending.add(old_pending)
-  
+
               tempObj = {
                 ...obj,
                 stakeOf: stakeOf.toString(),
                 pending: sumPending.toString(),
-                stakeOfCandidate: stakeOfCandidate.toString()
+                stakeOfCandidate: stakeOfCandidate.toString(),
+                oldHistory: oldHistory
               }
             } catch (e) {
               console.log(e)

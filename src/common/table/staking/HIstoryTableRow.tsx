@@ -26,12 +26,23 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
     eventName,
     sender,
     amount,
-    transaction
+    transaction,
+    layer2,
+    value,
+    transactionHash,
+    blockTimestamp,
+    from
   } = cell.row?.original;
-  
+
+  // console.log(cell.row?.original)
+  const txSender = sender ? sender : from
+  const txId = transaction ? transaction.id : transactionHash
+  const txTime = timestamp ? timestamp : blockTimestamp
+  const values = amount ? amount : data?.amount
+  // console.log(data)
   const theme = useTheme()
   const type = cell.column.id;
-  // const typeName = getEventName(eventName)
+  const typeName = getEventName(eventName)
   return  (
     <chakra.td
       key={key}
@@ -42,11 +53,11 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
       {tableType === 'Staking' && type === 'account' ? (
         <Link
           isExternal
-          href={`https://etherscan.io/address/${sender}`}
+          href={`https://etherscan.io/address/${txSender}`}
           color={'#2a72e5'}
         >
           {trimAddress({
-            address: sender,
+            address: txSender,
             firstChar: 6,
             lastChar: 4,
             dots: '...'
@@ -56,11 +67,11 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
       {type === 'txHash' ? (
         <Link
           isExternal
-          href={`https://etherscan.io/tx/${transaction.id}`}
+          href={`https://etherscan.io/tx/${txId}`}
           color={'#2a72e5'}
         >
           {trimAddress({
-            address: transaction.id,
+            address: txId,
             firstChar: 6,
             lastChar: 4,
             dots: '...'
@@ -70,13 +81,13 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
       {tableType === 'Staking' && type === 'txType' ? (
         //@ts-ignore
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
-          {eventName}
+          {typeName}
         </Text>
       ) : ('')}
       {tableType === 'Staking' && type === 'amount' ? (
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
           {convertNumber({
-            amount: amount,
+            amount: values,
             type: 'ray',
             localeString: true,
           })} TON
@@ -84,7 +95,7 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
       ) : ('')}
       {type === 'date' ? (
         <Flex color={'#828d99'}>
-          {moment.unix(timestamp).format('YYYY.MM.DD HH:mm:ss (Z)')}
+          {moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')}
         </Flex>
       ) : ('')}
     </chakra.td>
