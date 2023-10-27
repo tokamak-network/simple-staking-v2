@@ -41,13 +41,14 @@ export function useCandidateList () {
                 oldCommitHistory = await getEventByLayer2(oldCandidate, 'Comitted', 1, 300)
               }
               const sumPending = pending.add(old_pending)
-              console.log(oldCandidate, oldHistory)
+
               tempObj = {
                 ...obj,
                 stakeOf: stakeOf.toString(),
                 pending: sumPending.toString(),
                 stakeOfCandidate: stakeOfCandidate.toString(),
-                oldHistory: oldHistory
+                oldHistory: oldHistory,
+                oldCommitHistory: oldCommitHistory
               }
             } catch (e) {
               console.log(e)

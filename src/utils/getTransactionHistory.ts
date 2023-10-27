@@ -8,3 +8,12 @@ export function getTransactionHistory (data: any) {
   })
   return txData
 }
+
+export function getCommitHistory (data: any) {
+  const {asCommit, oldCommitHistory} = data
+  const concatData = asCommit.concat(oldCommitHistory)
+  const commitData = concatData.sort(function (a: any, b: any) {
+    return b.timestamp - a.timestamp;
+  })
+  return commitData
+}

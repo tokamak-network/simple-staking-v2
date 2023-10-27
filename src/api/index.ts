@@ -101,7 +101,6 @@ export async function getWithdrawTotal (account: string) {
 }
 
 export async function getOperatorUserHistory (layer2: string, from?: string) {
-  console.log(API)
   const res = await candidate.get('/events', {
     params: {
       chainId: DEFAULT_NETWORK,
@@ -110,7 +109,6 @@ export async function getOperatorUserHistory (layer2: string, from?: string) {
       from: from,
     },
   });
-  console.log(res)
   return res.data === '' ? [] : res.data.datas;
 }
 

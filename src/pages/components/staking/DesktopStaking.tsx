@@ -11,7 +11,7 @@ import HistoryTable from "@/common/table/staking/HistoryTable";
 import moment from "moment";
 import { useEffect } from 'react';
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
-import { getTransactionHistory } from '../../../utils/getTransactionHistory';
+import { getTransactionHistory, getCommitHistory } from '../../../utils/getTransactionHistory';
 import { useUserStaked } from "@/hooks/staking/useUserStaked";
 import { useWeb3React } from "@web3-react/core";
 import { convertNumber } from "@/components/number";
@@ -105,6 +105,7 @@ function DesktopStaking () {
       } = row.original;
       
       const txHistory = getTransactionHistory(row.original)
+      const commitHistory = getCommitHistory(row.original)
       // console.log(row.original)
       const candidateAmount = stakeOfCandidate? convertNumber({
         amount: stakeOfCandidate,
@@ -193,7 +194,7 @@ function DesktopStaking () {
             />
             <HistoryTable 
               columns={historyColumns}
-              data={asCommit}
+              data={commitHistory}
               tableType={'Commit'}
             />
           </Flex>
