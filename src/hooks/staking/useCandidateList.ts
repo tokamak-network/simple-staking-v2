@@ -28,14 +28,15 @@ export function useCandidateList () {
             obj
           ) {
             try{
-              console.log(account)
-              console.log('obj.candidateContract', obj.candidateContract)
+              
               const stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
               console.log('stakeOf', stakeOf)
               const stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
-              
+              console.log('stakeOfCandidate', stakeOfCandidate)
               const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
+              console.log('pending', pending)
               const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(getOldLayerAddress(obj.candidateContract))
+              console.log('old_pending', old_pending)
               const sumPending = pending.add(old_pending)
   
               tempObj = {
