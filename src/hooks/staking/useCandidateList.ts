@@ -33,11 +33,11 @@ export function useCandidateList () {
               const stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
               const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
               const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(getOldLayerAddress(obj.candidateContract))
-              
+
               let oldHistory
               if (oldCandidate) oldHistory = await getOperatorUserHistory(oldCandidate)
               const sumPending = pending.add(old_pending)
-
+              console.log(oldHistory)
               tempObj = {
                 ...obj,
                 stakeOf: stakeOf.toString(),
