@@ -17,28 +17,38 @@ export function useCandidateList () {
     
     async function fetch () {
       if (data) {
-        console.log(data)
+        console.log('data',data)
         const candidates = await Promise.all(data.candidates.map(async (obj: any) => {
           let tempObj = obj
-          if (account && SeigManager_CONTRACT && DepositManager_CONTRACT && Old_DepositManager_CONTRACT && obj) {
-            const stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
-            const stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
-            
-            const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
-            const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(getOldLayerAddress(obj.candidateContract))
-            const sumPending = pending.add(old_pending)
-
-            tempObj = {
-              ...obj,
-              stakeOf: stakeOf.toString(),
-              pending: sumPending.toString(),
-              stakeOfCandidate: stakeOfCandidate.toString()
+          if (
+            account && 
+            SeigManager_CONTRACT && 
+            DepositManager_CONTRACT && 
+            Old_DepositManager_CONTRACT && 
+            obj
+          ) {
+            try{
+              const stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
+              const stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
+              
+              const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
+              const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(getOldLayerAddress(obj.candidateContract))
+              const sumPending = pending.add(old_pending)
+  
+              tempObj = {
+                ...obj,
+                stakeOf: stakeOf.toString(),
+                pending: sumPending.toString(),
+                stakeOfCandidate: stakeOfCandidate.toString()
+              }
+              console.log('tempObj', tempObj)
+            } catch (e) {
+              console.log(e)
             }
-            console.log('tempObj', tempObj)
           }
           return tempObj
         }))
-        console.log(candidateList)
+        console.log('candidateList',candidateList)
         setCandidateList(candidates)
       }
     }
