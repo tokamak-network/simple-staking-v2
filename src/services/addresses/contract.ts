@@ -125,5 +125,7 @@ const info_goerli = [
   }
 ]
 
-export const OLD_CONTRACT = REACT_APP_MODE === 'PRODUCTION' ? info : info_goerli;
+export const OLD_CONTRACT = 
+  info
+  // REACT_APP_MODE === 'PRODUCTION' ? info : info_goerli;
 export default CONTRACT_ADDRESS;
