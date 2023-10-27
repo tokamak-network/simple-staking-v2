@@ -21,7 +21,7 @@ export const OperatorImage: React.FC<OperatorImageProps> = (props) => {
         borderRadius={25}
         fontSize={height && width? 8:14}
         color={'#c7d1d8'}>
-        <Text>OPR</Text>
+        <Text>CDD</Text>
       </Flex>
     );
   }

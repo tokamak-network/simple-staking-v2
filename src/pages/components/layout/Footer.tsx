@@ -1,4 +1,4 @@
-import { Flex, Text, Image } from '@chakra-ui/react';
+import { Flex, Text, Image, Link } from '@chakra-ui/react';
 import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import MEDIUM_ICON from '@/assets/images/community/medium.png';
 import TWITTER_ICON from '@/assets/images/community/TwitterX.svg';
@@ -74,7 +74,9 @@ function Footer() {
         <Flex h={'17px'} justifyContent={mobile ? 'center' : 'flex-end'}>
           {iconList.map((item, index) => {
             return (
-              <Flex
+              <Link
+                isExternal
+                href={item.url}
                 w={'20px'}
                 h={'20px'}
                 alignItems="center"
@@ -86,8 +88,8 @@ function Footer() {
                 mr={'15px'}
                 cursor={'pointer'}
               >
-                <Image src={item.icon.src} alt={'icon'}></Image>
-              </Flex>
+                <Image src={item.icon.src} alt={'icon'}/>
+              </Link>
             );
           })}
         </Flex>
