@@ -56,13 +56,13 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     stakeOfCandidate
   } = data
 
-  const { pendingUnstaked } = usePendingUnstaked(candidateContract, account)
+  const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account)
   const { 
     withdrawable, 
     withdrawableLength,
     old_withdrawable, 
     old_withdrawableLength,
-  } = useWithdrawable(candidateContract)
+  } = useWithdrawable(data?.candidateContract)
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
