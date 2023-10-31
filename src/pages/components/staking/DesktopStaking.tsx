@@ -159,12 +159,9 @@ function DesktopStaking () {
               </Flex>
             </Flex>
             <Box p={0} w={'390px'} borderRadius={'10px'} alignSelf={'flex-start'}>
-              {
-                row.original &&
-                <WalletInformation 
-                  data={row.original}
-                />
-              }
+              <WalletInformation 
+                data={row.original}
+              />
             </Box>
   
             <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>

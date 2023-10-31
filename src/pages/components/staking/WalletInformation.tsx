@@ -46,15 +46,28 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [unstakeDisabled, setUnstakeDisabled] = useState(true);
   const [reStakeDisabled, setReStakeDisabled] = useState(true);
   const [withdrawDisabled, setwithdrawDisabled] = useState(true);
+  const [candidateContracts, setCandidateContracts] = useState('')
+  const [candidates, setCandidates] = useState('')
+  const [stakeOfUser, setStakeOfUser] = useState('')
+  const [expSeig, setExpSeig] = useState('')
+  const [stakeCandidate, setStakeCandidate] = useState('')
+
   const { userTonBalance } = useUserBalance(account)
-  const {
-    candidateContract,
-    stakeOf,
-    candidate,
-    stakedAmountOfCandidate,
-    expectedSeig,
-    stakeOfCandidate
-  } = data
+  // const {
+  //   candidateContract,
+  //   stakeOf,
+  //   candidate,
+  //   expectedSeig,
+  //   stakeOfCandidate
+  // } = data
+
+  useEffect(() => {
+    setCandidateContracts(data?.candidateContract)
+    setCandidates(data?.candidate)
+    setStakeOfUser(data?.stakeOf)
+    setExpSeig(data?.expectedSeig)
+    setStakeCandidate(data?.stakeOfCandidate)
+  }, [data])
 
   const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account)
   const { 
@@ -67,15 +80,15 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
 
-  const yourStaked = stakeOf ? convertNumber({
+  const yourStaked = stakeOfUser ? convertNumber({
     //@ts-ignore
-    amount: stakeOf, 
+    amount: stakeOfUser, 
     type: 'ray',
     localeString: true
   }) : '-'
 
-  const expectedSeigs = expectedSeig ? convertNumber({
-    amount: expectedSeig,
+  const expectedSeigs = expSeig ? convertNumber({
+    amount: expSeig,
     type: 'ray',
     localeString: true
   }) : '0.00'
@@ -117,8 +130,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     /*eslint-disable*/
   }, [account, pendingUnstaked, userTonBalance, withdrawable, old_withdrawable])
 
-  const candidateAmount = stakeOfCandidate? convertNumber({
-    amount: stakeOfCandidate,
+  const candidateAmount = stakeCandidate? convertNumber({
+    amount: stakeCandidate,
     type: 'ray'
   }) : '0.00'
   const minimumAmount = Number(candidateAmount) > 100
@@ -130,12 +143,12 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     stakedAmount: yourStaked,
     withdrawable: withdrawable,
     old_withdrawable: old_withdrawable,
-    layer2: candidateContract,
-    old_layer2: getOldLayerAddress(candidateContract),
+    layer2: candidateContracts,
+    old_layer2: getOldLayerAddress(candidateContracts),
     withdrawableLength: withdrawableLength,
     old_withdrawableLength: old_withdrawableLength,
     seig: expectedSeigs,
-    candidate: candidate,
+    candidate: candidates,
     minimumAmount: minimumAmount
   }
   
