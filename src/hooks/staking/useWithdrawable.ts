@@ -67,7 +67,7 @@ export function useWithdrawable (layer2: string) {
           const withdrawableAmount = withdrawbleList.reduce(reducer, initial)
           const notWithdrawableAmount = notWithdrawableList.reduce(reducer, initial)
           
-          old_setWithdrawableLength(withdrawbleList.length)
+          old_setWithdrawableLength(old_withdrawbleList.length)
           const old_withdrawableAmount = old_withdrawbleList.reduce(reducer, initial)
           const old_notWithdrawableAmount = old_notWithdrawableList.reduce(reducer, initial)
         
