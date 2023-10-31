@@ -198,7 +198,7 @@ function MobileHeader() {
           placement="right"
           onClose={onClose}
           finalFocusRef={btnRef}
-          size={width < 460? "full":'md'}
+          size={width && width < 460? "full":'md'}
         >
           <DrawerContent bg="white" padding="26px 10px 10px 20px">
             <Flex w="100%" justifyContent={"flex-end"}>
