@@ -10,3 +10,14 @@ export const GET_GRAPH = gql`
     }
   }
 `;
+
+export const GET_FACTORY = gql`
+query GetFactory($id: String) {
+  factories(first: 5) {
+    id
+    totalStaked
+    totalPendingWithdrawal
+    numOfCandidate
+  }
+}
+`
