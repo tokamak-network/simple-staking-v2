@@ -34,7 +34,6 @@ export const HistoryTable: FC<HistoryTableProps> = ({
   data,
   tableType,
 }) => {
-  console.log(data)
   const {
     getTableProps,
     getTableBodyProps,
