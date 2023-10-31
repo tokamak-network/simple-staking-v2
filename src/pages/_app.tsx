@@ -22,7 +22,7 @@ import { apolloClient } from '../apollo';
 function MyApp({ Component, pageProps }: AppProps) {
   const { onOpen, isOpen: isModalOpen, onClose } = useDisclosure();
   const [width] = useWindowDimensions();
-  const mobile = width < 1040;
+  const mobile = width && width < 1040;
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <ApolloProvider client={apolloClient}>
