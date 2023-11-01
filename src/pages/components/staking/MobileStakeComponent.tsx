@@ -122,7 +122,7 @@ function MobileStakeComponent(props: { operatorList: any }) {
               userTonBalance,
               TON_CONTRACT,
               amount,
-              selectedOp.layer2,
+              selectedOp.candidateContract,
               setTxPending,
               setTx
             )

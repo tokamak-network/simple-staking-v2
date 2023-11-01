@@ -117,7 +117,7 @@ function MobileRestakeComponent(props: { operatorList: any }) {
             reStaking(
               account,
               DepositManager_CONTRACT,
-              selectedOp.layer2,
+              selectedOp.candidateContract,
               setTxPending,
               setTx
             )

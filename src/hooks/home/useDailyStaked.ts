@@ -25,7 +25,6 @@ export function useDailyStaked () {
       const totalSup = await getTotalSupply();
       const stakeTotal = factory.data?.factories[0].totalStaked
       const totalStake = parseFloat(stakeTotal) / Math.pow(10, 27);
-      // if (data.stakingDatas) {
 
       function pushToArray (date: number, stakeAmount: string) {
         const day = new Date(date * 1000)
@@ -46,7 +45,7 @@ export function useDailyStaked () {
       for (let i = 0; i < stakingDayDatas.length; i++) {
         const now = Math.floor(new Date().getTime() / 1000)
         const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day)
-        
+
         for (let i=0; i < sinceLastday ; i ++) {
           const today = (stakingDayDatas[0].date + day) * i
           filledData.push(pushToArray(today, stakingDayDatas[0].totalStaked))
@@ -63,7 +62,6 @@ export function useDailyStaked () {
           }
         } 
       }
-      
       
       const filteredData = dailyStakedTotal.filter((item: any) => item.fetchDateUTC < 20231024)
       const concatData = filledData?.concat(filteredData)

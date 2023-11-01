@@ -24,7 +24,7 @@ function MobileUnstakeComponent(props: { operatorList: any }) {
   const [amount, setAmount] = useState(0);
   const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } =
     useCallContract();
-    const staked = selectedOp? floatParser(selectedOp.yourStaked): 0
+    const staked = selectedOp? floatParser(selectedOp.stakeOf): 0
   return (
     <Flex w="100%" px="20px">
       <Flex
@@ -92,7 +92,7 @@ function MobileUnstakeComponent(props: { operatorList: any }) {
           isDisabled={(staked ?  amount> staked: false) || amount === 0 || Number.isNaN(amount) ||
             amount === undefined }
           onClick={() =>
-            unstake(account, selectedOp.layer2, DepositManager_CONTRACT, setTxPending, setTx,amount )
+            unstake(account, selectedOp.candidateContract, DepositManager_CONTRACT, setTxPending, setTx,amount )
           }
           _disabled={{ bg: "#86929d", color: "#e9edf1" }}
         >

@@ -35,17 +35,17 @@ function MyApp({ Component, pageProps }: AppProps) {
             {/* TABLET VIEW = 1040px */}
             {/* MOBILE VIEW = 360px */}
             {mobile ? (
-              // <Flex flexDir={'column'} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
-              //   <MobileHeader />
-              //   <Entry Component={Component} {...pageProps} />
-              //   <MobileFooter />
-              // </Flex>
-              <Flex alignItems={'left'} justifyContent={'center'} px={'15px'} flexDir={'column'}>
-                <Text mb={'10px'} fontWeight={'bold'}>Notice: Service Interruption Announcement</Text>
-                <Text>
-                Simple Staking Service is currently not usable via mobile browsers. We recommend using it from a desktop instead. We are working to open the mobile version soon. We apologize for the inconvenience and hope to provide you with a better experience as soon as possible.
-                </Text>
+              <Flex flexDir={'column'} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
+                <MobileHeader />
+                <Entry Component={Component} {...pageProps} />
+                <MobileFooter />
               </Flex>
+              // <Flex alignItems={'left'} justifyContent={'center'} px={'15px'} flexDir={'column'}>
+              //   <Text mb={'10px'} fontWeight={'bold'}>Notice: Service Interruption Announcement</Text>
+              //   <Text>
+              //   Simple Staking Service is currently not usable via mobile browsers. We recommend using it from a desktop instead. We are working to open the mobile version soon. We apologize for the inconvenience and hope to provide you with a better experience as soon as possible.
+              //   </Text>
+              // </Flex>
             ) : (
               <Flex flexDir={'column'} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
                 <Header

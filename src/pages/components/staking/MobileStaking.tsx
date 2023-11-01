@@ -11,12 +11,13 @@ import MobileStakeComponent from "./MobileStakeComponent";
 import MobileRestakeComponent from "./MobileRestakeComponent";
 import MobileUnstakeComponent from "./MobileUnstakeComponent";
 import MobileWithdrawComponent from "./MobileWithdrawComponent";
-import useOperatorListForMobile from "@/hooks/staking/useOperatorListForMobile";
+import { useCandidateList } from '@/hooks/staking/useCandidateList';
 
 function MobileStaking() {
   const theme = useTheme();
   const [selectedTab, setSelectedTab] = useState("stake");
-  const operatorListM = useOperatorListForMobile();
+  // const operatorListM = useOperatorListForMobile();
+  const { candidateList } = useCandidateList();
   
   return (
     <Flex
@@ -107,13 +108,13 @@ function MobileStaking() {
         </Flex>
       </Flex>
       {selectedTab === "withdraw" ? (
-        <MobileWithdrawComponent operatorList={operatorListM} />
+        <MobileWithdrawComponent operatorList={candidateList} />
       ) : selectedTab === "restake" ? (
-        <MobileRestakeComponent operatorList={operatorListM} />
+        <MobileRestakeComponent operatorList={candidateList} />
       ) : selectedTab === "unstake" ? (
-        <MobileUnstakeComponent operatorList={operatorListM} />
+        <MobileUnstakeComponent operatorList={candidateList} />
       ) : (
-        <MobileStakeComponent operatorList={operatorListM} />
+        <MobileStakeComponent operatorList={candidateList} />
       )}
     </Flex>
   );
