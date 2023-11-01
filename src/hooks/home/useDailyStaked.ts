@@ -45,39 +45,21 @@ export function useDailyStaked () {
       const day = 86400
       for (let i = 0; i < stakingDayDatas.length; i++) {
         const now = Math.floor(new Date().getTime() / 1000)
-
         const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day)
+        
         for (let i=0; i < sinceLastday ; i ++) {
           const today = (stakingDayDatas[0].date + day) * i
-          // let fetchDateUTC = moment(today * 1000).utc().format('YYYYMMDD')
           filledData.push(pushToArray(today, stakingDayDatas[0].totalStaked))
-          // .push({
-          //   blockTime: today * 1000,
-          //   fetchDateUTC: Number(fetchDateUTC),
-          //   totalSupply: stakingDayDatas[0].totalStaked
-          // })
         }
-        // const date1 = new Date(stakingDayDatas[i].date * 1000)
-        // const fetchDate1 = moment(date1).utc().format('YYYYMMDD')
+
         filledData.push(pushToArray(stakingDayDatas[i].date, stakingDayDatas[i].totalStaked))
-        // .push({
-        //   blockTime: stakingDayDatas[i].date * 1000,
-        //   fetchDateUTC: Number(fetchDate1),
-        //   totalSupply: stakingDayDatas[i].totalStaked
-        // })
+
         if (stakingDayDatas[i + 1]) {
           const gap = Math.floor((stakingDayDatas[i].date - stakingDayDatas[i + 1].date) / day)
 
           for (let j = 1; j < gap; j++) {
-            // const date2 = new Date((stakingDayDatas[i].date - day) * 1000)
             const date2 = (stakingDayDatas[i].date - day)
-            // const fetchDate2 = moment(date2).utc().format('YYYYMMDD')
             filledData.push(pushToArray(date2, stakingDayDatas[i + 1].totalStaked))
-            // .push({
-            //   blockTime: (stakingDayDatas[i].date - day) * 1000,
-            //   fetchDateUTC: Number(fetchDate2),
-            //   totalSupply: stakingDayDatas[i + 1].totalStaked
-            // })
           }
         } 
       }
