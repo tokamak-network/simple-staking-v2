@@ -6,7 +6,7 @@ import { GET_GRAPH, GET_FACTORY } from '../../graphql/getGraphdata';
 import moment from 'moment';
 
 export function useDailyStaked () {
-  const [dailyStaked, setDailyStaked] = useState([]);
+  const [dailyStaked, setDailyStaked] = useState<any[]>([]);
   const [totalStaked, setTotalStaked] = useState<number>(0);
 
   const { data } = useQuery(GET_GRAPH, {
@@ -24,26 +24,67 @@ export function useDailyStaked () {
       // const totalStakedCurrent: number = await getTotalStaked();
       const totalSup = await getTotalSupply();
       const stakeTotal = factory.data?.factories[0].totalStaked
-      
       const totalStake = parseFloat(stakeTotal) / Math.pow(10, 27);
-      
-      const stakingDayData = data?.stakingDayDatas.map((obj: any) => {
-        let tempObj 
-        const date = new Date(obj.date * 1000)
-        
-        let fetchDateUTC = moment(date).utc().format('YYYYMMDD')
+      // if (data.stakingDatas) {
 
-        tempObj = {
-          blockTime: obj.date * 1000,
-          fetchDateUTC: Number(fetchDateUTC),
-          totalSupply: obj.totalStaked
+      function pushToArray (date: number, stakeAmount: string) {
+        const day = new Date(date * 1000)
+        const fetchDay = moment(day).utc().format('YYYYMMDD')
+        return {
+          blockTime: date * 1000,
+          fetchDateUTC: Number(fetchDay),
+          totalSupply: stakeAmount
         }
+      }
 
-        return tempObj
-      })
+      const {
+        stakingDayDatas
+      } = data
+      
+      let filledData = []
+      const day = 86400
+      for (let i = 0; i < stakingDayDatas.length; i++) {
+        const now = Math.floor(new Date().getTime() / 1000)
+
+        const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day)
+        for (let i=0; i < sinceLastday ; i ++) {
+          const today = (stakingDayDatas[0].date + day) * i
+          // let fetchDateUTC = moment(today * 1000).utc().format('YYYYMMDD')
+          filledData.push(pushToArray(today, stakingDayDatas[0].totalStaked))
+          // .push({
+          //   blockTime: today * 1000,
+          //   fetchDateUTC: Number(fetchDateUTC),
+          //   totalSupply: stakingDayDatas[0].totalStaked
+          // })
+        }
+        // const date1 = new Date(stakingDayDatas[i].date * 1000)
+        // const fetchDate1 = moment(date1).utc().format('YYYYMMDD')
+        filledData.push(pushToArray(stakingDayDatas[i].date, stakingDayDatas[i].totalStaked))
+        // .push({
+        //   blockTime: stakingDayDatas[i].date * 1000,
+        //   fetchDateUTC: Number(fetchDate1),
+        //   totalSupply: stakingDayDatas[i].totalStaked
+        // })
+        if (stakingDayDatas[i + 1]) {
+          const gap = Math.floor((stakingDayDatas[i].date - stakingDayDatas[i + 1].date) / day)
+
+          for (let j = 1; j < gap; j++) {
+            // const date2 = new Date((stakingDayDatas[i].date - day) * 1000)
+            const date2 = (stakingDayDatas[i].date - day)
+            // const fetchDate2 = moment(date2).utc().format('YYYYMMDD')
+            filledData.push(pushToArray(date2, stakingDayDatas[i + 1].totalStaked))
+            // .push({
+            //   blockTime: (stakingDayDatas[i].date - day) * 1000,
+            //   fetchDateUTC: Number(fetchDate2),
+            //   totalSupply: stakingDayDatas[i + 1].totalStaked
+            // })
+          }
+        } 
+      }
+      
       
       const filteredData = dailyStakedTotal.filter((item: any) => item.fetchDateUTC < 20231024)
-      const concatData = stakingDayData?.concat(filteredData)
+      const concatData = filledData?.concat(filteredData)
 
       const graphdata = concatData?.map((item:any) => {
         const totalStaked = parseFloat(item.totalSupply ) / Math.pow(10, 27);
