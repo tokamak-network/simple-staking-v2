@@ -161,6 +161,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                     return (         
                       <HistoryTableRow 
                         key={index}
+                        index={index}
                         cell={cell}
                         tableType={tableType}
                       />

@@ -14,7 +14,7 @@ export const TableHeader = ({}) => {
  
   return (
     <chakra.thead
-      width={"100%"}
+      w={"700px"}
       borderBottom={"1px solid #dfe4ee"}
       px="20px"
       h={"29px"}
@@ -22,7 +22,14 @@ export const TableHeader = ({}) => {
       justifyContent={"center"}
       mb='9px'
     >
-      <chakra.tr fontSize={"12px"} color={"#3e495c"} h={"29px"} >
+      <chakra.tr 
+        fontSize={"12px"} 
+        color={"#3e495c"} 
+        h={"29px"} 
+        minW={'700px'}
+        w={'700px'}
+        maxW={'700px'}
+      >
         {HeaderColumn("txHash")}
 
         {HeaderColumn("txType")}
@@ -43,9 +50,9 @@ const HeaderColumn = (columnName: string) => {
           ? "left"
           : "center"
       }
-    
     >
-      {columnName === "txHash"
+      {
+        columnName === "txHash"
         ? "Tx Hash"
         : columnName === "txType"
         ? "Type"
@@ -53,7 +60,8 @@ const HeaderColumn = (columnName: string) => {
         ? "Amount TON"
         : columnName === "status"
         ? "Status"
-        : ""}
+        : ""
+      }
     </chakra.th>
   );
 };

@@ -55,8 +55,7 @@ export const MyHistoryTab: FC<MyHistoryTableProps> = ({ isLoading }) => {
           {...getTableProps()}
           display="flex"
           flexDirection="column"
-          width={"100%"}
-          w="100%"
+          w={'100%'}
         >
           <TableHeader />
 

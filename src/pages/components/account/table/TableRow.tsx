@@ -31,75 +31,74 @@ export const TableRow: FC<TableRowProps>=({
 
     return (
       <chakra.td
-            key={index}
-            w={
-              type === "txHash"
-                ? "33.2%"
-                : type === "txType"
-                ? "26.2%"
-                : type === "amount"
-                ? "30%"
-                : type === "status"
-                ? "16.9%"
-                : ""
-            }
-            h='36px'
-          display='flex'
-      alignItems={'center'}
-          //   {...theme.STAKING_HISTORY_TABLE_STYLE.tableRow()}
-            {...cell?.getCellProps()}
-            fontSize="11px"
-         
+        key={index}
+        w={
+          type === "txHash"
+            ? "33.2%"
+            : type === "txType"
+            ? "26.2%"
+            : type === "amount"
+            ? "30%"
+            : type === "status"
+            ? "16.9%"
+            : ""
+        }
+        h='36px'
+        display='flex'
+        alignItems={'center'}
+        //   {...theme.STAKING_HISTORY_TABLE_STYLE.tableRow()}
+        {...cell?.getCellProps()}
+        fontSize="11px"   
+      >
+        {type === "txHash" ? (
+          <Link
+            isExternal
+            href={`https://etherscan.io/tx/${transactionHash}`}
+            textAlign={"center"}
+            w={"100%"}
+            color={"gray.1100"}
+            textDecor='underline'
           >
-            {type === "txHash" ? (
-              <Link
-                isExternal
-                href={`https://etherscan.io/tx/${transactionHash}`}
-                textAlign={"center"}
-                w={"100%"}
-                color={"gray.1100"}
-                textDecor='underline'
-              >
-                {trimAddress({
-                  address: transactionHash,
-                  firstChar: 6,
-                  lastChar: 4,
-                  dots: "...",
-                })}
-              </Link>
-            ) : (
-              ""
-            )}
-      
-            {type === "txType" ? (
-              //@ts-ignore
-              <Text textAlign={"center"}  color={"gray.1100"} w={"100%"}>
-                {typeName}
-              </Text>
-            ) : (
-              ""
-            )}
-            {type === "amount" ? (
-              <Text textAlign={"center"} color={"blue.200"} fontWeight={500} w={"100%"}>
-                {convertNumber({
-                  amount: data.amount,
-                  type: "ray",
-                  localeString: true,
-                })}
-             
-              </Text>
-            ) : (
-              ""
-            )}
-      
-            {type === "status" ? (
-              <Text textAlign={"center"} color={"gray.1100"} w={"100%"}>
-                True
-              </Text>
-            ) : (
-              ""
-            )}
-          </chakra.td>
-    )
+            {trimAddress({
+              address: transactionHash,
+              firstChar: 6,
+              lastChar: 4,
+              dots: "...",
+            })}
+          </Link>
+        ) : (
+          ""
+        )}
+  
+        {type === "txType" ? (
+          //@ts-ignore
+          <Text textAlign={"center"}  color={"gray.1100"} w={"100%"}>
+            {typeName}
+          </Text>
+        ) : (
+          ""
+        )}
+        {type === "amount" ? (
+          <Text textAlign={"center"} color={"blue.200"} fontWeight={500} w={"100%"}>
+            {convertNumber({
+              amount: data.amount,
+              type: "ray",
+              localeString: true,
+            })}
+          
+          </Text>
+        ) : (
+          ""
+        )}
+  
+        {type === "status" ? (
+          <Text textAlign={"center"} color={"gray.1100"} w={"100%"}>
+            True
+          </Text>
+        ) : (
+          ""
+        )}
+      </chakra.td>
+  )
 }
 export default TableRow
