@@ -58,7 +58,7 @@ function MobileStakeComponent(props: { operatorList: any }) {
         flexDir={"column"}
       >
         <Flex alignItems={"center"} h="35px">
-          <Text color="gray.300" fontSize={"12px"}>
+          <Text color="gray.300" fontSize={"12px"} mr={'5px'}>
             Balance:
           </Text>
           <Text fontSize={"13px"} color="gray.700">
