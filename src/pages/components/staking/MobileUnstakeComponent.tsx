@@ -15,9 +15,13 @@ import { floatParser } from "@/components/number";
 import useCallContract from "@/hooks/useCallContract";
 import { convertNumber } from '../../../utils/number';
 
-function MobileUnstakeComponent(props: { operatorList: any }) {
+function MobileUnstakeComponent(props: { 
+  operatorList: any 
+}) {
   const { account } = useWeb3React();
-  const { operatorList } = props;
+  const { 
+    operatorList, 
+  } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedOp, setSelectedOp] = useState<any>(operatorList?.[0]);
   const [txPending, setTxPending] = useRecoilState(txState);

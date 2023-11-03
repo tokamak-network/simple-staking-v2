@@ -29,9 +29,13 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { txState } from "@/atom/global/transaction";
 import { floatParser } from "@/components/number";
 
-function MobileStakeComponent(props: { operatorList: any }) {
+function MobileStakeComponent(props: { 
+  operatorList: any 
+}) {
   const { account } = useWeb3React();
-  const { operatorList } = props;
+  const { 
+    operatorList, 
+  } = props;
   const { userTonBalance } = useUserBalance(account);
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();

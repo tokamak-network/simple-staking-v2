@@ -12,12 +12,14 @@ import MobileRestakeComponent from "./MobileRestakeComponent";
 import MobileUnstakeComponent from "./MobileUnstakeComponent";
 import MobileWithdrawComponent from "./MobileWithdrawComponent";
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
+import { useRecoilState } from "recoil";
+import { inputState } from "@/atom/global/input";
 
 function MobileStaking() {
   const theme = useTheme();
   const [selectedTab, setSelectedTab] = useState("stake");
-  // const operatorListM = useOperatorListForMobile();
   const { candidateList } = useCandidateList();
+  const [value, setValue] = useRecoilState(inputState);
   
   return (
     <Flex
@@ -65,7 +67,10 @@ function MobileStaking() {
             color={selectedTab === "stake" ? "white.100" : "gray.1000"}
             fontSize={"13px"}
             fontWeight={500}
-            onClick={() => setSelectedTab("stake")}
+            onClick={() => {
+              setValue('')
+              setSelectedTab("stake")
+            }}
           >
             Stake
           </Button>
@@ -89,7 +94,10 @@ function MobileStaking() {
             color={selectedTab === "unstake" ? "white.100" : "gray.1000"}
             fontSize={"13px"}
             fontWeight={500}
-            onClick={() => setSelectedTab("unstake")}
+            onClick={() => {
+              setValue('')
+              setSelectedTab("unstake")
+            }}
           >
             Unstake
           </Button>
@@ -114,9 +122,13 @@ function MobileStaking() {
       ) : selectedTab === "restake" ? (
         <MobileRestakeComponent operatorList={candidateList} />
       ) : selectedTab === "unstake" ? (
-        <MobileUnstakeComponent operatorList={candidateList} />
+        <MobileUnstakeComponent 
+          operatorList={candidateList} 
+        />
       ) : (
-        <MobileStakeComponent operatorList={candidateList} />
+        <MobileStakeComponent 
+          operatorList={candidateList}
+        />
       )}
     </Flex>
   );
