@@ -35,7 +35,7 @@ function Operators() {
         w="250px"
         color={"gray.300"}
       >
-        Select an operator to stake, unstake, or withdraw your tokens.
+        Select an operator to stake your tokens.
       </Text>
       <Flex w="100%" px="20px" flexDir={"column"}>
         {candidateList.length !== 0 ? (

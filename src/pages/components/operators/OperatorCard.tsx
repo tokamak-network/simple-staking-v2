@@ -37,13 +37,6 @@ import { getCommitHistory } from '../../../utils/getTransactionHistory';
 
 function OperatorCard(props: { operator: any }) {
   const { operator } = props;
-  const { 
-    withdrawable, 
-    old_withdrawable, 
-    old_notWithdrawable, 
-    withdrawableLength ,
-    notWithdrawable
-  } = useWithdrawable(operator?.candidateContract)
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [clicked, setClicked] = useState(false);
@@ -52,15 +45,23 @@ function OperatorCard(props: { operator: any }) {
   const theme = useTheme();
   const { account } = useWeb3React();
   const { userTonBalance } = useUserBalance(account);
+
+  const { 
+    withdrawable, 
+    old_withdrawable, 
+    old_notWithdrawable, 
+    withdrawableLength ,
+    notWithdrawable
+  } = useWithdrawable(operator?.candidateContract)
+
   useEffect(() => {
     setCandidate(operator)
     const commitHistory = getCommitHistory({
-      asCommit: candidate?.asCommit,
-      oldCommitHistory: candidate?.oldCommitHistory
+      asCommit: operator?.asCommit,
+      oldCommitHistory: operator?.oldCommitHistory
     })
     setCommit(commitHistory)
-  }, [operator, commit])
-
+  }, [])
   
   
   const [open, setOpen] = useState(false);
@@ -72,16 +73,6 @@ function OperatorCard(props: { operator: any }) {
 
   const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } =
     useCallContract();
-
-  const delay = () => {
-    const operatorDelay = parseInt(candidate?.withdrawalDelay);
-    const globalDelay = parseInt(candidate?.globalWithdrawalDelay);
-    if (operatorDelay > globalDelay) {
-      return operatorDelay;
-    } else {
-      return globalDelay;
-    }
-  };
   
   const myStaked = convertNumber({
     amount: candidate?.stakeOf,
@@ -139,11 +130,13 @@ function OperatorCard(props: { operator: any }) {
     { title: "My Staked", value: `${myStaked} TON` },
     {
       title: "Not Withdrawable",
-      value: Number(notWithdrawable) + Number(old_notWithdrawable),
+      // value: Number(notWithdrawable) + Number(old_notWithdrawable),
+      value: notWithdrawable
     },
     {
       title: "Withdrawable",
-      value: Number(withdrawable) + Number(old_withdrawable),
+      // value: Number(withdrawable) + Number(old_withdrawable),
+      value: withdrawable
     },
     // {
     //   title: "New Commission Rate",
@@ -179,6 +172,7 @@ function OperatorCard(props: { operator: any }) {
             h="68px"
             w="100%"
             alignItems={"center"}
+            justifyContent={'space-between'}
             borderBottom={"1px solid #e7ebf2"}
           >
             <Flex>
@@ -304,7 +298,7 @@ function OperatorCard(props: { operator: any }) {
           </Flex> */}
 
           <MobileCustomInput
-            w="280px"
+            w="90%"
             placeHolder={"0.00"}
             type={"staking"}
             maxValue={userTonBalance}

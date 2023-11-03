@@ -107,9 +107,9 @@ export function useWithdrawable (layer2: string) {
     fetch ()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    DepositManager_CONTRACT, 
+    // DepositManager_CONTRACT, 
     layer2, 
-    withdrawable, 
+    // withdrawable, 
     // old_withdrawable, 
     blockNumber,
     // account

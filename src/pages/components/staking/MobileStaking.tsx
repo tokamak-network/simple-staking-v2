@@ -102,11 +102,8 @@ function MobileStaking() {
             fontSize={"13px"}
             fontWeight={500}
             onClick={() => {
-              alert ('aaaa') 
-                setSelectedTab("withdraw")
-              
-            }
-            }
+              setSelectedTab("withdraw")
+            }}
           >
             Withdraw
           </Button>

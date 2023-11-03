@@ -69,7 +69,6 @@ export const TableRow: FC<TableRowProps>=({
         ) : (
           ""
         )}
-  
         {type === "txType" ? (
           //@ts-ignore
           <Text textAlign={"center"}  color={"gray.1100"} w={"100%"}>
@@ -90,7 +89,6 @@ export const TableRow: FC<TableRowProps>=({
         ) : (
           ""
         )}
-  
         {type === "status" ? (
           <Text textAlign={"center"} color={"gray.1100"} w={"100%"}>
             True

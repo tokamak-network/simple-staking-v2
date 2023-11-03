@@ -16,8 +16,8 @@ export function getColumnWidthWallet(columnName: string) {
 }
 
 export function getColumnWidthWalletMobile(columnName: string) {
-  return columnName === 'txHash' ? '27.8%' :
-    columnName === 'txType' ? '22.2%' : columnName === 'amount' ? '25%' :
-
-      columnName === 'status' ? '13.9%' : ''
+  return columnName === 'txHash' ? '33.2%' :
+    columnName === 'txType' ? '26.2%' : 
+    columnName === 'amount' ? '30%' :
+    columnName === 'status' ? '13.9%' : ''
 }
