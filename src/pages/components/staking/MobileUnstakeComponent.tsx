@@ -25,12 +25,12 @@ function MobileUnstakeComponent(props: { operatorList: any }) {
   const [amount, setAmount] = useState(0);
   const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } = useCallContract();
 
-  const staked = 
+  const staked = selectedOp ?
     convertNumber({
       amount: selectedOp.stakeOf,
       type: 'ray',
       localeString: true
-    }) 
+    }) : '0.00'
 
   return (
     <Flex w="100%" px="20px">
