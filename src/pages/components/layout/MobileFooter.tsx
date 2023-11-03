@@ -10,12 +10,12 @@ function MobileFooter() {
       alignItems="center"
       flexDir={"column"}
     >
-      <Text fontSize={"12px"} color="#7e7e8f">
+      {/* <Text fontSize={"12px"} color="#7e7e8f">
         Terms of Use
-      </Text>
+      </Text> */}
       <Flex alignItems={"center"} h="17px" mt="15px" >
         <Text fontSize={"12px"} color="#7e7e8f">
-          © 2022 <span style={{ color: "#2775ff" }}>Onther</span> PTE.LTD
+          TOKAMAK NETWORK PTE.LTD
         </Text>
         <Flex fontSize={"12px"} color="#7e7e8f" alignItems={'center'} ml='15px'>
           <Flex

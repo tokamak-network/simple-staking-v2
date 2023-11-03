@@ -4,9 +4,7 @@ import Sub_Logo from 'assets/images/Sub_Logo.png'
 import BalanceCard from "./BalanceCard";
 import useUserBalance from '@/hooks/useUserBalance';
 import { useWeb3React } from '@web3-react/core';
-import useOperatorList from "@/hooks/staking/useOperatorList";
 import { useEffect, useState } from "react";
-import BigNumber from "bignumber.js";
 import { convertNumber } from "utils/number";
 import { useCandidateList } from '../../../hooks/staking/useCandidateList';
 
@@ -41,7 +39,8 @@ useEffect (() => {
     const convertedWTon = expected ? expected.toLocaleString(undefined, { maximumFractionDigits: 2}) : '0.00'
     convertedWTon && setExpectedReward(convertedWTon)    
   }
-},[candidateList])
+},[candidateList, expectedReward])
+
   return (
     <Flex 
       w='100%' 
