@@ -113,7 +113,7 @@ function OperatorCard(props: { operator: any }) {
     { title: "Commit Count", value: commit ? commit.length : 0 },
     {
       title: "Recent Commit",
-      value: commit
+      value: commit && commit[0]
         ? `${moment.unix(commit[0].timestamp).fromNow()}`
         : "",
     },
@@ -231,7 +231,7 @@ function OperatorCard(props: { operator: any }) {
               Most Recent Commit
             </Text>
             <Text fontSize={"13px"} color="gray.700">
-              {commit
+              {commit && commit[0]
                 ? `${moment.unix(commit[0].timestamp).fromNow()}`
                 : ""}
             </Text>
@@ -367,7 +367,7 @@ function OperatorCard(props: { operator: any }) {
               </Text>
               <Text>
                 {" "}
-                {commit
+                {commit && commit[0]
                   ? `, ${moment
                       .unix(commit[0].timestamp)
                       .fromNow()}`

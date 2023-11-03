@@ -91,13 +91,14 @@ function MobileCustomInput(props: InputProp) {
   return (
     <InputGroup h="40px" justifyContent={"space-between"}>
       <Flex
-        w={!maxButton? '280px': "190px"}
+        w={!maxButton? '100%': "90%"}
         border={error ? "solid 1px red" : "solid 1px #dfe4ee"}
         borderRadius="4px"
         h="40px"
         justifyContent={"flex-end"}
         alignItems="center"
         px="10px"
+        mr={'15px'}
         fontSize={"13px"}
       >
         {txt ? <Text>Amount</Text> : <></>}

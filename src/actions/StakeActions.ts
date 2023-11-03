@@ -32,15 +32,12 @@ export const staking = async (userTonBalance: any, TON_CONTRACT: any, amount: an
         // if (confirm('Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates')) {
         const data = getData(layer2)
         if (TON_CONTRACT && amount) {
-            console.log('aaa')
             try {
-                console.log('bbb')
                 const tx = await TON_CONTRACT.approveAndCall(
                     WTON_ADDRESS,
                     convertToWei(amount.toString()),
                     data
                 )
-                console.log(tx)
                 setTxPending(true)
                 setTx(tx)
 

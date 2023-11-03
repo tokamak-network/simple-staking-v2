@@ -35,32 +35,34 @@ export function useDailyStaked () {
           totalSupply: stakeAmount
         }
       }
-
-      const {
-        stakingDayDatas
-      } = data
-      
       let filledData = []
-      const day = 86400
-      for (let i = 0; i < stakingDayDatas.length; i++) {
-        const now = Math.floor(new Date().getTime() / 1000)
-        const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day)
-
-        for (let i=0; i < sinceLastday ; i ++) {
-          const today = (stakingDayDatas[0].date + day) * i
-          filledData.push(pushToArray(today, stakingDayDatas[0].totalStaked))
-        }
-
-        filledData.push(pushToArray(stakingDayDatas[i].date, stakingDayDatas[i].totalStaked))
-
-        if (stakingDayDatas[i + 1]) {
-          const gap = Math.floor((stakingDayDatas[i].date - stakingDayDatas[i + 1].date) / day)
-
-          for (let j = 1; j < gap; j++) {
-            const date2 = (stakingDayDatas[i].date - day)
-            filledData.push(pushToArray(date2, stakingDayDatas[i + 1].totalStaked))
+      if (data) {
+        const {
+          stakingDayDatas
+        } = data
+        
+        
+        const day = 86400
+        for (let i = 0; i < stakingDayDatas.length; i++) {
+          const now = Math.floor(new Date().getTime() / 1000)
+          const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day)
+  
+          for (let i=0; i < sinceLastday ; i ++) {
+            const today = (stakingDayDatas[0].date + day) * i
+            filledData.push(pushToArray(today, stakingDayDatas[0].totalStaked))
           }
-        } 
+  
+          filledData.push(pushToArray(stakingDayDatas[i].date, stakingDayDatas[i].totalStaked))
+  
+          if (stakingDayDatas[i + 1]) {
+            const gap = Math.floor((stakingDayDatas[i].date - stakingDayDatas[i + 1].date) / day)
+  
+            for (let j = 1; j < gap; j++) {
+              const date2 = (stakingDayDatas[i].date - day)
+              filledData.push(pushToArray(date2, stakingDayDatas[i + 1].totalStaked))
+            }
+          } 
+        }
       }
       
       const filteredData = dailyStakedTotal.filter((item: any) => item.fetchDateUTC < 20231024)
