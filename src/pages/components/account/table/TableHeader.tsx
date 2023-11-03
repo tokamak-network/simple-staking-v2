@@ -14,7 +14,7 @@ export const TableHeader = ({}) => {
  
   return (
     <chakra.thead
-      w={"700px"}
+      w={"100%"}
       borderBottom={"1px solid #dfe4ee"}
       px="20px"
       h={"29px"}
@@ -26,9 +26,7 @@ export const TableHeader = ({}) => {
         fontSize={"12px"} 
         color={"#3e495c"} 
         h={"29px"} 
-        minW={'700px'}
-        w={'700px'}
-        maxW={'700px'}
+        w={"100%"}
       >
         {HeaderColumn("txHash")}
 

@@ -49,7 +49,11 @@ export const MyHistoryTab: FC<MyHistoryTableProps> = ({ isLoading }) => {
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Flex w="100%" flexDir={"column"} mt="10px">
+    <Flex 
+      w="100%" 
+      flexDir={"column"} 
+      mt="10px"
+    >
       <Box w="100%">
         <chakra.table
           {...getTableProps()}
@@ -58,7 +62,6 @@ export const MyHistoryTab: FC<MyHistoryTableProps> = ({ isLoading }) => {
           w={'100%'}
         >
           <TableHeader />
-
           <chakra.tbody
             {...getTableBodyProps()}
             display="flex"
