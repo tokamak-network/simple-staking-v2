@@ -59,7 +59,16 @@ useEffect (() => {
       >
         Tokamak Network
       </Text>
-      <Text fontSize={'12px'} textAlign='center' mt='5px' mb='30px' w='200px' color={'gray.300'}>Stake your TON to earn Power TON and other rewards</Text>
+      <Text 
+        fontSize={'12px'} 
+        textAlign='center' 
+        mt='5px' 
+        mb='30px' 
+        w='200px' 
+        color={'gray.300'}
+      >
+        Stake your TON to earn rewards
+      </Text>
       <BalanceCard 
         title={'Your TON Balance'} 
         amount={

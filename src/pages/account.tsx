@@ -13,6 +13,7 @@ import {
   useTable,
   useSortBy,
 } from "react-table";
+
 function Account() {
   const theme = useTheme();
   const { account } = useWeb3React();
