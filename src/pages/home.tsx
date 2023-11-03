@@ -25,7 +25,7 @@ ChartJS.register(
 
 function Home() {
   const [width] = useWindowDimensions();
-  const mobile = width < 1040;
+  const mobile = width && width < 1040;
 
   return (
     <>

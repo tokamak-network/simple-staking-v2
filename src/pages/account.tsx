@@ -4,7 +4,6 @@ import trimAddress from "@/utils/trimAddress";
 import { useState, useMemo } from "react";
 import AccountTab from "./components/account/AccountTab";
 // import HistoryTab from "./components/account/HistoryTab";
-import { useUserHistory } from "../hooks/wallet/useUserHIstory";
 import MyHistoryTable from "@/common/table/wallet/MyHistoryTable";
 import { MyHistoryTab } from "./components/account/MyHistoryTab";
 import {
@@ -14,11 +13,12 @@ import {
   useTable,
   useSortBy,
 } from "react-table";
+
 function Account() {
   const theme = useTheme();
   const { account } = useWeb3React();
   const [tableLoading, setTableLoading] = useState<boolean>(true);
-  const { userHistory } = useUserHistory();
+  // const { userHistory } = useUserHistory();
   const [selectedTab, setSelectedTab] = useState("account");
 
   const historyCols: Column<any>[] = useMemo(

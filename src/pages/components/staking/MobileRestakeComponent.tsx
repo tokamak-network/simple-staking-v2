@@ -32,7 +32,7 @@ function MobileRestakeComponent(props: { operatorList: any }) {
   const { operatorList } = props;
   const [selectedOp, setSelectedOp] = useState<any>(operatorList?.[0]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { pendingUnstaked } = usePendingUnstaked(selectedOp?.layer2, account);
+  const { pendingUnstaked } = usePendingUnstaked(selectedOp?.candidateContract, account);
   const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } =
     useCallContract();
   const [txPending, setTxPending] = useRecoilState(txState);
@@ -50,11 +50,11 @@ function MobileRestakeComponent(props: { operatorList: any }) {
         flexDir={"column"}
       >
         <Flex alignItems={"center"} h="35px">
-          <Text color="gray.300" fontSize={"12px"}>
+          <Text color="gray.300" fontSize={"12px"} mr={'5px'}>
             Balance:
           </Text>
           <Text fontSize={"13px"} color="gray.700">
-            {/* {userTonBalance} TON */}
+            {pendingUnstaked} TON
           </Text>
         </Flex>
         <Flex
@@ -64,16 +64,19 @@ function MobileRestakeComponent(props: { operatorList: any }) {
           alignItems="center"
           px="10px"
           fontSize={"13px"}
+          justifyContent={'space-between'}
         >
-          <Text fontSize={"13px"} w="160px">
+          <Text fontSize={"13px"}>
             Re-stake Amount
           </Text>
-          <Text textAlign={"right"} w="110px">
-            {pendingUnstaked}
-          </Text>
-          <Text fontSize={"13px"} ml="7px">
-            TON
-          </Text>
+          <Flex>
+            <Text textAlign={"right"}>
+              {pendingUnstaked}
+            </Text>
+            <Text fontSize={"13px"} ml="7px">
+              TON
+            </Text>
+          </Flex>
         </Flex>
         <Flex
           mt="10px"
@@ -117,7 +120,7 @@ function MobileRestakeComponent(props: { operatorList: any }) {
             reStaking(
               account,
               DepositManager_CONTRACT,
-              selectedOp.layer2,
+              selectedOp.candidateContract,
               setTxPending,
               setTx
             )

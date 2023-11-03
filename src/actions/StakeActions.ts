@@ -28,10 +28,10 @@ export const staking = async (userTonBalance: any, TON_CONTRACT: any, amount: an
             return alert('Please check input amount.');
 
         }
+        
         // if (confirm('Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates')) {
         const data = getData(layer2)
         if (TON_CONTRACT && amount) {
-
             try {
                 const tx = await TON_CONTRACT.approveAndCall(
                     WTON_ADDRESS,
@@ -60,56 +60,56 @@ export const staking = async (userTonBalance: any, TON_CONTRACT: any, amount: an
 }
 
 export const reStaking = async (account: any, DepositManager_CONTRACT: any, layer2: string, setTxPending: any, setTx: any) => {
-    if (confirm('Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates')) {
-    }
-    // if (DepositManager_CONTRACT && account && layer2) {
-    //     try {
-    //         const numPendRequest = await DepositManager_CONTRACT.numRequests(layer2, account)
-    //         const tx = await DepositManager_CONTRACT.redepositMulti(layer2, numPendRequest)
-    //         setTxPending(true)
-    //         setTx(tx)
-
-    //         if (tx) {
-    //             await tx.wait().then((receipt: any) => {
-    //                 if (receipt.status) {
-    //                     setTxPending(false);
-    //                     setTx(undefined);
-    //                 }
-    //             })
-    //         }
-    //     }
-    //     catch (e) {
-    //         setTxPending(false);
-    //         setTx(undefined);
-    //     }
+    // if (confirm('Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates')) {
     // }
+    if (DepositManager_CONTRACT && account && layer2) {
+        try {
+            const numPendRequest = await DepositManager_CONTRACT.numRequests(layer2, account)
+            const tx = await DepositManager_CONTRACT.redepositMulti(layer2, numPendRequest)
+            setTxPending(true)
+            setTx(tx)
+
+            if (tx) {
+                await tx.wait().then((receipt: any) => {
+                    if (receipt.status) {
+                        setTxPending(false);
+                        setTx(undefined);
+                    }
+                })
+            }
+        }
+        catch (e) {
+            setTxPending(false);
+            setTx(undefined);
+        }
+    }
 
 }
 
 export const unstake = async (account: any, layer2: string, DepositManager_CONTRACT: any, setTxPending: any, setTx: any, amount: number) => {
-  if (confirm('Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates')) {
-    }
-    // if (DepositManager_CONTRACT && account && layer2) {
+//   if (confirm('Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates')) {
+//     }
+    if (DepositManager_CONTRACT && account && layer2) {
 
-    //     try {
-    //         const numPendRequest = await DepositManager_CONTRACT.numRequests(layer2, account)
-    //         const tx = await DepositManager_CONTRACT.requestWithdrawal(layer2, convertToRay(amount.toString()))
-    //         setTx(tx);
-    //         setTxPending(true)
-    //         if (tx) {
-    //             await tx.wait().then((receipt: any) => {
-    //                 if (receipt.status) {
-    //                     setTxPending(false);
-    //                     setTx(undefined);
-    //                 }
-    //             })
-    //         }
-    //     }
-    //     catch (e) {
-    //         setTxPending(false);
-    //         setTx(undefined);
-    //     }
-    // }
+        try {
+            const numPendRequest = await DepositManager_CONTRACT.numRequests(layer2, account)
+            const tx = await DepositManager_CONTRACT.requestWithdrawal(layer2, convertToRay(amount.toString()))
+            setTx(tx);
+            setTxPending(true)
+            if (tx) {
+                await tx.wait().then((receipt: any) => {
+                    if (receipt.status) {
+                        setTxPending(false);
+                        setTx(undefined);
+                    }
+                })
+            }
+        }
+        catch (e) {
+            setTxPending(false);
+            setTx(undefined);
+        }
+    }
 }
 
 export const withdraw = async (account: any, layer2: string, DepositManager_CONTRACT: any, withdrawableLength: any, setTxPending: any, setTx: any) => {

@@ -13,18 +13,29 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { txState } from "@/atom/global/transaction";
 import { floatParser } from "@/components/number";
 import useCallContract from "@/hooks/useCallContract";
+import { convertNumber } from '../../../utils/number';
 
-function MobileUnstakeComponent(props: { operatorList: any }) {
+function MobileUnstakeComponent(props: { 
+  operatorList: any 
+}) {
   const { account } = useWeb3React();
-  const { operatorList } = props;
+  const { 
+    operatorList, 
+  } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedOp, setSelectedOp] = useState<any>(operatorList?.[0]);
   const [txPending, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
   const [amount, setAmount] = useState(0);
-  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } =
-    useCallContract();
-    const staked = selectedOp? floatParser(selectedOp.yourStaked): 0
+  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } = useCallContract();
+
+  const staked = selectedOp ?
+    convertNumber({
+      amount: selectedOp.stakeOf,
+      type: 'ray',
+      localeString: true
+    }) : '0.00'
+
   return (
     <Flex w="100%" px="20px">
       <Flex
@@ -39,17 +50,17 @@ function MobileUnstakeComponent(props: { operatorList: any }) {
       >
         <Flex alignItems={"center"} h="35px">
           <Text color="gray.300" fontSize={"12px"}>
-            Balance:
+            Your Staked:
           </Text>
           <Text ml="5px" fontSize={"13px"} color="gray.700">
-            {selectedOp ? selectedOp.yourStaked : "0.00"} TON
+            {staked} TON
           </Text>
         </Flex>
         <MobileCustomInput
-          w={"147px"}
+          w={"100%"}
           placeHolder={"0.00"}
           type={"staking"}
-          maxValue={selectedOp ? selectedOp.yourStaked : "0.00"}
+          maxValue={selectedOp ? staked : "0.00"}
           setAmount={setAmount}
           maxButton={true}
         />
@@ -89,10 +100,10 @@ function MobileUnstakeComponent(props: { operatorList: any }) {
           _hover={{
             bg: "blue.200",
           }}
-          isDisabled={(staked ?  amount> staked: false) || amount === 0 || Number.isNaN(amount) ||
+          isDisabled={(staked ?  amount > Number(staked) : false) || amount === 0 || Number.isNaN(amount) ||
             amount === undefined }
           onClick={() =>
-            unstake(account, selectedOp.layer2, DepositManager_CONTRACT, setTxPending, setTx,amount )
+            unstake(account, selectedOp.candidateContract, DepositManager_CONTRACT, setTxPending, setTx,amount )
           }
           _disabled={{ bg: "#86929d", color: "#e9edf1" }}
         >

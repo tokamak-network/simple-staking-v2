@@ -18,7 +18,7 @@ export function useUserHistory () {
       if (account) {
         const data = await getOperatorsInfo();
 
-        let staked = BigNumber.from('0')
+        // let staked = BigNumber.from('0')
         let myHistory: any = []
 
         await Promise.all(data.map(async (obj: any) => {
@@ -26,10 +26,10 @@ export function useUserHistory () {
 
           const history = await getOperatorUserHistory(obj.layer2.toLowerCase(), account.toLowerCase())
           
-          if (account && SeigManager_CONTRACT && DepositManager_CONTRACT) {
-            stakeOf = await SeigManager_CONTRACT.stakeOf(obj.layer2, account)
-          }
-          staked = staked.add(stakeOf)
+          // if (account && SeigManager_CONTRACT && DepositManager_CONTRACT) {
+          //   stakeOf = await SeigManager_CONTRACT.stakeOf(obj.layer2, account)
+          // }
+          // staked = staked.add(stakeOf)
 
           myHistory = [...myHistory, ...history]
           return await myHistory

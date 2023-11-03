@@ -12,10 +12,8 @@ import moment from "moment";
 import { useEffect } from 'react';
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { getTransactionHistory, getCommitHistory } from '../../../utils/getTransactionHistory';
-import { useUserStaked } from "@/hooks/staking/useUserStaked";
 import { useWeb3React } from "@web3-react/core";
 import { convertNumber } from "@/components/number";
-import { useExpectedSeig } from '../../../hooks/staking/useCalculateExpectedSeig';
 
 function DesktopStaking () {
 
@@ -186,17 +184,29 @@ function DesktopStaking () {
             </Flex>
           </Flex>
           {/* table area */}
-          <Flex flexDir={'row'} mt={'60px'} ml={'70px'} justifyContent={'center'} alignItems={'center'}>
-            <HistoryTable 
-              columns={historyColumns}
-              data={txHistory}
-              tableType={'Staking'}
-            />
-            <HistoryTable 
-              columns={historyColumns}
-              data={commitHistory}
-              tableType={'Commit'}
-            />
+          <Flex 
+            flexDir={'row'} 
+            mt={'60px'} 
+            ml={'70px'} 
+            justifyContent={'center'} 
+            alignItems={'center'}
+          >
+            {
+              txHistory &&
+              <HistoryTable 
+                columns={historyColumns}
+                data={txHistory}
+                tableType={'Staking'}
+              />
+            }
+            {
+              commitHistory &&
+              <HistoryTable 
+                columns={historyColumns}
+                data={commitHistory}
+                tableType={'Commit'}
+              />
+            }
           </Flex>
         </Flex>
       )

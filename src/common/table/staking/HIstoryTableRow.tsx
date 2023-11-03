@@ -9,12 +9,14 @@ import { useTheme } from '@chakra-ui/react';
 
 type HistoryTableRowProps = {
   key: number
+  index: number
   cell: any
   tableType: string
 }
 
 export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   key,
+  index,
   cell,
   tableType,
   
@@ -44,7 +46,7 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   
   return  (
     <chakra.td
-      key={key}
+      key={index}
       w={ getColumnWidthStaking(tableType, type) }
       {...theme.STAKING_HISTORY_TABLE_STYLE.tableRow()}
       {...cell.getCellProps()}

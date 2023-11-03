@@ -35,7 +35,7 @@ function MobileWithdrawComponent(props: { operatorList: any }) {
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedOp, setSelectedOp] = useState<any>(operatorList?.[0]);
-  const { withdrawable, withdrawableLength } = useWithdrawable(selectedOp?.layer2)
+  const { withdrawable, withdrawableLength } = useWithdrawable(selectedOp?.candidateContract)
   const [txPending, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
 
@@ -109,7 +109,7 @@ function MobileWithdrawComponent(props: { operatorList: any }) {
           }}
           _disabled={{ bg: "#86929d", color: "#e9edf1" }}
           isDisabled={withdrawable === '0.00' || selectedOp === undefined}
-          onClick={() => withdraw(account, selectedOp.layer2, DepositManager_CONTRACT,withdrawableLength, setTxPending, setTx)}
+          onClick={() => withdraw(account, selectedOp.candidateContract, DepositManager_CONTRACT,withdrawableLength, setTxPending, setTx)}
         >
           Withdraw
         </Button>

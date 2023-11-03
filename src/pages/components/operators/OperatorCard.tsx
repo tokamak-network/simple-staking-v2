@@ -19,7 +19,7 @@ import { useWeb3React } from "@web3-react/core";
 import useOperatorList from "@/hooks/staking/useOperatorList"; 
 import { OperatorImage } from "@/common/table/staking/Oval";
 import moment from "moment";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import icon_close from "assets/images/icon_close.png";
 import Back from "assets/images/Back.png";
 import Image from "next/image";
@@ -33,18 +33,37 @@ import useCallContract from "@/hooks/useCallContract";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { txState } from "@/atom/global/transaction";
 import { useWithdrawable } from "@/hooks/staking/useWithdrawable";
+import { getCommitHistory } from '../../../utils/getTransactionHistory';
 
 function OperatorCard(props: { operator: any }) {
   const { operator } = props;
-  const { withdrawable, withdrawableLength ,notWithdrawable} = useWithdrawable(operator?.layer2)
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [clicked, setClicked] = useState(false);
+  const [candidate, setCandidate] = useState<any>();
+  const [commit, setCommit] = useState<any>();
   const theme = useTheme();
   const { account } = useWeb3React();
   const { userTonBalance } = useUserBalance(account);
 
-  // const { operatorList } = useOperatorList();
+  const { 
+    withdrawable, 
+    old_withdrawable, 
+    old_notWithdrawable, 
+    withdrawableLength ,
+    notWithdrawable
+  } = useWithdrawable(operator?.candidateContract)
+
+  useEffect(() => {
+    setCandidate(operator)
+    const commitHistory = getCommitHistory({
+      asCommit: operator?.asCommit,
+      oldCommitHistory: operator?.oldCommitHistory
+    })
+    setCommit(commitHistory)
+  }, [])
+  
+  
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState(0);
 
@@ -54,88 +73,88 @@ function OperatorCard(props: { operator: any }) {
 
   const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } =
     useCallContract();
+  
+  const myStaked = convertNumber({
+    amount: candidate?.stakeOf,
+    type: 'ray',
+    localeString: true
+  })
 
-  const delay = () => {
-    const operatorDelay = parseInt(operator?.withdrawalDelay);
-    const globalDelay = parseInt(operator?.globalWithdrawalDelay);
-    if (operatorDelay > globalDelay) {
-      return operatorDelay;
-    } else {
-      return globalDelay;
-    }
-  };
+  const commissionRate = candidate?.commissionRate ?
+    Number(
+      convertNumber({
+        amount: candidate?.commissionRate,
+        type: 'wei',
+        localeString: false
+      })
+    ) / 10000000 : '0'
 
   const tabs = [
     {
       title: "Website",
       value:
-        operator?.name === "tokamak1"
+      candidate?.name === "tokamak1"
           ? "https://tokamak.network"
-          : operator?.website,
+          : candidate?.website,
     },
-    { title: "Description", value: operator?.description },
-    { title: "Operator Address", value: operator?.operator },
-    { title: "Operator Contract", value: operator?.layer2 },
-    { title: "Chain ID", value: operator?.chainId },
-    { title: "Commit Count", value: operator?.commit.length },
+    // { title: "Description", value: operator?.description },
+    { title: "Operator Address", value: candidate?.candidate },
+    { title: "Operator Contract", value: candidate?.candidateContract },
+    // { title: "Chain ID", value: operator?.chainId },
+    { title: "Commit Count", value: commit ? commit.length : 0 },
     {
       title: "Recent Commit",
-      value: operator?.commit[0]
-        ? `${moment.unix(operator?.commit[0].blockTimestamp).fromNow()}`
+      value: commit && commit[0]
+        ? `${moment.unix(commit[0].timestamp).fromNow()}`
         : "",
     },
-    {
-      title: "Running Time",
-      value: operator?.commit[0]
-        ? `${moment.unix(operator?.deployedAt).fromNow(true)}`
-        : "",
-    },
+    // {
+    //   title: "Running Time",
+    //   value: commitHistory[0]
+    //     ? `${moment.unix(operator?.deployedAt).fromNow(true)}`
+    //     : "",
+    // },
     {
       title: "Commission Rate",
-      value: ` ${operator?.isCommissionRateNegative ? "-" : ""}
-    ${
-      Number(
-        operator?.commissionRate.toLocaleString("fullwide", {
-          useGrouping: false,
-        })
-      ) / 10000000
-    }
-    %`,
+      value: ` ${candidate?.isCommissionRateNegative ? "-" : ""}
+        ${commissionRate}%`,
     },
     {
       title: "Total Staked",
       value: `${convertNumber({
-        amount: operator?.updateCoinageTotalString,
+        amount: candidate?.stakedAmount,
         type: "ray",
         localeString: true,
       })} TON`,
     },
-    { title: "My Staked", value: `${operator?.yourStaked} TON` },
+    { title: "My Staked", value: `${myStaked} TON` },
     {
       title: "Not Withdrawable",
-      value: notWithdrawable,
+      // value: Number(notWithdrawable) + Number(old_notWithdrawable),
+      value: notWithdrawable
     },
     {
       title: "Withdrawable",
-      value: withdrawable,
+      // value: Number(withdrawable) + Number(old_withdrawable),
+      value: withdrawable
     },
-    {
-      title: "New Commission Rate",
-      value: ` ${operator?.delayedCommissionRateNegative ? "-" : ""}
-    ${
-      Number(
-        operator?.delayedCommissionRate.toLocaleString("fullwide", {
-          useGrouping: false,
-        })
-      ) / 10000000
-    }
-    %`,
-    },
-    {
-      title: "New Commission Rate Changed At",
-      value: operator?.delayedCommissionBlock?.toString(),
-    },
-    { title: "Withdrawal Delay", value: delay() },
+    // {
+    //   title: "New Commission Rate",
+    //   value: ` ${operator?.delayedCommissionRateNegative ? "-" : ""}
+    // ${
+    //   Number(
+    //     operator?.delayedCommissionRate.toLocaleString("fullwide", {
+    //       useGrouping: false,
+    //     })
+    //   ) / 10000000
+    // }
+    // %`,
+    // },
+    // {
+    //   title: "New Commission Rate Changed At",
+    //   value: operator?.delayedCommissionBlock?.toString(),
+    // },
+    // { title: "Withdrawal Delay", value: delay() },
   ];
   
   return (
@@ -153,6 +172,7 @@ function OperatorCard(props: { operator: any }) {
             h="68px"
             w="100%"
             alignItems={"center"}
+            justifyContent={'space-between'}
             borderBottom={"1px solid #e7ebf2"}
           >
             <Flex>
@@ -189,12 +209,8 @@ function OperatorCard(props: { operator: any }) {
             </Text>
             <Text fontSize={"13px"} color="gray.700">
               {" "}
-              {operator?.isCommissionRateNegative ? "-" : ""}
-              {Number(
-                operator?.commissionRate.toLocaleString("fullwide", {
-                  useGrouping: false,
-                })
-              ) / 10000000}
+              {candidate?.isCommissionRateNegative ? "-" : ""}
+              {commissionRate}
               %
             </Text>
           </Flex>
@@ -209,8 +225,8 @@ function OperatorCard(props: { operator: any }) {
               Most Recent Commit
             </Text>
             <Text fontSize={"13px"} color="gray.700">
-              {operator?.commit[0]
-                ? `${moment.unix(operator?.commit[0].blockTimestamp).fromNow()}`
+              {commit && commit[0]
+                ? `${moment.unix(commit[0].timestamp).fromNow()}`
                 : ""}
             </Text>
           </Flex>
@@ -225,7 +241,7 @@ function OperatorCard(props: { operator: any }) {
               My Staked
             </Text>
             <Text fontSize={"13px"} color="gray.700">
-              {operator?.yourStaked} TON
+              {myStaked} TON
             </Text>
           </Flex>
           <Flex borderBottom={"1px solid #e7ebf2"}></Flex>
@@ -282,7 +298,7 @@ function OperatorCard(props: { operator: any }) {
           </Flex> */}
 
           <MobileCustomInput
-            w="280px"
+            w="90%"
             placeHolder={"0.00"}
             type={"staking"}
             maxValue={userTonBalance}
@@ -311,7 +327,7 @@ function OperatorCard(props: { operator: any }) {
                 userTonBalance,
                 TON_CONTRACT,
                 amount,
-                operator?.layer2,
+                candidate?.candidateContract,
                 setTxPending,
                 setTx
               )
@@ -330,7 +346,7 @@ function OperatorCard(props: { operator: any }) {
               color={"black.300"}
               fontWeight={"bold"}
             >
-              {operator?.name}
+              {candidate?.name}
             </Text>
 
             <Flex fontSize="11px" color={"gray.300"}>
@@ -338,20 +354,16 @@ function OperatorCard(props: { operator: any }) {
                 Commission Rate{" "}
                 <span>
                   {" "}
-                  {operator?.isCommissionRateNegative ? "-" : ""}
-                  {Number(
-                    operator?.commissionRate.toLocaleString("fullwide", {
-                      useGrouping: false,
-                    })
-                  ) / 10000000}
+                  {candidate?.isCommissionRateNegative ? "-" : ""}
+                  {commissionRate}
                   %
                 </span>
               </Text>
               <Text>
                 {" "}
-                {operator?.commit[0]
+                {commit && commit[0]
                   ? `, ${moment
-                      .unix(operator?.commit[0].blockTimestamp)
+                      .unix(commit[0].timestamp)
                       .fromNow()}`
                   : ""}
               </Text>
@@ -385,13 +397,13 @@ function OperatorCard(props: { operator: any }) {
                     pt="20px"
                   >
                     {/* <Text>{operator.website}</Text> */}
-                    {operator.website && operator.name ? (
+                    {candidate.website && candidate.name ? (
                       <iframe
                         style={{ height: "100vh", width: "100%" }}
                         src={
-                          operator?.name === "tokamak1"
+                          candidate?.name === "tokamak1"
                             ? "https://tokamak.network"
-                            : operator?.website
+                            : candidate?.website
                         }
                       ></iframe>
                     ) : null}
@@ -405,7 +417,7 @@ function OperatorCard(props: { operator: any }) {
                     <Flex alignItems={"center"}>
                       <OperatorImage />
                       <Text color="black.300" fontSize={"20px"} ml="18px">
-                        {operator?.name}
+                        {candidate?.name}
                       </Text>
                     </Flex>
                     <Flex h="24px" w="24px" onClick={onClose} ml={"15px"}>

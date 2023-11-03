@@ -29,9 +29,13 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { txState } from "@/atom/global/transaction";
 import { floatParser } from "@/components/number";
 
-function MobileStakeComponent(props: { operatorList: any }) {
+function MobileStakeComponent(props: { 
+  operatorList: any 
+}) {
   const { account } = useWeb3React();
-  const { operatorList } = props;
+  const { 
+    operatorList, 
+  } = props;
   const { userTonBalance } = useUserBalance(account);
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -58,7 +62,7 @@ function MobileStakeComponent(props: { operatorList: any }) {
         flexDir={"column"}
       >
         <Flex alignItems={"center"} h="35px">
-          <Text color="gray.300" fontSize={"12px"}>
+          <Text color="gray.300" fontSize={"12px"} mr={'5px'}>
             Balance:
           </Text>
           <Text fontSize={"13px"} color="gray.700">
@@ -122,7 +126,7 @@ function MobileStakeComponent(props: { operatorList: any }) {
               userTonBalance,
               TON_CONTRACT,
               amount,
-              selectedOp.layer2,
+              selectedOp.candidateContract,
               setTxPending,
               setTx
             )

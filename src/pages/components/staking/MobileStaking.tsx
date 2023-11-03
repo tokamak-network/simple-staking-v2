@@ -11,12 +11,15 @@ import MobileStakeComponent from "./MobileStakeComponent";
 import MobileRestakeComponent from "./MobileRestakeComponent";
 import MobileUnstakeComponent from "./MobileUnstakeComponent";
 import MobileWithdrawComponent from "./MobileWithdrawComponent";
-import useOperatorListForMobile from "@/hooks/staking/useOperatorListForMobile";
+import { useCandidateList } from '@/hooks/staking/useCandidateList';
+import { useRecoilState } from "recoil";
+import { inputState } from "@/atom/global/input";
 
 function MobileStaking() {
   const theme = useTheme();
   const [selectedTab, setSelectedTab] = useState("stake");
-  const operatorListM = useOperatorListForMobile();
+  const { candidateList } = useCandidateList();
+  const [value, setValue] = useRecoilState(inputState);
   
   return (
     <Flex
@@ -64,7 +67,10 @@ function MobileStaking() {
             color={selectedTab === "stake" ? "white.100" : "gray.1000"}
             fontSize={"13px"}
             fontWeight={500}
-            onClick={() => setSelectedTab("stake")}
+            onClick={() => {
+              setValue('')
+              setSelectedTab("stake")
+            }}
           >
             Stake
           </Button>
@@ -88,7 +94,10 @@ function MobileStaking() {
             color={selectedTab === "unstake" ? "white.100" : "gray.1000"}
             fontSize={"13px"}
             fontWeight={500}
-            onClick={() => setSelectedTab("unstake")}
+            onClick={() => {
+              setValue('')
+              setSelectedTab("unstake")
+            }}
           >
             Unstake
           </Button>
@@ -100,20 +109,26 @@ function MobileStaking() {
             color={selectedTab === "withdraw" ? "white.100" : "gray.1000"}
             fontSize={"13px"}
             fontWeight={500}
-            onClick={() => setSelectedTab("withdraw")}
+            onClick={() => {
+              setSelectedTab("withdraw")
+            }}
           >
             Withdraw
           </Button>
         </Flex>
       </Flex>
       {selectedTab === "withdraw" ? (
-        <MobileWithdrawComponent operatorList={operatorListM} />
+        <MobileWithdrawComponent operatorList={candidateList} />
       ) : selectedTab === "restake" ? (
-        <MobileRestakeComponent operatorList={operatorListM} />
+        <MobileRestakeComponent operatorList={candidateList} />
       ) : selectedTab === "unstake" ? (
-        <MobileUnstakeComponent operatorList={operatorListM} />
+        <MobileUnstakeComponent 
+          operatorList={candidateList} 
+        />
       ) : (
-        <MobileStakeComponent operatorList={operatorListM} />
+        <MobileStakeComponent 
+          operatorList={candidateList}
+        />
       )}
     </Flex>
   );

@@ -26,8 +26,8 @@ export function useWindowDimensions() {
   // }, []);
 
   // return windowDimensions;
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+  const [width, setWidth] = useState<number | undefined>(undefined);
+  const [height, setHeight] = useState<number | undefined>(undefined);
 
   const handleWindowResize = () => {
     setWidth(screen.width);

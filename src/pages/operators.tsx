@@ -3,11 +3,12 @@ import { useWeb3React } from "@web3-react/core";
 import useOperatorList from "@/hooks/staking/useOperatorList";
 import OperatorCard from "./components/operators/OperatorCard";
 import useOperatorListForMobile from "@/hooks/staking/useOperatorListForMobile";
+import { useCandidateList } from '../hooks/staking/useCandidateList';
 
 function Operators() {
   const theme = useTheme();
   const { account } = useWeb3React();
-  const operatorListM = useOperatorListForMobile();
+  const { candidateList } = useCandidateList();
 
   return (
     <Flex
@@ -34,11 +35,11 @@ function Operators() {
         w="250px"
         color={"gray.300"}
       >
-        Select an operator to stake, unstake, or withdraw your tokens.
+        Select an operator to stake your tokens.
       </Text>
       <Flex w="100%" px="20px" flexDir={"column"}>
-        {operatorListM.length !== 0 ? (
-          operatorListM.map((operator: any, index: number) => {
+        {candidateList.length !== 0 ? (
+          candidateList.map((operator: any, index: number) => {
             return <OperatorCard operator={operator} key={index} />;
           })
         ) : (

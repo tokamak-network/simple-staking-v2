@@ -1,18 +1,11 @@
 import {
-  Button,
   Flex,
   Text,
-  useTheme,
-  NumberInput,
-  NumberInputField,
   Drawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
 } from "@chakra-ui/react";
 import icon_close from "assets/images/icon_close.png";
 import Image from "next/image";
@@ -72,6 +65,5 @@ function OperatorSelect(props: {
     </Drawer>
   );
 }
-
 
 export default OperatorSelect;
