@@ -413,7 +413,7 @@ function StakeModal() {
                         ? staking
                         : selectedModal === 'unstaking'
                         ? unStaking
-                        : ackaselectedModal === 'restaking'
+                        : selectedModal === 'restaking'
                         ? reStaking
                         : withdraw
                     }
