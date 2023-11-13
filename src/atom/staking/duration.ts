@@ -1,9 +1,11 @@
 import { atom, selector } from 'recoil';
 import { v1 } from 'uuid';
 
-const durationState = atom({
+export type Duration = '1-year' | '6-month' | '3-month' | '1-month';
+
+const durationState = atom<Duration>({
   key: `checkValues/${v1()}`,
-  default: 'Year',
+  default: '1-year',
 });
 
 const selectedDurationState = selector({

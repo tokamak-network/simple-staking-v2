@@ -13,6 +13,7 @@ import { inputBalanceState } from '@/atom/global/input';
 import { modalState } from '@/atom/global/modal';
 import axios from 'axios';
 import { getTotalSupply } from '@/api';
+import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
 
 function CalculatorModal() {
   const theme = useTheme();
@@ -46,7 +47,7 @@ function CalculatorModal() {
     // setResetValue();
     // setInput('0')
     setType('calculate');
-    setDuration('Year');
+    setDuration('1-year');
     closeModal();
   }, [closeModal, setDuration]);
 
@@ -65,16 +66,17 @@ function CalculatorModal() {
     const USD = KRW * usdRates;
     if (Staked) {
       const total = Number(Staked.replace(/,/g, '')) + inputBalance;
-      const unit = duration === 'Year' ? 365 : duration === 'Month' ? 30 : 7;
+      const unit = duration === '1-year' ? 365 : duration === '6-month' ? 30 : 7;
+
+      const returnRate = calculateRoiBasedonCompound({ totalStakedAmount: total, totalSupply: totalSup, duration });
 
       const stakedRatio = total / totalSup;
       const compensatePeraDay = stakedRatio * maxCompensate;
       const dailyNotMintedSeig = maxCompensate - maxCompensate * stakedRatio;
       const proportionalSeig = dailyNotMintedSeig * (pSeigDeduction / 100);
-      const expectedSeig = (inputBalance / total) * (Number(compensatePeraDay) + proportionalSeig) * unit;
-      const my = inputBalance + expectedSeig;
-      const returnRate = (my / inputBalance) * 100 - 100;
-      const roi = returnRate.toLocaleString(undefined, { maximumFractionDigits: 2 });
+      const expectedSeig = inputBalance * (returnRate / 100);
+
+      // const roi = returnRate.toLocaleString(undefined, { maximumFractionDigits: 2 });
       const rewardTON = expectedSeig.toLocaleString(undefined, { maximumFractionDigits: 4 });
       const rewardUSD = (expectedSeig * USD).toLocaleString(undefined, { maximumFractionDigits: 2 });
       const rewardKRW = (expectedSeig * KRW).toLocaleString(undefined, { maximumFractionDigits: 0 });
@@ -82,20 +84,25 @@ function CalculatorModal() {
       setRewardKRW(rewardKRW);
       setRewardUSD(rewardUSD);
       setRewardTON(rewardTON);
-      setROI(roi);
+      setROI(
+        returnRate?.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        }) ?? '-',
+      );
       setType('result');
     }
   }, [Staked, duration, input]);
 
   const recalcButton = useCallback(() => {
     setType('calculate');
-    setDuration('Year');
+    setDuration('1-year');
   }, [setDuration]);
 
   const toStakeButton = useCallback(async () => {
     setSelectedModal('staking');
     setType('calculate');
-    setDuration('Year');
+    setDuration('1-year');
   }, [setDuration, setSelectedModal]);
 
   const totalStakedAmount = useMemo(() => {
@@ -103,8 +110,6 @@ function CalculatorModal() {
     return selectedModalData?.stakedAmount ?? undefined;
     //@ts-ignore
   }, [selectedModalData?.stakedAmount]);
-
-  console.log('totalStakedAmount', totalStakedAmount);
 
   return (
     <Modal isOpen={selectedModal === 'calculator'} isCentered onClose={closeThisModal}>
