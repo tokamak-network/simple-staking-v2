@@ -14,6 +14,7 @@ import { modalState } from '@/atom/global/modal';
 import axios from 'axios';
 import { getTotalSupply } from '@/api';
 import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
+import { useDailyStaked } from '@/hooks/home/useDailyStaked';
 
 function CalculatorModal() {
   const theme = useTheme();
@@ -34,14 +35,15 @@ function CalculatorModal() {
 
   const { totalStaked, userTotalStaked } = useOperatorList();
   const { userTonBalance } = useUserBalance(account);
+  const { dailyStaked } = useDailyStaked();
 
-  const Staked = totalStaked
+  const Staked = dailyStaked[0]
     ? convertNumber({
-        amount: totalStaked,
+        amount: dailyStaked[0]?.totalSupply,
         type: 'ray',
         localeString: true,
       })
-    : '0.00';
+    : undefined;
 
   const closeThisModal = useCallback(() => {
     // setResetValue();
@@ -73,11 +75,10 @@ function CalculatorModal() {
       const stakedRatio = total / totalSup;
       const compensatePeraDay = stakedRatio * maxCompensate;
       const dailyNotMintedSeig = maxCompensate - maxCompensate * stakedRatio;
-      const proportionalSeig = dailyNotMintedSeig * (pSeigDeduction / 100);
       const expectedSeig = inputBalance * (returnRate / 100);
 
       // const roi = returnRate.toLocaleString(undefined, { maximumFractionDigits: 2 });
-      const rewardTON = expectedSeig.toLocaleString(undefined, { maximumFractionDigits: 4 });
+      const rewardTON = expectedSeig.toLocaleString(undefined, { maximumFractionDigits: 2 });
       const rewardUSD = (expectedSeig * USD).toLocaleString(undefined, { maximumFractionDigits: 2 });
       const rewardKRW = (expectedSeig * KRW).toLocaleString(undefined, { maximumFractionDigits: 0 });
 
@@ -92,7 +93,7 @@ function CalculatorModal() {
       );
       setType('result');
     }
-  }, [Staked, duration, input]);
+  }, [Staked, duration, input, dailyStaked]);
 
   const recalcButton = useCallback(() => {
     setType('calculate');

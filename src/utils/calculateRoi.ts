@@ -44,11 +44,6 @@ export function calculateRoiBasedonCompound(params: {
   const adjustedAPY = annualAPY / compoundsPerMonth;
   const stakeDuration = convertDurationToSec(duration);
 
-  console.log('totalStakedAmount', totalStakedAmount);
-  console.log('totalSupply', totalSupply);
-  console.log('annualAPY', annualAPY);
-  console.log('stakeDuration', stakeDuration);
-
   if (typeof stakeDuration !== 'number') return 0;
 
   const apyPerMonth = (1 + adjustedAPY) ** ((compoundsPerMonth * stakeDuration) / 31536000) - 1;
