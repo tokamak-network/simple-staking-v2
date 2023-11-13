@@ -68,9 +68,10 @@ function CalculatorModal() {
     const USD = KRW * usdRates;
     if (Staked) {
       const total = Number(Staked.replace(/,/g, '')) + inputBalance;
+
       const unit = duration === '1-year' ? 365 : duration === '6-month' ? 30 : 7;
 
-      const returnRate = calculateRoiBasedonCompound({ totalStakedAmount: total, totalSupply: totalSup, duration });
+      const returnRate = calculateRoiBasedonCompound({ totalStakedAmount: total, totalSupply: 77676561.5, duration });
 
       const stakedRatio = total / totalSup;
       const compensatePeraDay = stakedRatio * maxCompensate;
