@@ -4,13 +4,13 @@ import { Duration } from '@/atom/staking/duration';
 function convertDurationToSec(duration: Duration) {
   switch (duration) {
     case '1-year':
-      return 31536000;
+      return 365 * 24 * 60 * 60;
     case '6-month':
-      return 31536000 / 2;
+      return (365 * 24 * 60 * 60) / 2;
     case '3-month':
-      return 31536000 / 4;
+      return (365 * 24 * 60 * 60) / 4;
     case '1-month':
-      return 31536000 / 12;
+      return (365 * 24 * 60 * 60) / 12;
     default:
       break;
   }
@@ -43,6 +43,11 @@ export function calculateRoiBasedonCompound(params: {
   const annualAPY = calculateRoi(totalStakedAmount, totalSupply);
   const adjustedAPY = annualAPY / compoundsPerMonth;
   const stakeDuration = convertDurationToSec(duration);
+
+  console.log('totalStakedAmount', totalStakedAmount);
+  console.log('totalSupply', totalSupply);
+  console.log('annualAPY', annualAPY);
+  console.log('stakeDuration', stakeDuration);
 
   if (typeof stakeDuration !== 'number') return 0;
 
