@@ -120,7 +120,7 @@ function CalculatorModal() {
             <Flex w="100%" flexDir={'column'} alignItems={'center'} py={'10px'}>
               <ModalHeader
                 main={'Staking Calculator'}
-                sub={'Calculating hot much you can earn'}
+                sub={'The calculation is based on monthly compounding interest.'}
                 closeThisModal={closeThisModal}
               />
               <Flex
