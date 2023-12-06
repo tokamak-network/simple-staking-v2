@@ -81,9 +81,9 @@ export function useDailyStaked() {
 
         const test = calculateRoi(totalStaked, totalSup);
 
-        if (index === 0) {
-          console.log(totalStaked, totalSup);
-        }
+        // if (index === 0) {
+        //   console.log(totalStaked, totalSup);
+        // }
 
         // item.roi = (my/Number(1000)*100 - 100)/100;
         let roi = test.toLocaleString(undefined, {
