@@ -18,7 +18,7 @@ const GRAPHQL_DEV = process.env.NEXT_PUBLIC_GRAPHQL_API_DEV;
 export const BASE_PROVIDER =
 REACT_APP_MODE === "PRODUCTION"
     ? ethers.getDefaultProvider("mainnet")
-    : ethers.getDefaultProvider("goerli");
+    : ethers.getDefaultProvider("sepolia");
 
 export const API = 
 // MAINNET_API
