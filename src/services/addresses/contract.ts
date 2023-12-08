@@ -127,5 +127,5 @@ const info = [
 
 export const OLD_CONTRACT = 
   // info
-  REACT_APP_MODE === 'PRODUCTION' ? info : '';
+  REACT_APP_MODE === 'PRODUCTION' ? info : [];
 export default CONTRACT_ADDRESS;

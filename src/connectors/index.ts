@@ -9,11 +9,11 @@ import { TrezorConnector } from "@web3-react/trezor-connector";
 const POLLING_INTERVAL = 12000;
 const RPC_URLS = {
   1: "https://mainnet.infura.io/v3/34448178b25e4fbda6d80f4da62afba2",
-  5: "https://sepolia.infura.io/v3/34448178b25e4fbda6d80f4da62afba2",
+  11155111: "https://sepolia.infura.io/v3/34448178b25e4fbda6d80f4da62afba2",
 };
 
 export const network = new NetworkConnector({
-  urls: { 1: RPC_URLS[1], 4: RPC_URLS[5] },
+  urls: { 1: RPC_URLS[1], 4: RPC_URLS[11155111] },
   defaultChainId: 1,
 });
 
@@ -33,7 +33,7 @@ const newWalletLink = () =>
   });
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [1, 4, 5],
+  supportedChainIds: [1, 11155111, 5],
 });
 
 export const trazorConnector = new TrezorConnector({

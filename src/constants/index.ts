@@ -8,7 +8,7 @@ export const REACT_APP_MODE = process.env.NEXT_PUBLIC_MODE as string;
 export const NetworkContextName = `${new Date().getTime()}-NETWORK`;
 export const DEFAULT_NETWORK: string | undefined =
 // "1"
-REACT_APP_MODE === "PRODUCTION" ? "1" : "5";
+REACT_APP_MODE === "PRODUCTION" ? "1" : "11155111";
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const MAINNET_API = process.env.NEXT_PUBLIC_API_PRODUCTION;
 const DEV_API = process.env.NEXT_PUBLIC_API_DEV;
