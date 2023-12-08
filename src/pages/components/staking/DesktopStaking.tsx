@@ -80,7 +80,6 @@ function DesktopStaking () {
     );
 
     const [tableLoading, setTableLoading] = useState<boolean>(true);
-    // const { operatorList } = useOperatorList()
     const { candidateList } = useCandidateList()
     
     useEffect(() => {
