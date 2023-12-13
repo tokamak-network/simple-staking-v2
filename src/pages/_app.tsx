@@ -14,6 +14,7 @@ import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import MobileFooter from './components/layout/MobileFooter';
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from '../apollo';
+import TokamakGNB from './components/layout/TokamakGNB';
 // import NetworkModal from './components/global/NetworkModal';
 // import 'css/gradient.css';
 // import 'css/modalOverlay.css';
@@ -48,6 +49,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               // </Flex>
             ) : (
               <Flex flexDir={'column'} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
+                <TokamakGNB />
                 <Header
                 // walletopen={() => handleWalletModalOpen("wallet")}
                 />
