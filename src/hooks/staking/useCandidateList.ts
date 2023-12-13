@@ -86,9 +86,13 @@ export function useCandidateList () {
               
               stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
               const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
-              const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(oldCandidate)
-                
-              sumPending = pending.add(old_pending) 
+              
+              if (oldCandidate) {
+                const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(oldCandidate)
+                sumPending = pending.add(old_pending) 
+              } else {
+                sumPending = pending
+              }
             } catch (e) {
               console.log(e)
             }
