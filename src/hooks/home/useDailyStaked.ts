@@ -38,7 +38,6 @@ export function useDailyStaked() {
       let filledData = [];
       if (data) {
         const { stakingDayDatas } = data;
-
         const day = 86400;
         for (let i = 0; i < stakingDayDatas.length; i++) {
           const now = Math.floor(new Date().getTime() / 1000);
@@ -46,7 +45,7 @@ export function useDailyStaked() {
 
           for (let i = 0; i < sinceLastday; i++) {
             const today = (stakingDayDatas[0].date + day) * i;
-            filledData.push(pushToArray(today, stakingDayDatas[0].totalStaked));
+            if (today > 0) filledData.push(pushToArray(today, stakingDayDatas[0].totalStaked));
           }
 
           filledData.push(pushToArray(stakingDayDatas[i].date, stakingDayDatas[i].totalStaked));
@@ -63,8 +62,9 @@ export function useDailyStaked() {
       }
 
       const filteredData = dailyStakedTotal.filter((item: any) => item.fetchDateUTC < 20231024);
+      // console.log(filteredData)
       const concatData = filledData?.concat(filteredData);
-
+      // console.log(concatData)
       const graphdata = concatData?.map((item: any, index) => {
         const totalStaked = parseFloat(item.totalSupply) / Math.pow(10, 27);
         let my = Number(1000);
