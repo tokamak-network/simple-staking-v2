@@ -39,17 +39,18 @@ export function useDailyStaked() {
       if (data) {
         const { stakingDayDatas } = data;
         const day = 86400;
-        for (let i = 0; i < stakingDayDatas.length; i++) {
-          const now = Math.floor(new Date().getTime() / 1000);
-          const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day);
-          // console.log(sinceLastday)
-          for (let i = 0; i < sinceLastday; i++) {
-            const today = (stakingDayDatas[0].date + day) * i;
-            if (today > 0 && today < now+day) filledData.push(pushToArray(today, stakingDayDatas[0].totalStaked));
+        const now = Math.floor(new Date().getTime() / 1000);
+        const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day);
+        // input staked ton data in the end of graph
+        for (let i = 1; i < sinceLastday + 1; i++) {
+          const today = (stakingDayDatas[0].date) + day * i;
+          if (today > 0) {
+            filledData.push(pushToArray(today, stakingDayDatas[0].totalStaked));
           }
-
+        }
+        for (let i = 0; i < stakingDayDatas.length; i++) {
           filledData.push(pushToArray(stakingDayDatas[i].date, stakingDayDatas[i].totalStaked));
-
+          // fill staked data in the middle of graph
           if (stakingDayDatas[i + 1]) {
             const gap = Math.floor((stakingDayDatas[i].date - stakingDayDatas[i + 1].date) / day);
             for (let j = 1; j < gap; j++) {
