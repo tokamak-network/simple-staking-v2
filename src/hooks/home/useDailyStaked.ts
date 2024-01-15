@@ -42,17 +42,16 @@ export function useDailyStaked() {
         for (let i = 0; i < stakingDayDatas.length; i++) {
           const now = Math.floor(new Date().getTime() / 1000);
           const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day);
-
+          // console.log(sinceLastday)
           for (let i = 0; i < sinceLastday; i++) {
             const today = (stakingDayDatas[0].date + day) * i;
-            if (today > 0) filledData.push(pushToArray(today, stakingDayDatas[0].totalStaked));
+            if (today > 0 && today < now+day) filledData.push(pushToArray(today, stakingDayDatas[0].totalStaked));
           }
 
           filledData.push(pushToArray(stakingDayDatas[i].date, stakingDayDatas[i].totalStaked));
 
           if (stakingDayDatas[i + 1]) {
             const gap = Math.floor((stakingDayDatas[i].date - stakingDayDatas[i + 1].date) / day);
-
             for (let j = 1; j < gap; j++) {
               const date2 = stakingDayDatas[i].date - day;
               filledData.push(pushToArray(date2, stakingDayDatas[i + 1].totalStaked));
@@ -60,11 +59,11 @@ export function useDailyStaked() {
           }
         }
       }
+      //@ts-ignore
+      const setData = [...new Set(filledData.map(JSON.stringify))].map(JSON.parse)
 
       const filteredData = dailyStakedTotal.filter((item: any) => item.fetchDateUTC < 20231024);
-      // console.log(filteredData)
-      const concatData = filledData?.concat(filteredData);
-      // console.log(concatData)
+      const concatData = setData?.concat(filteredData);
       const graphdata = concatData?.map((item: any, index) => {
         const totalStaked = parseFloat(item.totalSupply) / Math.pow(10, 27);
         let my = Number(1000);
