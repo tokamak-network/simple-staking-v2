@@ -1,4 +1,17 @@
-import { Flex, Text, Button, Stack, Box, useTheme, CircularProgress } from '@chakra-ui/react';
+import { 
+  Flex, 
+  Text, 
+  Button, 
+  Stack, 
+  Box, 
+  useTheme, 
+  CircularProgress,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Center
+} from '@chakra-ui/react';
 import Image from 'next/image';
 // import {NavLink, RouteMatch} from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
@@ -13,11 +26,23 @@ import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import TOKAMAK_ICON from '@/assets/images/tnss_bi.png';
 import { useRecoilValue } from 'recoil';
 import { txStatusState } from '@/atom/global/transaction';
+import arrow from "assets/images/smallArrow.svg";
 
 type MenuLinksProps = {
   walletopen: () => void;
   account: string | undefined | null;
 };
+
+const dropdownList = [
+  {
+    link: "support",
+    name: "Support"
+  },
+  {
+    link: "",
+    name: "Get Help"
+  }
+]
 
 const navItemList = [
   {
@@ -40,10 +65,6 @@ const navItemList = [
   //   link: "wallet",
   //   name: "Wallet"
   // },
-  {
-    link: "support",
-    name: "Support"
-  },
 ];
 
 const NavItem = () => {
@@ -171,6 +192,18 @@ export const Header = () => {
   const { openModal } = useModal('wallet');
   // const theme = useTheme();
   const { account } = useWeb3React();
+  const [menuState, setMenuState] = useState(false);
+  const [hover, setHover] = useState(false);
+  const handleMenuButtonhover = (event: any) => {
+    event.preventDefault();
+    setMenuState(true);
+  };
+
+  const handleMenuButtonClick = (event: any) => {
+    event.preventDefault();
+
+    !menuState && setMenuState(!menuState);
+  };
   // /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   // const router = useRouter();
   // const { pathname } = router;
@@ -192,6 +225,90 @@ export const Header = () => {
         </Flex>
         <Flex fontSize={'18px'} fontWeight={'bold'} justifyContent="space-between" alignItems={'center'} w={'540px'} mr={'250px'}>
           <NavItem/>
+          <Menu 
+            onClose={() => {
+              setMenuState(false);
+            }}
+            isOpen={menuState}
+          >
+            <MenuButton
+              as={Center}
+              fontSize={'18px'}
+              cursor={"pointer"}
+              onMouseEnter={handleMenuButtonhover}
+              // onMouseLeave={()=> setHoverOn(false)}
+              onMouseDown={handleMenuButtonClick}
+              borderBottom={menuState ? "3px solid #007AFF" : ""}
+              onClick={handleMenuButtonClick}
+              display={"flex"}
+              flexDir={"row"}
+            >
+              <Flex>
+                <Text>More</Text>
+                <Flex
+                  marginLeft={"4px"}
+                  height={"24px"}
+                  // width={"24px"}
+                  transform={menuState === true ? "rotate(180deg)" : ""}
+                >
+                  <Image src={arrow} alt="icon_arrow" />
+                </Flex>
+              </Flex>
+            </MenuButton>
+            <MenuList
+              onMouseLeave={() => setMenuState(false)}
+              bg="#fff"
+              mt={"17px"}
+              border={"none"}
+              fontSize={'15px'}
+              fontWeight={600}
+              style={{
+                minWidth: "117px",
+                paddingTop: "16px",
+                paddingBottom: "6px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+              }}
+            >
+              <MenuItem
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+                // target="_blank"
+                as={"a"}
+                href={"support"}
+                h={"18px"}
+                marginBottom={"16px"}
+                padding={"0px"}
+                // border={'1px solid red'}
+                bg="#fff"
+                _focus={{ background: "0F0F12" }}
+                _hover={{ bg: "none", color: "#2a72e5" }}
+              >
+                <Text>
+                  Support
+                </Text>
+              </MenuItem>
+              <MenuItem
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+                target="_blank"
+                as={"a"}
+                href={"https://docs.google.com/forms/d/16H_To1WJjIVvdS5h6Ng9rTi2EXZhwgz5Oz4IGOdfdwc/edit"}
+                h={"18px"}
+                marginBottom={"16px"}
+                padding={"0px"}
+                // border={'1px solid red'}
+                bg="#fff"
+                _focus={{ background: "0F0F12" }}
+                _hover={{ bg: "none", color: "#2a72e5" }}
+              >
+                <Text>
+                  Get Help
+                </Text>
+              </MenuItem>
+            </MenuList>
+
+          </Menu>
         </Flex>
         <Flex>
             

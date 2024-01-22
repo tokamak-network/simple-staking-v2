@@ -69,9 +69,20 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
           fontWeight={type === 'date' ? 500 : 'bold'}
           color={'#304156'}
         >
-          {value}
+          {title === 'Unclaimed Staking Reward' && !minimumAmount ? '-' : value}
         </Text>
-        {unit? <Text fontSize={'13px'} fontWeight={500} ml={'6px'} mb={'5px'}>{unit}</Text> : ''}
+        {
+          unit ? 
+          <Text 
+            fontSize={'13px'} 
+            fontWeight={500} 
+            ml={'6px'} 
+            mb={'5px'}
+          >
+            {unit}
+          </Text> :
+          ''
+        }
       </Flex>
       {
         title === 'Unclaimed Staking Reward' && !minimumAmount ?
@@ -79,8 +90,9 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
           fontSize={'11px'}
           color={'#ff2d78'}
           mt={'3px'}
+          w={'250px'}
         >
-          No staking reward for this layer2
+          Operator must stake at least 1,000.1 TON for stakers to receive a staking reward. This operator is managed by Talken (https://talken.io/).
         </Flex> :
           title === 'Unclaimed Staking Reward' && 
           value !== '0.00' && 
