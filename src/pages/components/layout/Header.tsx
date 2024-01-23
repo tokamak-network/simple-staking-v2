@@ -223,7 +223,14 @@ export const Header = () => {
         <Flex fontSize={'27px'} fontWeight={900}>
           <Image src={TOKAMAK_ICON} alt="" />
         </Flex>
-        <Flex fontSize={'18px'} fontWeight={'bold'} justifyContent="space-between" alignItems={'center'} w={'540px'} mr={'250px'}>
+        <Flex 
+          fontSize={'18px'} 
+          fontWeight={'bold'} 
+          justifyContent="space-between" 
+          alignItems={'center'} 
+          w={'540px'} 
+          mr={'250px'}
+        >
           <NavItem/>
           <Menu 
             onClose={() => {
@@ -238,7 +245,7 @@ export const Header = () => {
               onMouseEnter={handleMenuButtonhover}
               // onMouseLeave={()=> setHoverOn(false)}
               onMouseDown={handleMenuButtonClick}
-              borderBottom={menuState ? "3px solid #007AFF" : ""}
+              borderBottom={menuState ? "none" : ""}
               onClick={handleMenuButtonClick}
               display={"flex"}
               flexDir={"row"}
@@ -260,8 +267,10 @@ export const Header = () => {
               bg="#fff"
               mt={"17px"}
               border={"none"}
-              fontSize={'15px'}
-              fontWeight={600}
+              fontSize={'13px'}
+              fontWeight={'normal'}
+              color={'#7a7e87'}
+              boxShadow={'0 1px 4px 0 rgba(96, 97, 112, 0.14)'}
               style={{
                 minWidth: "117px",
                 paddingTop: "16px",

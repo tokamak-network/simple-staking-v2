@@ -1,4 +1,4 @@
-<svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-<line x1="5.99609" y1="8.09319" x2="9.66399" y2="4.42529" stroke="black" stroke-linecap="round"/>
-<line x1="2.3282" y1="4.42529" x2="5.99609" y2="8.09319" stroke="black" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <path style="fill:none" d="M0 0h24v24H0z"/>
+    <path data-name="패스 8" d="m47.738 85.3-5.216 5.216a.782.782 0 0 1-1.108 0L36.2 85.3a.784.784 0 1 1 1.108-1.108l4.662 4.662 4.662-4.663A.784.784 0 1 1 47.74 85.3z" transform="translate(-29.969 -73.959)" style="fill:#ccc"/>
 </svg>

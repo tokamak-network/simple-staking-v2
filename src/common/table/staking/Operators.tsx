@@ -105,7 +105,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
           </Flex>
           {getCircle('operator')}
           <Flex>
-            Operator
+            Plasma EVM
           </Flex>
         </Flex>
         {/* <Select
@@ -254,7 +254,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                           (rate !== '-' && rate) ? Info('Commission Rate', (+rate) / 10000000, '%') : ('')
                         ) : ('')}
                         {type === 'yourStaked' ? (
-                          (yourStaked !== '0.00') ? Info('Your Staked', yourStaked, 'TON') : ('')
+                          (yourStaked !== '0.00' && yourStaked) ? Info('Your Staked', yourStaked, 'TON') : ('')
                         ) : ('')}
                         {type === 'expander' ? (
                           renderBtn(candidateContract, isOpen)

@@ -14,6 +14,7 @@ import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { getTransactionHistory, getCommitHistory } from '../../../utils/getTransactionHistory';
 import { useWeb3React } from "@web3-react/core";
 import { convertNumber } from "@/components/number";
+import getCircle from "@/common/table/staking/Circle";
 
 function DesktopStaking () {
 
@@ -81,7 +82,7 @@ function DesktopStaking () {
 
     const [tableLoading, setTableLoading] = useState<boolean>(true);
     // const { operatorList } = useOperatorList()
-    const { candidateList } = useCandidateList()
+    const { candidateList, noStakingRewardList } = useCandidateList()
     const { account } = useWeb3React();
     // console.log(candidateList)
     useEffect(() => {
@@ -215,20 +216,61 @@ function DesktopStaking () {
     
     return (
       <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
-        <PageHeader title={'Select your Operator'} subtitle={'You can select an operator to stake, restake, unstake, your TONS.'}/>
+        <PageHeader title={'Select Your Operator'} subtitle={'You can select an operator to stake, restake, unstake, your TONS.'}/>
         <Box fontFamily={theme.fonts.roboto}>
           {candidateList.length === 0 ? 
             <Flex justifyContent="center" alignItems={"center"} h='200px'>
               <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
             </Flex> :
-            <OpearatorTable 
-              renderDetail={renderRowSubComponent}
-              columns={columns}
-              // @ts-ignore
-              data={candidateList}
-              isLoading={tableLoading}
-            />
+            <Flex flexDir={'column'}>
+              <Flex 
+                alignItems={'center'}
+                justifyContent={'center'}
+                fontSize={'24px'}
+                color={'#3d495d'}
+                fontWeight={600}
+                mt={'60px'}
+                mb={'15px'}
+                fontFamily={theme.fonts.Nanum}
+              >
+                Staking Reward Available
+              </Flex>
+              <OpearatorTable 
+                renderDetail={renderRowSubComponent}
+                columns={columns}
+                // @ts-ignore
+                data={candidateList}
+                isLoading={tableLoading}
+              />
+            </Flex>
           }
+          {
+          noStakingRewardList.length !== 0 ? (
+            <Flex flexDir={'column'}>
+              <Flex 
+                alignItems={'center'}
+                justifyContent={'center'}
+                fontSize={'24px'}
+                color={'#3d495d'}
+                fontWeight={600}
+                mt={'60px'}
+                mb={'15px'}
+                fontFamily={theme.fonts.Nanum}
+              >
+                No Staking Reward Available
+              </Flex>
+              <OpearatorTable 
+                renderDetail={renderRowSubComponent}
+                columns={columns}
+                // @ts-ignore
+                data={noStakingRewardList}
+                isLoading={tableLoading}
+              />
+            </Flex>
+          ) : (
+            <Flex />
+          )
+        }
         </Box>
       </Flex>
     );

@@ -1,14 +1,11 @@
 import { Box, Flex, Text, useTheme, Button, Spinner } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
-import useOperatorList from "@/hooks/staking/useOperatorList";
 import OperatorCard from "./components/operators/OperatorCard";
-import useOperatorListForMobile from "@/hooks/staking/useOperatorListForMobile";
 import { useCandidateList } from '../hooks/staking/useCandidateList';
 
 function Operators() {
   const theme = useTheme();
-  const { account } = useWeb3React();
-  const { candidateList } = useCandidateList();
+  const { candidateList, noStakingRewardList } = useCandidateList();
 
   return (
     <Flex
@@ -47,6 +44,20 @@ function Operators() {
             <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
           </Flex>
         )}
+        {
+          noStakingRewardList.length !== 0 ? (
+            noStakingRewardList.map((operator: any, index: number) => {
+              return (
+                <Flex>
+                  <Flex h={1} color={'#gray.200'} />
+                  <OperatorCard operator={operator} key={index} />
+                </Flex>
+              )
+            })
+          ) : (
+            <Flex />
+          )
+        }
       </Flex>
     </Flex>
   );

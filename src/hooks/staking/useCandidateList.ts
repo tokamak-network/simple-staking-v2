@@ -16,6 +16,7 @@ import Coinage from "services/abi/AutoRefactorCoinage.json"
 
 export function useCandidateList () {
   const [candidateList, setCandidateList] = useState<any[]>([]);
+  const [noStakingRewardList, setNoStakingRewardList] = useState<any[]>([]);
   const { data } = useQuery(GET_CANDIDATE, {
     pollInterval: 10000
   });
@@ -109,11 +110,20 @@ export function useCandidateList () {
           }
           return tempObj
         }))
-        setCandidateList(candidates)
+
+        const noRewardList = candidates.filter((candidate: any) => {
+          return candidate.asCommit.length === 0
+        })
+        const rewardList = candidates.filter((candidate: any) => {
+          return candidate.asCommit.length !== 0
+        })
+
+        setNoStakingRewardList(noRewardList)
+        setCandidateList(rewardList)
       }
     }
     fetch()
   }, [data, account])
 
-  return { candidateList }
+  return { candidateList, noStakingRewardList }
 }

@@ -1,4 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react"
+import { Flex, Text, Link } from "@chakra-ui/react"
 import { FC, useEffect, useState } from "react";
 import { useCallback } from 'react';
 import Candidate from "services/abi/Candidate.json"
@@ -86,14 +86,42 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
       </Flex>
       {
         title === 'Unclaimed Staking Reward' && !minimumAmount ?
-        <Flex
+        <Text
           fontSize={'11px'}
           color={'#ff2d78'}
           mt={'3px'}
           w={'250px'}
         >
-          Operator must stake at least 1,000.1 TON for stakers to receive a staking reward. This operator is managed by Talken (https://talken.io/).
-        </Flex> :
+          <Link
+            isExternal
+            href={'https://etherscan.io/address/0xcc2f386adca481a00d614d5aa77a30984f264a07'}
+            color={'#2a72e5'}
+            textDecor={'underline'}
+            mr={'3px'}
+          >
+            Operator
+          </Link>  
+          must stake at least 
+          <Link
+            isExternal
+            href={'https://medium.com/onther-tech/staking-on-tokamak-network-a5cca48bea3d#:~:text=Become%20a%20direct%20Operator%20in%20the%20Tokamak%20Network%20by%20operating%20a%20new%20blockchain.%20In%20order%20to%20operate%20a%20chain%2C%20at%20least%201%2C000.1%20TON%20must%20be%20deposited%20(posting%20updated%20on%202024.1.22)'}
+            mx={'3px'}
+            color={'#2a72e5'}
+            textDecor={'underline'}
+          >
+            1,000.1 TON 
+          </Link>
+          for stakers to receive a staking reward. This operator is managed by 
+          <Link
+            isExternal
+            href={'https://talken.io/'}
+            color={'#2a72e5'}
+            textDecor={'underline'}
+            ml={'3px'}
+          >
+            Talken.
+          </Link>
+        </Text> :
           title === 'Unclaimed Staking Reward' && 
           value !== '0.00' && 
           account ?
