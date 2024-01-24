@@ -11,7 +11,7 @@ import MobileStakeComponent from "./MobileStakeComponent";
 import MobileRestakeComponent from "./MobileRestakeComponent";
 import MobileUnstakeComponent from "./MobileUnstakeComponent";
 import MobileWithdrawComponent from "./MobileWithdrawComponent"
-import MobileStakingComponent from "./MobileStakingComponent";
+// import MobileStakingComponent from "./MobileStakingComponent";
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { useRecoilState } from "recoil";
 import { inputState } from "@/atom/global/input";
