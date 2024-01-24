@@ -1,15 +1,20 @@
 import { Flex } from "@chakra-ui/react";
+import { convertNumber } from '../../../utils/number';
 
 export default function MobileInfo(props: {
   title: string,
-  value: string | number
+  value: string
 }) {
   const { title, value } = props
+  const convertedValue = value ? convertNumber({
+    amount: value,
+    type:'ray'
+  }) : '-'
   return (
     <Flex
       h={'70px'}
       w={'100%'}
-      my={'15px'}
+      mt={'15px'}
       borderRadius={'10px'}
       border={'solid 1px #e7ebf2'}
       bgColor={'#fff'}
@@ -34,7 +39,7 @@ export default function MobileInfo(props: {
           fontWeight={'bold'}
           color={'#131315'}
         >
-          {value}
+          {convertedValue}
         </Flex>
         <Flex
           fontSize={'10px'}

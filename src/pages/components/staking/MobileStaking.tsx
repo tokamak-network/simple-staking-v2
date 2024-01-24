@@ -11,7 +11,7 @@ import MobileStakeComponent from "./MobileStakeComponent";
 import MobileRestakeComponent from "./MobileRestakeComponent";
 import MobileUnstakeComponent from "./MobileUnstakeComponent";
 import MobileWithdrawComponent from "./MobileWithdrawComponent"
-// import MobileStakingComponent from "./MobileStakingComponent";
+import MobileStakingComponent from "./MobileStakingComponent";
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { useRecoilState } from "recoil";
 import { inputState } from "@/atom/global/input";
@@ -21,7 +21,7 @@ import { useWeb3React } from "@web3-react/core";
 function MobileStaking() {
   const theme = useTheme();
   const [selectedTab, setSelectedTab] = useState("Stake");
-  const { candidateList } = useCandidateList();
+  const { candidateList, noStakingRewardList } = useCandidateList();
   const [value, setValue] = useRecoilState(inputState);
   const { account } = useWeb3React();
   
@@ -121,11 +121,11 @@ function MobileStaking() {
           </Button>
         </Flex>
       </Flex>
-      {/* <MobileStakingComponent 
-        operatorList={candidateList}
+      <MobileStakingComponent 
+        operatorList={candidateList.concat(noStakingRewardList)}
         title={selectedTab}
-      /> */}
-      {selectedTab === "Withdraw" ? (
+      />
+      {/* {selectedTab === "Withdraw" ? (
         <MobileWithdrawComponent operatorList={candidateList} />
       ) : selectedTab === "Re-Stake" ? (
         <MobileRestakeComponent operatorList={candidateList} />
@@ -137,7 +137,7 @@ function MobileStaking() {
         <MobileStakeComponent 
           operatorList={candidateList}
         />
-      )}
+      )} */}
     </Flex>
   );
 }
