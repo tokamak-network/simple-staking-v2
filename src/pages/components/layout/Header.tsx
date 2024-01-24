@@ -229,7 +229,7 @@ export const Header = () => {
           justifyContent="space-between" 
           alignItems={'center'} 
           w={'340px'} 
-          mr={'250px'}
+          mr={'10%'}
         >
           <NavItem/>
           <Menu 
