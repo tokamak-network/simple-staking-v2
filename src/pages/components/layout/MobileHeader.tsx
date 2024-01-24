@@ -111,7 +111,7 @@ function MobileHeader() {
               //     ? 'white.100'
               //     : 'blue.200'
               //   : 'transparent'
-              "white.100"
+              txPending === true ? '#2a72e5' : "white.100"
             }
             zIndex={100}
             _hover={{}}
@@ -120,10 +120,11 @@ function MobileHeader() {
               txPending === true ? (
                 <Text
                   fontFamily={theme.fonts.roboto}
-                  fontWeight={100}
+                  fontWeight={'normal'}
                   fontSize={"14px"}
                   ml={"18px"}
                   pt={"1px"}
+                  color={'#fff'}
                 >
                   Tx PENDING
                 </Text>

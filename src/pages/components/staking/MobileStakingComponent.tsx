@@ -36,7 +36,7 @@ function MobileStakingComponent(props: {
     operatorList, 
     title
   } = props;
-  console.log(operatorList)
+
   const { userTonBalance } = useUserBalance(account);
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,29 +53,40 @@ function MobileStakingComponent(props: {
   const tonB = userTonBalance? floatParser(userTonBalance): 0
   const expectedSeig = useExpectedSeig(selectedOp?.candidateContract)
 
+  useEffect(() => {
+    setSelectedOp(operatorList[0])
+  }, [operatorList])
+
   const updateSeig = useCallback(async () => {
     if (account && library) {
-      const Candidate_CONTRACT = getContract(selectedOp?.candidateContract, Candidate.abi, library, account)
-      const tx = await Candidate_CONTRACT.updateSeigniorage()
-      setTx(tx);
-      setTxPending(true);
+      try {
+        const Candidate_CONTRACT = getContract(selectedOp?.candidateContract, Candidate.abi, library, account)
+        const tx = await Candidate_CONTRACT.updateSeigniorage()
+        setTx(tx);
+        setTxPending(true);
+      } catch (e) {
+        setTxPending(false);
+        setTx(undefined);
+      }
     }
   }, [])
   
   useEffect(() => {
     let disable = true
-    if (title === 'Stake') {
-      disable = 
-        userTonBalance === "0.00" ||
-        amount === 0 ||
-        Number.isNaN(amount) ||
-        amount === undefined  || (tonB?  amount > tonB: false)
-    } else if (title === 'Unstake') {
-      disable = (staked ?  amount > Number(staked) : false) || amount === 0 || Number.isNaN(amount) ||amount === undefined
-    } else if (title === 'Re-Stake') {
-      disable = pendingUnstaked === "0.00"
-    } else {
-      disable = withdrawable === '0.00' || selectedOp === undefined
+    if (selectedOp) {
+      if (title === 'Stake') {
+        disable = 
+          (userTonBalance === "0.00" ||
+          amount === 0 ||
+          Number.isNaN(amount) ||
+          amount === undefined  || (tonB?  amount > tonB: false))
+      } else if (title === 'Unstake') {
+        disable = (staked ?  amount > Number(staked) : false) || amount === 0 || Number.isNaN(amount) ||amount === undefined
+      } else if (title === 'Re-Stake') {
+        disable = pendingUnstaked === "0.00"
+      } else {
+        disable = withdrawable === '0.00' || selectedOp === undefined
+      }
     }
     setDisabled(disable)
   }, [title, amount])
