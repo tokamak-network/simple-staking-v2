@@ -356,7 +356,7 @@ function OperatorCard(props: { operator: any }) {
               </Link>
               operator have not met the minimum staked balance requirement (at least 1,000.1 TON). As a result, there will be
               <Link
-                ml={'3px'}
+                mx={'4px'}
                 color="#2a72e5"
                 textDecor={'none'}
                 href={'#'}
