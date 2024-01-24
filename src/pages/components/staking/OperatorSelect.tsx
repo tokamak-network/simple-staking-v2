@@ -48,15 +48,23 @@ function OperatorSelect(props: {
                  
                 }}
               >
-                <OperatorImage height="30px" width="30px" />
-                <Text
-                  ml="15px"
-                  fontSize={"16px"}
-                  color="black.300"
-                  fontWeight={500}
-                >
-                  {operator.name}
-                </Text>
+                <Flex flexDir={'row'} alignItems={'space-between'} w={'100%'}>
+                  <OperatorImage height="30px" width="30px" />
+                  <Text
+                    ml="15px"
+                    fontSize={"16px"}
+                    color="black.300"
+                    fontWeight={500}
+                  >
+                    {operator.name}
+                  </Text>
+                </Flex>
+                {
+                  operator.name === "Talken" ?
+                  <Flex fontSize={'12px'} color={'#2a72e5'} w={'100%'} justifyContent={'center'}>
+                    No Staking Reward Available
+                  </Flex> : ''
+                }
               </Flex>
             );
           })}

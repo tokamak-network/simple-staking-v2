@@ -36,6 +36,7 @@ function MobileStakingComponent(props: {
     operatorList, 
     title
   } = props;
+  console.log(operatorList)
   const { userTonBalance } = useUserBalance(account);
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();

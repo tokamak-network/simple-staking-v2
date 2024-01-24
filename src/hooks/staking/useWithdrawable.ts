@@ -25,13 +25,12 @@ export function useWithdrawable (layer2: string) {
         let numPendingRequests
         let old_numPendingRequests
         
-  
         let initial = BigNumber.from('0')
         const pendingRequests: any = [];
         const old_pendingRequests: any = [];
-        const old_address = getOldLayerAddress(layer2)
-
-        if (account && DepositManager_CONTRACT && Old_DepositManager_CONTRACT) {
+        
+        if (account && DepositManager_CONTRACT && Old_DepositManager_CONTRACT && layer2) {
+          const old_address = getOldLayerAddress(layer2)
           numPendingRequests = await DepositManager_CONTRACT.numPendingRequests(layer2, account)
           old_numPendingRequests = await Old_DepositManager_CONTRACT.numPendingRequests(old_address, account)
           let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(layer2, account)

@@ -7,10 +7,6 @@ import {
   useTheme,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import MobileStakeComponent from "./MobileStakeComponent";
-import MobileRestakeComponent from "./MobileRestakeComponent";
-import MobileUnstakeComponent from "./MobileUnstakeComponent";
-import MobileWithdrawComponent from "./MobileWithdrawComponent"
 import MobileStakingComponent from "./MobileStakingComponent";
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { useRecoilState } from "recoil";
@@ -46,7 +42,7 @@ function MobileStaking() {
         fontSize={"12px"}
         textAlign="center"
         mt="5px"
-        mb="30px"
+        mb="20px"
         w="250px"
         color={"gray.300"}
       >
@@ -125,19 +121,6 @@ function MobileStaking() {
         operatorList={candidateList.concat(noStakingRewardList)}
         title={selectedTab}
       />
-      {/* {selectedTab === "Withdraw" ? (
-        <MobileWithdrawComponent operatorList={candidateList} />
-      ) : selectedTab === "Re-Stake" ? (
-        <MobileRestakeComponent operatorList={candidateList} />
-      ) : selectedTab === "Unstake" ? (
-        <MobileUnstakeComponent 
-          operatorList={candidateList} 
-        />
-      ) : (
-        <MobileStakeComponent 
-          operatorList={candidateList}
-        />
-      )} */}
     </Flex>
   );
 }

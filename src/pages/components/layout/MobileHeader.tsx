@@ -30,6 +30,7 @@ import Burger_close_icon from "assets/images/Burger_close_icon.png";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
+
 type MenuLinksProps = {
   walletopen: () => void;
   account: string | undefined | null;
@@ -47,17 +48,25 @@ function MobileHeader() {
 
   const navItemList = [
     {
+      name: "Home",
       link: "home",
     },
     {
+      name: "Operators",
       link: "operators",
     },
     {
+      name: "Staking",
       link: "staking",
     },
     {
+      name: "Account",
       link: "account",
     },
+    {
+      name: "Get Help",
+      link: "https://docs.google.com/forms/d/16H_To1WJjIVvdS5h6Ng9rTi2EXZhwgz5Oz4IGOdfdwc/edit"
+    }
   ];
 
   const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
@@ -227,35 +236,71 @@ function MobileHeader() {
             <DrawerBody p="0">
               <Flex mt="24px" flexDir={"column"}>
                 {navItemList.map((item: any, index: number) => {
-                  const capitalLinkName =
-                    item.link.charAt(0).toUpperCase() + item.link.slice(1);
                   return (
-                    <Link
-                      href={`${item.link}`}
-                      key={`nav-item-${index}`}
-                      passHref
-                      onClick={onClose}
-                    >
+                    <Flex>
+                      {
+                      item.name === "Get Help" ?
                       <Flex
-                        fontSize={"20px"}
-                        fontWeight={600}
-                        mb="30px"
-                        color={
-                          isHover === index
-                            ? pathname === "/" + item.link
+                        key={`nav-item-${index}`}
+                        onClick={onClose}
+                      >
+                        <Flex
+                          fontSize={"20px"}
+                          fontWeight={600}
+                          mb="30px"
+                          color={
+                            isHover === index
+                              ? pathname === "/" + item.link
+                                ? "#2a72e5"
+                                : "#3e495c"
+                              : pathname === "/" + item.link
                               ? "#2a72e5"
                               : "#3e495c"
-                            : pathname === "/" + item.link
-                            ? "#2a72e5"
-                            : "#3e495c"
-                        }
-                        cursor={"pointer"}
-                        onMouseEnter={() => setIsHover(index)}
-                        onMouseLeave={() => setIsHover(undefined)}
-                      >
-                        {capitalLinkName}
+                          }
+                          cursor={"pointer"}
+                          onMouseEnter={() => setIsHover(index)}
+                          onMouseLeave={() => setIsHover(undefined)}
+                        >
+                          <a 
+                            target="_blank" 
+                            href={`${item.link}`} 
+                            rel="noopener noreferrer"
+                          >
+                            {item.name}
+                          </a>
+                        </Flex>
                       </Flex>
-                    </Link>
+                      :
+                      <Link
+                        href={`${item.link}`}
+                        key={`nav-item-${index}`}
+                        passHref
+                        onClick={onClose}
+                      >
+                        <Flex
+                          fontSize={"20px"}
+                          fontWeight={600}
+                          mb="30px"
+                          color={
+                            isHover === index
+                              ? pathname === "/" + item.link
+                                ? "#2a72e5"
+                                : "#3e495c"
+                              : pathname === "/" + item.link
+                              ? "#2a72e5"
+                              : "#3e495c"
+                          }
+                          cursor={"pointer"}
+                          onMouseEnter={() => setIsHover(index)}
+                          onMouseLeave={() => setIsHover(undefined)}
+                        >
+                          {item.name}
+                        </Flex>
+                      </Link>
+                      }
+                      
+
+                    </Flex>
                   );
                 })}
               </Flex>

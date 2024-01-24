@@ -24,7 +24,8 @@ export function useExpectedSeig (candidateContract: string) {
         TON_CONTRACT && 
         WTON_CONTRACT && 
         DepositManager_CONTRACT &&
-        account
+        account &&
+        candidateContract
       ) {
         try {
           const Tot = getContract(await SeigManager_CONTRACT.tot(), Coinage, library, account)
