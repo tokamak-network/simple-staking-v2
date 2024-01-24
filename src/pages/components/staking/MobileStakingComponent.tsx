@@ -79,7 +79,7 @@ function MobileStakingComponent(props: {
           (userTonBalance === "0.00" ||
           amount === 0 ||
           Number.isNaN(amount) ||
-          amount === undefined  || (tonB?  amount > tonB: false))
+          amount === undefined  || (tonB?  amount > tonB: false) || selectedOp.name === 'Talken')
       } else if (title === 'Unstake') {
         disable = (staked ?  amount > Number(staked) : false) || amount === 0 || Number.isNaN(amount) ||amount === undefined
       } else if (title === 'Re-Stake') {

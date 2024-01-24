@@ -48,10 +48,7 @@ function Operators() {
           noStakingRewardList.length !== 0 ? (
             noStakingRewardList.map((operator: any, index: number) => {
               return (
-                <Flex>
-                  <Flex h={1} color={'#gray.200'} />
-                  <OperatorCard operator={operator} key={index} />
-                </Flex>
+                <OperatorCard operator={operator} key={index} />
               )
             })
           ) : (

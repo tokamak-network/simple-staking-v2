@@ -241,7 +241,7 @@ function OperatorCard(props: { operator: any }) {
               My Staked
             </Text>
             <Text fontSize={"13px"} color="gray.700">
-              {myStaked} TON
+              {myStaked ? myStaked : '0.00'} TON
             </Text>
           </Flex>
           <Flex borderBottom={"1px solid #e7ebf2"}></Flex>
@@ -256,7 +256,7 @@ function OperatorCard(props: { operator: any }) {
               Available Amount
             </Text>
             <Text fontSize={"13px"} color="gray.700">
-              {userTonBalance} TON
+              {userTonBalance ? userTonBalance : '0.00'} TON
             </Text>
           </Flex>
           {/* <Flex
@@ -319,7 +319,8 @@ function OperatorCard(props: { operator: any }) {
               amount === 0 ||
               Number.isNaN(amount) ||
               amount === undefined ||
-              (tonB ? amount > tonB : false)
+              (tonB ? amount > tonB : false) ||
+              candidate?.name === 'Talken'
             }
             _disabled={{ bg: "#86929d", color: "#e9edf1" }}
             onClick={() =>
