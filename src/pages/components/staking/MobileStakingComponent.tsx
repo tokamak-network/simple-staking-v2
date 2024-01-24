@@ -19,7 +19,7 @@ import useCallContract from "@/hooks/useCallContract";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { txState } from "@/atom/global/transaction";
 import { convertNumber, floatParser } from "@/components/number";
-import { MobileInfo } from "./MobileInfo";
+import MobileInfo from "./MobileInfo";
 import { useWithdrawable } from "@/hooks/staking/useWithdrawable";
 import { usePendingUnstaked } from "@/hooks/staking/usePendingUnstaked";
 

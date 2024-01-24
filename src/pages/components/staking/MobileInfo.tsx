@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 
-export function MobileInfo(props: {
+export default function MobileInfo(props: {
   title: string,
   value: string | number
 }) {

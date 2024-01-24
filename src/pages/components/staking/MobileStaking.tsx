@@ -15,7 +15,7 @@ import MobileWithdrawComponent from "./MobileWithdrawComponent"
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { useRecoilState } from "recoil";
 import { inputState } from "@/atom/global/input";
-import { MobileInfo } from "./MobileInfo";
+import MobileInfo  from "./MobileInfo";
 import { useWeb3React } from "@web3-react/core";
 
 function MobileStaking() {
