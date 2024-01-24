@@ -14,6 +14,7 @@ import {
   DrawerContent,
   DrawerCloseButton,
   useDisclosure,
+  Link,
 } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import useOperatorList from "@/hooks/staking/useOperatorList"; 
@@ -160,7 +161,7 @@ function OperatorCard(props: { operator: any }) {
   return (
     <Flex
       mb="15px"
-      h={open ? "350px" : "78px"}
+      h={open ? "" : "78px"}
       border={"1px solid #e7ebf2"}
       borderRadius="10px"
       bg="white.100"
@@ -307,7 +308,7 @@ function OperatorCard(props: { operator: any }) {
             txt={"Amount"}
           />
           <Button
-            mt="15px"
+            my="15px"
             w="100%"
             bg="blue.200"
             color="white.100"
@@ -336,6 +337,36 @@ function OperatorCard(props: { operator: any }) {
           >
             Stake
           </Button>
+          {
+            candidate?.name === 'Talken' ?
+            <Text
+              fontSize={'12px'}
+              color={'#3e495c'}
+              flexDir={'row'}
+              mb={'15px'}
+              textAlign={'center'}
+            >
+              <Link
+                mr={'3px'}
+                href={'#'}
+                color="#ff2d78"
+                textDecor={'none'}
+              >
+                Warning: 
+              </Link>
+              operator have not met the minimum staked balance requirement (at least 1,000.1 TON). As a result, there will be
+              <Link
+                ml={'3px'}
+                color="#2a72e5"
+                textDecor={'none'}
+                href={'#'}
+              >
+                no staking reward 
+              </Link>
+              for staking on this layer2.
+            </Text>
+            : ''
+          }
         </Flex>
       ) : (
         <Flex ml="22px" onClick={() => setOpen(!open)}>

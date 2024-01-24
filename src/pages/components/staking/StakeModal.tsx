@@ -382,7 +382,7 @@ function StakeModal() {
                           !selectedModalData.minimumAmount ? (
                           <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
                             <span style={{ color: '#ff2d78' }}>Warning</span>: operator have not met the minimum staked
-                            balance requirement (greater than 1,000 TON). As a result, there will be
+                            balance requirement (at least than 1,000.1 TON). As a result, there will be
                             <span style={{ color: '#2a72e5' }}> no staking reward</span>
                             <span> for staking on this layer2.</span>
                           </Box>

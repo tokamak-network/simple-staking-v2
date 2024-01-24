@@ -8,14 +8,14 @@ import { getColumnWidthStaking } from '@/utils/getColumnWidth';
 import { useTheme } from '@chakra-ui/react';
 
 type HistoryTableRowProps = {
-  key: number
+  // key: number
   index: number
   cell: any
   tableType: string
 }
 
 export const HistoryTableRow: FC<HistoryTableRowProps> = ({
-  key,
+  // key,
   index,
   cell,
   tableType,

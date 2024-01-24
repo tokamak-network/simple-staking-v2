@@ -228,7 +228,7 @@ export const Header = () => {
           fontWeight={'bold'} 
           justifyContent="space-between" 
           alignItems={'center'} 
-          w={'540px'} 
+          w={'340px'} 
           mr={'250px'}
         >
           <NavItem/>

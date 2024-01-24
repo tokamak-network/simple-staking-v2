@@ -35,15 +35,21 @@ function Operators() {
         Select an operator to stake your tokens.
       </Text>
       <Flex w="100%" px="20px" flexDir={"column"}>
+        <Flex mb={'15px'} fontSize={'18px'} fontWeight={'bold'} color={'#3e495c'} justifyContent={'center'}>
+          Staking Reward Available
+        </Flex>
         {candidateList.length !== 0 ? (
           candidateList.map((operator: any, index: number) => {
-            return <OperatorCard operator={operator} key={index} />;
+            return <OperatorCard operator={operator} key={index} />
           })
         ) : (
           <Flex justifyContent="center" alignItems={"center"} h='200px'>
             <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
           </Flex>
         )}
+        <Flex my={'15px'} fontSize={'18px'} fontWeight={'bold'} color={'#3e495c'} justifyContent={'center'}>
+          No Staking Reward Available
+        </Flex>
         {
           noStakingRewardList.length !== 0 ? (
             noStakingRewardList.map((operator: any, index: number) => {
