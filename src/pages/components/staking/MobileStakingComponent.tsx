@@ -296,7 +296,7 @@ function MobileStakingComponent(props: {
           fontSize={'12px'}
           color={'#ff2d78'}
           mt={'3px'}
-          textAlign={'center'}
+          textAlign={'right'}
           // w={'250px'}
         >
           <Link
@@ -336,7 +336,7 @@ function MobileStakingComponent(props: {
           color={'#2a72e5'}
           cursor={'pointer'}
           justifyContent={'end'}
-          mt={'10px'}
+          mt={'12px'}
           onClick={()=> updateSeig()}
         >
           Add to Your Staked
