@@ -53,6 +53,12 @@ function MobileStakingComponent(props: {
   const tonB = userTonBalance? floatParser(userTonBalance): 0
   const expectedSeig = useExpectedSeig(selectedOp?.candidateContract)
 
+  const userExpectedSeig = expectedSeig? convertNumber({
+    amount: expectedSeig,
+    type: 'ray',
+    localeString: true
+  }) : '0.00'
+
   useEffect(() => {
     setSelectedOp(operatorList[0])
   }, [operatorList])
@@ -60,16 +66,22 @@ function MobileStakingComponent(props: {
   const updateSeig = useCallback(async () => {
     if (account && library) {
       try {
-        const Candidate_CONTRACT = getContract(selectedOp?.candidateContract, Candidate.abi, library, account)
+        const Candidate_CONTRACT = getContract(
+          selectedOp?.candidateContract, 
+          Candidate.abi, 
+          library, 
+          account
+        )
         const tx = await Candidate_CONTRACT.updateSeigniorage()
         setTx(tx);
         setTxPending(true);
       } catch (e) {
+        console.log(e)
         setTxPending(false);
         setTx(undefined);
       }
     }
-  }, [])
+  }, [account, library, selectedOp])
   
   useEffect(() => {
     let disable = true
@@ -342,7 +354,7 @@ function MobileStakingComponent(props: {
           </Link>
         </Text>
         ) : 
-        expectedSeig && expectedSeig !== '0' ?
+        userExpectedSeig && userExpectedSeig !== '0.00' ?
         <Flex
           fontSize={'11px'}
           color={'#2a72e5'}

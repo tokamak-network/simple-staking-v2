@@ -121,20 +121,20 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
           >
             Talken.
           </Link>
-        </Text> :
-          title === 'Unclaimed Staking Reward' && 
+        </Text> 
+        : title === 'Unclaimed Staking Reward' && 
           value !== '0.00' && 
           account ?
-        <Flex
-          fontSize={'11px'}
-          color={'#2a72e5'}
-          cursor={'pointer'}
-          mt={'3px'}
-          onClick={()=> updateSeig()}
-        >
-          Add to Your Staked
-        </Flex> : 
-        ''
+          <Flex
+            fontSize={'11px'}
+            color={'#2a72e5'}
+            cursor={'pointer'}
+            mt={'3px'}
+            onClick={()=> updateSeig()}
+          >
+            Add to Your Staked
+          </Flex> : 
+          ''
       }
     </Flex>
   )

@@ -6,7 +6,6 @@ import useCallContract from "../useCallContract";
 import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
 import { getEventByLayer2, getOperatorUserHistory } from "@/api";
 import { useWindowDimensions } from "../useWindowDimensions";
-import { useExpectedSeig } from './useCalculateExpectedSeig';
 import { getContract } from "@/components/getContract";
 import { toBN } from "web3-utils";
 import { calculateExpectedSeig } from "tokamak-staking-lib";
