@@ -81,6 +81,12 @@ function OperatorCard(props: { operator: any }) {
     localeString: true
   })
 
+  const candidateAmount = candidate?.stakeOfCandidate ? convertNumber({
+    amount: candidate?.stakeOfCandidate,
+    type: 'ray'
+  }) : '0.00'
+  const minimumAmount = Number(candidateAmount) > 1000
+
   const commissionRate = candidate?.commissionRate ?
     Number(
       convertNumber({
@@ -338,7 +344,7 @@ function OperatorCard(props: { operator: any }) {
             Stake
           </Button>
           {
-            candidate?.name === 'Talken' ?
+            candidate?.name === 'Talken' && !minimumAmount ?
             <Text
               fontSize={'12px'}
               color={'#3e495c'}
