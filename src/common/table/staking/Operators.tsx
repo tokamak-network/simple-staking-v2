@@ -140,11 +140,10 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
             flexDirection="column"
           >
             {page && page.map((row: any, i) => {
-              const { candidateContract } = row.original;
-              
+              const { candidateContract, stakedAmount } = row.original;
               const stakedId = candidateContract
               const { userStakeds } = useUserStaked(`${account?.toLocaleLowerCase()}-${stakedId.toLocaleLowerCase()}`)
-              const expectedSeig = useExpectedSeig(candidateContract)
+              const expectedSeig = useExpectedSeig(candidateContract, stakedAmount)
               
               row.original = {
                 ...row.original,

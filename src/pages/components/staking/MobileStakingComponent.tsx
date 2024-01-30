@@ -51,7 +51,7 @@ function MobileStakingComponent(props: {
   const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } = useCallContract();
 
   const tonB = userTonBalance? floatParser(userTonBalance): 0
-  const expectedSeig = useExpectedSeig(selectedOp?.candidateContract)
+  const expectedSeig = useExpectedSeig(selectedOp?.candidateContract, selectedOp?.stakedAmount)
 
   const userExpectedSeig = expectedSeig? convertNumber({
     amount: expectedSeig,
