@@ -27,37 +27,11 @@ export function useOperatorList() {
       
       let staked = BigNumber.from('0')
       let totalStake: BigNumber = BigNumber.from('0')
-      // if (account && SeigManager_CONTRACT) {
-      //   const stake = await SeigManager_CONTRACT.stakeOf(
-      //     '0x1f4aef3a04372cf9d738d5459f31950a53969ca3',
-      //     '0xf3d37602d501dc27e1bdbc841f174adf337909d2'
-      //   )
-      //   console.log('stakeOf', account, '0x1f4aef3a04372cf9d738d5459f31950a53969ca3', stake.toString())
-      //   // commisionRates = await SeigManager_CONTRACT.commissionRates(obj.layer2)
-      // }
       
       const operators = await Promise.all(data.map(async (obj: any) => {
-      // const operators = await Promise.all(data?.candidates.map(async (obj: any) => {
-        // const history = await getOperatorUserHistory(obj.layer2.toLowerCase())
-        // const commitHistory = await getEventByLayer2(obj.layer2.toLowerCase(), 'Comitted', 1, 300)
-        // const blockNumber = library && await library.getBlockNumber();
-        // const candidates = await getCandidates()
-        // const events = await getCandidateCreateEvent();
-        // const Layer2 = getContract(obj.layer2, Layer2ABI, library)
-        // const delegators = await getDelegators(obj.layer2.toLowerCase())
-
-        let pendingUnstakedLayer2
+        let pendingUnstakedLayer2 = ''
         let stakeOf = '0'
         let commisionRates = undefined
-        if (DepositManager_CONTRACT) {
-          pendingUnstakedLayer2 = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
-        }
-        
-        if (account && SeigManager_CONTRACT) {
-          // stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
-          // console.log('stakeOf', account, obj.candidateContract, stakeOf.toString())
-          // commisionRates = await SeigManager_CONTRACT.commissionRates(obj.layer2)
-        }
 
         const pendingWithdrawal = pendingUnstakedLayer2 ? convertNumber({
           amount: pendingUnstakedLayer2.toString(),
@@ -67,15 +41,7 @@ export function useOperatorList() {
         
         totalStake = obj.updateCoinageTotalString ? totalStake.add(obj.updateCoinageTotalString) : BigNumber.from('0')
         staked = staked.add(stakeOf)
-        const yourStaked = convertNumber({
-          amount: stakeOf.toString(),
-          type: 'ray',
-          localeString: true
-        })
-        // const commissionRate = commisionRates ? convertNumber({
-        //   amount: commisionRates.toString(),
-        //   type: 'wei',
-        // }) : '-'
+       
         const commissionRate = '-'
         const find = NON_CANDIDATE.find(data => data.layer2 === obj.layer2)
         const fetchedData = {
@@ -88,7 +54,6 @@ export function useOperatorList() {
           commissionRate: commissionRate,
    
         }
-        // const find = NON_CANDIDATE.find(data => data.layer2 === obj.layer2)
         return find ?
           await { ...fetchedData, name: find.name } : await fetchedData
       }))
@@ -105,7 +70,7 @@ export function useOperatorList() {
       }
     }
     fetchList()
-  }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account, setTotalStaked,width])
+  }, [])
 
   return { operatorList, userTotalStaked, totalStaked, tx }
 }

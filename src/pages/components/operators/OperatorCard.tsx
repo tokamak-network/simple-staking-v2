@@ -17,7 +17,6 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
-import useOperatorList from "@/hooks/staking/useOperatorList"; 
 import { OperatorImage } from "@/common/table/staking/Oval";
 import moment from "moment";
 import { useState, useEffect } from "react";

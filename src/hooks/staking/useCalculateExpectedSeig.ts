@@ -82,7 +82,6 @@ export function useExpectedSeig (candidateContract: string, stakedAmount: string
           } else {
             seig = stakedAmount === '0' ? 0 : seigOfLayer.mul(BigNumber.from(userStaked)).div(BigNumber.from(stakedAmount))
           }
-          
           setExpectedSeig(seig.toString())
         } catch (e) {
           console.log(e)
@@ -90,7 +89,7 @@ export function useExpectedSeig (candidateContract: string, stakedAmount: string
       }
     }
     fetch ()
-  }, [])
+  }, [account, candidateContract])
   return expectedSeig
 }
 

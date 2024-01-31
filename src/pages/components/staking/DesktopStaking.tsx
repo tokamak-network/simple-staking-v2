@@ -1,6 +1,5 @@
 import { IconClose } from "@/common/Icons/IconClose";
 import { IconOpen } from "@/common/Icons/IconOpen";
-import useOperatorList from "@/hooks/staking/useOperatorList";
 import { Box, Flex, Spinner, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
 import { useMemo, useCallback, useState } from 'react';
 import OperatorDetailInfo from "@/common/table/staking/OperatorDetail";
@@ -81,12 +80,10 @@ function DesktopStaking () {
     );
 
     const [tableLoading, setTableLoading] = useState<boolean>(true);
-    // const { operatorList } = useOperatorList()
     const { candidateList, noStakingRewardList } = useCandidateList()
     const { account } = useWeb3React();
-    // console.log(candidateList)
+
     useEffect(() => {
-      // operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)
       candidateList ? setTableLoading(false) : setTableLoading(true)
     }, [candidateList, tableLoading])
     
@@ -104,7 +101,7 @@ function DesktopStaking () {
       } = row.original;
       const txHistory = getTransactionHistory(row.original)
       const commitHistory = getCommitHistory(row.original)
-      // console.log(row.original)
+
       const candidateAmount = stakeOfCandidate? convertNumber({
         amount: stakeOfCandidate,
         type: 'ray'
