@@ -102,7 +102,6 @@ function DesktopStaking () {
         asCommit,
         stakeOfCandidate
       } = row.original;
-      
       const txHistory = getTransactionHistory(row.original)
       const commitHistory = getCommitHistory(row.original)
       // console.log(row.original)
@@ -111,7 +110,7 @@ function DesktopStaking () {
         type: 'ray'
       }) : '0.00'
       const minimumAmount = Number(candidateAmount) > 1000
-      
+
       const userExpectedSeig = expectedSeig? convertNumber({
         amount: expectedSeig,
         type: 'ray',
