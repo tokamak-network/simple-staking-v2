@@ -6,10 +6,15 @@ export default function MobileInfo(props: {
   value: string
 }) {
   const { title, value } = props
-  const convertedValue = value ? convertNumber({
-    amount: value,
-    type:'ray'
-  }) : '-'
+  
+  const convertedValue = 
+    !value || value === '-' ?  
+    '-' :
+    convertNumber({
+      amount: value,
+      type:'ray'
+    })
+
   return (
     <Flex
       h={'70px'}

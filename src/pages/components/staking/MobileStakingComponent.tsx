@@ -53,6 +53,12 @@ function MobileStakingComponent(props: {
   const tonB = userTonBalance? floatParser(userTonBalance): 0
   const expectedSeig = useExpectedSeig(selectedOp?.candidateContract, selectedOp?.stakedAmount, selectedOp?.candidate)
 
+  const candidateAmount = selectedOp?.stakeOfCandidate ? convertNumber({
+    amount: selectedOp?.stakeOfCandidate,
+    type: 'ray'
+  }) : '0.00'
+  const minimumAmount = Number(candidateAmount) > 1000
+
   const userExpectedSeig = expectedSeig? convertNumber({
     amount: expectedSeig,
     type: 'ray',
@@ -269,7 +275,7 @@ function MobileStakingComponent(props: {
                 5 TON
               </Text>
           </Flex>
-          : title === 'Stake' && selectedOp?.name === 'Talken' ?
+          : title === 'Stake' && !minimumAmount ?
           <Text
             fontSize={'12px'}
             color={'#3e495c'}
@@ -308,13 +314,13 @@ function MobileStakingComponent(props: {
           /> 
           <MobileInfo 
             title={'Unclaimed Staking Reward'}
-            value={expectedSeig}
+            value={minimumAmount ? expectedSeig : '-'}
           />
         </Flex>
           : '' 
       }
       {
-        selectedOp?.name === 'Talken' ?
+        !minimumAmount ?
         (
           <Text
           fontSize={'12px'}
