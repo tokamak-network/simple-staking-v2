@@ -47,7 +47,7 @@ function StakeModal() {
   const [, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
   const [withdrawType, setWithdrawType] = useState('');
-  const [tokenType, setTokenType] = useState('');
+  const [tokenType, setTokenType] = useState('ton');
 
   //@ts-ignore
   let modalComponent = undefined;
@@ -362,7 +362,7 @@ function StakeModal() {
                       ''
                     }
                     <Flex 
-                      h={'84px'} 
+                      h={selectedModal === 'withdraw' ? '' : '84px'} 
                       alignItems={'center'} 
                       flexDir={'row'} 
                       justifyContent={'center'} 
@@ -374,13 +374,6 @@ function StakeModal() {
                             {/* {modalComponent.balance} */}
                           </Text>
                         ) : selectedModal === 'withdraw' ? (
-                          // <Text fontSize={'38px'} fontWeight={500}>
-                          //   {withdrawType === 'old'
-                          //     ? modalComponent.balance2
-                          //     : withdrawType === 'new'
-                          //     ? modalComponent.balance3
-                          //     : '0.00'}
-                          // </Text>
                           ''
                         ) : (
                           <BalanceInput
