@@ -84,7 +84,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     : '0.00';
 
   const btnDisabledStake = () => {
-    return account === undefined || userTonBalance === '0.00' ? setStakeDisabled(true) : setStakeDisabled(false);
+    return account === undefined || userTonBalance === '0.00' || userWTonBalance === '0.00' ? setStakeDisabled(true) : setStakeDisabled(false);
   };
 
   const btnDisabledReStake = () => {
