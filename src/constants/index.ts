@@ -47,6 +47,12 @@ export const NON_CANDIDATE = [
   },
 ]
 
+export const MEMBER_ADDRESS_TEMP = [
+  "0xf3b17fdb808c7d0df9acd24da34700ce069007df",
+  "0x0f42d1c40b95df7a1478639918fc358b4af5298d",
+  "0x06d34f65869ec94b3ba8c0e08bceb532f65005e2"
+]
+
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   INJECTED: {

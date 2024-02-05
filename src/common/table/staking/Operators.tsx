@@ -33,6 +33,7 @@ import { useUserStaked } from '../../../hooks/staking/useUserStaked';
 import { useWeb3React } from '@web3-react/core';
 import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
 import BasicTooltip from '../../tooltip/index';
+import { MEMBER_ADDRESS_TEMP } from '@/constants';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -212,6 +213,8 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       stakeOf
                       // yourStaked,
                     } = cell.row.original;
+
+                    const isMember = MEMBER_ADDRESS_TEMP.find((address: string) => address === candidateContract)
                     
                     const type = cell.column.id;
                     const rate = convertNumber({
@@ -259,7 +262,10 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       >
                         {type === 'name' ? (
                           <Flex alignItems={'center'} mr={'30px'}>
-                            {getCircle(kind)}
+                            <Flex flexDir={'column'} justifyContent={isMember ? 'space-between' : 'center'} h={'25px'}>
+                              {getCircle(kind)}
+                              {isMember ? getCircle('member') : ''}
+                            </Flex>
                             <Box mr={'12px'}>
                               <OperatorImage imageLink={''}/>
                             </Box>
