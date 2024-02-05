@@ -3,9 +3,8 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
     staking: {
       header: 'Stake',
       subHeader: 'Stake TON (or WTON) to earn staking rewards.',
-      balanceInfo: 'TON Balance',
+      balanceInfo: 'Balance',
       balance: data.tonBalance,
-      balanceInfo2: 'WTON Balance',
       balance2: data.wtonBalance,
       bottomComment: 'Recommended minimum staking amount is 5 TON.',
       buttonName: 'Stake',
@@ -21,7 +20,7 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
     restaking: {
       header: 'Restaking',
       subHeader: 'Restake unstaked TON to continue earning staking rewards.',
-      balanceInfo: 'Re-stake Amount',
+      balanceInfo: 'Restakable Amount',
       balance: data.pendingUnstaked,
       bottomComment: '',
       buttonName: 'Restake',

@@ -362,7 +362,7 @@ function StakeModal() {
                       ''
                     }
                     <Flex 
-                      // h={'84px'} 
+                      h={'84px'} 
                       alignItems={'center'} 
                       flexDir={'row'} 
                       justifyContent={'center'} 
@@ -371,7 +371,7 @@ function StakeModal() {
                       {
                         selectedModal === 'restaking' ? (
                           <Text fontSize={'38px'} fontWeight={500}>
-                            {modalComponent.balance}
+                            {/* {modalComponent.balance} */}
                           </Text>
                         ) : selectedModal === 'withdraw' ? (
                           // <Text fontSize={'38px'} fontWeight={500}>
@@ -507,23 +507,30 @@ function StakeModal() {
                         </Flex>
                       </Flex>
                     ) : (
-                      <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
+                      <Flex 
+                        w={'100%'} 
+                        flexDir={'column'} 
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        h={selectedModal === 'restaking' ? '100px' : ''}
+                      >
                         <Text fontSize={'12px'} fontWeight={500} color={'#808992'}>
                           {
-                            selectedModal === 'staking' && tokenType === 'wton' ? 
-                              modalComponent.balanceInfo2 : 
-                              modalComponent.balanceInfo
+                            modalComponent.balanceInfo
                           }
                         </Text>
-                        {selectedModal === 'unstaking' &&
-                        //@ts-ignore
-                        account?.toLowerCase() === selectedModalData.candidate.toLowerCase() ? (
-                          <Text fontSize={'11px'} fontWeight={'normal'} color={'#86929d'}>
-                            (Operator's Minimum Staked Balance)
-                          </Text>
-                        ) : (
-                          ''
-                        )}
+                        {
+                          selectedModal === 'unstaking' &&
+                          //@ts-ignore
+                          account?.toLowerCase() === selectedModalData.candidate.toLowerCase() ? 
+                          (
+                            <Text fontSize={'11px'} fontWeight={'normal'} color={'#86929d'}>
+                              (Operator's Minimum Staked Balance)
+                            </Text>
+                          ) : (
+                            ''
+                          )
+                        }
                         <Text mt={'5px'}>
                           {
                             selectedModal === 'staking' && tokenType === 'wton' ? 
@@ -554,19 +561,26 @@ function StakeModal() {
                   ) : (
                     <Flex mt={'25px'} color={'#2a72e5'} fontSize={'12px'} fontWeight={500} alignItems={'center'}>
                       {
-                        //@ts-ignore
-                        selectedModal === 'unstaking' && !seigChecker(selectedModalData.seig) ? (
-                          <Flex color={'#2a72e5'} ml={'13px'}>
-                            <Text
-                              mr={'3px'}
-                              cursor={'pointer'}
-                              textDecoration={'underline'}
-                              onClick={() => updateSeig()}
-                            >
-                              Claim
-                            </Text>
-                            <Text color={'#3e495c'}>{modalComponent.bottomComment}</Text>
-                          </Flex>
+                        selectedModal === 'unstaking' ? (
+                          //@ts-ignore
+                          !seigChecker(selectedModalData.seig) ?
+                          (
+                            <Flex color={'#2a72e5'} ml={'13px'}>
+                              <Text
+                                mr={'3px'}
+                                cursor={'pointer'}
+                                textDecoration={'underline'}
+                                onClick={() => updateSeig()}
+                              >
+                                Claim
+                              </Text>
+                              <Text color={'#3e495c'}>{modalComponent.bottomComment}</Text>
+                            </Flex>
+                          ) : (
+                            <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
+                              <span style={{ color: '#ff2d78' }}>Warning</span>: You can withdraw unstaked TON to your wallet 14 days after unstaking. Remember to claim any unclaimed TON before unstaking.
+                            </Box>
+                          )
                         ) : selectedModal === 'staking' &&
                           //@ts-ignore
                           !selectedModalData.minimumAmount ? (
@@ -576,10 +590,11 @@ function StakeModal() {
                             <span style={{ color: '#2a72e5' }}> no staking reward</span>
                             <span> for staking on this layer2.</span>
                           </Box>
-                        ) : (
-                          ''
-                        )
-                      
+                        ) : selectedModal === 'restaking' ? (
+                          <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
+                            <span style={{ color: '#ff2d78' }}>Warning</span>: Restaking will stake unstaked TON, and these cannot be withdrawn until they are unstaked again.
+                          </Box>
+                        ) : ''
                       }
                     </Flex>
                   )}
