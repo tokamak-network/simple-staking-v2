@@ -7,7 +7,7 @@ import {
   Link
 } from "@chakra-ui/react";
 import { QuestionOutlineIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type tooltipProps = {
   label: string | undefined;
@@ -19,10 +19,25 @@ type tooltipProps = {
 const BasicTooltip: React.FC<tooltipProps> = (props) => {
   const { colorMode } = useColorMode();
   const { label, label2, placement, types } = props;
+  // const dropMenuRef = useRef<HTMLDivElement | null>();
   const [isLabelOpen, setIsLabelOpen] = useState(false)
+
   const tooltipControl = () => {
     !isLabelOpen ? setIsLabelOpen(true) : setIsLabelOpen(false)
   }
+
+  // useEffect(() => {
+  //   const handleOutsideClose = (e: {target: any}) => {
+  //   	// useRef current에 담긴 엘리먼트 바깥을 클릭 시 드롭메뉴 닫힘
+  //     console.log(e.target, dropMenuRef.current)
+  //     console.log(isLabelOpen)
+  //     if (isLabelOpen === true && dropMenuRef.current !== e.target) setIsLabelOpen(false);
+  //   };
+  //   document.addEventListener('click', handleOutsideClose);
+    
+  //   return () => document.removeEventListener('click', handleOutsideClose);
+  // }, [isLabelOpen]);
+
   const members = () => {
     return (
       <Text>
