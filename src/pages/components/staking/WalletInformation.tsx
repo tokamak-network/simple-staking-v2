@@ -41,7 +41,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [expSeig, setExpSeig] = useState('');
   const [stakeCandidate, setStakeCandidate] = useState('');
 
-  const { userTonBalance } = useUserBalance(account);
+  const { userTonBalance, userWTonBalance } = useUserBalance(account);
   // const {
   //   candidateContract,
   //   stakeOf,
@@ -64,7 +64,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   );
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
-  const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
+  const [, setSelectedModalData] = useRecoilState(modalData);
 
   const yourStaked = stakeOfUser
     ? convertNumber({
@@ -121,6 +121,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 
   const dataModal = {
     tonBalance: userTonBalance,
+    wtonBalance: userWTonBalance,
     pendingUnstaked: pendingUnstaked,
     stakedAmount: yourStaked,
     withdrawable: withdrawable,
