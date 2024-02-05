@@ -32,6 +32,7 @@ import { toggleState } from '@/atom/staking/toggle';
 import { useUserStaked } from '../../../hooks/staking/useUserStaked';
 import { useWeb3React } from '@web3-react/core';
 import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
+import BasicTooltip from '../../tooltip/index';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -99,13 +100,32 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
     <Flex w={'1100px'} flexDir={'column'}>
       <Flex justifyContent={'space-between'} mb={'15px'} ml={'17px'}>
         <Flex fontSize={'11px'} flexDir={'row'} alignItems={'center'}>
+        {getCircle('member')}
+          <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
+            <Flex mr={'3px'}>
+              DAO Committee Member
+            </Flex>
+            <BasicTooltip 
+              label={'member'} 
+            />
+          </Flex>
           {getCircle('candidate')}
-          <Flex mr={'20px'}>
-            DAO Candidate
+          <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
+          <Flex mr={'3px'}>
+              DAO Candidate
+            </Flex>
+            <BasicTooltip 
+              label={'candidate'} 
+            />
           </Flex>
           {getCircle('operator')}
-          <Flex>
-            Plasma EVM
+          <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
+            <Flex mr={'3px'}>
+              Plasma EVM
+            </Flex>
+            <BasicTooltip 
+              label={'plasma'} 
+            />
           </Flex>
         </Flex>
         {/* <Select

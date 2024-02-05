@@ -27,6 +27,8 @@ export const getCircle = (kind: string) => {
           bg={
             kind === 'operator'
               ? '#eb597b'
+              : kind === 'member' 
+              ? '#2a72e5'
               : '#00c766'  
           } 
         />

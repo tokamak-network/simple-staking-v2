@@ -13,7 +13,6 @@ import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { getTransactionHistory, getCommitHistory } from '../../../utils/getTransactionHistory';
 import { useWeb3React } from "@web3-react/core";
 import { convertNumber } from "@/components/number";
-import getCircle from "@/common/table/staking/Circle";
 
 function DesktopStaking () {
 
