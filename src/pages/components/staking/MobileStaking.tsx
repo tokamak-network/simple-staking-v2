@@ -84,7 +84,7 @@ function MobileStaking() {
             fontWeight={500}
             onClick={() => setSelectedTab("Re-Stake")}
           >
-            Re-Stake
+            Restake
           </Button>
           <Button
             w="25%"

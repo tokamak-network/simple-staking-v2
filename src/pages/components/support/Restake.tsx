@@ -25,7 +25,7 @@ function Restake(props: {reef:any}) {
         fontWeight={500}
         mb="40px"
       >
-        Re-stake
+        Restake
       </Heading>
       <Flex mt="20px" justifyContent={"center"} alignItems="center" mb="30px">
         <Flex

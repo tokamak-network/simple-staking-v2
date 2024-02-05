@@ -67,7 +67,7 @@ function MobileRestakeComponent(props: { operatorList: any }) {
           justifyContent={'space-between'}
         >
           <Text fontSize={"13px"}>
-            Re-stake Amount
+            Restake Amount
           </Text>
           <Flex>
             <Text textAlign={"right"}>
@@ -126,7 +126,7 @@ function MobileRestakeComponent(props: { operatorList: any }) {
             )
           }
         >
-          Re-Stake
+          Restake
         </Button>
       </Flex>
       <OperatorSelect

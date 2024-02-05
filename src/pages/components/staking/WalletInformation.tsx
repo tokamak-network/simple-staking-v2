@@ -200,7 +200,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             opacity={loading === true ? 0.5 : 1}
             onClick={() => modalButton('restaking', dataModal)}
           >
-            Re-Stake
+            Restake
           </Button>
           <Button
             {...(withdrawDisabled === true ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
