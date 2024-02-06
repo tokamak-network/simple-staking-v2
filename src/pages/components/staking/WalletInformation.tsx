@@ -177,7 +177,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
           <Button
             {...(stakeDisabled ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-            isDisabled={stakeDisabled}
+            // isDisabled={stakeDisabled}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
             onClick={() => modalButton('staking', dataModal)}
@@ -186,7 +186,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           </Button>
           <Button
             {...(unstakeDisabled ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-            isDisabled={unstakeDisabled}
+            // isDisabled={unstakeDisabled}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
             onClick={() => modalButton('unstaking', dataModal)}
@@ -195,7 +195,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           </Button>
           <Button
             {...(reStakeDisabled ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-            isDisabled={reStakeDisabled}
+            // isDisabled={reStakeDisabled}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
             onClick={() => modalButton('restaking', dataModal)}
@@ -204,7 +204,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           </Button>
           <Button
             {...(withdrawDisabled === true ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-            isDisabled={withdrawDisabled}
+            // isDisabled={withdrawDisabled}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
             onClick={() => modalButton('withdraw', dataModal)}
@@ -220,6 +220,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         </Grid>
       </Box>
       <StakeModal />
+      
       <CalculatorModal />
     </Container>
   );
