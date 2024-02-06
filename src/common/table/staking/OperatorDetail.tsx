@@ -85,7 +85,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
         }
       </Flex>
       {
-        title === 'Unclaimed Staking Reward' && !minimumAmount ?
+        title === 'Unclaimed Staking Reward' && !minimumAmount && account ?
         <Text
           fontSize={'11px'}
           color={'#ff2d78'}
