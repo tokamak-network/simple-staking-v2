@@ -109,7 +109,7 @@ function MobileWithdrawComponent(props: { operatorList: any }) {
           }}
           _disabled={{ bg: "#86929d", color: "#e9edf1" }}
           isDisabled={withdrawable === '0.00' || selectedOp === undefined}
-          onClick={() => withdraw(account, selectedOp.candidateContract, DepositManager_CONTRACT,withdrawableLength, setTxPending, setTx)}
+          onClick={() => withdraw(account, selectedOp.candidateContract, DepositManager_CONTRACT,withdrawableLength, true ,setTxPending, setTx)}
         >
           Withdraw
         </Button>

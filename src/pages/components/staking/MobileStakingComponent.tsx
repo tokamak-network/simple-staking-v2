@@ -117,9 +117,9 @@ function MobileStakingComponent(props: {
     setDisabled(disable)
   }, [title, amount, tokenType])
   
-  const staked = selectedOp.stakeOf ?
+  const staked = selectedOp?.stakeOf ?
     convertNumber({
-      amount: selectedOp.stakeOf,
+      amount: selectedOp?.stakeOf,
       type: 'ray',
       localeString: true
     }) : '0.00'
