@@ -87,8 +87,8 @@ export function useDailyStaked() {
 
         // item.roi = (my/Number(1000)*100 - 100)/100;
         let roi = test.toLocaleString(undefined, {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
+          maximumFractionDigits: 4,
+          minimumFractionDigits: 4,
         });
 
         let fixedData = {
