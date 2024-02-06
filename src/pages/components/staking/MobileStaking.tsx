@@ -77,12 +77,12 @@ function MobileStaking() {
           <Button
             w="25%"
             h="100%"
-            color={selectedTab === "Re-Stake" ? "white.100" : "gray.1000"}
-            bg={selectedTab === "Re-Stake" ? "blue.200" : "white.100"}
+            color={selectedTab === "Restake" ? "white.100" : "gray.1000"}
+            bg={selectedTab === "Restake" ? "blue.200" : "white.100"}
             _focus={{ bg: "#2a72e5", color: "white.100" }}
             fontSize={"13px"}
             fontWeight={500}
-            onClick={() => setSelectedTab("Re-Stake")}
+            onClick={() => setSelectedTab("Restake")}
           >
             Restake
           </Button>

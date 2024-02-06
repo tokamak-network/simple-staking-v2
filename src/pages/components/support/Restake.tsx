@@ -46,14 +46,14 @@ function Restake(props: {reef:any}) {
       <OrderedList>
         <ListItem color={"black.100"}>
           <Text {...theme.SUPPORT_PARAGRAPH_STYLE.paragraphText()}>
-            Press the <span style={{ fontWeight: "bold" }}>Re-stake</span>{" "}
+            Press the <span style={{ fontWeight: "bold" }}>Restake</span>{" "}
             button and a popup will appear.
           </Text>
         </ListItem>
         <ListItem color={"black.100"}>
           <Text {...theme.SUPPORT_PARAGRAPH_STYLE.paragraphText()}>
-            Click the <span style={{ fontWeight: "bold" }}>Re-stake</span>{" "}
-            button to re-stake all your re-stakable TON at once.
+            Click the <span style={{ fontWeight: "bold" }}>Restake</span>{" "}
+            button to Restake all your re-stakable TON at once.
           </Text>
         </ListItem>
         <ListItem color={"black.100"}>

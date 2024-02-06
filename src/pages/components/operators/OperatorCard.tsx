@@ -42,9 +42,10 @@ function OperatorCard(props: { operator: any }) {
   const [clicked, setClicked] = useState(false);
   const [candidate, setCandidate] = useState<any>();
   const [commit, setCommit] = useState<any>();
+  const [tokenType, setTokenType] = useState('TON')
   const theme = useTheme();
   const { account } = useWeb3React();
-  const { userTonBalance } = useUserBalance(account);
+  const { userTonBalance, userWTonBalance } = useUserBalance(account);
 
   const { 
     withdrawable, 
@@ -307,8 +308,10 @@ function OperatorCard(props: { operator: any }) {
             w="90%"
             placeHolder={"0.00"}
             type={"staking"}
-            maxValue={userTonBalance}
+            maxValue={tokenType === 'TON' ? userTonBalance : userWTonBalance}
             setAmount={setAmount}
+            setTokenType={setTokenType}
+            tokenType={tokenType}
             maxButton={false}
             txt={"Amount"}
           />

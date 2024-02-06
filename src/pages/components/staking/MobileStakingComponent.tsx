@@ -5,6 +5,8 @@ import {
   useTheme,
   useDisclosure,
   Link,
+  RadioGroup,
+  Radio,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import useUserBalance from "@/hooks/useUserBalance";
@@ -15,7 +17,7 @@ import icon_close from "assets/images/icon_close.png";
 import { useCallback, useEffect, useState } from "react";
 import OperatorSelect from "./OperatorSelect";
 import MobileCustomInput from "@/common/input/MobileCustomInput";
-import { reStaking, staking, unstake, withdraw } from "@/actions/StakeActions";
+import { reStaking, staking, unstake, withdraw, wtonStaking } from "@/actions/StakeActions";
 import useCallContract from "@/hooks/useCallContract";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { txState } from "@/atom/global/transaction";
@@ -37,12 +39,13 @@ function MobileStakingComponent(props: {
     title
   } = props;
 
-  const { userTonBalance } = useUserBalance(account);
+  const { userTonBalance, userWTonBalance } = useUserBalance(account);
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedOp, setSelectedOp] = useState<any>(operatorList?.[0]);
   const [disabled, setDisabled] = useState<boolean>(true);
   const [amount, setAmount] = useState(0);
+  const [tokenType, setTokenType] = useState('TON')
   const [txPending, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
   const { withdrawable, withdrawableLength } = useWithdrawable(selectedOp?.candidateContract)
@@ -50,7 +53,8 @@ function MobileStakingComponent(props: {
 
   const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } = useCallContract();
 
-  const tonB = userTonBalance? floatParser(userTonBalance): 0
+  const tonB = userTonBalance ? floatParser(userTonBalance): 0
+  const wtonB = userWTonBalance ? floatParser(userWTonBalance) : 0
   const expectedSeig = useExpectedSeig(selectedOp?.candidateContract, selectedOp?.stakedAmount, selectedOp?.candidate)
 
   const candidateAmount = selectedOp?.stakeOfCandidate ? convertNumber({
@@ -93,23 +97,27 @@ function MobileStakingComponent(props: {
     let disable = true
     if (selectedOp) {
       if (title === 'Stake') {
-        disable = 
-          (userTonBalance === "0.00" ||
+        disable = (
+          userTonBalance === "0.00" ||
+          userWTonBalance === "0.00" ||
           amount === 0 ||
           Number.isNaN(amount) ||
-          amount === undefined  || (tonB?  amount > tonB: false) || selectedOp.name === 'Talken')
+          amount === undefined  || 
+          (tonB && tokenType === 'TON' && amount > tonB ? true : false) || 
+          (wtonB && tokenType === 'WTON' && amount > wtonB ? true : false)
+        )
       } else if (title === 'Unstake') {
         disable = (staked ?  amount > Number(staked) : false) || amount === 0 || Number.isNaN(amount) ||amount === undefined
-      } else if (title === 'Re-Stake') {
+      } else if (title === 'Restake') {
         disable = pendingUnstaked === "0.00"
       } else {
         disable = withdrawable === '0.00' || selectedOp === undefined
       }
     }
     setDisabled(disable)
-  }, [title, amount])
+  }, [title, amount, tokenType])
   
-  const staked = selectedOp ?
+  const staked = selectedOp.stakeOf ?
     convertNumber({
       amount: selectedOp.stakeOf,
       type: 'ray',
@@ -134,6 +142,7 @@ function MobileStakingComponent(props: {
           </Text>
           {
             title === 'Withdraw' ? '' :
+            <Flex>
               <Text fontSize={"13px"} color="gray.700">
                 {
                   title === 'Stake' ?
@@ -143,10 +152,22 @@ function MobileStakingComponent(props: {
                   pendingUnstaked
                 } TON
               </Text>
+              {
+                title === 'Stake' ?
+                <Text 
+                  fontSize={"13px"} 
+                  color="gray.700"
+                  ml={'3px'}
+                >
+                  {`/ ${userWTonBalance}`} WTON
+                </Text> : ''
+              }
+
+            </Flex>
           }
         </Flex>
         {
-          title === 'Re-Stake' ?
+          title === 'Restake' ?
           (
             <Flex
               border={"solid 1px #dfe4ee"}
@@ -158,7 +179,7 @@ function MobileStakingComponent(props: {
               justifyContent={'space-between'}
             >
               <Text fontSize={"13px"}>
-                Re-stake Amount
+                Restake Amount
               </Text>
               <Flex>
                 <Text textAlign={"right"}>
@@ -187,9 +208,17 @@ function MobileStakingComponent(props: {
             <MobileCustomInput
               w={"147px"}
               placeHolder={"0.00"}
-              type={'staking'}
-              maxValue={title === 'Stake' ? userTonBalance : staked}
+              type={title}
+              maxValue={
+                title === 'Stake' && tokenType === 'TON' 
+                ? userTonBalance 
+                : title === 'Stake' && tokenType === 'WTON'  
+                ? userWTonBalance
+                : staked
+              }
               setAmount={setAmount}
+              setTokenType={setTokenType}
+              tokenType={tokenType}
               maxButton={true}
             />
           )
@@ -218,6 +247,69 @@ function MobileStakingComponent(props: {
             </Flex>
           </Flex>
         </Flex>
+        {
+          title === 'Withdraw' ?
+          <Flex
+            flexDir={'row'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            h={'43px'}
+          >
+            <Flex
+              fontSize={'12px'}
+              fontWeight={'normal'}
+              color={'#808992'}
+              alignItems={'center'}
+              mt={'5px'}
+            >
+              Withdraw as
+            </Flex>
+            <RadioGroup
+              onChange={(value: 'TON' | 'WTON') => setTokenType(value)} 
+              value={tokenType}
+            >
+              <Flex alignItems={'row'} mt={'11px'} justifyContent={'center'}>
+                <Radio
+                  value="TON"
+                  h={'20px'}
+                  mr={'6px'}
+                  bgColor={'#fff'}
+                  border={'solid 2px #c6cbd9'}
+                  isChecked={true}
+                >
+                  <Flex
+                    fontSize={'13px'}
+                    fontWeight={500}
+                    color={'#3d495d'}
+                    flexDir={'row'}
+                    alignItems={'center'}
+                  >
+                    TON 
+                  </Flex>
+                </Radio>
+                <Radio
+                  value="WTON"
+                  h={'20px'}
+                  mr={'6px'}
+                  bgColor={'#fff'}
+                  border={'solid 2px #c6cbd9'}
+                  isChecked={false}
+                >
+                  <Flex
+                    fontSize={'13px'}
+                    fontWeight={500}
+                    color={'#3d495d'}
+                    flexDir={'row'}
+                    alignItems={'center'}
+                  >
+                    WTON 
+                  </Flex>
+                </Radio>
+              </Flex>
+            </RadioGroup>
+          </Flex> :
+          ''
+        }
         <Button
           mt="15px"
           bg="blue.200"
@@ -234,7 +326,7 @@ function MobileStakingComponent(props: {
           isDisabled={disabled}
           _disabled={{ bg: "#86929d", color: "#e9edf1" }}
           onClick={() =>
-            title === 'Stake' ?
+            title === 'Stake' && tokenType === 'TON' ?
               staking(
                 userTonBalance,
                 TON_CONTRACT,
@@ -243,9 +335,18 @@ function MobileStakingComponent(props: {
                 setTxPending,
                 setTx
               ) :
+            title === 'Stake' && tokenType === 'WTON' ?
+              staking(
+                userWTonBalance,
+                WTON_CONTRACT,
+                amount,
+                selectedOp.candidateContract,
+                setTxPending,
+                setTx
+              ) :
             title === 'Unstake' ?
               unstake(account, selectedOp.candidateContract, DepositManager_CONTRACT, setTxPending, setTx, amount) :
-            title === 'Re-Stake' ?
+            title === 'Restake' ?
               reStaking(
                 account,
                 DepositManager_CONTRACT,
@@ -253,7 +354,15 @@ function MobileStakingComponent(props: {
                 setTxPending,
                 setTx
               ) :
-              withdraw(account, selectedOp.candidateContract, DepositManager_CONTRACT,withdrawableLength, setTxPending, setTx)
+              withdraw(
+                account, 
+                selectedOp.candidateContract, 
+                DepositManager_CONTRACT,
+                withdrawableLength, 
+                tokenType === 'TON' ? true : false,
+                setTxPending, 
+                setTx
+              )
           }
         >
           {title}
@@ -302,7 +411,43 @@ function MobileStakingComponent(props: {
             </Link>
             for staking on this layer2.
           </Text>
-          :''
+          : title === 'Restake' ? 
+          <Text
+            fontSize={'12px'}
+            color={'#3e495c'}
+            flexDir={'row'}
+            mt={'15px'}
+            textAlign={'center'}
+          >
+            <Link
+              mr={'3px'}
+              href={'#'}
+              color="#ff2d78"
+              textDecor={'none'}
+            >
+              Warning
+            </Link>
+            : Restaking will stake unstaked TON, and these cannot be withdrawn until they are unstaked again.
+          </Text>
+          : title === 'Unstake' ?
+          <Text
+          fontSize={'12px'}
+          color={'#3e495c'}
+          flexDir={'row'}
+          mt={'15px'}
+          textAlign={'center'}
+        >
+          <Link
+            mr={'3px'}
+            href={'#'}
+            color="#ff2d78"
+            textDecor={'none'}
+          >
+            Warning
+          </Link>
+          : You can withdraw unstaked TON to your wallet 14 days after unstaking.
+        </Text>
+          : ''
         }
       </Flex>
       {
@@ -320,7 +465,7 @@ function MobileStakingComponent(props: {
           : '' 
       }
       {
-        !minimumAmount ?
+        !minimumAmount && account ?
         (
           <Text
           fontSize={'12px'}

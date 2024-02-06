@@ -25,7 +25,7 @@ function TopButtonContainer(props: { refs: any }) {
       id: "unstake",
     },
     {
-      name: "Re-stake",
+      name: "Restake",
       id: "restake",
     },
     {
