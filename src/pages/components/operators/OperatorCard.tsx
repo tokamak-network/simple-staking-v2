@@ -252,7 +252,7 @@ function OperatorCard(props: { operator: any }) {
             </Text>
           </Flex>
           <Flex borderBottom={"1px solid #e7ebf2"}></Flex>
-          <Flex
+          {/* <Flex
             w="100%"
             justifyContent={"space-between"}
             h="35px"
@@ -266,44 +266,6 @@ function OperatorCard(props: { operator: any }) {
               {userTonBalance ? userTonBalance : '0.00'} TON
             </Text>
           </Flex>
-          {/* <Flex
-            h="40px"
-            border="1px solid #dfe4ee"
-            borderRadius={"4px"}
-            justifyContent="space-between"
-            alignItems={"center"}
-            px="10px"
-            fontSize={"13px"}
-          >
-            <Text color="gray.700">Amount</Text>
-            <NumberInput
-              borderColor={"transparent"}
-              _focus={{
-                borderColor: "transparent",
-              }}
-              _active={{
-                borderColor: "transparent",
-              }}
-              _hover={{
-                borderColor: "transparent",
-              }}
-              focusBorderColor="transparent"
-            >
-              <NumberInputField
-                textAlign={"right"}
-                border="none"
-                _focus={{
-                  borderWidth: 0,
-                }}
-                pr="0px"
-                _active={{
-                  borderWidth: 0,
-                }}
-              ></NumberInputField>
-            </NumberInput>
-            <Text ml="7px">TON</Text>
-          </Flex> */}
-
           <MobileCustomInput
             w="90%"
             placeHolder={"0.00"}
@@ -344,7 +306,7 @@ function OperatorCard(props: { operator: any }) {
             }
           >
             Stake
-          </Button>
+          </Button> */}
           {
             candidate?.name === 'Talken' && !minimumAmount ?
             <Text

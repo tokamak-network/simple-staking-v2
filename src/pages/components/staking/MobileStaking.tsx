@@ -36,17 +36,17 @@ function MobileStaking() {
         color="gray.700"
         mb="5px"
       >
-        Stake your TON
+        Stake
       </Text>
       <Text
         fontSize={"12px"}
         textAlign="center"
         mt="5px"
         mb="20px"
-        w="250px"
+        w="100%"
         color={"gray.300"}
       >
-        You can earn TON
+        Stake TON (or WTON) to earn staking rewards.
       </Text>
       <Flex w="100%" px="20px">
         <Flex

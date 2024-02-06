@@ -47,14 +47,17 @@ function Operators() {
             <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
           </Flex>
         )}
-        <Flex my={'15px'} fontSize={'18px'} fontWeight={'bold'} color={'#3e495c'} justifyContent={'center'}>
-          No Staking Reward Available
-        </Flex>
+        
         {
           noStakingRewardList.length !== 0 ? (
             noStakingRewardList.map((operator: any, index: number) => {
               return (
-                <OperatorCard operator={operator} key={index} />
+                <Flex flexDir={'column'}>
+                  <Flex my={'15px'} fontSize={'18px'} fontWeight={'bold'} color={'#3e495c'} justifyContent={'center'}>
+                    No Staking Reward Available
+                  </Flex>
+                  <OperatorCard operator={operator} key={index} />
+                </Flex>
               )
             })
           ) : (

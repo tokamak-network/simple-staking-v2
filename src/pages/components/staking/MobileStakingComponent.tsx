@@ -202,7 +202,7 @@ function MobileStakingComponent(props: {
               alignItems={'center'}
               px='10px'
             >
-                <Text fontSize={'13px'}>{withdrawable} TON</Text>
+                <Text fontSize={'13px'}>{`${withdrawable} ${tokenType}`} </Text>
             </Flex>
           ) : (
             <MobileCustomInput
