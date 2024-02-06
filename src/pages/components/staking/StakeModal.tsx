@@ -362,7 +362,7 @@ function StakeModal() {
                       ''
                     }
                     <Flex 
-                      h={selectedModal === 'withdraw' ? '' : '84px'} 
+                      h={selectedModal === 'withdraw' || selectedModal === 'restaking' ? '' : '84px'} 
                       alignItems={'center'} 
                       flexDir={'row'} 
                       justifyContent={'center'} 
@@ -370,9 +370,10 @@ function StakeModal() {
                     > 
                       {
                         selectedModal === 'restaking' ? (
-                          <Text fontSize={'38px'} fontWeight={500}>
-                            {/* {modalComponent.balance} */}
-                          </Text>
+                          // <Text fontSize={'1px'} fontWeight={500}>
+                          //   {/* {modalComponent.balance} */}
+                          // </Text>
+                          ''
                         ) : selectedModal === 'withdraw' ? (
                           ''
                         ) : (

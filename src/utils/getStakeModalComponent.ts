@@ -18,9 +18,9 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
       buttonName: 'Unstake',
     },
     restaking: {
-      header: 'Restaking',
+      header: 'Restake',
       subHeader: 'Restake unstaked TON to continue earning staking rewards.',
-      balanceInfo: 'Restakable Amount',
+      balanceInfo: 'Restakable Balance',
       balance: data.pendingUnstaked,
       bottomComment: '',
       buttonName: 'Restake',
