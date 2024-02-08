@@ -48,6 +48,7 @@ function DesktopHome() {
           minimumFractionDigits: 2,
         });
         return result.push(Number(test.replace(/,/g, '')));
+        // return result.push(totalStaked)
       }
       result.push(displayAmount(item.totalSupply));
     });
@@ -56,7 +57,7 @@ function DesktopHome() {
   const getData = () => {
     const latesData = getLatestData();
     const roi = dailyStakes?.map((item: any) => item.roi);
-    console.log(roi)
+    
     return {
       labels: dailyStakes?.map((item: any) => moment(item.blockTime).format('YYYY.MM.DD')),
       datasets: [

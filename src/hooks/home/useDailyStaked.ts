@@ -4,7 +4,7 @@ import { getDailyStakedTotal, getTotalSupply, getTotalStaked } from '@/api';
 import { useQuery } from '@apollo/client';
 import { GET_GRAPH, GET_FACTORY } from '../../graphql/getGraphdata';
 import moment from 'moment';
-import { calculateRoi } from '@/components/calculateRoi';
+import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
 
 export function useDailyStaked() {
   const [dailyStaked, setDailyStaked] = useState<any[]>([]);
@@ -79,16 +79,15 @@ export function useDailyStaked() {
         const expectedSeig = (my / total) * (Number(compensatePerDay) + proportionalSeig) * unit;
         my = my + expectedSeig;
 
-        const test = calculateRoi(totalStaked, totalSup);
+        const test = calculateRoiBasedonCompound({
+          totalStakedAmount: totalStaked, 
+          totalSupply: totalSup,
+          duration: '1-year'
+        });
 
-        // if (index === 0) {
-        //   console.log(totalStaked, totalSup);
-        // }
-
-        // item.roi = (my/Number(1000)*100 - 100)/100;
-        let roi = test.toLocaleString(undefined, {
-          maximumFractionDigits: 4,
-          minimumFractionDigits: 4,
+        let roi = (test/100).toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
         });
 
         let fixedData = {
