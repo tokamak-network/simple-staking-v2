@@ -138,7 +138,15 @@ function MobileStakingComponent(props: {
       >
         <Flex alignItems={"center"} h="35px">
           <Text color="gray.300" fontSize={"12px"} mr={'5px'}>
-            {title === 'Withdraw' ? 'Withdrawable Amount:' : 'Balance:'}
+            {
+              title === 'Withdraw' 
+              ? 'Withdrawable Amount:' 
+              : title === 'Restake' 
+              ? 'Restakable Balance:'
+              : title === 'Unstake' 
+              ? 'Unstakable Balance:'
+              : 'Balance:'
+            }
           </Text>
           {
             title === 'Withdraw' ? '' :
@@ -179,7 +187,7 @@ function MobileStakingComponent(props: {
               justifyContent={'space-between'}
             >
               <Text fontSize={"13px"}>
-                Restake Amount
+                
               </Text>
               <Flex>
                 <Text textAlign={"right"}>
@@ -202,7 +210,7 @@ function MobileStakingComponent(props: {
               alignItems={'center'}
               px='10px'
             >
-                <Text fontSize={'13px'}>{`${withdrawable} ${tokenType}`} </Text>
+              <Text fontSize={'13px'}>{`${withdrawable} ${tokenType}`} </Text>
             </Flex>
           ) : (
             <MobileCustomInput

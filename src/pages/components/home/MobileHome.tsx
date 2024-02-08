@@ -12,7 +12,7 @@ function MobileHome () {
 const theme = useTheme();
 const { account } = useWeb3React();
 
-const { userTonBalance } = useUserBalance(account);
+const { userTonBalance, userWTonBalance } = useUserBalance(account);
 const { candidateList } = useCandidateList()
 const [totalStaked, setTotalStaked] = useState('0')
 const [expectedReward, setExpectedReward] = useState('0')
@@ -75,7 +75,12 @@ useEffect (() => {
           userTonBalance ?
           userTonBalance : 
           '0'
-        } 
+        }
+        wtonAmount={
+          userWTonBalance ?
+          userWTonBalance :
+          '0'
+        }
       />
       <BalanceCard 
         title={'Total Staked Amount'} 

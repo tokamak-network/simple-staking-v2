@@ -22,7 +22,7 @@ function Operators() {
         color="gray.700"
         mb="5px"
       >
-        Select your favorite operator
+        Select Your Operator
       </Text>
       <Text
         fontSize={"12px"}
