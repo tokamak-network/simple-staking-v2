@@ -17,6 +17,7 @@ import { useUserHistory } from '@/hooks/wallet/useUserHIstory';
 import { useWithdrawable } from '../../../hooks/staking/useWithdrawable';
 import { convertNumber } from '@/components/number';
 import { getOldLayerAddress } from '@/components/getOldLayerAddress';
+import { StakeModalDataType } from "types"
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -119,18 +120,18 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     : '0.00';
   const minimumAmount = Number(candidateAmount) > 100;
 
-  const dataModal = {
-    tonBalance: userTonBalance,
-    wtonBalance: userWTonBalance,
+  const dataModal: StakeModalDataType = {
+    tonBalance: userTonBalance ? userTonBalance : '0.00',
+    wtonBalance: userWTonBalance ? userWTonBalance : '0.00',
     pendingUnstaked: pendingUnstaked,
-    stakedAmount: yourStaked,
+    stakedAmount: yourStaked ? yourStaked : '0.00',
     withdrawable: withdrawable,
     old_withdrawable: old_withdrawable,
     layer2: candidateContracts,
-    old_layer2: getOldLayerAddress(candidateContracts),
+    old_layer2: getOldLayerAddress(candidateContracts) ? getOldLayerAddress(candidateContracts) : '',
     withdrawableLength: withdrawableLength,
     old_withdrawableLength: old_withdrawableLength,
-    seig: expectedSeigs,
+    seig: expectedSeigs ? expectedSeigs : '0.00',
     candidate: candidates,
     minimumAmount: minimumAmount,
   };
@@ -176,8 +177,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         </Box>
         <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
           <Button
-            {...(stakeDisabled ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-            // isDisabled={stakeDisabled}
+            {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
+            isDisabled={account ? false : true}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
             onClick={() => modalButton('staking', dataModal)}
@@ -185,8 +186,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             Stake
           </Button>
           <Button
-            {...(unstakeDisabled ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-            // isDisabled={unstakeDisabled}
+            {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
+            isDisabled={account ? false : true}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
             onClick={() => modalButton('unstaking', dataModal)}
@@ -194,8 +195,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             Unstake
           </Button>
           <Button
-            {...(reStakeDisabled ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-            // isDisabled={reStakeDisabled}
+            {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
+            isDisabled={account ? false : true}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
             onClick={() => modalButton('restaking', dataModal)}
@@ -203,8 +204,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             Restake
           </Button>
           <Button
-            {...(withdrawDisabled === true ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-            // isDisabled={withdrawDisabled}
+            {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
+            isDisabled={account ? false : true}
             fontSize={'14px'}
             opacity={loading === true ? 0.5 : 1}
             onClick={() => modalButton('withdraw', dataModal)}

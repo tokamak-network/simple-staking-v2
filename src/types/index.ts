@@ -10,6 +10,36 @@ export type CheckBoxValueType = {
   pageKey: PageKey;
 };
 
+export type StakeModalDataType = {
+  tonBalance: string,
+  wtonBalance: string,
+  pendingUnstaked: string,
+  stakedAmount: string ,
+  withdrawable: string,
+  old_withdrawable: string,
+  layer2: string,
+  old_layer2: string | undefined,
+  withdrawableLength: string,
+  old_withdrawableLength: string,
+  seig: string,
+  candidate: string,
+  minimumAmount: boolean,
+}
+
+export type StakeModalComponentType = {
+  header: string,
+  subHeader: string,
+  balance: string,
+  balanceInfo: string,
+  balanceInfo1: string,
+  balance1: string,
+  balanceInfo2: string,
+  balance2: string,
+  balance3: string,
+  bottomComment: string,
+  buttonName: string
+}
+
 export type InputKey = Pages;
 
 export type CheckBoxValuesType = CheckBoxValueType[] | undefined;
