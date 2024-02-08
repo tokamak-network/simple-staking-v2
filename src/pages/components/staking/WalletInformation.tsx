@@ -18,6 +18,8 @@ import { useWithdrawable } from '../../../hooks/staking/useWithdrawable';
 import { convertNumber } from '@/components/number';
 import { getOldLayerAddress } from '@/components/getOldLayerAddress';
 import { StakeModalDataType } from "types"
+import WalletModal from '@/common/modal/Wallet';
+import useModal from '@/hooks/useModal';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -43,6 +45,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [stakeCandidate, setStakeCandidate] = useState('');
 
   const { userTonBalance, userWTonBalance } = useUserBalance(account);
+  const { openModal } = useModal('wallet');
   // const {
   //   candidateContract,
   //   stakeOf,
@@ -145,7 +148,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const { btnStyle } = theme;
 
   return (
-    <Container maxW={'sm'} shadow={'md'} borderRadius={'lg'} border={'solid 1px #f4f6f8'}>
+    <Container maxW={'sm'} shadow={'md'} borderRadius={'lg'} border={'solid 1px #f4f6f8'} h={'273px'}>
       <Box w={'100%'} p={0} textAlign={'center'} pb={'30px'} px={5}>
         <Flex
           mt={'20px'}
@@ -168,60 +171,100 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           // fontSize={'42px'}
           h={'55px'}
         >
-          {account == undefined ? <Text>- </Text> : userTonBalance === undefined ? <LoadingDots /> : userTonBalance} TON
+          {
+            userTonBalance === undefined 
+            ? <LoadingDots /> 
+            : (
+              <Flex flexDir={'row'} color={'#304156'} fontSize={'18px'} fontWeight={'bold'}>
+                <Flex alignItems={'end'}>
+                  {account ? userTonBalance : '-'}
+                  <Text fontSize={'13px'} fontWeight={500} ml={'3px'}>
+                    TON
+                  </Text>
+                </Flex>
+                <Flex mx={'6px'} color={'#c7d1d8'} fontWeight={'normal'}>
+                  /
+                </Flex>
+                <Flex alignItems={'end'}>
+                  {account ? userWTonBalance : '-'}
+                  <Text fontSize={'13px'} fontWeight={500} ml={'3px'}>
+                    WTON
+                  </Text>
+                </Flex>
+              </Flex>
+            )
+            }
         </Heading>
         <Box pt={'5px'} pb={'30px'}>
           <Text fontSize={'15px'} color={'gray.400'}>
             Available in wallet
           </Text>
         </Box>
-        <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
-          <Button
-            {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-            isDisabled={account ? false : true}
-            fontSize={'14px'}
-            opacity={loading === true ? 0.5 : 1}
-            onClick={() => modalButton('staking', dataModal)}
-          >
-            Stake
-          </Button>
-          <Button
-            {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-            isDisabled={account ? false : true}
-            fontSize={'14px'}
-            opacity={loading === true ? 0.5 : 1}
-            onClick={() => modalButton('unstaking', dataModal)}
-          >
-            Unstake
-          </Button>
-          <Button
-            {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-            isDisabled={account ? false : true}
-            fontSize={'14px'}
-            opacity={loading === true ? 0.5 : 1}
-            onClick={() => modalButton('restaking', dataModal)}
-          >
-            Restake
-          </Button>
-          <Button
-            {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-            isDisabled={account ? false : true}
-            fontSize={'14px'}
-            opacity={loading === true ? 0.5 : 1}
-            onClick={() => modalButton('withdraw', dataModal)}
-          >
-            Withdraw
-          </Button>
+        {
+          account ?
+          <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
+            <Button
+              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
+              isDisabled={account ? false : true}
+              fontSize={'14px'}
+              opacity={loading === true ? 0.5 : 1}
+              onClick={() => modalButton('staking', dataModal)}
+            >
+              Stake
+            </Button>
+            <Button
+              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
+              isDisabled={account ? false : true}
+              fontSize={'14px'}
+              opacity={loading === true ? 0.5 : 1}
+              onClick={() => modalButton('unstaking', dataModal)}
+            >
+              Unstake
+            </Button>
+            <Button
+              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
+              isDisabled={account ? false : true}
+              fontSize={'14px'}
+              opacity={loading === true ? 0.5 : 1}
+              onClick={() => modalButton('restaking', dataModal)}
+            >
+              Restake
+            </Button>
+            <Button
+              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
+              isDisabled={account ? false : true}
+              fontSize={'14px'}
+              opacity={loading === true ? 0.5 : 1}
+              onClick={() => modalButton('withdraw', dataModal)}
+            >
+              Withdraw
+            </Button>
 
-          {loading === true ? (
-            <Flex pos="absolute" zIndex={100} w="100%" h="100%" alignItems="cneter" justifyContent="center">
-              <Center>{/* <LoadingComponent></LoadingComponent> */}</Center>
-            </Flex>
-          ) : null}
-        </Grid>
+            {loading === true ? (
+              <Flex pos="absolute" zIndex={100} w="100%" h="100%" alignItems="cneter" justifyContent="center">
+                <Center>{/* <LoadingComponent></LoadingComponent> */}</Center>
+              </Flex>
+            ) : null}
+          </Grid>
+          :
+          <Flex
+            justifyContent={'center'}
+            alignItems={'center'}
+            mt={'20px'}
+            
+          >
+            <Button
+              {...btnStyle.btnAble()}
+              isDisabled={false}
+              onClick={openModal}
+            >
+              Connect wallet
+            </Button>
+          </Flex>
+        }
       </Box>
       <StakeModal />
-      
+      <WalletModal />
       <CalculatorModal />
     </Container>
   );

@@ -320,7 +320,6 @@ export const Header = () => {
           </Menu>
         </Flex>
         <Flex>
-            
           <MenuLinks account={account} walletopen={openModal} />
         </Flex>
       </Flex>
