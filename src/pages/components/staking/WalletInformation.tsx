@@ -172,9 +172,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           h={'55px'}
         >
           {
-            userTonBalance === undefined 
-            ? <LoadingDots /> 
-            : (
+            // userTonBalance === undefined 
+            // ? <LoadingDots /> 
+            // : (
               <Flex flexDir={'row'} color={'#304156'} fontSize={'18px'} fontWeight={'bold'}>
                 <Flex alignItems={'end'}>
                   {account ? userTonBalance : '-'}
@@ -192,7 +192,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
                   </Text>
                 </Flex>
               </Flex>
-            )
+            // )
             }
         </Heading>
         <Box pt={'5px'} pb={'30px'}>
