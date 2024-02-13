@@ -107,7 +107,7 @@ function MobileStakingComponent(props: {
           (wtonB && tokenType === 'WTON' && amount > wtonB ? true : false)
         )
       } else if (title === 'Unstake') {
-        disable = (staked ?  amount > Number(staked) : false) || amount === 0 || Number.isNaN(amount) ||amount === undefined
+        disable = (staked ?  amount > Number(staked) : false) || amount === 0 || Number.isNaN(amount) || amount === undefined
       } else if (title === 'Restake') {
         disable = pendingUnstaked === "0.00"
       } else {

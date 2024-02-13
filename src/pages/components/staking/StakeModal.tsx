@@ -218,7 +218,24 @@ function StakeModal() {
   }, []);
 
   const btnDisabledStake = () => {
-    return account && (selectedModalData?.tonBalance !== '0.00' || selectedModalData.wtonBalance !== '0.00') ? setStakeDisabled(false) : setStakeDisabled(true);
+    if (selectedModalData) {
+      const {
+        tonBalance,
+        wtonBalance
+      } = selectedModalData
+
+      const disable = (
+        tonBalance === "0.00" 
+        || wtonBalance === "0.00"
+        || input === "0.00"
+        || input === ''
+        //@ts-ignore
+        || (tonBalance && tokenType === 'ton' && floatParser(input) > floatParser(tonBalance) ? true : false)
+        //@ts-ignore
+        || (wtonBalance && tokenType === 'wton' && floatParser(input) > floatParser(wtonBalance) ? true : false)
+      )
+      setStakeDisabled(disable)
+    }
   };
 
   const btnDisabledReStake = () => {
@@ -226,9 +243,17 @@ function StakeModal() {
   };
 
   const btnDisabledUnStake = () => {
-    return account === undefined || selectedModalData?.stakedAmount === '0.00' || selectedModalData?.stakedAmount === '-'
-      ? setUnstakeDisabled(true)
-      : setUnstakeDisabled(false);
+    
+    if ( selectedModalData) {
+      const disable = (
+        selectedModalData?.stakedAmount
+        //@ts-ignore 
+        ? floatParser(input) > floatParser(selectedModalData?.stakedAmount) 
+        : false
+      ) || input === '0.00' || input === '' 
+      setUnstakeDisabled(disable)
+    }
+    
   };
 
   const btnDisabledWithdraw = () => {
@@ -237,15 +262,20 @@ function StakeModal() {
       : setwithdrawDisabled(false);
   };
   useEffect(() => {
-    btnDisabledStake();
-    btnDisabledUnStake();
-    btnDisabledReStake();
-    btnDisabledWithdraw();
+    if (selectedModalData) {
+      btnDisabledStake();
+      btnDisabledUnStake();
+      btnDisabledReStake();
+      btnDisabledWithdraw();
+    }
     /*eslint-disable*/
   }, [
     account, 
+    tokenType,
+    input,
     selectedModalData?.pendingUnstaked, 
-    selectedModalData?.tonBalance, 
+    selectedModalData?.tonBalance,
+    selectedModalData?.wtonBalance, 
     selectedModalData?.withdrawable, 
     selectedModalData?.old_withdrawable
   ]);
