@@ -14,8 +14,9 @@ import {
   DrawerContent,
   DrawerCloseButton,
   useDisclosure,
-  Link,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { useWeb3React } from "@web3-react/core";
 import { OperatorImage } from "@/common/table/staking/Oval";
 import moment from "moment";
@@ -34,24 +35,21 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { txState } from "@/atom/global/transaction";
 import { useWithdrawable } from "@/hooks/staking/useWithdrawable";
 import { getCommitHistory } from '../../../utils/getTransactionHistory';
+import { candidateState } from "@/atom/global/candidateList";
 
 function OperatorCard(props: { operator: any }) {
   const { operator } = props;
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [clicked, setClicked] = useState(false);
   const [candidate, setCandidate] = useState<any>();
   const [commit, setCommit] = useState<any>();
-  const [tokenType, setTokenType] = useState('TON')
+  
   const theme = useTheme();
   const { account } = useWeb3React();
-  const { userTonBalance, userWTonBalance } = useUserBalance(account);
+  const [, setCandidateIndex] = useRecoilState(candidateState)
 
   const { 
     withdrawable, 
-    old_withdrawable, 
-    old_notWithdrawable, 
-    withdrawableLength ,
     notWithdrawable
   } = useWithdrawable(operator?.candidateContract)
 
@@ -66,14 +64,6 @@ function OperatorCard(props: { operator: any }) {
   
   
   const [open, setOpen] = useState(false);
-  const [amount, setAmount] = useState(0);
-
-  const tonB = userTonBalance ? floatParser(userTonBalance) : 0;
-  const [txPending, setTxPending] = useRecoilState(txState);
-  const [tx, setTx] = useState();
-
-  const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } =
-    useCallContract();
   
   const myStaked = convertNumber({
     amount: candidate?.stakeOf,
@@ -251,7 +241,22 @@ function OperatorCard(props: { operator: any }) {
               {myStaked ? myStaked : '0.00'} TON
             </Text>
           </Flex>
-          <Flex borderBottom={"1px solid #e7ebf2"}></Flex>
+          <Flex
+            fontSize={'12px'}
+            color={'#2a72e5'}
+            textDecor={'underline'}
+            justifyContent={'center'}
+            mb={'18px'}
+          >
+            <Link
+              passHref
+              href={'staking'}
+              // onClick={() => setCandidateIndex(candidate?.candidateContract)}
+              onClick={() => setCandidateIndex(candidate?.index)}
+            >
+              Manage Your Stake
+            </Link>
+          </Flex>
           {/* <Flex
             w="100%"
             justifyContent={"space-between"}
@@ -316,23 +321,23 @@ function OperatorCard(props: { operator: any }) {
               mb={'15px'}
               textAlign={'center'}
             >
-              <Link
+              <ChakraLink
                 mr={'3px'}
                 href={'#'}
                 color="#ff2d78"
                 textDecor={'none'}
               >
                 Warning: 
-              </Link>
+              </ChakraLink>
               operator have not met the minimum staked balance requirement (at least 1,000.1 TON). As a result, there will be
-              <Link
+              <ChakraLink
                 mx={'4px'}
                 color="#2a72e5"
                 textDecor={'none'}
                 href={'#'}
               >
                 no staking reward 
-              </Link>
+              </ChakraLink>
               for staking on this layer2.
             </Text>
             : ''

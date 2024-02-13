@@ -32,7 +32,7 @@ function Operators() {
         w="250px"
         color={"gray.300"}
       >
-        Select an operator to stake your tokens.
+        Choose an operator to stake, restake, unstake, or withdraw TON (or WTON).
       </Text>
       <Flex w="100%" px="20px" flexDir={"column"}>
         <Flex mb={'15px'} fontSize={'18px'} fontWeight={'bold'} color={'#3e495c'} justifyContent={'center'}>
@@ -51,6 +51,7 @@ function Operators() {
         {
           noStakingRewardList.length !== 0 ? (
             noStakingRewardList.map((operator: any, index: number) => {
+              console.log(index)
               return (
                 <Flex flexDir={'column'}>
                   <Flex my={'15px'} fontSize={'18px'} fontWeight={'bold'} color={'#3e495c'} justifyContent={'center'}>

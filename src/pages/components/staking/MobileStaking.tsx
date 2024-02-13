@@ -11,15 +11,13 @@ import MobileStakingComponent from "./MobileStakingComponent";
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { useRecoilState } from "recoil";
 import { inputState } from "@/atom/global/input";
-import MobileInfo  from "./MobileInfo";
-import { useWeb3React } from "@web3-react/core";
 
 function MobileStaking() {
   const theme = useTheme();
   const [selectedTab, setSelectedTab] = useState("Stake");
   const { candidateList, noStakingRewardList } = useCandidateList();
-  const [value, setValue] = useRecoilState(inputState);
-  const { account } = useWeb3React();
+  const [, setValue] = useRecoilState(inputState);
+  // const { account } = useWeb3React();
   
   return (
     <Flex

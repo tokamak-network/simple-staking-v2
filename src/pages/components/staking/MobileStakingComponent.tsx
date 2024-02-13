@@ -28,6 +28,7 @@ import { usePendingUnstaked } from "@/hooks/staking/usePendingUnstaked";
 import { useExpectedSeig } from "@/hooks/staking/useCalculateExpectedSeig";
 import { getContract } from "@/components/getContract";
 import Candidate from 'services/abi/Candidate.json';
+import { candidateValues } from '@/atom/global/candidateList';
 
 function MobileStakingComponent(props: { 
   operatorList: any 
@@ -42,7 +43,8 @@ function MobileStakingComponent(props: {
   const { userTonBalance, userWTonBalance } = useUserBalance(account);
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedOp, setSelectedOp] = useState<any>(operatorList?.[0]);
+  const index = useRecoilValue(candidateValues)
+  const [selectedOp, setSelectedOp] = useState<any>(index ? operatorList?.[index] : operatorList?.[0]);
   const [disabled, setDisabled] = useState<boolean>(true);
   const [amount, setAmount] = useState(0);
   const [tokenType, setTokenType] = useState('TON')
@@ -56,7 +58,7 @@ function MobileStakingComponent(props: {
   const tonB = userTonBalance ? floatParser(userTonBalance): 0
   const wtonB = userWTonBalance ? floatParser(userWTonBalance) : 0
   const expectedSeig = useExpectedSeig(selectedOp?.candidateContract, selectedOp?.stakedAmount, selectedOp?.candidate)
-
+  
   const candidateAmount = selectedOp?.stakeOfCandidate ? convertNumber({
     amount: selectedOp?.stakeOfCandidate,
     type: 'ray'
@@ -70,8 +72,8 @@ function MobileStakingComponent(props: {
   }) : '0.00'
 
   useEffect(() => {
-    setSelectedOp(operatorList[0])
-  }, [operatorList])
+    setSelectedOp(index? operatorList[index] : operatorList[0])
+  }, [operatorList, index])
 
   const updateSeig = useCallback(async () => {
     if (account && library) {
