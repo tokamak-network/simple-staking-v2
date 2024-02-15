@@ -28,6 +28,7 @@ import { usePendingUnstaked } from "@/hooks/staking/usePendingUnstaked";
 import { useExpectedSeig } from "@/hooks/staking/useCalculateExpectedSeig";
 import { getContract } from "@/components/getContract";
 import Candidate from 'services/abi/Candidate.json';
+import { candidateValues } from '@/atom/global/candidateList';
 
 function MobileStakingComponent(props: { 
   operatorList: any 
@@ -42,7 +43,8 @@ function MobileStakingComponent(props: {
   const { userTonBalance, userWTonBalance } = useUserBalance(account);
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedOp, setSelectedOp] = useState<any>(operatorList?.[0]);
+  const index = useRecoilValue(candidateValues)
+  const [selectedOp, setSelectedOp] = useState<any>(index ? operatorList?.[index] : operatorList?.[0]);
   const [disabled, setDisabled] = useState<boolean>(true);
   const [amount, setAmount] = useState(0);
   const [tokenType, setTokenType] = useState('TON')
@@ -56,7 +58,7 @@ function MobileStakingComponent(props: {
   const tonB = userTonBalance ? floatParser(userTonBalance): 0
   const wtonB = userWTonBalance ? floatParser(userWTonBalance) : 0
   const expectedSeig = useExpectedSeig(selectedOp?.candidateContract, selectedOp?.stakedAmount, selectedOp?.candidate)
-
+  
   const candidateAmount = selectedOp?.stakeOfCandidate ? convertNumber({
     amount: selectedOp?.stakeOfCandidate,
     type: 'ray'
@@ -70,8 +72,8 @@ function MobileStakingComponent(props: {
   }) : '0.00'
 
   useEffect(() => {
-    setSelectedOp(operatorList[0])
-  }, [operatorList])
+    setSelectedOp(index? operatorList[index] : operatorList[0])
+  }, [operatorList, index])
 
   const updateSeig = useCallback(async () => {
     if (account && library) {
@@ -107,7 +109,7 @@ function MobileStakingComponent(props: {
           (wtonB && tokenType === 'WTON' && amount > wtonB ? true : false)
         )
       } else if (title === 'Unstake') {
-        disable = (staked ?  amount > Number(staked) : false) || amount === 0 || Number.isNaN(amount) ||amount === undefined
+        disable = (staked ?  amount > Number(staked) : false) || amount === 0 || Number.isNaN(amount) || amount === undefined
       } else if (title === 'Restake') {
         disable = pendingUnstaked === "0.00"
       } else {
@@ -117,9 +119,9 @@ function MobileStakingComponent(props: {
     setDisabled(disable)
   }, [title, amount, tokenType])
   
-  const staked = selectedOp.stakeOf ?
+  const staked = selectedOp?.stakeOf ?
     convertNumber({
-      amount: selectedOp.stakeOf,
+      amount: selectedOp?.stakeOf,
       type: 'ray',
       localeString: true
     }) : '0.00'
@@ -138,7 +140,15 @@ function MobileStakingComponent(props: {
       >
         <Flex alignItems={"center"} h="35px">
           <Text color="gray.300" fontSize={"12px"} mr={'5px'}>
-            {title === 'Withdraw' ? 'Withdrawable Amount:' : 'Balance:'}
+            {
+              title === 'Withdraw' 
+              ? 'Withdrawable Amount:' 
+              : title === 'Restake' 
+              ? 'Restakable Balance:'
+              : title === 'Unstake' 
+              ? 'Unstakable Balance:'
+              : 'Balance:'
+            }
           </Text>
           {
             title === 'Withdraw' ? '' :
@@ -179,7 +189,7 @@ function MobileStakingComponent(props: {
               justifyContent={'space-between'}
             >
               <Text fontSize={"13px"}>
-                Restake Amount
+                
               </Text>
               <Flex>
                 <Text textAlign={"right"}>
@@ -202,7 +212,7 @@ function MobileStakingComponent(props: {
               alignItems={'center'}
               px='10px'
             >
-                <Text fontSize={'13px'}>{withdrawable} TON</Text>
+              <Text fontSize={'13px'}>{`${withdrawable} ${tokenType}`} </Text>
             </Flex>
           ) : (
             <MobileCustomInput

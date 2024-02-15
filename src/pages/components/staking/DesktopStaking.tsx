@@ -213,7 +213,7 @@ function DesktopStaking () {
     
     return (
       <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
-        <PageHeader title={'Select Your Operator'} subtitle={'Choose an Operator to stake, restake, or unstake TON (or WTON).'}/>
+        <PageHeader title={'Select Your Operator'} subtitle={'Choose an operator to stake, restake, unstake, or withdraw TON (or WTON).'}/>
         <Box fontFamily={theme.fonts.roboto}>
           {candidateList.length === 0 ? 
             <Flex justifyContent="center" alignItems={"center"} h='200px'>

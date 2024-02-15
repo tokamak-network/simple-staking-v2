@@ -32,7 +32,7 @@ export function useCandidateList () {
   useEffect(() => {
     async function fetch () {
       if (data) {
-        const candidates = await Promise.all(data.candidates.map(async (obj: any) => {
+        const candidates = await Promise.all(data.candidates.map(async (obj: any, index: number) => {
           let tempObj = obj
           let stakeOf
           let sumPending
@@ -105,7 +105,8 @@ export function useCandidateList () {
             pending: sumPending && sumPending.toString(),
             stakeOfCandidate: stakeOfCandidate && stakeOfCandidate.toString(),
             oldHistory: oldHistory,
-            oldCommitHistory: oldCommitHistory
+            oldCommitHistory: oldCommitHistory,
+            index: index
           }
           return tempObj
         }))

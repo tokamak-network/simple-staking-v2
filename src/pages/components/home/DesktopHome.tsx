@@ -25,7 +25,7 @@ function DesktopHome() {
   const theme = useTheme();
   const { dailyStaked, totalStaked } = useDailyStaked();
   const [dailyStakes, setDailyStakes] = useState<any[]>();
-
+  // console.log(dailyStaked)
   useEffect(() => {
     if (dailyStaked !== undefined) {
       const ordered = orderBy(dailyStaked, (staked: any) => staked.blockTime, ['asc']);
@@ -48,6 +48,7 @@ function DesktopHome() {
           minimumFractionDigits: 2,
         });
         return result.push(Number(test.replace(/,/g, '')));
+        // return result.push(totalStaked)
       }
       result.push(displayAmount(item.totalSupply));
     });
@@ -56,7 +57,7 @@ function DesktopHome() {
   const getData = () => {
     const latesData = getLatestData();
     const roi = dailyStakes?.map((item: any) => item.roi);
-
+    
     return {
       labels: dailyStakes?.map((item: any) => moment(item.blockTime).format('YYYY.MM.DD')),
       datasets: [
