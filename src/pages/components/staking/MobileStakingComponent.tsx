@@ -378,49 +378,52 @@ function MobileStakingComponent(props: {
           {title}
         </Button>
         {
-          title === 'Stake' && selectedOp?.name !== 'Talken' ?
-          <Flex
-            fontSize={'12px'}
-            color={'#3e495c'}
-            flexDir={'row'}
-            mt={'15px'}
-            
-          >
-            Recommended minimum staking amount is 
-              <Text
+          title === 'Stake' ? (
+            !minimumAmount ?
+            <Text
+              fontSize={'12px'}
+              color={'#3e495c'}
+              flexDir={'row'}
+              mt={'15px'}
+              textAlign={'center'}
+            >
+              <Link
+                mr={'3px'}
+                href={'#'}
+                color="#ff2d78"
+                textDecor={'none'}
+              >
+                Warning: 
+              </Link>
+                operator have not met the minimum staked balance requirement (at least 1,000.1 TON). As a result, there will be
+              <Link
                 ml={'3px'}
                 color="#2a72e5"
+                textDecor={'none'}
+                href={'#'}
               >
-                5 TON
-              </Text>
-          </Flex>
-          : title === 'Stake' && !minimumAmount ?
-          <Text
-            fontSize={'12px'}
-            color={'#3e495c'}
-            flexDir={'row'}
-            mt={'15px'}
-            textAlign={'center'}
-          >
-            <Link
-              mr={'3px'}
-              href={'#'}
-              color="#ff2d78"
-              textDecor={'none'}
+                no staking reward 
+              </Link>
+              for staking on this layer2.
+            </Text> :
+            <Text
+              fontSize={'12px'}
+              color={'#3e495c'}
+              flexDir={'row'}
+              mt={'15px'}
+              textAlign={'center'}
             >
-              Warning: 
-            </Link>
-            operator have not met the minimum staked balance requirement (at least 1,000.1 TON). As a result, there will be
-            <Link
-              ml={'3px'}
-              color="#2a72e5"
-              textDecor={'none'}
-              href={'#'}
-            >
-              no staking reward 
-            </Link>
-            for staking on this layer2.
-          </Text>
+              <Link
+                mr={'3px'}
+                href={'#'}
+                color="#ff2d78"
+                textDecor={'none'}
+              >
+                Warning
+              </Link>
+              : Staking will earn you TON staking rewards. However, to withdraw, you need to unstake and wait for 14 days.
+            </Text>
+          ) 
           : title === 'Restake' ? 
           <Text
             fontSize={'12px'}

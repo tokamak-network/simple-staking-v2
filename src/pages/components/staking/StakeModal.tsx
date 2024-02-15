@@ -363,6 +363,7 @@ function StakeModal() {
                           fontSize={'12px'}
                           fontWeight={500}
                           color={'#808992'}
+                          justifyContent={'center'}
                         >
                           Select token to stake
                         </Flex>
@@ -632,15 +633,19 @@ function StakeModal() {
                               <span style={{ color: '#ff2d78' }}>Warning</span>: You can withdraw unstaked TON to your wallet 14 days after unstaking. Remember to claim any unclaimed TON before unstaking.
                             </Box>
                           )
-                        ) : selectedModal === 'staking' && selectedModalData &&
-                          
+                        ) : selectedModal === 'staking' && selectedModalData ? (
                           !selectedModalData.minimumAmount ? (
-                          <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
-                            <span style={{ color: '#ff2d78' }}>Warning</span>: operator have not met the minimum staked
-                            balance requirement (at least 1,000.1 TON). As a result, there will be
-                            <span style={{ color: '#2a72e5' }}> no staking reward</span>
-                            <span> for staking on this layer2.</span>
-                          </Box>
+                            <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
+                              <span style={{ color: '#ff2d78' }}>Warning</span>: operator have not met the minimum staked
+                              balance requirement (at least 1,000.1 TON). As a result, there will be
+                              <span style={{ color: '#2a72e5' }}> no staking reward</span>
+                              <span> for staking on this layer2.</span>
+                            </Box>
+                          ) : (
+                            <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
+                              <span style={{ color: '#ff2d78' }}>Warning</span>: Staking will earn you TON staking rewards. However, to withdraw, you need to unstake and wait for 14 days.
+                            </Box>
+                          )
                         ) : selectedModal === 'restaking' ? (
                           <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
                             <span style={{ color: '#ff2d78' }}>Warning</span>: Restaking will stake unstaked TON, and these cannot be withdrawn until they are unstaked again.
