@@ -455,12 +455,18 @@ function StakeModal() {
                           <Flex fontSize={'13px'} fontWeight={500} color={'#808992'}>
                             {modalComponent.balanceInfo2}
                           </Flex>
-                          <RadioGroup 
-                            onChange={(value: 'old' | 'new') => withdrawSetting(value)} 
-                            value={withdrawType}
-                          >
-                            {
-                              modalComponent.balance2 === '0.00' ? '' :
+                          {
+                            modalComponent.balance2 === '0.00' ? (
+                            <Flex mt={'15px'}>
+                              <Text fontSize={'16px'} fontWeight={500} color={'#3d495d'}>
+                                {`${modalComponent.balance3} ${tokenType === 'ton' ? `TON` : `WTON`}`}
+                              </Text>
+                            </Flex>
+                            ) : (
+                            <RadioGroup 
+                              onChange={(value: 'old' | 'new') => withdrawSetting(value)} 
+                              value={withdrawType}
+                            >
                               <Flex alignItems={'center'} mt={'11px'} justifyContent={'center'}>
                                 <Radio
                                   value="old"
@@ -484,15 +490,15 @@ function StakeModal() {
                                   </Flex>
                                 </Radio>
                               </Flex>
-                            }
-                            <Flex alignItems={'center'} justifyContent={'center'} mt={'11px'}>
-                              <Radio value="new" h={'20px'} mr={'6px'} bgColor={'#fff'} border={'solid 2px #c6cbd9'}>
-                                <Text fontSize={'16px'} fontWeight={500} color={'#3d495d'}>
-                                  {`${modalComponent.balance3} ${tokenType === 'ton' ? `TON` : `WTON`}`}
-                                </Text>
-                              </Radio>
-                            </Flex>
-                          </RadioGroup>
+                              <Flex alignItems={'center'} justifyContent={'center'} mt={'11px'}>
+                                <Radio value="new" h={'20px'} mr={'6px'} bgColor={'#fff'} border={'solid 2px #c6cbd9'}>
+                                  <Text fontSize={'16px'} fontWeight={500} color={'#3d495d'}>
+                                    {`${modalComponent.balance3} ${tokenType === 'ton' ? `TON` : `WTON`}`}
+                                  </Text>
+                                </Radio>
+                              </Flex>
+                            </RadioGroup>
+                          )}
                         </Flex>
                         <Flex
                           flexDir={'column'}
