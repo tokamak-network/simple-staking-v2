@@ -379,7 +379,7 @@ function MobileStakingComponent(props: {
         </Button>
         {
           title === 'Stake' ? (
-            !minimumAmount ?
+            !minimumAmount && account && selectedOp?.stakeOfCandidate ?
             <Text
               fontSize={'12px'}
               color={'#3e495c'}
@@ -395,7 +395,7 @@ function MobileStakingComponent(props: {
               >
                 Warning: 
               </Link>
-                operator have not met the minimum staked balance requirement (at least 1,000.1 TON). As a result, there will be
+                Operator have not met the minimum staked balance requirement (at least 1,000.1 TON). As a result, there will be
               <Link
                 ml={'3px'}
                 color="#2a72e5"
