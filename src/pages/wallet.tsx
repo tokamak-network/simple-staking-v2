@@ -53,7 +53,7 @@ function Wallet () {
         accessor: 'amount',
       },
       {
-        Header: 'Block Number',
+        Header: 'Time',
         accessor: 'blockNumber',
       },
     ],

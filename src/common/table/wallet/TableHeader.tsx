@@ -36,13 +36,13 @@ const HeaderColumn = (columnName: string) => {
         : columnName === "txHash"
         ? "Transaction Hash"
         : columnName === "contractAddress"
-        ? "Operator Contract"
+        ? "Candidate"
         : columnName === "txType"
         ? "Type"
         : columnName === "amount"
         ? "Amount"
         : columnName === "blockNumber"
-        ? "Block Number"
+        ? "Time"
         : ""}
     </chakra.th>
   );

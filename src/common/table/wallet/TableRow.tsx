@@ -5,6 +5,7 @@ import { chakra, Link, Text } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useTheme } from '@chakra-ui/react';
 import { getLayerName } from '../../../utils/getOldLayerAddress';
+import moment from 'moment';
 
 type TableRowProps = {
   index: number
@@ -50,7 +51,7 @@ export const TableRow: FC<TableRowProps> = ({
         type === 'index' ? '70px' :
         type === 'txHash' || type === 'contractAddress' ? '200px' :
         type === 'txType' || type === 'amount' ? '160px' :
-        type === 'blockNumber' ? '180px' :
+        type === 'blockNumber' ? '200px' :
         type === 'status' ? '140px' : ''
       }
       {...theme.STAKING_HISTORY_TABLE_STYLE.tableRow()}
@@ -112,7 +113,7 @@ export const TableRow: FC<TableRowProps> = ({
       {type === 'blockNumber' ? (
         //@ts-ignore
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
-          {blockNo}
+          {moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')}
         </Text>
       ) : ('')}
       {type === 'status' ? (
