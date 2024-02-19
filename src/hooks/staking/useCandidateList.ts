@@ -117,7 +117,7 @@ export function useCandidateList () {
         const rewardList = candidates.filter((candidate: any) => {
           return candidate.asCommit.length !== 0
         })
-        console.log(rewardList)
+
         setNoStakingRewardList(noRewardList)
         setCandidateList(rewardList)
       }
