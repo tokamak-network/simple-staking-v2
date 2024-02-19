@@ -31,10 +31,10 @@ export function useCandidateList () {
 
   useEffect(() => {
     async function fetch () {
-      if (data) {
+      if (data) {     
         const candidates = await Promise.all(data.candidates.map(async (obj: any, index: number) => {
           let tempObj = obj
-          let stakeOf
+          let stakeOf     
           let sumPending
           let stakeOfCandidate
           let oldCommitHistory
@@ -110,14 +110,14 @@ export function useCandidateList () {
           }
           return tempObj
         }))
-
+        
         const noRewardList = candidates.filter((candidate: any) => {
           return candidate.asCommit.length === 0
         })
         const rewardList = candidates.filter((candidate: any) => {
           return candidate.asCommit.length !== 0
         })
-
+        console.log(rewardList)
         setNoStakingRewardList(noRewardList)
         setCandidateList(rewardList)
       }

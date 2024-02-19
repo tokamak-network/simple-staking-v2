@@ -5,23 +5,33 @@ import useCallContract from '../useCallContract';
 import { BigNumber } from 'ethers';
 import { range } from 'lodash'
 import { useBlockNumber } from '../useBlockNumber';
+import { GET_HISTORY } from '@/graphql/getUserHIstory';
+import { useQuery } from '@apollo/client';
+import { getTransactionHistory } from '../../utils/getTransactionHistory';
 
 export function useUserHistory () {
   const [userHistory, setUserHistory] = useState([])
   const { blockNumber } = useBlockNumber()
+  const { account } = useWeb3React();
+  const {data} = useQuery(GET_HISTORY, {
+    variables: {
+      id: account?.toLowerCase()
+    },
+    pollInterval: 10000
+  });
   // const [totalStaked, setTotalStaked] = useState('0.00')
   const { DepositManager_CONTRACT , SeigManager_CONTRACT} = useCallContract();
-  const { account } = useWeb3React();
 
   useEffect(() => {
-    async function fetchList () {  
-      if (account) {
-        const data = await getOperatorsInfo();
+    async function fetchList () { 
+      console.log(data) 
+      if (account && data.users) {
+        const pastData = await getOperatorsInfo();
 
         // let staked = BigNumber.from('0')
         let myHistory: any = []
 
-        await Promise.all(data.map(async (obj: any) => {
+        await Promise.all(pastData.map(async (obj: any) => {
           let stakeOf = '0'
 
           const history = await getOperatorUserHistory(obj.layer2.toLowerCase(), account.toLowerCase())
@@ -34,14 +44,15 @@ export function useUserHistory () {
           myHistory = [...myHistory, ...history]
           return await myHistory
         }))
-        myHistory.sort(function(a: any, b: any) {
-          return b.blockNumber - a.blockNumber
-        })
-        setUserHistory(myHistory)
+        const {staked, unstaked, withdrawal} = data.users[0]
+        // console.log(staked, unstaked, withdrawal)
+        const txData = getTransactionHistory({...data.users[0], oldHistory: myHistory})
+        console.log(txData)
+        setUserHistory(txData)
       }
     }
     fetchList()
-  }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account, blockNumber])
+  }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account, blockNumber, data])
 
   return { userHistory }
 }
