@@ -21,7 +21,7 @@ export function useUserHistory () {
 
   useEffect(() => {
     async function fetchList () {  
-      if (account && data.users) {
+      if (account && data) {
         const pastData = await getOperatorsInfo();
 
         let myHistory: any = []
