@@ -36,6 +36,7 @@ export const injected = new InjectedConnector({
   supportedChainIds: [1, 11155111, 5],
 });
 
+
 export const trazorConnector = new TrezorConnector({
   chainId: 1,
   url: RPC_URLS[1],
