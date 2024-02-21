@@ -86,7 +86,21 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
       </Flex>
       {
         title === 'Unclaimed Staking Reward' && !minimumAmount && account ?
-          ''
+          (
+            <Text
+              fontSize={'11px'}
+              color={'#3e495c'}
+              mt={'3px'}
+              w={'215px'}
+              textAlign={'left'}
+              // w={'250px'}
+            >
+            <span style={{color:'#ff2d78'}}>Warning</span>
+            : operator have not met the minimum staked balance requirement (at least 1,000.1 TON). As a result, there will be 
+            <span style={{color:'#2a72e5'}}> no staking reward </span> 
+            for staking on this layer2.
+          </Text>
+          )
         : title === 'Unclaimed Staking Reward' && 
           value !== '0.00' && 
           account ?

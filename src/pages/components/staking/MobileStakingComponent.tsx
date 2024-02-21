@@ -479,40 +479,15 @@ function MobileStakingComponent(props: {
         (
           <Text
           fontSize={'12px'}
-          color={'#ff2d78'}
+          color={'#3e495c'}
           mt={'3px'}
           textAlign={'right'}
           // w={'250px'}
         >
-          <Link
-            isExternal
-            href={'https://etherscan.io/address/0xcc2f386adca481a00d614d5aa77a30984f264a07'}
-            color={'#2a72e5'}
-            textDecor={'underline'}
-            mr={'3px'}
-          >
-            Operator
-          </Link>  
-          must stake at least 
-          <Link
-            isExternal
-            href={'https://medium.com/onther-tech/staking-on-tokamak-network-a5cca48bea3d#:~:text=Become%20a%20direct%20Operator%20in%20the%20Tokamak%20Network%20by%20operating%20a%20new%20blockchain.%20In%20order%20to%20operate%20a%20chain%2C%20at%20least%201%2C000.1%20TON%20must%20be%20deposited%20(posting%20updated%20on%202024.1.22)'}
-            mx={'3px'}
-            color={'#2a72e5'}
-            textDecor={'underline'}
-          >
-            1,000.1 TON 
-          </Link>
-          for stakers to receive a staking reward. This operator is managed by 
-          <Link
-            isExternal
-            href={'https://talken.io/'}
-            color={'#2a72e5'}
-            textDecor={'underline'}
-            ml={'3px'}
-          >
-            Talken.
-          </Link>
+          <span style={{color:'#ff2d78'}}>Warning</span>
+          : operator have not met the minimum staked balance requirement (at least 1,000.1 TON). As a result, there will be 
+          <span style={{color:'#2a72e5'}}> no staking reward </span> 
+          for staking on this layer2.
         </Text>
         ) : 
         userExpectedSeig && userExpectedSeig !== '0.00' ?

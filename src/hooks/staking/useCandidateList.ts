@@ -84,8 +84,8 @@ export function useCandidateList () {
                   );
                 }
               }
-              
               stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
+              console.log(stakeOfCandidate.toString())
               const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
               if (oldCandidate) {
                 const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(oldCandidate)
@@ -113,10 +113,10 @@ export function useCandidateList () {
         }))
         
         const noRewardList = candidates.filter((candidate: any) => {
-          return candidate.asCommit.length === 0
+          return candidate.stakeOfCandidate < 1000000000000000000000000000000
         })
         const rewardList = candidates.filter((candidate: any) => {
-          return candidate.asCommit.length !== 0
+          return candidate.stakeOfCandidate > 1000000000000000000000000000000
         })
 
         setNoStakingRewardList(noRewardList)
