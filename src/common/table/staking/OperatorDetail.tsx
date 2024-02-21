@@ -1,4 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react"
+import { Flex, Text, Link } from "@chakra-ui/react"
 import { FC, useEffect, useState } from "react";
 import { useCallback } from 'react';
 import Candidate from "services/abi/Candidate.json"
@@ -69,32 +69,37 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
           fontWeight={type === 'date' ? 500 : 'bold'}
           color={'#304156'}
         >
-          {value}
+          {title === 'Unclaimed Staking Reward' && !minimumAmount ? '-' : value}
         </Text>
-        {unit? <Text fontSize={'13px'} fontWeight={500} ml={'6px'} mb={'5px'}>{unit}</Text> : ''}
+        {
+          unit ? 
+          <Text 
+            fontSize={'13px'} 
+            fontWeight={500} 
+            ml={'6px'} 
+            mb={'5px'}
+          >
+            {unit}
+          </Text> :
+          ''
+        }
       </Flex>
       {
-        title === 'Unclaimed Staking Reward' && !minimumAmount ?
-        <Flex
-          fontSize={'11px'}
-          color={'#ff2d78'}
-          mt={'3px'}
-        >
-          No staking reward for this layer2
-        </Flex> :
-          title === 'Unclaimed Staking Reward' && 
+        title === 'Unclaimed Staking Reward' && !minimumAmount && account ?
+          ''
+        : title === 'Unclaimed Staking Reward' && 
           value !== '0.00' && 
           account ?
-        <Flex
-          fontSize={'11px'}
-          color={'#2a72e5'}
-          cursor={'pointer'}
-          mt={'3px'}
-          onClick={()=> updateSeig()}
-        >
-          Add to Your Staked
-        </Flex> : 
-        ''
+          <Flex
+            fontSize={'11px'}
+            color={'#2a72e5'}
+            cursor={'pointer'}
+            mt={'3px'}
+            onClick={()=> updateSeig()}
+          >
+            Add to Your Staked
+          </Flex> : 
+          ''
       }
     </Flex>
   )

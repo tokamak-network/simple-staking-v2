@@ -20,6 +20,16 @@ const getData = (layer2: any) => {
     );
 };
 
+const getDataForWton = (layer2: any) => {
+  if (layer2) return marshalString(
+    //@ts-ignore
+    [layer2]
+      .map(unmarshalString)
+      .map((str) => padLeft(str, 64))
+      .join(''),
+  )
+}
+
 export const staking = async (
   userTonBalance: any,
   TON_CONTRACT: any,
@@ -40,6 +50,45 @@ export const staking = async (
     if (TON_CONTRACT && amount) {
       try {
         const tx = await TON_CONTRACT.approveAndCall(WTON_ADDRESS, convertToWei(amount.toString()), data);
+        setTxPending(true);
+        setTx(tx);
+
+        if (tx) {
+          await tx.wait().then((receipt: any) => {
+            if (receipt.status) {
+              setTxPending(false);
+              setTx(undefined);
+            }
+          });
+        }
+      } catch (e) {
+        setTxPending(false);
+        setTx(undefined);
+      }
+    }
+  }
+};
+
+export const wtonStaking = async (
+  userWTonBalance: any,
+  WTON_CONTRACT: any,
+  amount: any,
+  layer2: string,
+  setTxPending: any,
+  setTx: any,
+) => {
+  const { DepositManager_ADDRESS } = CONTRACT_ADDRESS;
+  if (userWTonBalance) {
+    const tonBalance = floatParser(userWTonBalance);
+    if (tonBalance && amount > tonBalance) {
+      return alert('Please check input amount.');
+    }
+
+    // if (confirm('Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates')) {
+    const data = getDataForWton(layer2);
+    if (WTON_CONTRACT && amount) {
+      try {
+        const tx = await WTON_CONTRACT.approveAndCall(DepositManager_ADDRESS, convertToRay(amount.toString()), data);
         setTxPending(true);
         setTx(tx);
 
@@ -126,12 +175,13 @@ export const withdraw = async (
   layer2: string,
   DepositManager_CONTRACT: any,
   withdrawableLength: any,
+  isTon: boolean,
   setTxPending: any,
   setTx: any,
 ) => {
   if (DepositManager_CONTRACT && account && layer2) {
     try {
-      const tx = await DepositManager_CONTRACT.processRequests(layer2, withdrawableLength, true);
+      const tx = await DepositManager_CONTRACT.processRequests(layer2, withdrawableLength, isTon);
       setTx(tx);
       setTxPending(true);
       if (tx) {

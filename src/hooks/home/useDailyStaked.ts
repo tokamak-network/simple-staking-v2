@@ -4,7 +4,7 @@ import { getDailyStakedTotal, getTotalSupply, getTotalStaked } from '@/api';
 import { useQuery } from '@apollo/client';
 import { GET_GRAPH, GET_FACTORY } from '../../graphql/getGraphdata';
 import moment from 'moment';
-import { calculateRoi } from '@/components/calculateRoi';
+import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
 
 export function useDailyStaked() {
   const [dailyStaked, setDailyStaked] = useState<any[]>([]);
@@ -38,22 +38,21 @@ export function useDailyStaked() {
       let filledData = [];
       if (data) {
         const { stakingDayDatas } = data;
-
         const day = 86400;
-        for (let i = 0; i < stakingDayDatas.length; i++) {
-          const now = Math.floor(new Date().getTime() / 1000);
-          const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day);
-
-          for (let i = 0; i < sinceLastday; i++) {
-            const today = (stakingDayDatas[0].date + day) * i;
+        const now = Math.floor(new Date().getTime() / 1000);
+        const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day);
+        // input staked ton data in the end of graph
+        for (let i = 1; i < sinceLastday + 1; i++) {
+          const today = (stakingDayDatas[0].date) + day * i;
+          if (today > 0) {
             filledData.push(pushToArray(today, stakingDayDatas[0].totalStaked));
           }
-
+        }
+        for (let i = 0; i < stakingDayDatas.length; i++) {
           filledData.push(pushToArray(stakingDayDatas[i].date, stakingDayDatas[i].totalStaked));
-
+          // fill staked data in the middle of graph
           if (stakingDayDatas[i + 1]) {
             const gap = Math.floor((stakingDayDatas[i].date - stakingDayDatas[i + 1].date) / day);
-
             for (let j = 1; j < gap; j++) {
               const date2 = stakingDayDatas[i].date - day;
               filledData.push(pushToArray(date2, stakingDayDatas[i + 1].totalStaked));
@@ -61,10 +60,11 @@ export function useDailyStaked() {
           }
         }
       }
+      //@ts-ignore
+      const setData = [...new Set(filledData.map(JSON.stringify))].map(JSON.parse)
 
       const filteredData = dailyStakedTotal.filter((item: any) => item.fetchDateUTC < 20231024);
-      const concatData = filledData?.concat(filteredData);
-
+      const concatData = setData?.concat(filteredData);
       const graphdata = concatData?.map((item: any, index) => {
         const totalStaked = parseFloat(item.totalSupply) / Math.pow(10, 27);
         let my = Number(1000);
@@ -79,14 +79,13 @@ export function useDailyStaked() {
         const expectedSeig = (my / total) * (Number(compensatePerDay) + proportionalSeig) * unit;
         my = my + expectedSeig;
 
-        const test = calculateRoi(totalStaked, totalSup);
+        const test = calculateRoiBasedonCompound({
+          totalStakedAmount: totalStaked, 
+          totalSupply: totalSup,
+          duration: '1-year'
+        });
 
-        // if (index === 0) {
-        //   console.log(totalStaked, totalSup);
-        // }
-
-        // item.roi = (my/Number(1000)*100 - 100)/100;
-        let roi = test.toLocaleString(undefined, {
+        let roi = (test/100).toLocaleString(undefined, {
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         });

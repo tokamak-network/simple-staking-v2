@@ -4,6 +4,8 @@ import trimAddress from '@/components/trimAddress';
 import { chakra, Link, Text } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useTheme } from '@chakra-ui/react';
+import { getLayerName } from '../../../utils/getOldLayerAddress';
+import moment from 'moment';
 
 type TableRowProps = {
   index: number
@@ -14,18 +16,33 @@ export const TableRow: FC<TableRowProps> = ({
   index,
   cell,
 }) => {
+  // console.log(cell?.row.original)
   const {
     transactionHash,
     layer2,
+    sender,
+    transaction,
+    timestamp,
+    blockTimestamp,
+    amount,
     data,
     eventName,
     from,
-    blockNumber
+    blockNumber,
+    candidate,
   } = cell?.row.original;
+  
+  const txSender = sender ? sender : from
+  const txId = transaction ? transaction.id : transactionHash
+  const txTime = timestamp ? timestamp : blockTimestamp
+  const values = amount ? amount : data?.amount
+  const candidateId = candidate ? candidate.id : layer2
+  const blockNo = transaction ? transaction.blockNumber : blockNumber
 
   const theme = useTheme()
   const type = cell.column.id;
   const typeName = getEventName(eventName)
+  const layerName = getLayerName(candidateId)
 
   return  (
     <chakra.td
@@ -34,7 +51,7 @@ export const TableRow: FC<TableRowProps> = ({
         type === 'index' ? '70px' :
         type === 'txHash' || type === 'contractAddress' ? '200px' :
         type === 'txType' || type === 'amount' ? '160px' :
-        type === 'blockNumber' ? '180px' :
+        type === 'blockNumber' ? '200px' :
         type === 'status' ? '140px' : ''
       }
       {...theme.STAKING_HISTORY_TABLE_STYLE.tableRow()}
@@ -45,16 +62,16 @@ export const TableRow: FC<TableRowProps> = ({
           {index}
         </Text>
       ) : ('')}
-      {transactionHash && type === 'txHash' ? (
+      {txId && type === 'txHash' ? (
         <Link
           isExternal
-          href={`https://etherscan.io/tx/${transactionHash}`}
+          href={`https://etherscan.io/tx/${txId}`}
           textAlign={'center'}
           w={'100%'}
           color={'#2a72e5'}
         >
           {trimAddress({
-            address: transactionHash,
+            address: txId,
             firstChar: 6,
             lastChar: 4,
             dots: '...'
@@ -64,17 +81,18 @@ export const TableRow: FC<TableRowProps> = ({
       {type === 'contractAddress' ? (
         <Link
           isExternal
-          href={`https://etherscan.io/address/${from}`}
+          href={`https://etherscan.io/address/${txSender}`}
           textAlign={'center'}
           w={'100%'}
           color={'#2a72e5'}
         >
-          {trimAddress({
-            address: layer2,
+          {layerName}
+          {/* {trimAddress({
+            address: candidateId,
             firstChar: 6,
             lastChar: 4,
             dots: '...'
-          })}
+          })} */}
         </Link>
       ) : ('')}
       {type === 'txType' ? (
@@ -86,7 +104,7 @@ export const TableRow: FC<TableRowProps> = ({
       {type === 'amount' ? (
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
           {convertNumber({
-            amount: data.amount,
+            amount: values,
             type: 'ray',
             localeString: true,
           })} TON
@@ -95,7 +113,7 @@ export const TableRow: FC<TableRowProps> = ({
       {type === 'blockNumber' ? (
         //@ts-ignore
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
-          {blockNumber}
+          {moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')}
         </Text>
       ) : ('')}
       {type === 'status' ? (

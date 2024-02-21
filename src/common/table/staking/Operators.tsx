@@ -1,4 +1,4 @@
-import {FC, useState, useRef, Fragment} from 'react';
+import {FC, useState, useRef, useEffect} from 'react';
 import {
   Column,
   useExpanded,
@@ -32,6 +32,9 @@ import { toggleState } from '@/atom/staking/toggle';
 import { useUserStaked } from '../../../hooks/staking/useUserStaked';
 import { useWeb3React } from '@web3-react/core';
 import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
+import BasicTooltip from '../../tooltip/index';
+import { MEMBER_ADDRESS_TEMP } from '@/constants';
+import { useRouter } from 'next/router';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -63,6 +66,9 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   const theme = useTheme();
   const focusTarget = useRef<any>([]);
 
+  const router = useRouter();
+  const { asPath } = router;
+
   const onChangeSelectBox = (e: any) => {
     const filterValue = e.target.value;
     headerGroups[0].headers.map((e) => {
@@ -84,7 +90,23 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   );
   const [toggle, setToggle] = useRecoilState(toggleState)
 
+  useEffect(() => {
+    if (asPath.includes('#')) {
+      const indexOf = asPath.indexOf('#')
+      const dataIndex = page.findIndex((candidateData: any) => candidateData.original.id === asPath.slice(indexOf + 1))
+      setIsOpen(asPath.slice(9));
+      setToggle('All')
+      setTimeout(() => {
+      focusTarget?.current[dataIndex]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 100);
+    }
+  }, [])
+
   const clickOpen = (candidateContract: string, index: number) => {
+    console.log(candidateContract)
     setIsOpen(candidateContract);
     setToggle('All')
     setTimeout(() => {
@@ -94,18 +116,37 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
       });
     }, 100);
   };
-
+ 
   return (
-    <Flex w={'1100px'} flexDir={'column'}>
+    <Flex w={'1100px'} flexDir={'column'} id={candidateContract}>
       <Flex justifyContent={'space-between'} mb={'15px'} ml={'17px'}>
         <Flex fontSize={'11px'} flexDir={'row'} alignItems={'center'}>
+        {getCircle('member')}
+          <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
+            <Flex mr={'3px'}>
+              DAO Committee Member
+            </Flex>
+            <BasicTooltip 
+              label={'member'} 
+            />
+          </Flex>
           {getCircle('candidate')}
-          <Flex mr={'20px'}>
-            DAO Candidate
+          <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
+          <Flex mr={'3px'}>
+              DAO Candidate
+            </Flex>
+            <BasicTooltip 
+              label={'candidate'} 
+            />
           </Flex>
           {getCircle('operator')}
-          <Flex>
-            Operator
+          <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
+            <Flex mr={'3px'}>
+              Plasma EVM
+            </Flex>
+            <BasicTooltip 
+              label={'plasma'} 
+            />
           </Flex>
         </Flex>
         {/* <Select
@@ -140,11 +181,10 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
             flexDirection="column"
           >
             {page && page.map((row: any, i) => {
-              const { candidateContract } = row.original;
-              
+              const { candidateContract, stakedAmount, candidate } = row.original;
               const stakedId = candidateContract
               const { userStakeds } = useUserStaked(`${account?.toLocaleLowerCase()}-${stakedId.toLocaleLowerCase()}`)
-              const expectedSeig = useExpectedSeig(candidateContract)
+              const expectedSeig = useExpectedSeig(candidateContract, stakedAmount, candidate)
               
               row.original = {
                 ...row.original,
@@ -193,6 +233,8 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       stakeOf
                       // yourStaked,
                     } = cell.row.original;
+
+                    const isMember = MEMBER_ADDRESS_TEMP.find((address: string) => address === candidateContract)
                     
                     const type = cell.column.id;
                     const rate = convertNumber({
@@ -240,7 +282,10 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       >
                         {type === 'name' ? (
                           <Flex alignItems={'center'} mr={'30px'}>
-                            {getCircle(kind)}
+                            <Flex flexDir={'column'} justifyContent={isMember ? 'space-between' : 'center'} h={'25px'}>
+                              {getCircle(kind)}
+                              {isMember ? getCircle('member') : ''}
+                            </Flex>
                             <Box mr={'12px'}>
                               <OperatorImage imageLink={''}/>
                             </Box>
@@ -254,7 +299,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                           (rate !== '-' && rate) ? Info('Commission Rate', (+rate) / 10000000, '%') : ('')
                         ) : ('')}
                         {type === 'yourStaked' ? (
-                          (yourStaked !== '0.00') ? Info('Your Staked', yourStaked, 'TON') : ('')
+                          (yourStaked !== '0.00' && yourStaked) ? Info('Your Staked', yourStaked, 'TON') : ('')
                         ) : ('')}
                         {type === 'expander' ? (
                           renderBtn(candidateContract, isOpen)

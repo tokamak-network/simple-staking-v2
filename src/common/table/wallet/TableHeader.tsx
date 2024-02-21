@@ -6,7 +6,7 @@ export const TableHeader = ({}) => {
     <chakra.thead
       borderBottom={"1px dashed #e6eaee"}
       // mr={'30px'}
-      w={"1110px"}
+      w={"970px"}
       h={"40px"}
       alignItems={"center"}
       justifyContent={"center"}
@@ -18,7 +18,6 @@ export const TableHeader = ({}) => {
         {HeaderColumn("txType")}
         {HeaderColumn("amount")}
         {HeaderColumn("blockNumber")}
-        {HeaderColumn("status")}
       </chakra.tr>
     </chakra.thead>
   );
@@ -37,15 +36,13 @@ const HeaderColumn = (columnName: string) => {
         : columnName === "txHash"
         ? "Transaction Hash"
         : columnName === "contractAddress"
-        ? "Operator Contract"
+        ? "Candidate"
         : columnName === "txType"
         ? "Type"
         : columnName === "amount"
         ? "Amount"
         : columnName === "blockNumber"
-        ? "Block Number"
-        : columnName === "status"
-        ? "Status"
+        ? "Time"
         : ""}
     </chakra.th>
   );

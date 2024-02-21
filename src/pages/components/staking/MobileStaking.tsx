@@ -7,19 +7,17 @@ import {
   useTheme,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import MobileStakeComponent from "./MobileStakeComponent";
-import MobileRestakeComponent from "./MobileRestakeComponent";
-import MobileUnstakeComponent from "./MobileUnstakeComponent";
-import MobileWithdrawComponent from "./MobileWithdrawComponent";
+import MobileStakingComponent from "./MobileStakingComponent";
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { useRecoilState } from "recoil";
 import { inputState } from "@/atom/global/input";
 
 function MobileStaking() {
   const theme = useTheme();
-  const [selectedTab, setSelectedTab] = useState("stake");
-  const { candidateList } = useCandidateList();
-  const [value, setValue] = useRecoilState(inputState);
+  const [selectedTab, setSelectedTab] = useState("Stake");
+  const { candidateList, noStakingRewardList } = useCandidateList();
+  const [, setValue] = useRecoilState(inputState);
+  // const { account } = useWeb3React();
   
   return (
     <Flex
@@ -36,17 +34,17 @@ function MobileStaking() {
         color="gray.700"
         mb="5px"
       >
-        Stake tokens now
+        Stake
       </Text>
       <Text
         fontSize={"12px"}
         textAlign="center"
         mt="5px"
-        mb="30px"
-        w="250px"
+        mb="20px"
+        w="100%"
         color={"gray.300"}
       >
-        Stake TON or earn TON.
+        Stake TON (or WTON) to earn staking rewards.
       </Text>
       <Flex w="100%" px="20px">
         <Flex
@@ -62,14 +60,14 @@ function MobileStaking() {
           <Button
             w="25%"
             h="100%"
-            bg={selectedTab === "stake" ? "blue.200" : "white.100"}
+            bg={selectedTab === "Stake" ? "blue.200" : "white.100"}
             _focus={{ bg: "#2a72e5", color: "white.100" }}
-            color={selectedTab === "stake" ? "white.100" : "gray.1000"}
+            color={selectedTab === "Stake" ? "white.100" : "gray.1000"}
             fontSize={"13px"}
             fontWeight={500}
             onClick={() => {
               setValue('')
-              setSelectedTab("stake")
+              setSelectedTab("Stake")
             }}
           >
             Stake
@@ -77,26 +75,26 @@ function MobileStaking() {
           <Button
             w="25%"
             h="100%"
-            color={selectedTab === "restake" ? "white.100" : "gray.1000"}
-            bg={selectedTab === "restake" ? "blue.200" : "white.100"}
+            color={selectedTab === "Restake" ? "white.100" : "gray.1000"}
+            bg={selectedTab === "Restake" ? "blue.200" : "white.100"}
             _focus={{ bg: "#2a72e5", color: "white.100" }}
             fontSize={"13px"}
             fontWeight={500}
-            onClick={() => setSelectedTab("restake")}
+            onClick={() => setSelectedTab("Restake")}
           >
-            Re-Stake
+            Restake
           </Button>
           <Button
             w="25%"
             h="100%"
-            bg={selectedTab === "unstake" ? "blue.200" : "white.100"}
+            bg={selectedTab === "Unstake" ? "blue.200" : "white.100"}
             _focus={{ bg: "#2a72e5", color: "white.100" }}
-            color={selectedTab === "unstake" ? "white.100" : "gray.1000"}
+            color={selectedTab === "Unstake" ? "white.100" : "gray.1000"}
             fontSize={"13px"}
             fontWeight={500}
             onClick={() => {
               setValue('')
-              setSelectedTab("unstake")
+              setSelectedTab("Unstake")
             }}
           >
             Unstake
@@ -104,32 +102,23 @@ function MobileStaking() {
           <Button
             w="25%"
             h="100%"
-            bg={selectedTab === "withdraw" ? "blue.200" : "white.100"}
+            bg={selectedTab === "Withdraw" ? "blue.200" : "white.100"}
             _focus={{ bg: "#2a72e5", color: "white.100" }}
-            color={selectedTab === "withdraw" ? "white.100" : "gray.1000"}
+            color={selectedTab === "Withdraw" ? "white.100" : "gray.1000"}
             fontSize={"13px"}
             fontWeight={500}
             onClick={() => {
-              setSelectedTab("withdraw")
+              setSelectedTab("Withdraw")
             }}
           >
             Withdraw
           </Button>
         </Flex>
       </Flex>
-      {selectedTab === "withdraw" ? (
-        <MobileWithdrawComponent operatorList={candidateList} />
-      ) : selectedTab === "restake" ? (
-        <MobileRestakeComponent operatorList={candidateList} />
-      ) : selectedTab === "unstake" ? (
-        <MobileUnstakeComponent 
-          operatorList={candidateList} 
-        />
-      ) : (
-        <MobileStakeComponent 
-          operatorList={candidateList}
-        />
-      )}
+      <MobileStakingComponent 
+        operatorList={candidateList.concat(noStakingRewardList)}
+        title={selectedTab}
+      />
     </Flex>
   );
 }

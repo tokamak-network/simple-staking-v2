@@ -36,13 +36,14 @@ function MobileStakeComponent(props: {
   const { 
     operatorList, 
   } = props;
-  const { userTonBalance } = useUserBalance(account);
+  const { userTonBalance, userWTonBalance } = useUserBalance(account);
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedOp, setSelectedOp] = useState<any>(operatorList?.[0]);
   const [amount, setAmount] = useState(0);
   const [txPending, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
+  const [tokenType, setTokenType] = useState('TON')
 
   const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } =
     useCallContract();
@@ -76,6 +77,8 @@ function MobileStakeComponent(props: {
           maxValue={userTonBalance}
           setAmount={setAmount}
           maxButton={true}
+          setTokenType={setTokenType}
+          tokenType={tokenType}
         />
 
         <Flex

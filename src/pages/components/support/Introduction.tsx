@@ -127,7 +127,7 @@ function Introduction(props: {reef:any}) {
               <Text {...theme.SUPPORT_PARAGRAPH_STYLE.paragraphText()}>
                 When your wallet is connected, you can click the staking buttons
                 to stake your TON. For more information please check the Stake,
-                Un-stake, Re-stake, or Withdraw sections.{" "}
+                Un-stake, Restake, or Withdraw sections.{" "}
               </Text>
             </ListItem>
           </UnorderedList>

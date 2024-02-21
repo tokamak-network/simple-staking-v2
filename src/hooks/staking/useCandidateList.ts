@@ -6,7 +6,6 @@ import useCallContract from "../useCallContract";
 import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
 import { getEventByLayer2, getOperatorUserHistory } from "@/api";
 import { useWindowDimensions } from "../useWindowDimensions";
-import { useExpectedSeig } from './useCalculateExpectedSeig';
 import { getContract } from "@/components/getContract";
 import { toBN } from "web3-utils";
 import { calculateExpectedSeig } from "tokamak-staking-lib";
@@ -16,6 +15,7 @@ import Coinage from "services/abi/AutoRefactorCoinage.json"
 
 export function useCandidateList () {
   const [candidateList, setCandidateList] = useState<any[]>([]);
+  const [noStakingRewardList, setNoStakingRewardList] = useState<any[]>([]);
   const { data } = useQuery(GET_CANDIDATE, {
     pollInterval: 10000
   });
@@ -31,10 +31,10 @@ export function useCandidateList () {
 
   useEffect(() => {
     async function fetch () {
-      if (data) {
-        const candidates = await Promise.all(data.candidates.map(async (obj: any) => {
+      if (data) {     
+        const candidates = await Promise.all(data.candidates.map(async (obj: any, index: number) => {
           let tempObj = obj
-          let stakeOf
+          let stakeOf     
           let sumPending
           let stakeOfCandidate
           let oldCommitHistory
@@ -86,13 +86,13 @@ export function useCandidateList () {
               
               stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
               const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
-              
               if (oldCandidate) {
                 const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(oldCandidate)
                 sumPending = pending.add(old_pending) 
               } else {
                 sumPending = pending
               }
+                
             } catch (e) {
               console.log(e)
             }
@@ -105,15 +105,25 @@ export function useCandidateList () {
             pending: sumPending && sumPending.toString(),
             stakeOfCandidate: stakeOfCandidate && stakeOfCandidate.toString(),
             oldHistory: oldHistory,
-            oldCommitHistory: oldCommitHistory
+            oldCommitHistory: oldCommitHistory,
+            index: index
           }
           return tempObj
         }))
-        setCandidateList(candidates)
+        
+        const noRewardList = candidates.filter((candidate: any) => {
+          return candidate.asCommit.length === 0
+        })
+        const rewardList = candidates.filter((candidate: any) => {
+          return candidate.asCommit.length !== 0
+        })
+
+        setNoStakingRewardList(noRewardList)
+        setCandidateList(rewardList)
       }
     }
     fetch()
   }, [data, account])
 
-  return { candidateList }
+  return { candidateList, noStakingRewardList }
 }

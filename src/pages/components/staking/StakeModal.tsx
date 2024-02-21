@@ -30,6 +30,7 @@ import { ModalHeader } from './modal/ModalHeader';
 import { WithdrawModalBody } from './modal/WithdrawModalBody';
 import { getContract } from '@/components/getContract';
 import Candidate from 'services/abi/Candidate.json';
+import { StakeModalComponentType } from 'types'
 
 function StakeModal() {
   const theme = useTheme();
@@ -44,35 +45,46 @@ function StakeModal() {
     useCallContract();
 
   const [input, setInput] = useRecoilState(inputState);
-  const [txPending, setTxPending] = useRecoilState(txState);
+  const [, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
   const [withdrawType, setWithdrawType] = useState('');
+  const [tokenType, setTokenType] = useState('ton');
+  const [modalComponent, setModalComponent] = useState<StakeModalComponentType>()
+  const [stakeDisabled, setStakeDisabled] = useState(true);
+  const [unstakeDisabled, setUnstakeDisabled] = useState(true);
+  const [reStakeDisabled, setReStakeDisabled] = useState(true);
+  const [withdrawDisabled, setwithdrawDisabled] = useState(true);
 
-  //@ts-ignore
-  let modalComponent = undefined;
-  if (selectedModal && selectedModalData) {
-    modalComponent = getStakeModalComponent(selectedModal, selectedModalData);
-  }
+  useEffect(() => {
+    if (selectedModal && selectedModalData)
+      setModalComponent(getStakeModalComponent(selectedModal, selectedModalData))
+  }, [selectedModal, selectedModalData])
+
   const withdrawSetting = useCallback(
     (value: string) => {
       setWithdrawType(value);
-      //@ts-ignore
-      const inputTemp = withdrawType === 'new' ? modalComponent.balance2 : modalComponent.balance3;
-      setInput(inputTemp);
+      if (modalComponent) {
+        const inputTemp = 
+          withdrawType === 'new' ? 
+            modalComponent.balance2 : 
+            modalComponent.balance3;
+        setInput(inputTemp);
+      }
     },
-    [modalComponent, withdrawType],
+    [withdrawType],
   );
 
   const closeThisModal = useCallback(() => {
     // setResetValue();
     setInput('0');
+    setTokenType('ton')
     closeModal();
   }, [setInput, closeModal]);
 
   const getData = useCallback(() => {
     if (selectedModalData)
       return marshalString(
-        //@ts-ignore
+        
         [DepositManager_ADDRESS, selectedModalData.layer2]
           .map(unmarshalString)
           .map((str) => padLeft(str, 64))
@@ -80,17 +92,22 @@ function StakeModal() {
       );
   }, [DepositManager_ADDRESS, selectedModalData]);
 
+  const getDataForWton = useCallback(() => {
+    if (selectedModalData) return marshalString(
+      
+      [selectedModalData.layer2]
+        .map(unmarshalString)
+        .map((str) => padLeft(str, 64))
+        .join(''),
+    )
+  }, [selectedModalData])
+
   const staking = useCallback(async () => {
     const amount = floatParser(input);
-    //@ts-ignore
-    if (selectedModalData && Number(amount) > Number(floatParser(selectedModalData.tonBalance))) {
-      return alert('Please check input amount.');
-    }
-    // if (
-    //   confirm(
-    //     'Stake, Unstake, and Restake functionalities are temporarily disabled. Please check our official Twitter page @tokamak_network for updates.',
-    //   )
-    // ) {
+    
+    // if (selectedModalData && Number(amount) > Number(floatParser(selectedModalData.tonBalance))) {
+    //   return alert('Please check input amount.');
+    // }
     const data = getData();
     if (TON_CONTRACT && amount) {
       const tx = await TON_CONTRACT.approveAndCall(WTON_ADDRESS, convertToWei(amount.toString()), data);
@@ -101,11 +118,33 @@ function StakeModal() {
     // }
   }, [TON_CONTRACT, WTON_ADDRESS, closeThisModal, getData, input, selectedModalData, setTx, setTxPending]);
 
+  const stakingWton = useCallback(async () => {
+    const amount = floatParser(input);
+    
+    
+    // if (selectedModalData && Number(amount) > Number(floatParser(selectedModalData.wtonBalance))) {
+    //   return alert('Please check input amount.');
+    // }
+    
+    const data = getDataForWton();
+    if (WTON_CONTRACT && amount) {
+      const tx = await WTON_CONTRACT.approveAndCall(
+        DepositManager_ADDRESS, 
+        convertToRay(amount.toString()), 
+        data
+      );
+      setTx(tx);
+      setTxPending(true);
+      return closeThisModal();
+    }
+    
+  }, [WTON_ADDRESS, closeThisModal, getData, input, selectedModalData, setTx, setTxPending]);
+
   const unStaking = useCallback(async () => {
     try {
       const amount = floatParser(input);
       if (DepositManager_CONTRACT && SeigManager_CONTRACT && amount && account && selectedModalData) {
-        //@ts-ignore
+        
         // const coinage = getContract(await SeigManager_CONTRACT.coinages(selectedModalData.layer2), Coinage, library, account)
         // const bal = await coinage.balanceOf(account)
         // console.log(bal.toString(), convertToRay(amount.toString()))
@@ -116,7 +155,7 @@ function StakeModal() {
           )
         ) {
           const tx = await DepositManager_CONTRACT.requestWithdrawal(
-            //@ts-ignore
+            
             selectedModalData.layer2,
             convertToRay(amount.toString()),
           );
@@ -131,17 +170,10 @@ function StakeModal() {
   }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending]);
 
   const reStaking = useCallback(async () => {
-    // if (
-    //   confirm(
-    //     'Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates',
-    //   )
-    // ) {
-
-    // }
-    if (DepositManager_CONTRACT && account) {
-      //@ts-ignore
+    if (DepositManager_CONTRACT && account && selectedModalData) {
+     
       const numPendRequest = await DepositManager_CONTRACT.numPendingRequests(selectedModalData.layer2, account);
-      //@ts-ignore
+     
       const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest);
       setTx(tx);
       setTxPending(true);
@@ -150,23 +182,23 @@ function StakeModal() {
   }, [input, DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal]);
 
   const withdraw = useCallback(async () => {
-    if (selectedModalData && DepositManager_CONTRACT && Old_DepositManager_CONTRACT) {
-      //@ts-ignore
+    if (selectedModalData && DepositManager_CONTRACT && Old_DepositManager_CONTRACT && selectedModalData) {
+      
       const tx =
         withdrawType === 'new'
           ? await DepositManager_CONTRACT.processRequests(
-              //@ts-ignore
+              
               selectedModalData.layer2,
-              //@ts-ignore
+              
               selectedModalData.withdrawableLength,
-              true,
+              tokenType === 'ton' ? true : false,
             )
           : await Old_DepositManager_CONTRACT.processRequests(
-              //@ts-ignore
+              
               selectedModalData.old_layer2,
-              //@ts-ignore
+              
               selectedModalData.old_withdrawableLength,
-              true,
+              tokenType === 'ton' ? true : false,
             );
       setTx(tx);
       setTxPending(true);
@@ -177,13 +209,76 @@ function StakeModal() {
 
   const updateSeig = useCallback(async () => {
     if (account && library && selectedModalData) {
-      //@ts-ignore
+      
       const Candidate_CONTRACT = getContract(selectedModalData.layer2, Candidate.abi, library, account);
       const tx = await Candidate_CONTRACT.updateSeigniorage();
       setTx(tx);
       setTxPending(true);
     }
   }, []);
+
+  const btnDisabledStake = () => {
+    if (selectedModalData) {
+      const {
+        tonBalance,
+        wtonBalance
+      } = selectedModalData
+
+      const disable = (
+        tonBalance === "0.00" 
+        || wtonBalance === "0.00"
+        || input === "0.00"
+        || input === ''
+        //@ts-ignore
+        || (tonBalance && tokenType === 'ton' && floatParser(input) > floatParser(tonBalance) ? true : false)
+        //@ts-ignore
+        || (wtonBalance && tokenType === 'wton' && floatParser(input) > floatParser(wtonBalance) ? true : false)
+      )
+      setStakeDisabled(disable)
+    }
+  };
+
+  const btnDisabledReStake = () => {
+    return account === undefined || selectedModalData?.pendingUnstaked === '0.00' ? setReStakeDisabled(true) : setReStakeDisabled(false);
+  };
+
+  const btnDisabledUnStake = () => {
+    
+    if ( selectedModalData) {
+      const disable = (
+        selectedModalData?.stakedAmount
+        //@ts-ignore 
+        ? floatParser(input) > floatParser(selectedModalData?.stakedAmount) 
+        : false
+      ) || input === '0.00' || input === '' 
+      setUnstakeDisabled(disable)
+    }
+    
+  };
+
+  const btnDisabledWithdraw = () => {
+    return account === undefined || (selectedModalData?.withdrawable === '0.00' && selectedModalData?.old_withdrawable === '0.00')
+      ? setwithdrawDisabled(true)
+      : setwithdrawDisabled(false);
+  };
+  useEffect(() => {
+    if (selectedModalData) {
+      btnDisabledStake();
+      btnDisabledUnStake();
+      btnDisabledReStake();
+      btnDisabledWithdraw();
+    }
+    /*eslint-disable*/
+  }, [
+    account, 
+    tokenType,
+    input,
+    selectedModalData?.pendingUnstaked, 
+    selectedModalData?.tonBalance,
+    selectedModalData?.wtonBalance, 
+    selectedModalData?.withdrawable, 
+    selectedModalData?.old_withdrawable
+  ]);
 
   useEffect(() => {
     async function waitReceipt() {
@@ -209,19 +304,22 @@ function StakeModal() {
   };
 
   const seigChecker = (value: string) => {
-    //@ts-ignore
-    if (value) return floatParser(value) < 5;
+    
+    if (value) {
+      //@ts-ignore
+      return floatParser(value) < 5;
+    }
   };
 
   useEffect(() => {
-    if (
-      selectedModal == 'withdraw' &&
-      //@ts-ignore
-      modalComponent.balance2 !== '0.00'
-    ) {
-      setWithdrawType('old');
-      //@ts-ignore
-      setInput(modalComponent.balance2);
+    if (modalComponent)  {
+      if (selectedModal == 'withdraw' && modalComponent.balance2 !== '0.00') {
+        setWithdrawType('old'); 
+        setInput(modalComponent.balance2);
+      } else if (selectedModal == 'withdraw' && modalComponent.balance2 === '0.00') {
+        setWithdrawType('new')      
+        setInput(modalComponent.balance3)
+      }
     }
   }, [selectedModal]);
 
@@ -247,7 +345,7 @@ function StakeModal() {
                   closeThisModal={closeThisModal}
                 />
                 {/* modal body */}
-                {modalComponent && selectedModalData ? (
+                {modalComponent && selectedModalData && account ? (
                   <Flex
                     w={'350px'}
                     borderY={'1px'}
@@ -256,46 +354,171 @@ function StakeModal() {
                     flexDir={'column'}
                     alignItems={'center'}
                   >
-                    <Flex h={'84px'} alignItems={'center'} flexDir={'row'} justifyContent={'center'} w={'100%'}>
-                      {selectedModal === 'restaking' ? (
-                        <Text fontSize={'38px'} fontWeight={500}>
-                          {modalComponent.balance}
-                        </Text>
-                      ) : selectedModal === 'withdraw' ? (
-                        <Text fontSize={'38px'} fontWeight={500}>
-                          {withdrawType === 'old'
-                            ? modalComponent.balance2
-                            : withdrawType === 'new'
-                            ? modalComponent.balance3
-                            : '0.00'}
-                        </Text>
-                      ) : (
-                        <BalanceInput
-                          w={'220px'}
-                          placeHolder={'0'}
-                          type={'staking'}
-                          maxValue={
-                            selectedModal === 'unstaking' &&
-                            //@ts-ignore
-                            account.toLowerCase() === selectedModalData.candidate.toLowerCase()
-                              ? amountForCandidate(modalComponent.balance)
-                              : modalComponent.balance
-                          }
-                        />
+                    {
+                      selectedModal === 'staking' ?
+                      <Flex
+                        flexDir={'column'}
+                      >
+                        <Flex
+                          fontSize={'12px'}
+                          fontWeight={500}
+                          color={'#808992'}
+                        >
+                          Select token to stake
+                        </Flex>
+                        <RadioGroup 
+                          onChange={(value: 'ton' | 'wton') => setTokenType(value)} 
+                          value={tokenType}
+                        >
+                          <Flex alignItems={'row'} my={'11px'} justifyContent={'center'}>
+                            <Radio
+                              value="ton"
+                              h={'20px'}
+                              mr={'6px'}
+                              bgColor={'#fff'}
+                              border={'solid 2px #c6cbd9'}
+                              isChecked={true}
+                            >
+                              <Flex
+                                fontSize={'16px'}
+                                fontWeight={500}
+                                color={'#3d495d'}
+                                flexDir={'row'}
+                                alignItems={'center'}
+                              >
+                                TON 
+                              </Flex>
+                            </Radio>
+                            <Radio
+                              value="wton"
+                              h={'20px'}
+                              mr={'6px'}
+                              bgColor={'#fff'}
+                              border={'solid 2px #c6cbd9'}
+                              isChecked={false}
+                            >
+                              <Flex
+                                fontSize={'16px'}
+                                fontWeight={500}
+                                color={'#3d495d'}
+                                flexDir={'row'}
+                                alignItems={'center'}
+                              >
+                                WTON 
+                              </Flex>
+                            </Radio>
+                          </Flex>
+                        </RadioGroup>
+                      </Flex> :
+                      ''
+                    }
+                    <Flex 
+                      h={selectedModal === 'withdraw' || selectedModal === 'restaking' ? '' : '84px'} 
+                      alignItems={'center'} 
+                      flexDir={'row'} 
+                      justifyContent={'center'} 
+                      w={'100%'}
+                    > 
+                      {
+                        selectedModal === 'restaking' ? (
+                          // <Text fontSize={'38px'} fontWeight={500}>
+                          //   {/* {modalComponent.balance} */}
+                          // </Text>
+                          ''
+                        ) : selectedModal === 'withdraw' ? (
+                          ''
+                        ) : (
+                          <BalanceInput
+                            w={'220px'}
+                            placeHolder={'0'}
+                            type={'staking'}
+                            maxValue={
+                              selectedModal === 'unstaking' &&
+                              
+                              account.toLowerCase() === selectedModalData.candidate.toLowerCase()
+                                ? amountForCandidate(modalComponent.balance)
+                                : tokenType === 'wton'
+                                ? modalComponent.balance2 
+                                : modalComponent.balance
+                            }
+                          />
                       )}
                     </Flex>
                     {selectedModal === 'withdraw' ? (
-                      <Flex w={'100%'} flexDir={'column'} alignItems={'center'} mb={'10px'}>
-                        <WithdrawModalBody title={modalComponent.balanceInfo1} value={modalComponent.balance1} />
+                      <Flex w={'100%'} flexDir={'column'} alignItems={'center'} mb={'10px'} mt={'30px'}>
+                        {/* <WithdrawModalBody 
+                          title={modalComponent.balanceInfo1} 
+                          value={modalComponent.balance1} 
+                        /> */}
                         {/* <WithdrawModalBody title={modalComponent.balanceInfo2} value={modalComponent.balance2} /> */}
                         <Flex flexDir={'column'} alignItems={'center'}>
                           <Flex fontSize={'13px'} fontWeight={500} color={'#808992'}>
                             {modalComponent.balanceInfo2}
                           </Flex>
-                          <RadioGroup onChange={(value: 'old' | 'new') => withdrawSetting(value)} value={withdrawType}>
-                            <Flex alignItems={'center'} my={'11px'} justifyContent={'center'}>
+                          {
+                            modalComponent.balance2 === '0.00' ? (
+                            <Flex mt={'15px'}>
+                              <Text fontSize={'16px'} fontWeight={500} color={'#3d495d'}>
+                                {`${modalComponent.balance3} ${tokenType === 'ton' ? `TON` : `WTON`}`}
+                              </Text>
+                            </Flex>
+                            ) : (
+                            <RadioGroup 
+                              onChange={(value: 'old' | 'new') => withdrawSetting(value)} 
+                              value={withdrawType}
+                            >
+                              <Flex alignItems={'center'} mt={'11px'} justifyContent={'center'}>
+                                <Radio
+                                  value="old"
+                                  h={'20px'}
+                                  mr={'6px'}
+                                  bgColor={'#fff'}
+                                  border={'solid 2px #c6cbd9'}
+                                  isChecked={true}
+                                >
+                                  <Flex
+                                    fontSize={'16px'}
+                                    fontWeight={500}
+                                    color={'#3d495d'}
+                                    flexDir={'row'}
+                                    alignItems={'center'}
+                                  >
+                                    <Text mr={'3px'}>{`${modalComponent.balance2} ${tokenType === 'ton' ? `TON` : `WTON`}`}</Text>
+                                    <Text fontSize={'12px'} color={'#2a72e5'}>
+                                      (prior to patch)
+                                    </Text>
+                                  </Flex>
+                                </Radio>
+                              </Flex>
+                              <Flex alignItems={'center'} justifyContent={'center'} mt={'11px'}>
+                                <Radio value="new" h={'20px'} mr={'6px'} bgColor={'#fff'} border={'solid 2px #c6cbd9'}>
+                                  <Text fontSize={'16px'} fontWeight={500} color={'#3d495d'}>
+                                    {`${modalComponent.balance3} ${tokenType === 'ton' ? `TON` : `WTON`}`}
+                                  </Text>
+                                </Radio>
+                              </Flex>
+                            </RadioGroup>
+                          )}
+                        </Flex>
+                        <Flex
+                          flexDir={'column'}
+                          alignItems={'center'}
+                          mt={'30px'}
+                        >
+                          <Flex
+                            fontSize={'12px'}
+                            fontWeight={500}
+                            color={'#808992'}
+                          >
+                            Withdraw as
+                          </Flex>
+                          <RadioGroup 
+                            onChange={(value: 'ton' | 'wton') => setTokenType(value)} 
+                            value={tokenType}
+                          >
+                            <Flex alignItems={'row'} my={'11px'} justifyContent={'center'}>
                               <Radio
-                                value="old"
+                                value="ton"
                                 h={'20px'}
                                 mr={'6px'}
                                 bgColor={'#fff'}
@@ -309,43 +532,68 @@ function StakeModal() {
                                   flexDir={'row'}
                                   alignItems={'center'}
                                 >
-                                  <Text mr={'3px'}>{modalComponent.balance2} TON</Text>
-                                  <Text fontSize={'12px'} color={'#2a72e5'}>
-                                    (prior to patch)
-                                  </Text>
+                                  TON 
                                 </Flex>
                               </Radio>
-                            </Flex>
-                            <Flex alignItems={'center'} justifyContent={'center'}>
-                              <Radio value="new" h={'20px'} mr={'6px'} bgColor={'#fff'} border={'solid 2px #c6cbd9'}>
-                                <Text fontSize={'16px'} fontWeight={500} color={'#3d495d'}>
-                                  {modalComponent.balance3} TON
-                                </Text>
+                              <Radio
+                                value="wton"
+                                h={'20px'}
+                                mr={'6px'}
+                                bgColor={'#fff'}
+                                border={'solid 2px #c6cbd9'}
+                                isChecked={false}
+                              >
+                                <Flex
+                                  fontSize={'16px'}
+                                  fontWeight={500}
+                                  color={'#3d495d'}
+                                  flexDir={'row'}
+                                  alignItems={'center'}
+                                >
+                                  WTON 
+                                </Flex>
                               </Radio>
                             </Flex>
                           </RadioGroup>
                         </Flex>
                       </Flex>
                     ) : (
-                      <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
+                      <Flex 
+                        w={'100%'} 
+                        flexDir={'column'} 
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        h={selectedModal === 'restaking' ? '100px' : ''}
+                      >
                         <Text fontSize={'12px'} fontWeight={500} color={'#808992'}>
-                          {modalComponent.balanceInfo}
+                          {
+                            modalComponent.balanceInfo
+                          }
                         </Text>
-                        {selectedModal === 'unstaking' &&
-                        //@ts-ignore
-                        account?.toLowerCase() === selectedModalData.candidate.toLowerCase() ? (
-                          <Text fontSize={'11px'} fontWeight={'normal'} color={'#86929d'}>
-                            (Operator's Minimum Staked Balance)
-                          </Text>
-                        ) : (
-                          ''
-                        )}
-                        <Text mt={'5px'}>{modalComponent.balance} TON</Text>
                         {
-                          //@ts-ignore
+                          selectedModal === 'unstaking' &&
+                          
+                          account?.toLowerCase() === selectedModalData.candidate.toLowerCase() ? 
+                          (
+                            <Text fontSize={'11px'} fontWeight={'normal'} color={'#86929d'}>
+                              (Operator's Minimum Staked Balance)
+                            </Text>
+                          ) : (
+                            ''
+                          )
+                        }
+                        <Text mt={'5px'}>
+                          {
+                            selectedModal === 'staking' && tokenType === 'wton' ? 
+                            `${modalComponent.balance2} WTON` :
+                            `${modalComponent.balance} TON`
+                          } 
+                        </Text>
+                        {
+                          
                           selectedModal === 'unstaking' && account.toLowerCase() === selectedModalData.candidate ? (
                             <Text fontSize={'13px'} color={'#808992'} fontWeight={500}>
-                              (1,000 TON)
+                              (1,000.1 TON)
                             </Text>
                           ) : (
                             ''
@@ -364,53 +612,80 @@ function StakeModal() {
                   ) : (
                     <Flex mt={'25px'} color={'#2a72e5'} fontSize={'12px'} fontWeight={500} alignItems={'center'}>
                       {
-                        //@ts-ignore
-                        selectedModal === 'unstaking' && !seigChecker(selectedModalData.seig) ? (
-                          <Flex color={'#2a72e5'} ml={'13px'}>
-                            <Text
-                              mr={'3px'}
-                              cursor={'pointer'}
-                              textDecoration={'underline'}
-                              onClick={() => updateSeig()}
-                            >
-                              Claim
-                            </Text>
-                            <Text color={'#3e495c'}>{modalComponent.bottomComment}</Text>
-                          </Flex>
-                        ) : selectedModal === 'staking' &&
-                          //@ts-ignore
+                        selectedModal === 'unstaking' && selectedModalData ? (
+                          
+                          !seigChecker(selectedModalData.seig) ?
+                          (
+                            <Flex color={'#2a72e5'} ml={'13px'}>
+                              <Text
+                                mr={'3px'}
+                                cursor={'pointer'}
+                                textDecoration={'underline'}
+                                onClick={() => updateSeig()}
+                              >
+                                Claim
+                              </Text>
+                              <Text color={'#3e495c'}>{modalComponent.bottomComment}</Text>
+                            </Flex>
+                          ) : (
+                            <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
+                              <span style={{ color: '#ff2d78' }}>Warning</span>: You can withdraw unstaked TON to your wallet 14 days after unstaking. Remember to claim any unclaimed TON before unstaking.
+                            </Box>
+                          )
+                        ) : selectedModal === 'staking' && selectedModalData &&
+                          
                           !selectedModalData.minimumAmount ? (
                           <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
                             <span style={{ color: '#ff2d78' }}>Warning</span>: operator have not met the minimum staked
-                            balance requirement (greater than 1,000 TON). As a result, there will be
+                            balance requirement (at least 1,000.1 TON). As a result, there will be
                             <span style={{ color: '#2a72e5' }}> no staking reward</span>
                             <span> for staking on this layer2.</span>
                           </Box>
-                        ) : (
-                          ''
-                        )
-                        // <Text
-                        //   color={'#2a72e5'}
-                        // >
-                        //   {modalComponent.bottomComment}
-                        // </Text>
+                        ) : selectedModal === 'restaking' ? (
+                          <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
+                            <span style={{ color: '#ff2d78' }}>Warning</span>: Restaking will stake unstaked TON, and these cannot be withdrawn until they are unstaked again.
+                          </Box>
+                        ) : ''
                       }
                     </Flex>
                   )}
                   <Button
                     mt={'25px'}
                     w={'150px'}
-                    //@ts-ignore
-                    {...(input && floatParser(input) > 0
-                      ? { ...btnStyle.btnAble() }
-                      : selectedModal === 'restaking' || selectedModal === 'withdraw'
-                      ? { ...btnStyle.btnAble() }
-                      : { ...btnStyle.btnDisable() })}
-                    //@ts-ignore
-                    isDisabled={floatParser(input) === 0}
+                    {
+                      ...(
+                        selectedModal === 'staking' && stakeDisabled 
+                        ? {...btnStyle.btnDisable()} 
+                        : selectedModal === 'unstaking' && unstakeDisabled
+                        ? {...btnStyle.btnDisable()} 
+                        : selectedModal === 'restaking' && reStakeDisabled
+                        ? {...btnStyle.btnDisable()} 
+                        : selectedModal === 'withdraw' && withdrawDisabled
+                        ? {...btnStyle.btnDisable()} 
+                        : {...btnStyle.btnAble()}
+                      )
+                    }
+                    // {...(input && floatParser(input) > 0
+                    //   ? { ...btnStyle.btnAble() }
+                    //   : selectedModal === 'restaking' || selectedModal === 'withdraw'
+                    //   ? { ...btnStyle.btnAble() }
+                    //   : { ...btnStyle.btnDisable() })}
+                    
+                    isDisabled={
+                      selectedModal === 'staking' 
+                      ? stakeDisabled
+                      : selectedModal === 'unstaking' 
+                      ? unstakeDisabled
+                      : selectedModal === 'restaking' 
+                      ? reStakeDisabled
+                      : selectedModal === 'withdraw' 
+                      ? withdrawDisabled : ''
+                    }
                     onClick={
-                      selectedModal === 'staking'
+                      selectedModal === 'staking' && tokenType === 'ton'
                         ? staking
+                        : selectedModal === 'staking' && tokenType === 'wton'
+                        ? stakingWton
                         : selectedModal === 'unstaking'
                         ? unStaking
                         : selectedModal === 'restaking'

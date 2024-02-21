@@ -13,8 +13,9 @@ export const TopCardContainer: FC<TopCardContainerProps> = ({
   pendingWithdrawal,
   accumulatedReward,
 }) => {
+  
   return (
-    <Flex flexDir={'row'} justifyContent={'space-between'} maxW={'1100px'}>
+    <Flex flexDir={'row'} justifyContent={'space-between'} maxW={'1100px'} px={'200px'}>
       <TopCard
         title={'Total Staked'}
         value={totalStaked}
@@ -23,10 +24,10 @@ export const TopCardContainer: FC<TopCardContainerProps> = ({
         title={'Pending Withdrawal'}
         value={pendingWithdrawal}
       />
-      <TopCard
+      {/* <TopCard
         title={'Total Accumulated Reward'}
         value={accumulatedReward}
-      />
+      /> */}
     </Flex>
   )
 }

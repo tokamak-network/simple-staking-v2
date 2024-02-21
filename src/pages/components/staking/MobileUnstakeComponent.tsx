@@ -27,6 +27,7 @@ function MobileUnstakeComponent(props: {
   const [txPending, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
   const [amount, setAmount] = useState(0);
+  const [tokenType, setTokenType] = useState('TON')
   const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } = useCallContract();
 
   const staked = selectedOp ?
@@ -63,6 +64,8 @@ function MobileUnstakeComponent(props: {
           maxValue={selectedOp ? staked : "0.00"}
           setAmount={setAmount}
           maxButton={true}
+          setTokenType={setTokenType}
+          tokenType={tokenType}
         />
         <Flex
           mt="10px"

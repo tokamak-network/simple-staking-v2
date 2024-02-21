@@ -1,6 +1,5 @@
 import { IconClose } from "@/common/Icons/IconClose";
 import { IconOpen } from "@/common/Icons/IconOpen";
-import useOperatorList from "@/hooks/staking/useOperatorList";
 import { Box, Flex, Spinner, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
 import { useMemo, useCallback, useState } from 'react';
 import OperatorDetailInfo from "@/common/table/staking/OperatorDetail";
@@ -80,10 +79,10 @@ function DesktopStaking () {
     );
 
     const [tableLoading, setTableLoading] = useState<boolean>(true);
-    const { candidateList } = useCandidateList()
-    
+    const { candidateList, noStakingRewardList } = useCandidateList()
+    const { account } = useWeb3React();
+
     useEffect(() => {
-      // operatorList.length === 0 ? setTableLoading(true) : setTableLoading(false)
       candidateList ? setTableLoading(false) : setTableLoading(true)
     }, [candidateList, tableLoading])
     
@@ -99,21 +98,22 @@ function DesktopStaking () {
         asCommit,
         stakeOfCandidate
       } = row.original;
-      
       const txHistory = getTransactionHistory(row.original)
       const commitHistory = getCommitHistory(row.original)
-      // console.log(row.original)
+
       const candidateAmount = stakeOfCandidate? convertNumber({
         amount: stakeOfCandidate,
         type: 'ray'
       }) : '0.00'
-      const minimumAmount = Number(candidateAmount) > 100
-      0
-      const userExpectedSeig = expectedSeig? convertNumber({
-        amount: expectedSeig,
-        type: 'ray',
-        localeString: true
-      }) : '-'
+
+      const minimumAmount = Number(candidateAmount) >= 1000
+
+      const userExpectedSeig = expectedSeig ? 
+        convertNumber({
+          amount: expectedSeig,
+          type: 'ray',
+          localeString: true
+        }) : '-' 
       
       const yourStake = convertNumber({
         amount: stakeOf, 
@@ -213,20 +213,61 @@ function DesktopStaking () {
     
     return (
       <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
-        <PageHeader title={'Select your Operator'} subtitle={'You can select an operator to stake, restake, unstake, your TONS.'}/>
+        <PageHeader title={'Select Your Operator'} subtitle={'Choose an operator to stake, restake, unstake, or withdraw TON (or WTON).'}/>
         <Box fontFamily={theme.fonts.roboto}>
           {candidateList.length === 0 ? 
             <Flex justifyContent="center" alignItems={"center"} h='200px'>
               <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
             </Flex> :
-            <OpearatorTable 
-              renderDetail={renderRowSubComponent}
-              columns={columns}
-              // @ts-ignore
-              data={candidateList}
-              isLoading={tableLoading}
-            />
+            <Flex flexDir={'column'}>
+              <Flex 
+                alignItems={'center'}
+                justifyContent={'center'}
+                fontSize={'24px'}
+                color={'#3d495d'}
+                fontWeight={600}
+                mt={'60px'}
+                mb={'15px'}
+                fontFamily={theme.fonts.Nanum}
+              >
+                Staking Reward Available
+              </Flex>
+              <OpearatorTable 
+                renderDetail={renderRowSubComponent}
+                columns={columns}
+                // @ts-ignore
+                data={candidateList}
+                isLoading={tableLoading}
+              />
+            </Flex>
           }
+          {
+          noStakingRewardList.length !== 0 ? (
+            <Flex flexDir={'column'}>
+              <Flex 
+                alignItems={'center'}
+                justifyContent={'center'}
+                fontSize={'24px'}
+                color={'#3d495d'}
+                fontWeight={600}
+                mt={'60px'}
+                mb={'15px'}
+                fontFamily={theme.fonts.Nanum}
+              >
+                No Staking Reward Available
+              </Flex>
+              <OpearatorTable 
+                renderDetail={renderRowSubComponent}
+                columns={columns}
+                // @ts-ignore
+                data={noStakingRewardList}
+                isLoading={tableLoading}
+              />
+            </Flex>
+          ) : (
+            <Flex />
+          )
+        }
         </Box>
       </Flex>
     );

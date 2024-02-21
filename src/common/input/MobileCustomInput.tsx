@@ -7,11 +7,16 @@ import {
   Button,
   Flex,
   useTheme,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { inputState } from "@/atom/global/input";
 import React, { useEffect, useState, SetStateAction } from "react";
 import { useRecoilState } from "recoil";
 import { floatParser } from "@/components/number";
+import select1_arrow_inactive from "assets/images/select1_arrow_inactive.png";
+import Image from "next/image";
+import TokenSelect from "@/pages/components/staking/TokenSelect";
+
 type InputProp = {
   placeHolder?: string;
   w?: number | string;
@@ -24,6 +29,8 @@ type InputProp = {
   setAmount: React.Dispatch<SetStateAction<any>>;
   maxButton?: boolean;
   txt?: string;
+  setTokenType: React.Dispatch<SetStateAction<any>>;
+  tokenType: string
   // atomKey: string;
 };
 
@@ -69,11 +76,15 @@ function MobileCustomInput(props: InputProp) {
     setAmount,
     maxButton,
     txt,
+    setTokenType,
+    tokenType
   } = props;
   const [value, setValue] = useRecoilState(inputState);
   const theme = useTheme();
   const { INPUT_STYLE } = theme;
   const [error, setError] = useState(false);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
@@ -87,6 +98,8 @@ function MobileCustomInput(props: InputProp) {
     setError(Number(valueWithoutCommas) > Number(balanceWithoutComas));
     setAmount(valueWithoutCommas);
   }, [value]);
+
+  const tokenList = ['TON', 'WTON']
 
   return (
     <InputGroup h="40px" justifyContent={"space-between"}>
@@ -107,13 +120,13 @@ function MobileCustomInput(props: InputProp) {
           w={w}
           h={h || "40px"}
           focusBorderColor={"transparent"}
-          border={type === "staking" ? "none" : "1px solid #dfe4ee"}
+          border={type === "Stake" || type === "Unstake" ? "none" : "1px solid #dfe4ee"}
           borderRadius={"4px"}
           value={addComma(value)}
           px="0px"
         >
           <Flex
-            flexDir={type === "staking" ? "row" : "row"}
+            flexDir={type === "Stake" ? "row" : "row"}
             alignItems={"center"}
           >
             <NumberInputField
@@ -130,9 +143,20 @@ function MobileCustomInput(props: InputProp) {
               }}
               onChange={onChange}
             />
-            <Text fontSize={"13px"} fontWeight={"normal"} ml={"7px"} mt={"1px"}>
-              TON
-            </Text>
+            <Flex alignItems={"center"}>
+              <Text ml="7px" fontSize={"13px"} fontWeight="normal">
+                {type === 'Stake' ? tokenType : 'TON'}
+              </Text>
+              {
+                type === 'Stake' ?
+                  <Flex height={"9px"} width={"8px"} ml="10px" onClick={onOpen}>
+                    <Image
+                      src={select1_arrow_inactive}
+                      alt={"select1_arrow_inactive"}
+                    />
+                  </Flex> : ''
+              }
+            </Flex>
           </Flex>
         </NumberInput>
       </Flex>
@@ -162,6 +186,12 @@ function MobileCustomInput(props: InputProp) {
       ) : (
         <></>
       )}
+      <TokenSelect
+        tokenList={tokenList}
+        onClose={onClose}
+        isOpen={isOpen}
+        setSelectedToken={setTokenType}
+      />
     </InputGroup>
   );
 }
