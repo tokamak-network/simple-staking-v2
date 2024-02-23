@@ -21,7 +21,7 @@ const iconList = [
   },
   {
     icon: GITHUB_ICON,
-    url: 'https://github.com/Onther-Tech/',
+    url: 'https://github.com/tokamak-network/',
   },
   {
     icon: FACEBOOK_ICON,
