@@ -324,9 +324,6 @@ function WalletModal() {
             ) : (
               <Text>Error connecting</Text>
             )}
-            {/* {error instanceof UnsupportedChainIdError
-              ? 'Network not supported' + <br /> + 'Please change to Rinkeby or Mainnet'
-              : 'Error connecting'} */}
           </ModalHeader>
           <ModalCloseButton />
           {/* <ModalBody pb={6}>
