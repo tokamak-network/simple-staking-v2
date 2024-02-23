@@ -23,7 +23,6 @@ export function useTopCardInfo () {
   } = useCallContract();
   const [userTotalStaked, setUserTotalStaked] = useState('0.00')
   const [userPendingWithdrawal, setUserPendingWithdrawal] = useState('0.00')
-  // const [userHistory, setUserHistory] = useState([])
 
   useEffect(() => {
     async function fetch () {
