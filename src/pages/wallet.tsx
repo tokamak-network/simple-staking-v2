@@ -13,7 +13,7 @@ function Wallet () {
   const theme = useTheme();
   const { userHistory } = useUserHistory();
   const [tableLoading, setTableLoading] = useState<boolean>(true);
-  const { accumulatedReward } = useAccumulatedReward()
+  // const { accumulatedReward } = useAccumulatedReward()
   // const { userTotalStaked } = useOperatorList()
   const { userTotalStaked, userPendingWithdrawal } = useTopCardInfo()
 
@@ -67,7 +67,7 @@ function Wallet () {
         <TopCardContainer
           totalStaked={myTotalStaked}
           pendingWithdrawal={myPendingWithdrawal}
-          accumulatedReward={accumulatedReward}
+          accumulatedReward={''}
         />
         {/* <GraphContainer /> */}
         <MyHistoryTable 

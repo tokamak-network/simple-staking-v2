@@ -25,7 +25,7 @@ export function useUserHistory () {
         const pastData = await getOperatorsInfo();
 
         let myHistory: any = []
-
+        console.log(data)
         await Promise.all(pastData.map(async (obj: any) => {
           const history = await getOperatorUserHistory(obj.layer2.toLowerCase(), account.toLowerCase())
           myHistory = [...myHistory, ...history]
@@ -34,9 +34,10 @@ export function useUserHistory () {
         myHistory = myHistory.sort(function (a: any, b: any) {
           return b.blockNumber - a.blockNumber
         })
-        const txData = getTransactionHistory({...data.users[0], oldHistory: myHistory})
-
-        setUserHistory(txData)
+        if (data.users[0]) {
+          const txData = getTransactionHistory({...data.users[0], oldHistory: myHistory})
+          setUserHistory(txData)
+        }
       }
     }
     fetchList()
