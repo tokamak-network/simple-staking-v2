@@ -19,7 +19,6 @@ export function useTopCardInfo () {
     SeigManager_CONTRACT, 
     DepositManager_CONTRACT, 
     Old_DepositManager_CONTRACT, 
-    TON_CONTRACT 
   } = useCallContract();
   const [userTotalStaked, setUserTotalStaked] = useState('0.00')
   const [userPendingWithdrawal, setUserPendingWithdrawal] = useState('0.00')
