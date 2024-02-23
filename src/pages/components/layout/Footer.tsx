@@ -87,7 +87,7 @@ function Footer() {
                 mb={'10px'}
                 mr={'15px'}
                 cursor={'pointer'}
-                zIndex={100}
+                zIndex={999}
               >
                 <Image src={item.icon.src} alt={'icon'}/>
               </Link>
