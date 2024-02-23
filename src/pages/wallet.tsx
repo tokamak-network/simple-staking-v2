@@ -5,7 +5,7 @@ import GraphContainer from './components/wallet/GraphContainer';
 import { MyHistoryTable } from '../common/table/wallet/MyHistoryTable';
 import { useMemo, useState } from 'react';
 import { useUserHistory } from '../hooks/wallet/useUserHIstory';
-import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
+// import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
 import { convertNumber } from '../utils/number';
 import { useTopCardInfo } from '@/hooks/wallet/useTopCardInfo';
 
@@ -13,7 +13,7 @@ function Wallet () {
   const theme = useTheme();
   const { userHistory } = useUserHistory();
   const [tableLoading, setTableLoading] = useState<boolean>(true);
-  const { accumulatedReward } = useAccumulatedReward()
+  // const { accumulatedReward } = useAccumulatedReward()
   // const { userTotalStaked } = useOperatorList()
   const { userTotalStaked, userPendingWithdrawal } = useTopCardInfo()
 
@@ -67,7 +67,7 @@ function Wallet () {
         <TopCardContainer
           totalStaked={myTotalStaked}
           pendingWithdrawal={myPendingWithdrawal}
-          accumulatedReward={accumulatedReward}
+          accumulatedReward={''}
         />
         {/* <GraphContainer /> */}
         <MyHistoryTable 
