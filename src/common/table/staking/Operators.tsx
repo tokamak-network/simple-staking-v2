@@ -1,4 +1,4 @@
-import {FC, useState, useRef, Fragment} from 'react';
+import {FC, useState, useRef, useEffect} from 'react';
 import {
   Column,
   useExpanded,
@@ -34,6 +34,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
 import BasicTooltip from '../../tooltip/index';
 import { MEMBER_ADDRESS_TEMP } from '@/constants';
+import { useRouter } from 'next/router';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -65,6 +66,9 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   const theme = useTheme();
   const focusTarget = useRef<any>([]);
 
+  const router = useRouter();
+  const { asPath } = router;
+
   const onChangeSelectBox = (e: any) => {
     const filterValue = e.target.value;
     headerGroups[0].headers.map((e) => {
@@ -86,7 +90,23 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   );
   const [toggle, setToggle] = useRecoilState(toggleState)
 
+  useEffect(() => {
+    if (asPath.includes('#')) {
+      const indexOf = asPath.indexOf('#')
+      const dataIndex = page.findIndex((candidateData: any) => candidateData.original.id === asPath.slice(indexOf + 1))
+      setIsOpen(asPath.slice(9));
+      setToggle('All')
+      setTimeout(() => {
+      focusTarget?.current[dataIndex]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 100);
+    }
+  }, [])
+
   const clickOpen = (candidateContract: string, index: number) => {
+    console.log(candidateContract)
     setIsOpen(candidateContract);
     setToggle('All')
     setTimeout(() => {
@@ -96,9 +116,9 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
       });
     }, 100);
   };
-
+ 
   return (
-    <Flex w={'1100px'} flexDir={'column'}>
+    <Flex w={'1100px'} flexDir={'column'} id={candidateContract}>
       <Flex justifyContent={'space-between'} mb={'15px'} ml={'17px'}>
         <Flex fontSize={'11px'} flexDir={'row'} alignItems={'center'}>
         {getCircle('member')}

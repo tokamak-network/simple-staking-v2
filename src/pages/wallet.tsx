@@ -5,26 +5,29 @@ import GraphContainer from './components/wallet/GraphContainer';
 import { MyHistoryTable } from '../common/table/wallet/MyHistoryTable';
 import { useMemo, useState } from 'react';
 import { useUserHistory } from '../hooks/wallet/useUserHIstory';
-import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
+// import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
 import { convertNumber } from '../utils/number';
-import useOperatorList from '../hooks/staking/useOperatorList';
-import { useCandidateList } from '../hooks/staking/useCandidateList';
+import { useTopCardInfo } from '@/hooks/wallet/useTopCardInfo';
 
 function Wallet () {
   const theme = useTheme();
   const { userHistory } = useUserHistory();
   const [tableLoading, setTableLoading] = useState<boolean>(true);
-  const { accumulatedReward } = useAccumulatedReward()
-  const { userTotalStaked } = useOperatorList()
-  // const dat = useCandidateList();
-  // console.log(dat)
-  // const staked = useRecoilValue(userStakedStatusState)
+  // const { accumulatedReward } = useAccumulatedReward()
+  // const { userTotalStaked } = useOperatorList()
+  const { userTotalStaked, userPendingWithdrawal } = useTopCardInfo()
+
   const myTotalStaked = userTotalStaked ? convertNumber({
     amount: userTotalStaked,
     type: 'ray',
     localeString: true
   }) : '0.00' 
-  
+
+  const myPendingWithdrawal = userPendingWithdrawal ? convertNumber({
+    amount: userPendingWithdrawal,
+    type: 'ray',
+    localeString: true
+  }) : '0.00' 
 
   
   const historyColumns = useMemo(
@@ -50,13 +53,9 @@ function Wallet () {
         accessor: 'amount',
       },
       {
-        Header: 'Block Number',
+        Header: 'Time',
         accessor: 'blockNumber',
       },
-      {
-        Header: 'Status',
-        accessor: 'status',
-      }
     ],
     [],
   );
@@ -67,10 +66,10 @@ function Wallet () {
       <Box fontFamily={theme.fonts.roboto}>
         <TopCardContainer
           totalStaked={myTotalStaked}
-          pendingWithdrawal={''}
-          accumulatedReward={accumulatedReward}
+          pendingWithdrawal={myPendingWithdrawal}
+          accumulatedReward={''}
         />
-        <GraphContainer />
+        {/* <GraphContainer /> */}
         <MyHistoryTable 
           columns={historyColumns}
           data={userHistory}

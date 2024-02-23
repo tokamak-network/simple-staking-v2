@@ -11,8 +11,7 @@ export function getColumnWidthWallet(columnName: string) {
   return columnName === 'index' ? '70px' :
     columnName === 'txHash' || columnName === 'contractAddress' ? '200px' :
       columnName === 'txType' || columnName === 'amount' ? '160px' :
-        columnName === 'blockNumber' ? '180px' :
-          columnName === 'status' ? '140px' : ''
+        columnName === 'blockNumber' ? '180px' : ''
 }
 
 export function getColumnWidthWalletMobile(columnName: string) {
