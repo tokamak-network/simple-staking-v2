@@ -41,7 +41,7 @@ const iconList = [
   },
   {
     icon: LINKEDIN_ICON,
-    url: 'https://www.linkedin.com/company/onther-tech/',
+    url: 'https://sg.linkedin.com/company/tokamaknetwork/',
   },
   {
     icon: MEDIUM_ICON,
@@ -87,6 +87,7 @@ function Footer() {
                 mb={'10px'}
                 mr={'15px'}
                 cursor={'pointer'}
+                zIndex={100}
               >
                 <Image src={item.icon.src} alt={'icon'}/>
               </Link>
