@@ -4,8 +4,9 @@ import { useCallback } from 'react';
 import Candidate from "services/abi/Candidate.json"
 import { getContract } from '../../../utils/getContract';
 import { useWeb3React } from '@web3-react/core';
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { txState } from "@/atom/global/transaction";
+import { minimumAmountState } from '@/atom/staking/minimumAmount';
 
 type OperatorDetailProps = {
   title: string; 
@@ -27,6 +28,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
   const { library, account } = useWeb3React()
   const [tx, setTx] = useState();
   const [txPending, setTxPending] = useRecoilState(txState);
+  const minimum = useRecoilValue(minimumAmountState)
   const updateSeig = useCallback(async () => {
     if (account && library) {
       const Candidate_CONTRACT = getContract(contractInfo, Candidate.abi, library, account)
@@ -85,7 +87,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
         }
       </Flex>
       {
-        title === 'Unclaimed Staking Reward' && !minimumAmount && account ?
+        title === 'Unclaimed Staking Reward' && !minimum && account ?
           (
             <Text
               fontSize={'11px'}

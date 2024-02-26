@@ -63,13 +63,13 @@ function MobileStakingComponent(props: {
   const candidateAmount = selectedOp?.stakeOfCandidate ? convertNumber({
     amount: selectedOp?.stakeOfCandidate,
     type: 'ray'
-  }) : '0.00'
+  }) : '1000.1'
 
   useEffect(() => {
-    console.log(candidateAmount)
+    // console.log(candidateAmount)
     setMinimumAmount(Number(candidateAmount) > 1000)
 
-  }, [account, candidateAmount])
+  }, [candidateAmount])
 
   const userExpectedSeig = expectedSeig? convertNumber({
     amount: expectedSeig,
@@ -99,7 +99,7 @@ function MobileStakingComponent(props: {
         setTx(undefined);
       }
     }
-  }, [account, library, selectedOp])
+  }, [library, selectedOp])
   
   useEffect(() => {
     let disable = true
@@ -385,7 +385,7 @@ function MobileStakingComponent(props: {
           {title}
         </Button>
         {
-          title === 'Stake' && !minimumAmount ?
+          title === 'Stake' && !minimumAmount && account ?
           <Text
             fontSize={'12px'}
             color={'#ff2d78'}
@@ -527,7 +527,7 @@ function MobileStakingComponent(props: {
         //   on this layer2 before stakers can receive the staking reward. Users are unable to stake until this minimum collateral requirement is fulfilled.
         // </Text>
         // ) : 
-        userExpectedSeig && userExpectedSeig !== '0.00' ?
+        userExpectedSeig && userExpectedSeig !== '0.00' && account ?
         <Flex
           fontSize={'11px'}
           color={'#2a72e5'}

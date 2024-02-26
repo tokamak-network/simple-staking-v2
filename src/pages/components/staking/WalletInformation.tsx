@@ -20,6 +20,7 @@ import { getOldLayerAddress } from '@/components/getOldLayerAddress';
 import { StakeModalDataType } from "types"
 import WalletModal from '@/common/modal/Wallet';
 import useModal from '@/hooks/useModal';
+import { minimumAmountState } from '@/atom/staking/minimumAmount';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -43,7 +44,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [stakeOfUser, setStakeOfUser] = useState('');
   const [expSeig, setExpSeig] = useState('');
   const [stakeCandidate, setStakeCandidate] = useState('');
-  const [minimumAmount, setMinimumAmount] = useState<boolean>(true);
+  const [minimumAmount, setMinimumAmount] = useRecoilState(minimumAmountState)
+  const [minimumAmountForButton, setMinimumAmountForButton] = useState<boolean>(false);
   const [isOperator, setIsOperator] = useState<boolean>(false);
 
   const { userTonBalance, userWTonBalance } = useUserBalance(account);
@@ -128,10 +130,18 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         type: 'ray',
       })
     : '1000.1';
+  
+  const candidateAmountForButton = stakeCandidate
+  ? convertNumber({
+      amount: stakeCandidate,
+      type: 'ray',
+    })
+  : '0.00';
 
   useEffect(() => {
     // console.log(Number(candidateAmount), Number(candidateAmount) > 1000)
     setMinimumAmount(Number(candidateAmount) > 1000)
+    setMinimumAmountForButton(Number(candidateAmountForButton) > 1000)
 
   }, [account, candidateAmount])
 
@@ -216,8 +226,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           account ?
           <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
             <Button
-              {...(minimumAmount || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
-              isDisabled={minimumAmount || isOperator ? false : true}
+              {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={minimumAmountForButton || isOperator ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('staking', dataModal)}
@@ -225,8 +235,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Stake
             </Button>
             <Button
-              {...(minimumAmount || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
-              isDisabled={minimumAmount || isOperator ? false : true}
+              {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={minimumAmountForButton || isOperator ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('unstaking', dataModal)}
@@ -234,8 +244,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Unstake
             </Button>
             <Button
-              {...(minimumAmount || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
-              isDisabled={minimumAmount || isOperator ? false : true}
+              {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={minimumAmountForButton || isOperator ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('restaking', dataModal)}
@@ -243,8 +253,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Restake
             </Button>
             <Button
-              {...(minimumAmount || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
-              isDisabled={minimumAmount || isOperator ? false : true}
+              {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={minimumAmountForButton || isOperator ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('withdraw', dataModal)}
