@@ -32,7 +32,6 @@ export function useCandidateList () {
   useEffect(() => {
     async function fetch () {
       if (data) {     
-        console.log(data)
         const candidates = await Promise.all(data.candidates.map(async (obj: any, index: number) => {
           let tempObj = obj
           let stakeOf     
@@ -57,7 +56,6 @@ export function useCandidateList () {
             try{
               if (account) {
                 stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
-
                 if (mobile && stakeOf !== '0' && TON_CONTRACT) {
                   const blockNumber = library && await library.getBlockNumber();
                   const Tot = getContract(await SeigManager_CONTRACT.tot(), Coinage, library, account)
@@ -85,7 +83,6 @@ export function useCandidateList () {
                 }
               }
               stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
-              console.log(stakeOfCandidate.toString())
               const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
               if (oldCandidate) {
                 const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(oldCandidate)
@@ -98,7 +95,7 @@ export function useCandidateList () {
               console.log(e)
             }
           }
-          
+
           tempObj = {
             ...obj,
             stakeOf: stakeOf ? stakeOf.toString() : '0.00',
@@ -112,15 +109,7 @@ export function useCandidateList () {
           return tempObj
         }))
         
-        const noRewardList = candidates.filter((candidate: any) => {
-          return candidate.stakeOfCandidate < 1000000000000000000000000000000
-        })
-        const rewardList = candidates.filter((candidate: any) => {
-          return candidate.stakeOfCandidate > 1000000000000000000000000000000
-        })
-
-        setNoStakingRewardList(noRewardList)
-        setCandidateList(rewardList)
+        setCandidateList(candidates)
       }
     }
     fetch()

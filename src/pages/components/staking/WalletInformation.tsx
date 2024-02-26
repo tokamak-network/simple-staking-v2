@@ -121,7 +121,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         type: 'ray',
       })
     : '0.00';
-  const minimumAmount = Number(candidateAmount) > 100;
+  const minimumAmount = Number(candidateAmount) > 1000;
 
   const dataModal: StakeModalDataType = {
     tonBalance: userTonBalance ? userTonBalance : '0.00',
@@ -204,8 +204,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           account ?
           <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
             <Button
-              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account ? false : true}
+              {...(minimumAmount ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={account && minimumAmount ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('staking', dataModal)}
@@ -213,8 +213,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Stake
             </Button>
             <Button
-              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account ? false : true}
+              {...(!minimumAmount ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
+              isDisabled={account && minimumAmount ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('unstaking', dataModal)}
@@ -222,8 +222,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Unstake
             </Button>
             <Button
-              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account ? false : true}
+              {...(!minimumAmount ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
+              isDisabled={account && minimumAmount ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('restaking', dataModal)}
@@ -231,8 +231,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Restake
             </Button>
             <Button
-              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account ? false : true}
+              {...(!minimumAmount ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
+              isDisabled={account && minimumAmount ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('withdraw', dataModal)}
