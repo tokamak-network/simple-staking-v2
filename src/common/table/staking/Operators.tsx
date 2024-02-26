@@ -229,10 +229,17 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       name,
                       kind,
                       stakedAmount,
-                      stakeOf
+                      stakeOf,
+                      stakeOfCandidate
                       // yourStaked,
                     } = cell.row.original;
 
+                    const candidateAmount = stakeOfCandidate? convertNumber({
+                      amount: stakeOfCandidate,
+                      type: 'ray'
+                    }) : '0.00'
+              
+                    const minimumAmount = Number(candidateAmount) >= 1000
                     const isMember = MEMBER_ADDRESS_TEMP.find((address: string) => address === candidateContract)
                     
                     const type = cell.column.id;
@@ -281,8 +288,13 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       >
                         {type === 'name' ? (
                           <Flex alignItems={'center'} mr={'30px'}>
-                            <Flex flexDir={'column'} justifyContent={isMember ? 'space-between' : 'center'} h={'25px'}>
-                              {getCircle(kind)}
+                            <Flex 
+                              flexDir={'column'} 
+                              justifyContent={isMember ? 'space-between' : 'center'} 
+                              h={'25px'}
+                              mr={minimumAmount ? '' : '20px'}
+                            >
+                              {minimumAmount ? getCircle(kind) : ''}
                               {isMember ? getCircle('member') : ''}
                             </Flex>
                             <Box mr={'12px'}>

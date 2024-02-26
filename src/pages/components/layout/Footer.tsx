@@ -62,13 +62,9 @@ function Footer() {
         rowGap={mobile ? '15px' : 0}
       >
         <Flex h={'17px'} justifyContent={'space-between'}>
-          <Text color={'black.100'} fontWeight={'bold'} mr={'25px'}>
-            TOKAMAK NETWORK PTE.LTD
+          <Text color={'#999999'} fontWeight={'bold'} mr={'25px'}>
+          Copyright © 2024 <span style={{color: '#1c1c1c'}}>Tokamak Network</span> All Rights Reserved.
           </Text>
-          <Text mr={'25px'}>111 SOMERSET ROAD #06-07O 111 SOMERSET SINGAPORE 238164</Text>
-          <Flex>
-            <Text>hello@tokamak.network</Text>
-          </Flex>
         </Flex>
 
         <Flex h={'17px'} justifyContent={mobile ? 'center' : 'flex-end'}>

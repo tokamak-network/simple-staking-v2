@@ -43,6 +43,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [stakeOfUser, setStakeOfUser] = useState('');
   const [expSeig, setExpSeig] = useState('');
   const [stakeCandidate, setStakeCandidate] = useState('');
+  const [minimumAmount, setMinimumAmount] = useState<boolean>(true);
+  const [isOperator, setIsOperator] = useState<boolean>(false);
 
   const { userTonBalance, userWTonBalance } = useUserBalance(account);
   const { openModal } = useModal('wallet');
@@ -62,6 +64,11 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     setStakeCandidate(data?.stakeOfCandidate);
   }, [data]);
 
+  useEffect(() => {
+    if (account) {
+      setIsOperator(candidates.toLowerCase() === account.toLowerCase())
+    }
+  }, [account, candidates])
   const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account);
   const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength } = useWithdrawable(
     data?.candidateContract,
@@ -120,8 +127,13 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         amount: stakeCandidate,
         type: 'ray',
       })
-    : '0.00';
-  const minimumAmount = Number(candidateAmount) > 1000;
+    : '1000.1';
+
+  useEffect(() => {
+    // console.log(Number(candidateAmount), Number(candidateAmount) > 1000)
+    setMinimumAmount(Number(candidateAmount) > 1000)
+
+  }, [account, candidateAmount])
 
   const dataModal: StakeModalDataType = {
     tonBalance: userTonBalance ? userTonBalance : '0.00',
@@ -204,8 +216,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           account ?
           <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
             <Button
-              {...(minimumAmount ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
-              isDisabled={account && minimumAmount ? false : true}
+              {...(minimumAmount || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={minimumAmount || isOperator ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('staking', dataModal)}
@@ -213,8 +225,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Stake
             </Button>
             <Button
-              {...(!minimumAmount ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account && minimumAmount ? false : true}
+              {...(minimumAmount || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={minimumAmount || isOperator ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('unstaking', dataModal)}
@@ -222,8 +234,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Unstake
             </Button>
             <Button
-              {...(!minimumAmount ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account && minimumAmount ? false : true}
+              {...(minimumAmount || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={minimumAmount || isOperator ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('restaking', dataModal)}
@@ -231,8 +243,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Restake
             </Button>
             <Button
-              {...(!minimumAmount ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account && minimumAmount ? false : true}
+              {...(minimumAmount || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={minimumAmount || isOperator ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('withdraw', dataModal)}

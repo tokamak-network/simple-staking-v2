@@ -48,7 +48,7 @@ function MobileStakingComponent(props: {
   const [disabled, setDisabled] = useState<boolean>(true);
   const [amount, setAmount] = useState(0);
   const [tokenType, setTokenType] = useState('TON')
-  const [minimumAmount, setMinimumAmount] = useState<boolean>();
+  const [minimumAmount, setMinimumAmount] = useState<boolean>(true);
   const [txPending, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
   const { withdrawable, withdrawableLength } = useWithdrawable(selectedOp?.candidateContract)
@@ -66,6 +66,7 @@ function MobileStakingComponent(props: {
   }) : '0.00'
 
   useEffect(() => {
+    console.log(candidateAmount)
     setMinimumAmount(Number(candidateAmount) > 1000)
 
   }, [account, candidateAmount])

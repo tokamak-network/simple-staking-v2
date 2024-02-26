@@ -5,7 +5,7 @@ import { useCandidateList } from '../hooks/staking/useCandidateList';
 
 function Operators() {
   const theme = useTheme();
-  const { candidateList, noStakingRewardList } = useCandidateList();
+  const { candidateList } = useCandidateList();
 
   return (
     <Flex
@@ -44,19 +44,6 @@ function Operators() {
             <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
           </Flex>
         )}
-        {
-          noStakingRewardList.length !== 0 ? (
-            noStakingRewardList.map((operator: any, index: number) => {
-              return (
-                <Flex flexDir={'column'}>
-                  <OperatorCard operator={operator} key={index} />
-                </Flex>
-              )
-            })
-          ) : (
-            <Flex />
-          )
-        }
       </Flex>
     </Flex>
   );

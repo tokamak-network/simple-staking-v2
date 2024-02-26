@@ -79,7 +79,7 @@ function DesktopStaking () {
     );
 
     const [tableLoading, setTableLoading] = useState<boolean>(true);
-    const { candidateList, noStakingRewardList } = useCandidateList()
+    const { candidateList } = useCandidateList()
     const { account } = useWeb3React();
 
     useEffect(() => {
@@ -220,18 +220,6 @@ function DesktopStaking () {
               <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
             </Flex> :
             <Flex flexDir={'column'}>
-              <Flex 
-                alignItems={'center'}
-                justifyContent={'center'}
-                fontSize={'24px'}
-                color={'#3d495d'}
-                fontWeight={600}
-                mt={'60px'}
-                mb={'15px'}
-                fontFamily={theme.fonts.Nanum}
-              >
-                Staking Reward Available
-              </Flex>
               <OpearatorTable 
                 renderDetail={renderRowSubComponent}
                 columns={columns}
@@ -241,33 +229,6 @@ function DesktopStaking () {
               />
             </Flex>
           }
-          {
-          noStakingRewardList.length !== 0 ? (
-            <Flex flexDir={'column'}>
-              <Flex 
-                alignItems={'center'}
-                justifyContent={'center'}
-                fontSize={'24px'}
-                color={'#3d495d'}
-                fontWeight={600}
-                mt={'60px'}
-                mb={'15px'}
-                fontFamily={theme.fonts.Nanum}
-              >
-                No Staking Reward Available
-              </Flex>
-              <OpearatorTable 
-                renderDetail={renderRowSubComponent}
-                columns={columns}
-                // @ts-ignore
-                data={noStakingRewardList}
-                isLoading={tableLoading}
-              />
-            </Flex>
-          ) : (
-            <Flex />
-          )
-        }
         </Box>
       </Flex>
     );
