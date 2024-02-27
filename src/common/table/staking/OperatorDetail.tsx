@@ -7,6 +7,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { txState } from "@/atom/global/transaction";
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
+import { ETHERSCAN_LINK } from "@/constants";
 
 type OperatorDetailProps = {
   title: string; 
@@ -15,6 +16,7 @@ type OperatorDetailProps = {
   type?: string;
   contractInfo?: any;
   minimumAmount?: boolean;
+  candidate?: string
 }
 
 export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
@@ -23,7 +25,8 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
   unit,
   type,
   contractInfo,
-  minimumAmount
+  minimumAmount,
+  candidate
 }) => {
   const { library, account } = useWeb3React()
   const [tx, setTx] = useState();
@@ -101,7 +104,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
             : The 
             <Link
               isExternal
-              href={`https://etherscan.io/address/${contractInfo}`}
+              href={`${ETHERSCAN_LINK}/address/${candidate}`}
               color={'#2a72e5'}
               mx={'3px'}
             >

@@ -36,6 +36,7 @@ import { txState } from "@/atom/global/transaction";
 import { useWithdrawable } from "@/hooks/staking/useWithdrawable";
 import { getCommitHistory } from '../../../utils/getTransactionHistory';
 import { candidateState } from "@/atom/global/candidateList";
+import { ETHERSCAN_LINK } from "@/constants";
 
 function OperatorCard(props: { operator: any }) {
   const { operator } = props;
@@ -337,7 +338,7 @@ function OperatorCard(props: { operator: any }) {
             <ChakraLink
               color={'#2a72e5'}
               mx={'3px'}
-              href={`https://etherscan.io/address/${candidate.candidateContract}`}
+              href={`${ETHERSCAN_LINK}/address/${candidate.candidate}`}
               isExternal
             >
               operator

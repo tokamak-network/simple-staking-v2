@@ -29,6 +29,7 @@ import { useExpectedSeig } from "@/hooks/staking/useCalculateExpectedSeig";
 import { getContract } from "@/components/getContract";
 import Candidate from 'services/abi/Candidate.json';
 import { candidateValues } from '@/atom/global/candidateList';
+import { ETHERSCAN_LINK } from "@/constants";
 
 function MobileStakingComponent(props: { 
   operatorList: any 
@@ -404,7 +405,7 @@ function MobileStakingComponent(props: {
             <Link
               color={'#2a72e5'}
               mx={'3px'}
-              // href={`https://etherscan.io/address/${selectedOp.candidateContract}`}
+              href={`${ETHERSCAN_LINK}/address/${selectedOp.candidate}`}
               isExternal
             >
               operator
