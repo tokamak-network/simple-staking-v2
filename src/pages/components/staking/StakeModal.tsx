@@ -225,8 +225,8 @@ function StakeModal() {
       } = selectedModalData
 
       const disable = (
-        tonBalance === "0.00" 
-        || wtonBalance === "0.00"
+        (tonBalance === "0.00" 
+        && wtonBalance === "0.00")
         || input === "0.00"
         || input === ''
         //@ts-ignore
