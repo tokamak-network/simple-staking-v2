@@ -183,23 +183,18 @@ function StakeModal() {
 
   const withdraw = useCallback(async () => {
     if (selectedModalData && DepositManager_CONTRACT && Old_DepositManager_CONTRACT && selectedModalData) {
-      
       const tx =
-        withdrawType === 'new'
-          ? await DepositManager_CONTRACT.processRequests(
-              
-              selectedModalData.layer2,
-              
-              selectedModalData.withdrawableLength,
-              tokenType === 'ton' ? true : false,
-            )
-          : await Old_DepositManager_CONTRACT.processRequests(
-              
+        withdrawType === 'old'
+          ? await Old_DepositManager_CONTRACT.processRequests(
               selectedModalData.old_layer2,
-              
               selectedModalData.old_withdrawableLength,
               tokenType === 'ton' ? true : false,
-            );
+            )
+          : await DepositManager_CONTRACT.processRequests( 
+            selectedModalData.layer2,
+            selectedModalData.withdrawableLength,
+            tokenType === 'ton' ? true : false,
+          );
       setTx(tx);
       setTxPending(true);
 
