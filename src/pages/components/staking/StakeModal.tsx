@@ -47,7 +47,7 @@ function StakeModal() {
   const [input, setInput] = useRecoilState(inputState);
   const [, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
-  const [withdrawType, setWithdrawType] = useState('');
+  const [withdrawType, setWithdrawType] = useState('new');
   const [tokenType, setTokenType] = useState('ton');
   const [modalComponent, setModalComponent] = useState<StakeModalComponentType>()
   const [stakeDisabled, setStakeDisabled] = useState(true);
@@ -185,11 +185,15 @@ function StakeModal() {
     if (selectedModalData && DepositManager_CONTRACT && Old_DepositManager_CONTRACT && selectedModalData) {
       const tx =
         withdrawType === 'old'
-          ? await Old_DepositManager_CONTRACT.processRequests(
+          ? selectedModalData.old_withdrawableLength !== '0' 
+          ? ''
+          : await Old_DepositManager_CONTRACT.processRequests(
               selectedModalData.old_layer2,
               selectedModalData.old_withdrawableLength,
               tokenType === 'ton' ? true : false,
             )
+          : selectedModalData.withdrawableLength !== '0' 
+          ? '' 
           : await DepositManager_CONTRACT.processRequests( 
             selectedModalData.layer2,
             selectedModalData.withdrawableLength,
@@ -463,6 +467,20 @@ function StakeModal() {
                               onChange={(value: 'old' | 'new') => withdrawSetting(value)} 
                               value={withdrawType}
                             >
+                              <Flex alignItems={'center'} justifyContent={'center'} mt={'11px'}>
+                                <Radio 
+                                  value="new" 
+                                  h={'20px'} 
+                                  mr={'6px'} 
+                                  bgColor={'#fff'} 
+                                  border={'solid 2px #c6cbd9'} 
+                                  isChecked={true}
+                                >
+                                  <Text fontSize={'16px'} fontWeight={500} color={'#3d495d'}>
+                                    {`${modalComponent.balance3} ${tokenType === 'ton' ? `TON` : `WTON`}`}
+                                  </Text>
+                                </Radio>
+                              </Flex>
                               <Flex alignItems={'center'} mt={'11px'} justifyContent={'center'}>
                                 <Radio
                                   value="old"
@@ -470,7 +488,6 @@ function StakeModal() {
                                   mr={'6px'}
                                   bgColor={'#fff'}
                                   border={'solid 2px #c6cbd9'}
-                                  isChecked={true}
                                 >
                                   <Flex
                                     fontSize={'16px'}
@@ -484,13 +501,6 @@ function StakeModal() {
                                       (prior to patch)
                                     </Text>
                                   </Flex>
-                                </Radio>
-                              </Flex>
-                              <Flex alignItems={'center'} justifyContent={'center'} mt={'11px'}>
-                                <Radio value="new" h={'20px'} mr={'6px'} bgColor={'#fff'} border={'solid 2px #c6cbd9'}>
-                                  <Text fontSize={'16px'} fontWeight={500} color={'#3d495d'}>
-                                    {`${modalComponent.balance3} ${tokenType === 'ton' ? `TON` : `WTON`}`}
-                                  </Text>
                                 </Radio>
                               </Flex>
                             </RadioGroup>
