@@ -106,7 +106,6 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   }, [])
 
   const clickOpen = (candidateContract: string, index: number) => {
-    console.log(candidateContract)
     setIsOpen(candidateContract);
     setToggle('All')
     setTimeout(() => {

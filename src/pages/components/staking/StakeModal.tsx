@@ -185,14 +185,14 @@ function StakeModal() {
     if (selectedModalData && DepositManager_CONTRACT && Old_DepositManager_CONTRACT && selectedModalData) {
       const tx =
         withdrawType === 'old'
-          ? selectedModalData.old_withdrawableLength !== '0' 
+          ? selectedModalData.old_withdrawableLength === '0' 
           ? ''
           : await Old_DepositManager_CONTRACT.processRequests(
               selectedModalData.old_layer2,
               selectedModalData.old_withdrawableLength,
               tokenType === 'ton' ? true : false,
             )
-          : selectedModalData.withdrawableLength !== '0' 
+          : selectedModalData.withdrawableLength === '0' 
           ? '' 
           : await DepositManager_CONTRACT.processRequests( 
             selectedModalData.layer2,
