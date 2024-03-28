@@ -104,27 +104,6 @@ const info = [
   },
 ]
 
-// const info_goerli = [
-//   {
-//     oldLayer: "0xaeb5675424c4bd3074ba363bfffdb0e2c0a1011b",
-//     newLayer: "0xCFd49c06eF6057932a900bd6cF0B995214821398",
-//     operator: "0x43700f09B582eE2BFcCe4b5Db40ee41B4649D977",
-//     name: "TokamakOperator_v2"
-//   }, 
-//   {
-//     oldLayer: "0xc1eba383D94c6021160042491A5dfaF1d82694E6",
-//     newLayer: "0x2e8400Ec60349A18DD84De0566881379056a3085",
-//     operator: "0xc1eba383D94c6021160042491A5dfaF1d82694E6",
-//     name: "ContractTeam_DAO_v2"
-//   }, 
-//   {
-//     oldLayer: "0xa6ccdb6b2384bbf35cfb190ce41667a1f0dbdc53",
-//     newLayer: "0x1f4aEf3A04372cF9D738d5459F31950A53969cA3",
-//     operator: "0xf3D37602D501DC27e1bDbc841f174aDf337909D2",
-//     name: "ContractTeam_DAO2_v2"
-//   }
-// ]
-
 export const OLD_CONTRACT = 
   // info
   REACT_APP_MODE === 'PRODUCTION' ? info : [];

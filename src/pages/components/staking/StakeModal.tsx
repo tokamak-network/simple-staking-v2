@@ -21,7 +21,7 @@ import CONTRACT_ADDRESS from '@/services/addresses/contract';
 import { marshalString, unmarshalString } from '@/utils/marshalString';
 import { padLeft } from 'web3-utils';
 import useCallContract from '@/hooks/useCallContract';
-import { convertToRay, convertToWei, floatParser } from '@/utils/number';
+import { convertNumber, convertToRay, convertToWei, floatParser } from '@/utils/number';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { inputBalanceState, inputState } from '@/atom/global/input';
 import { useWeb3React } from '@web3-react/core';

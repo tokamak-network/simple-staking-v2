@@ -43,6 +43,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [stakeOfUser, setStakeOfUser] = useState('');
   const [expSeig, setExpSeig] = useState('');
   const [stakeCandidate, setStakeCandidate] = useState('');
+  const [minimumAmount, setMinimumAmount] = useState<boolean>(false);
 
   const { userTonBalance, userWTonBalance } = useUserBalance(account);
   const { openModal } = useModal('wallet');
@@ -115,13 +116,25 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     /*eslint-disable*/
   }, [account, pendingUnstaked, userTonBalance, withdrawable, old_withdrawable]);
 
-  const candidateAmount = stakeCandidate
-    ? convertNumber({
+  // const candidateAmount = stakeCandidate
+  //   ? convertNumber({
+  //       amount: stakeCandidate,
+  //       type: 'ray',
+  //     })
+  //   : '0.00';
+
+  // const minimumAmount = Number(candidateAmount) > 100;
+
+  useEffect(() => {
+    if (stakeCandidate && account) {
+      const candidateAmount = stakeCandidate ? convertNumber({
         amount: stakeCandidate,
-        type: 'ray',
-      })
-    : '0.00';
-  const minimumAmount = Number(candidateAmount) > 100;
+        type: 'ray'
+      }) : '0.00'
+      setMinimumAmount(Number(candidateAmount) > 1000)
+    }
+  }, [stakeCandidate, account])
+
 
   const dataModal: StakeModalDataType = {
     tonBalance: userTonBalance ? userTonBalance : '0.00',
