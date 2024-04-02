@@ -635,7 +635,7 @@ function StakeModal() {
                             </Flex>
                           ) : (
                             <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
-                              <span style={{ color: '#ff2d78' }}>Warning</span>: You can withdraw unstaked TON to your wallet 14 days after unstaking. Remember to claim any unclaimed TON before unstaking.
+                              <span style={{ color: '#ff2d78' }}>Warning</span>: You can withdraw unstaked TON to your wallet 14 days after unstaking. Remember to claim any unclaimed staking reward before unstaking.
                             </Box>
                           )
                         ) : selectedModal === 'staking' && selectedModalData ? (
