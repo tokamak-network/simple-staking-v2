@@ -278,9 +278,9 @@ export const Header = () => {
               <MenuItem
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
-                // target="_blank"
+                target="_blank"
                 as={"a"}
-                href={"support"}
+                href={"https://docs.tokamak.network"}
                 h={"18px"}
                 marginBottom={"16px"}
                 padding={"0px"}
