@@ -22,7 +22,7 @@ function Operators() {
         color="gray.700"
         mb="5px"
       >
-        Select Your Operator
+        DAO Candidate
       </Text>
       <Text
         fontSize={"12px"}
@@ -32,12 +32,9 @@ function Operators() {
         w="250px"
         color={"gray.300"}
       >
-        Choose an operator to stake, restake, unstake, or withdraw TON (or WTON).
+        Choose a DAO candidate to stake, restake, unstake, or withdraw TON (or WTON).
       </Text>
       <Flex w="100%" px="20px" flexDir={"column"}>
-        <Flex mb={'15px'} fontSize={'18px'} fontWeight={'bold'} color={'#3e495c'} justifyContent={'center'}>
-          Staking Reward Available
-        </Flex>
         {candidateList.length !== 0 ? (
           candidateList.map((operator: any, index: number) => {
             return <OperatorCard operator={operator} key={index} />
@@ -54,9 +51,6 @@ function Operators() {
               console.log(index)
               return (
                 <Flex flexDir={'column'}>
-                  <Flex my={'15px'} fontSize={'18px'} fontWeight={'bold'} color={'#3e495c'} justifyContent={'center'}>
-                    No Staking Reward Available
-                  </Flex>
                   <OperatorCard operator={operator} key={index} />
                 </Flex>
               )

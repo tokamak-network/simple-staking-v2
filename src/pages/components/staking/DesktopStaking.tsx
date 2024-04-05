@@ -213,25 +213,13 @@ function DesktopStaking () {
     
     return (
       <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
-        <PageHeader title={'Select Your Operator'} subtitle={'Choose an operator to stake, restake, unstake, or withdraw TON (or WTON).'}/>
+        <PageHeader title={'DAO Candidate'} subtitle={'Choose a DAO candidate to stake, restake, unstake, or withdraw TON (or WTON).'}/>
         <Box fontFamily={theme.fonts.roboto}>
           {candidateList.length === 0 ? 
             <Flex justifyContent="center" alignItems={"center"} h='200px'>
               <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
             </Flex> :
             <Flex flexDir={'column'}>
-              <Flex 
-                alignItems={'center'}
-                justifyContent={'center'}
-                fontSize={'24px'}
-                color={'#3d495d'}
-                fontWeight={600}
-                mt={'60px'}
-                mb={'15px'}
-                fontFamily={theme.fonts.Nanum}
-              >
-                Staking Reward Available
-              </Flex>
               <OpearatorTable 
                 renderDetail={renderRowSubComponent}
                 columns={columns}
@@ -244,18 +232,6 @@ function DesktopStaking () {
           {
           noStakingRewardList.length !== 0 ? (
             <Flex flexDir={'column'}>
-              <Flex 
-                alignItems={'center'}
-                justifyContent={'center'}
-                fontSize={'24px'}
-                color={'#3d495d'}
-                fontWeight={600}
-                mt={'60px'}
-                mb={'15px'}
-                fontFamily={theme.fonts.Nanum}
-              >
-                No Staking Reward Available
-              </Flex>
               <OpearatorTable 
                 renderDetail={renderRowSubComponent}
                 columns={columns}

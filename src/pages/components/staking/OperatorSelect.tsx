@@ -59,12 +59,6 @@ function OperatorSelect(props: {
                     {operator.name}
                   </Text>
                 </Flex>
-                {/* {
-                  operator.name === "Talken" ?
-                  <Flex fontSize={'12px'} color={'#2a72e5'} w={'100%'} justifyContent={'center'}>
-                    No Staking Reward Available
-                  </Flex> : ''
-                } */}
               </Flex>
             );
           })}
