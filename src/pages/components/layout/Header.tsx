@@ -45,10 +45,10 @@ const dropdownList = [
 ]
 
 const navItemList = [
-  {
-    link: "home",
-    name: "Home"
-  },
+  // {
+  //   link: "home",
+  //   name: "Home"
+  // },
   {
     link: "staking",
     name: "Staking"
@@ -216,16 +216,16 @@ export const Header = () => {
       // pb={'20px'}
     >
       <Flex flexDir={'row'} w={'95%'} justifyContent="space-between">
-        <Flex fontSize={'27px'} fontWeight={900}>
+        <Link href={'home'} >
           <Image src={TOKAMAK_ICON} alt="" />
-        </Flex>
+        </Link>
         <Flex 
           fontSize={'18px'} 
           fontWeight={'bold'} 
           justifyContent="space-between" 
           alignItems={'center'} 
           w={'340px'} 
-          mr={'10%'}
+          mr={'17%'}
         >
           <NavItem/>
           <Menu 

@@ -47,10 +47,10 @@ function MobileHeader() {
   const [width] = useWindowDimensions();
 
   const navItemList = [
-    {
-      name: "Home",
-      link: "home",
-    },
+    // {
+    //   name: "Home",
+    //   link: "home",
+    // },
     {
       name: "Operators",
       link: "operators",
@@ -184,7 +184,9 @@ function MobileHeader() {
       pl="20px"
       pr="10px"
     >
-      <Image src={mobile_logo} alt={"mobile logo"} height={30} width={135} />
+      <Link href={'home'}>
+        <Image src={mobile_logo} alt={"mobile logo"} height={30} width={135} />
+      </Link>
       <Flex height={"35px"} alignItems="center">
         <MenuLinks account={account} walletopen={openModal} />
         <Button
