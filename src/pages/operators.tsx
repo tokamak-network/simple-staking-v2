@@ -22,7 +22,7 @@ function Operators() {
         color="gray.700"
         mb="5px"
       >
-        DAO Candidate
+        DAO Candidates
       </Text>
       <Text
         fontSize={"12px"}
