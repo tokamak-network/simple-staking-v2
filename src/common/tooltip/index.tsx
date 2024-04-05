@@ -26,18 +26,6 @@ const BasicTooltip: React.FC<tooltipProps> = (props) => {
     !isLabelOpen ? setIsLabelOpen(true) : setIsLabelOpen(false)
   }
 
-  // useEffect(() => {
-  //   const handleOutsideClose = (e: {target: any}) => {
-  //   	// useRef current에 담긴 엘리먼트 바깥을 클릭 시 드롭메뉴 닫힘
-  //     console.log(e.target, dropMenuRef.current)
-  //     console.log(isLabelOpen)
-  //     if (isLabelOpen === true && dropMenuRef.current !== e.target) setIsLabelOpen(false);
-  //   };
-  //   document.addEventListener('click', handleOutsideClose);
-    
-  //   return () => document.removeEventListener('click', handleOutsideClose);
-  // }, [isLabelOpen]);
-
   const members = () => {
     return (
       <Text>

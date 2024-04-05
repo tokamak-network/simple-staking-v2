@@ -138,15 +138,6 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
               label={'candidate'} 
             />
           </Flex>
-          {getCircle('operator')}
-          <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
-            <Flex mr={'3px'}>
-              Plasma EVM
-            </Flex>
-            <BasicTooltip 
-              label={'plasma'} 
-            />
-          </Flex>
         </Flex>
         {/* <Select
           w={'145px'}
