@@ -141,7 +141,7 @@ function DesktopStaking () {
             <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
               <Flex flexDir={'column'} alignItems={'space-between'}>
                 <OperatorDetailInfo 
-                  title={'Total Delegator'}
+                  title={'Total Stakers'}
                   value={stakedUserList.length}
                 />
               </Flex>

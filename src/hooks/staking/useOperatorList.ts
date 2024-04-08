@@ -1,4 +1,4 @@
-import { getEventByLayer2, getOperatorsInfo, getDelegators, getOperatorUserHistory } from "@/api";
+import { getOperatorsInfo } from "@/api";
 import { useEffect, useState } from 'react';
 import { NON_CANDIDATE } from "@/constants";
 import { useWeb3React } from '@web3-react/core';
