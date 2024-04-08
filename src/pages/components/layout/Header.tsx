@@ -280,7 +280,7 @@ export const Header = () => {
                 onMouseLeave={() => setHover(false)}
                 target="_blank"
                 as={"a"}
-                href={"https://docs.tokamak.network"}
+                href={"https://docs.tokamak.network/home/service-guide/staking-and-dao/simple-staking"}
                 h={"18px"}
                 marginBottom={"16px"}
                 padding={"0px"}
