@@ -24,7 +24,7 @@ type TableRowProps = {
 export const TableRow: FC<TableRowProps>=({
   index, cell
 }) =>{
-  const { eventName,transactionHash, layer2, data, from, blockNumber } =  cell?.row?.original || {};
+  const { eventName,transactionHash, layer2, data, from, blockNumber, transaction, amount } =  cell?.row?.original || {};
   const theme = useTheme();
     const type = cell?.column.id;
     const typeName = getEventName(eventName);
@@ -53,14 +53,14 @@ export const TableRow: FC<TableRowProps>=({
         {type === "txHash" ? (
           <Link
             isExternal
-            href={`https://etherscan.io/tx/${transactionHash}`}
+            href={`https://etherscan.io/tx/${transactionHash ? transactionHash : transaction.id }`}
             textAlign={"center"}
             w={"100%"}
             color={"gray.1100"}
             textDecor='underline'
           >
             {trimAddress({
-              address: transactionHash,
+              address: transactionHash ? transactionHash : transaction.id,
               firstChar: 6,
               lastChar: 4,
               dots: "...",
@@ -80,7 +80,7 @@ export const TableRow: FC<TableRowProps>=({
         {type === "amount" ? (
           <Text textAlign={"center"} color={"blue.200"} fontWeight={500} w={"100%"}>
             {convertNumber({
-              amount: data.amount,
+              amount: data?.amount ? data.amount : amount,
               type: "ray",
               localeString: true,
             })}

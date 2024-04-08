@@ -36,7 +36,7 @@ type MenuLinksProps = {
 const dropdownList = [
   {
     link: "support",
-    name: "Support"
+    name: "User Guide"
   },
   {
     link: "",
@@ -58,8 +58,8 @@ const navItemList = [
   //   name: "Tokamak Fast Withdraw"
   // },
   {
-    link: "wallet",
-    name: "Wallet"
+    link: "account",
+    name: "Account"
   },
 ];
 
@@ -290,7 +290,7 @@ export const Header = () => {
                 _hover={{ bg: "none", color: "#2a72e5" }}
               >
                 <Text>
-                  Support
+                  User Guide
                 </Text>
               </MenuItem>
               <MenuItem

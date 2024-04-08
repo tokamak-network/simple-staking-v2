@@ -62,7 +62,7 @@ function Wallet () {
 
   return (
     <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
-      <PageHeader title={'Wallet'} subtitle={'Check the status of your assets in the wallet'}/>
+      <PageHeader title={'Account'} subtitle={'Check the status of your assets in the account'}/>
       <Box fontFamily={theme.fonts.roboto}>
         <TopCardContainer
           totalStaked={myTotalStaked}
