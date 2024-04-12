@@ -131,13 +131,23 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
           </Flex>
           {getCircle('candidate')}
           <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
-          <Flex mr={'3px'}>
+            <Flex mr={'3px'}>
               DAO Candidate
             </Flex>
             <BasicTooltip 
               label={'candidate'} 
             />
           </Flex>
+          {getCircle('operator')}
+          <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
+            <Flex mr={'3px'}>
+              Tokamak OP
+            </Flex>
+            <BasicTooltip 
+              label={'candidate'} 
+            />
+          </Flex>
+          
         </Flex>
         {/* <Select
           w={'145px'}

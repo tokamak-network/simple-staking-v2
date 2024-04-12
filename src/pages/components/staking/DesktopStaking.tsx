@@ -2,17 +2,15 @@ import { IconClose } from "@/common/Icons/IconClose";
 import { IconOpen } from "@/common/Icons/IconOpen";
 import { Box, Flex, Spinner, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
 import { useMemo, useCallback, useState } from 'react';
-import OperatorDetailInfo from "@/common/table/staking/OperatorDetail";
 import PageHeader from "../layout/PageHeader";
 import OpearatorTable from "@/common/table/staking/Operators";
-import { WalletInformation } from "./WalletInformation";
 import HistoryTable from "@/common/table/staking/HistoryTable";
-import moment from "moment";
 import { useEffect } from 'react';
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { getTransactionHistory, getCommitHistory } from '../../../utils/getTransactionHistory';
 import { useWeb3React } from "@web3-react/core";
-import { convertNumber } from "@/components/number";
+import ServiceTab from "./ServiceTab";
+import UserServiceBox from "./UserServiceBox";
 
 function DesktopStaking () {
 
@@ -81,6 +79,15 @@ function DesktopStaking () {
     const [tableLoading, setTableLoading] = useState<boolean>(true);
     const { candidateList, noStakingRewardList } = useCandidateList()
     const { account } = useWeb3React();
+    const [currentTab, setCurrentTab] = useState('operator')
+
+    useEffect(() => { setCurrentTab('service') }, [])
+
+    const tabHandler = (tab: string) => {
+      console.log(tab)
+      setCurrentTab(tab)
+      console.log(currentTab)
+    }
 
     useEffect(() => {
       candidateList ? setTableLoading(false) : setTableLoading(true)
@@ -101,85 +108,29 @@ function DesktopStaking () {
       const txHistory = getTransactionHistory(row.original)
       const commitHistory = getCommitHistory(row.original)
 
-      const candidateAmount = stakeOfCandidate? convertNumber({
-        amount: stakeOfCandidate,
-        type: 'ray'
-      }) : '0.00'
 
-      const minimumAmount = Number(candidateAmount) >= 1000
 
-      const userExpectedSeig = expectedSeig ? 
-        convertNumber({
-          amount: expectedSeig,
-          type: 'ray',
-          localeString: true
-        }) : '-' 
-      
-      const yourStake = convertNumber({
-        amount: stakeOf, 
-        type: 'ray',
-        localeString: true
-      })
-
-      const pendingUnstaked = convertNumber({
-        amount: pending,
-        type: 'ray',
-        localeString: true
-      })
-    
       return (
         <Flex
           w="100%"
           m={0}
           justifyContent={'space-between'}
           alignItems="start"
-          pt="70px"
+          pt="20px"
           border={'none'}
           flexDir={'column'}
         >
-          <Flex>
-            <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
-              <Flex flexDir={'column'} alignItems={'space-between'}>
-                <OperatorDetailInfo 
-                  title={'Total Stakers'}
-                  value={stakedUserList.length}
-                />
-              </Flex>
-              <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
-                <OperatorDetailInfo 
-                  title={'Pending Withdrawal'}
-                  value={pendingUnstaked}
-                  unit={'TON'}
-                  type={''}
-                />
-              </Flex>
-            </Flex>
-            <Box p={0} w={'390px'} borderRadius={'10px'} alignSelf={'flex-start'}>
-              <WalletInformation 
-                data={row.original}
-              />
-            </Box>
-  
-            <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
-              <Flex flexDir={'column'} alignItems={'space-between'}>
-                <OperatorDetailInfo 
-                  title={'Your Staked'}
-                  value={yourStake}
-                  unit={'TON'}
-                  type={''}
-                />
-              </Flex>
-              <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
-                <OperatorDetailInfo 
-                  title={'Unclaimed Staking Reward'}
-                  value={userExpectedSeig}
-                  unit={'TON'}
-                  type={''}
-                  contractInfo={candidateContract}
-                  minimumAmount={minimumAmount}
-                />
-              </Flex>
-            </Flex>
+          <Flex
+            w={'100%'}
+            flexDir={'column'}
+          >
+            <ServiceTab 
+              setServiceTab={tabHandler}
+              currentTab={currentTab}
+            />
+            <UserServiceBox 
+              original={row.original}
+            />
           </Flex>
           {/* table area */}
           <Flex 
