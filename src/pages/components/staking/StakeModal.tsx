@@ -151,7 +151,7 @@ function StakeModal() {
         // operator 일 경우 minimum amount 남겨둬야함
         if (
           confirm(
-            `Warning:\nYou may lose unclaimed staking reward if you unstake before claiming them.\nCome back here after 2 weeks to withdraw your unstaked TON.`,
+            `Warning:\nYou may lose unclaimed staking reward if you unstake before claiming them.\nCome back after 93,046 blocks (~14 days) from unstaking to withdraw (W)TON to your account.`,
           )
         ) {
           const tx = await DepositManager_CONTRACT.requestWithdrawal(
@@ -635,7 +635,7 @@ function StakeModal() {
                             </Flex>
                           ) : (
                             <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
-                              <span style={{ color: '#ff2d78' }}>Warning</span>: You can withdraw unstaked TON to your wallet 14 days after unstaking. Remember to claim any unclaimed staking reward before unstaking.
+                              <span style={{ color: '#ff2d78' }}>Warning</span>: You can withdraw (W)TON to your wallet after 93,046 blocks (~14 days) from unstaking. Remember to claim any unclaimed staking reward before unstaking.
                             </Box>
                           )
                         ) : selectedModal === 'staking' && selectedModalData ? (
@@ -648,7 +648,7 @@ function StakeModal() {
                             </Box>
                           ) : (
                             <Box color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}>
-                              <span style={{ color: '#ff2d78' }}>Warning</span>: Staking will earn you TON staking rewards. However, to withdraw, you need to unstake and wait for 14 days.
+                              <span style={{ color: '#ff2d78' }}>Warning</span>: Staking TON will earn you TON staking rewards. However, you have to unstake and wait for 93,046 blocks (~14 days) to withdraw.
                             </Box>
                           )
                         ) : selectedModal === 'restaking' ? (

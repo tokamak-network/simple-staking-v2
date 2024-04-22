@@ -421,7 +421,7 @@ function MobileStakingComponent(props: {
               >
                 Warning
               </Link>
-              : Staking will earn you TON staking rewards. However, to withdraw, you need to unstake and wait for 14 days.
+              : Staking TON will earn you TON staking rewards. However, you have to unstake and wait for 93,046 blocks (~14 days) to withdraw.
             </Text>
           ) 
           : title === 'Restake' ? 
@@ -458,7 +458,7 @@ function MobileStakingComponent(props: {
           >
             Warning
           </Link>
-          : You can withdraw unstaked TON to your wallet 14 days after unstaking.
+          : You can withdraw (W)TON to your wallet after 93,046 blocks (~14 days) from unstaking. Remember to claim any unclaimed staking reward before unstaking.
         </Text>
           : ''
         }
