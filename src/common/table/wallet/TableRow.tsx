@@ -1,11 +1,14 @@
 import { getEventName } from '@/components/getEventName';
 import { convertNumber } from '@/components/number';
 import trimAddress from '@/components/trimAddress';
-import { chakra, Link, Text } from '@chakra-ui/react';
-import { FC } from 'react';
+import { chakra, Link, Text, Flex } from '@chakra-ui/react';
+import { FC, useEffect, useState } from 'react';
 import { useTheme } from '@chakra-ui/react';
 import { getLayerName } from '../../../utils/getOldLayerAddress';
 import moment from 'moment';
+import { getCountdown } from '@/api';
+import { useWeb3React } from '@web3-react/core';
+import { calcCountDown } from '../../../utils/number';
 
 type TableRowProps = {
   index: number
@@ -44,14 +47,57 @@ export const TableRow: FC<TableRowProps> = ({
   const typeName = getEventName(eventName)
   const layerName = getLayerName(candidateId)
 
+  const { library } = useWeb3React()
+  const [ remainTime, setRemainTime ] = useState('')
+  
+  useEffect(() => {
+    async function fetch () {
+      if (typeName === 'Unstake') {
+        const withdrawableBlock = Number(blockNo) + 93046
+        const currentBlock = await library.getBlockNumber()
+        if (currentBlock > withdrawableBlock) {
+          setRemainTime('0')
+        } else {
+          const apiValue = await getCountdown(withdrawableBlock)
+          setRemainTime(apiValue.EstimateTimeInSec)
+        }
+      }
+    }
+    fetch()
+  }, [])
+
+  // console.log(remainTime)
+  
+
+  const withdrawableTime = (blockNumber: number) => {
+    const withdrawableBlock = Number(blockNumber) + 93046
+    return (
+      <Flex justifyContent={'center'}>
+        <Flex mr={'3px'}>
+          Withdrawable at block
+        </Flex>
+        <Link
+          isExternal
+          href={`https://etherscan.io/block/countdown/${withdrawableBlock}`}
+          color={'#2a72e5'}
+        >
+          {withdrawableBlock}
+        </Link>
+        <Flex ml={'3px'}>
+          {calcCountDown(remainTime)}
+        </Flex>
+      </Flex>
+    )
+  }
+
   return  (
     <chakra.td
       key={index}
       w={ 
         type === 'index' ? '70px' :
-        type === 'txHash' || type === 'contractAddress' ? '200px' :
-        type === 'txType' || type === 'amount' ? '160px' :
-        type === 'blockNumber' ? '200px' :
+        type === 'txHash' || type === 'contractAddress' ? '140px' :
+        type === 'txType' || type === 'amount' ? '130px' :
+        type === 'blockNumber' ? '360px' :
         type === 'status' ? '140px' : ''
       }
       {...theme.STAKING_HISTORY_TABLE_STYLE.tableRow()}
@@ -87,12 +133,6 @@ export const TableRow: FC<TableRowProps> = ({
           color={'#2a72e5'}
         >
           {layerName}
-          {/* {trimAddress({
-            address: candidateId,
-            firstChar: 6,
-            lastChar: 4,
-            dots: '...'
-          })} */}
         </Link>
       ) : ('')}
       {type === 'txType' ? (
@@ -113,7 +153,7 @@ export const TableRow: FC<TableRowProps> = ({
       {type === 'blockNumber' ? (
         //@ts-ignore
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
-          {moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')}
+          {typeName === 'Unstake' ? withdrawableTime(blockNo) : moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')}
         </Text>
       ) : ('')}
       {type === 'status' ? (

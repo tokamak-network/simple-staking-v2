@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { API } from '@/constants';
 import { DEFAULT_NETWORK } from '@/constants/index';
+import { ETHERSCAN_API } from '@/constants'
 
 function createInstatnceCandidate () {
   return axios.create({
@@ -8,7 +9,26 @@ function createInstatnceCandidate () {
   });
 }
 
+function createInstanceEtherscan () {
+  return axios.create({
+    baseURL: 'https://api.etherscan.io'
+  })
+}
+
 const candidate = createInstatnceCandidate();
+const etherscan = createInstanceEtherscan();
+
+export async function getCountdown (blockNumber: number) {
+  const res = await etherscan.get('/api', {
+    params: {
+      module: 'block',
+      action: 'getBlockcountdown',
+      blockno: blockNumber,
+      apikey: ETHERSCAN_API
+    }
+  })
+  return res.data.result
+}
 
 export async function getDailyStakedTotal () {
   const res = await candidate.get('/stakedtotals', {
