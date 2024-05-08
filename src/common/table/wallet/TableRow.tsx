@@ -66,8 +66,6 @@ export const TableRow: FC<TableRowProps> = ({
     fetch()
   }, [])
 
-  // console.log(remainTime)
-  
 
   const withdrawableTime = (blockNumber: number) => {
     const withdrawableBlock = Number(blockNumber) + 93046
