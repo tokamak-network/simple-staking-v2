@@ -45,7 +45,7 @@ const iconList = [
   },
   {
     icon: MEDIUM_ICON,
-    url: 'https://medium.com/onther-tech/',
+    url: 'https://medium.com/tokamak-network/',
   },
 ];
 function Footer() {

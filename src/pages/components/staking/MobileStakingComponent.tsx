@@ -131,170 +131,119 @@ function MobileStakingComponent(props: {
       <Flex
         w="100%"
         // h="205px"
-        border={"1px solid #e7ebf2"}
+        border={'1px solid #e7ebf2'}
         borderRadius="10px"
         pt="10px"
         pb="15px"
         px="20px"
-        flexDir={"column"}
+        flexDir={'column'}
       >
-        <Flex alignItems={"center"} h="35px">
-          <Text color="gray.300" fontSize={"12px"} mr={'5px'}>
-            {
-              title === 'Withdraw' 
-              ? 'Withdrawable Amount:' 
-              : title === 'Restake' 
+        <Flex alignItems={'center'} h="35px">
+          <Text color="gray.300" fontSize={'12px'} mr={'5px'}>
+            {title === 'Withdraw'
+              ? 'Withdrawable Amount:'
+              : title === 'Restake'
               ? 'Restakable Balance:'
-              : title === 'Unstake' 
+              : title === 'Unstake'
               ? 'Unstakable Balance:'
-              : 'Balance:'
-            }
+              : 'Balance:'}
           </Text>
-          {
-            title === 'Withdraw' ? '' :
-            <Flex>
-              <Text fontSize={"13px"} color="gray.700">
-                {
-                  title === 'Stake' ?
-                  userTonBalance :
-                  title === 'Unstake' ?
-                  staked :
-                  pendingUnstaked
-                } TON
-              </Text>
-              {
-                title === 'Stake' ?
-                <Text 
-                  fontSize={"13px"} 
-                  color="gray.700"
-                  ml={'3px'}
-                >
-                  {`/ ${userWTonBalance}`} WTON
-                </Text> : ''
-              }
-
-            </Flex>
-          }
-        </Flex>
-        {
-          title === 'Restake' ?
-          (
-            <Flex
-              border={"solid 1px #dfe4ee"}
-              borderRadius="4px"
-              h="40px"
-              alignItems="center"
-              px="10px"
-              fontSize={"13px"}
-              justifyContent={'space-between'}
-            >
-              <Text fontSize={"13px"}>
-                
-              </Text>
-              <Flex>
-                <Text textAlign={"right"}>
-                  {pendingUnstaked}
-                </Text>
-                <Text fontSize={"13px"} ml="7px">
-                  TON
-                </Text>
-              </Flex>
-            </Flex>
-          ) : 
-          title === 'Withdraw' ?
-          (
-            <Flex
-              h="40px"
-              justifyContent={"flex-end"}
-              borderRadius="4px"
-              bg="gray.200"
-              border="solid 1px #dfe4ee"
-              alignItems={'center'}
-              px='10px'
-            >
-              <Text fontSize={'13px'}>{`${withdrawable} ${tokenType}`} </Text>
-            </Flex>
+          {title === 'Withdraw' ? (
+            ''
           ) : (
-            <MobileCustomInput
-              w={"147px"}
-              placeHolder={"0.00"}
-              type={title}
-              maxValue={
-                title === 'Stake' && tokenType === 'TON' 
-                ? userTonBalance 
-                : title === 'Stake' && tokenType === 'WTON'  
+            <Flex>
+              <Text fontSize={'13px'} color="gray.700">
+                {title === 'Stake' ? userTonBalance : title === 'Unstake' ? staked : pendingUnstaked} TON
+              </Text>
+              {title === 'Stake' ? (
+                <Text fontSize={'13px'} color="gray.700" ml={'3px'}>
+                  {`/ ${userWTonBalance}`} WTON
+                </Text>
+              ) : (
+                ''
+              )}
+            </Flex>
+          )}
+        </Flex>
+        {title === 'Restake' ? (
+          <Flex
+            border={'solid 1px #dfe4ee'}
+            borderRadius="4px"
+            h="40px"
+            alignItems="center"
+            px="10px"
+            fontSize={'13px'}
+            justifyContent={'space-between'}
+          >
+            <Text fontSize={'13px'}></Text>
+            <Flex>
+              <Text textAlign={'right'}>{pendingUnstaked}</Text>
+              <Text fontSize={'13px'} ml="7px">
+                TON
+              </Text>
+            </Flex>
+          </Flex>
+        ) : title === 'Withdraw' ? (
+          <Flex
+            h="40px"
+            justifyContent={'flex-end'}
+            borderRadius="4px"
+            bg="gray.200"
+            border="solid 1px #dfe4ee"
+            alignItems={'center'}
+            px="10px"
+          >
+            <Text fontSize={'13px'}>{`${withdrawable} ${tokenType}`} </Text>
+          </Flex>
+        ) : (
+          <MobileCustomInput
+            w={'147px'}
+            placeHolder={'0.00'}
+            type={title}
+            maxValue={
+              title === 'Stake' && tokenType === 'TON'
+                ? userTonBalance
+                : title === 'Stake' && tokenType === 'WTON'
                 ? userWTonBalance
                 : staked
-              }
-              setAmount={setAmount}
-              setTokenType={setTokenType}
-              tokenType={tokenType}
-              maxButton={true}
-            />
-          )
-        }
-        
+            }
+            setAmount={setAmount}
+            setTokenType={setTokenType}
+            tokenType={tokenType}
+            maxButton={true}
+          />
+        )}
+
         <Flex
           mt="10px"
           h="40px"
-          borderRadius={"4px"}
+          borderRadius={'4px'}
           border="solid 1px #dfe4ee"
-          justifyContent={"space-between"}
+          justifyContent={'space-between'}
           alignItems="center"
           px="10px"
         >
-          <Text fontSize={"12px"}>Select an operator</Text>
-          <Flex alignItems={"center"}>
+          <Text fontSize={'12px'}>Select an operator</Text>
+          <Flex alignItems={'center'}>
             <OperatorImage height="20px" width="20px" />
-            <Text ml="7px" fontSize={"13px"} fontWeight="bold">
+            <Text ml="7px" fontSize={'13px'} fontWeight="bold">
               {selectedOp?.name}
             </Text>
-            <Flex height={"9px"} width={"8px"} ml="10px" onClick={onOpen}>
-              <Image
-                src={select1_arrow_inactive}
-                alt={"select1_arrow_inactive"}
-              />
+            <Flex height={'9px'} width={'8px'} ml="10px" onClick={onOpen}>
+              <Image src={select1_arrow_inactive} alt={'select1_arrow_inactive'} />
             </Flex>
           </Flex>
         </Flex>
-        {
-          title === 'Withdraw' ?
-          <Flex
-            flexDir={'row'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            h={'43px'}
-          >
-            <Flex
-              fontSize={'12px'}
-              fontWeight={'normal'}
-              color={'#808992'}
-              alignItems={'center'}
-              mt={'5px'}
-            >
+        {title === 'Withdraw' ? (
+          <Flex flexDir={'row'} justifyContent={'space-between'} alignItems={'center'} h={'43px'}>
+            <Flex fontSize={'12px'} fontWeight={'normal'} color={'#808992'} alignItems={'center'} mt={'5px'}>
               Withdraw as
             </Flex>
-            <RadioGroup
-              onChange={(value: 'TON' | 'WTON') => setTokenType(value)} 
-              value={tokenType}
-            >
+            <RadioGroup onChange={(value: 'TON' | 'WTON') => setTokenType(value)} value={tokenType}>
               <Flex alignItems={'row'} mt={'11px'} justifyContent={'center'}>
-                <Radio
-                  value="TON"
-                  h={'20px'}
-                  mr={'6px'}
-                  bgColor={'#fff'}
-                  border={'solid 2px #c6cbd9'}
-                  isChecked={true}
-                >
-                  <Flex
-                    fontSize={'13px'}
-                    fontWeight={500}
-                    color={'#3d495d'}
-                    flexDir={'row'}
-                    alignItems={'center'}
-                  >
-                    TON 
+                <Radio value="TON" h={'20px'} mr={'6px'} bgColor={'#fff'} border={'solid 2px #c6cbd9'} isChecked={true}>
+                  <Flex fontSize={'13px'} fontWeight={500} color={'#3d495d'} flexDir={'row'} alignItems={'center'}>
+                    TON
                   </Flex>
                 </Radio>
                 <Radio
@@ -305,182 +254,104 @@ function MobileStakingComponent(props: {
                   border={'solid 2px #c6cbd9'}
                   isChecked={false}
                 >
-                  <Flex
-                    fontSize={'13px'}
-                    fontWeight={500}
-                    color={'#3d495d'}
-                    flexDir={'row'}
-                    alignItems={'center'}
-                  >
-                    WTON 
+                  <Flex fontSize={'13px'} fontWeight={500} color={'#3d495d'} flexDir={'row'} alignItems={'center'}>
+                    WTON
                   </Flex>
                 </Radio>
               </Flex>
             </RadioGroup>
-          </Flex> :
+          </Flex>
+        ) : (
           ''
-        }
+        )}
         <Button
           mt="15px"
           bg="blue.200"
-          color={"white.100"}
+          color={'white.100'}
           _focus={{
-            bg: "blue.200",
+            bg: 'blue.200',
           }}
           _active={{
-            bg: "blue.200",
+            bg: 'blue.200',
           }}
           _hover={{
-            bg: "blue.200",
+            bg: 'blue.200',
           }}
           isDisabled={disabled}
-          _disabled={{ bg: "#86929d", color: "#e9edf1" }}
+          _disabled={{ bg: '#86929d', color: '#e9edf1' }}
           onClick={() =>
-            title === 'Stake' && tokenType === 'TON' ?
-              staking(
-                userTonBalance,
-                TON_CONTRACT,
-                amount,
-                selectedOp.candidateContract,
-                setTxPending,
-                setTx
-              ) :
-            title === 'Stake' && tokenType === 'WTON' ?
-              staking(
-                userWTonBalance,
-                WTON_CONTRACT,
-                amount,
-                selectedOp.candidateContract,
-                setTxPending,
-                setTx
-              ) :
-            title === 'Unstake' ?
-              unstake(account, selectedOp.candidateContract, DepositManager_CONTRACT, setTxPending, setTx, amount) :
-            title === 'Restake' ?
-              reStaking(
-                account,
-                DepositManager_CONTRACT,
-                selectedOp.candidateContract,
-                setTxPending,
-                setTx
-              ) :
-              withdraw(
-                account, 
-                selectedOp.candidateContract, 
-                DepositManager_CONTRACT,
-                withdrawableLength, 
-                tokenType === 'TON' ? true : false,
-                setTxPending, 
-                setTx
-              )
+            title === 'Stake' && tokenType === 'TON'
+              ? staking(userTonBalance, TON_CONTRACT, amount, selectedOp.candidateContract, setTxPending, setTx)
+              : title === 'Stake' && tokenType === 'WTON'
+              ? staking(userWTonBalance, WTON_CONTRACT, amount, selectedOp.candidateContract, setTxPending, setTx)
+              : title === 'Unstake'
+              ? unstake(account, selectedOp.candidateContract, DepositManager_CONTRACT, setTxPending, setTx, amount)
+              : title === 'Restake'
+              ? reStaking(account, DepositManager_CONTRACT, selectedOp.candidateContract, setTxPending, setTx)
+              : withdraw(
+                  account,
+                  selectedOp.candidateContract,
+                  DepositManager_CONTRACT,
+                  withdrawableLength,
+                  tokenType === 'TON' ? true : false,
+                  setTxPending,
+                  setTx,
+                )
           }
         >
           {title}
         </Button>
-        {
-          title === 'Stake' ? (
-            !minimumAmount && account && selectedOp?.stakeOfCandidate ?
-            <Text
-              fontSize={'12px'}
-              color={'#3e495c'}
-              flexDir={'row'}
-              mt={'15px'}
-              textAlign={'center'}
-            >
-              <Link
-                mr={'3px'}
-                href={'#'}
-                color="#ff2d78"
-                textDecor={'none'}
-              >
-                Warning: 
+        {title === 'Stake' ? (
+          !minimumAmount && account && selectedOp?.stakeOfCandidate ? (
+            <Text fontSize={'12px'} color={'#3e495c'} flexDir={'row'} mt={'15px'} textAlign={'center'}>
+              <Link mr={'3px'} href={'#'} color="#ff2d78" textDecor={'none'}>
+                Warning:
               </Link>
-                Operator have not met the minimum staked balance requirement (at least 1,000.1 TON). As a result, there will be
-              <Link
-                ml={'3px'}
-                color="#2a72e5"
-                textDecor={'none'}
-                href={'#'}
-              >
-                no staking reward 
+              Operator have not met the minimum staked balance requirement (at least 1,000.1 TON). As a result, there
+              will be
+              <Link ml={'3px'} color="#2a72e5" textDecor={'none'} href={'#'}>
+                no staking reward
               </Link>
               for staking on this layer2.
-            </Text> :
-            <Text
-              fontSize={'12px'}
-              color={'#3e495c'}
-              flexDir={'row'}
-              mt={'15px'}
-              textAlign={'center'}
-            >
-              <Link
-                mr={'3px'}
-                href={'#'}
-                color="#ff2d78"
-                textDecor={'none'}
-              >
+            </Text>
+          ) : (
+            <Text fontSize={'12px'} color={'#3e495c'} flexDir={'row'} mt={'15px'} textAlign={'center'}>
+              <Link mr={'3px'} href={'#'} color="#ff2d78" textDecor={'none'}>
                 Warning
               </Link>
-              : Staking TON will earn you TON staking rewards. However, you have to unstake and wait for 93,046 blocks (~14 days) to withdraw.
+              : Staking TON will earn you TON staking rewards. However, you have to unstake and wait for 93,046 blocks
+              (~14 days) to withdraw.
             </Text>
-          ) 
-          : title === 'Restake' ? 
-          <Text
-            fontSize={'12px'}
-            color={'#3e495c'}
-            flexDir={'row'}
-            mt={'15px'}
-            textAlign={'center'}
-          >
-            <Link
-              mr={'3px'}
-              href={'#'}
-              color="#ff2d78"
-              textDecor={'none'}
-            >
+          )
+        ) : title === 'Restake' ? (
+          <Text fontSize={'12px'} color={'#3e495c'} flexDir={'row'} mt={'15px'} textAlign={'center'}>
+            <Link mr={'3px'} href={'#'} color="#ff2d78" textDecor={'none'}>
               Warning
             </Link>
             : Restaking will stake unstaked TON, and these cannot be withdrawn until they are unstaked again.
           </Text>
-          : title === 'Unstake' ?
-          <Text
-          fontSize={'12px'}
-          color={'#3e495c'}
-          flexDir={'row'}
-          mt={'15px'}
-          textAlign={'center'}
-        >
-          <Link
-            mr={'3px'}
-            href={'#'}
-            color="#ff2d78"
-            textDecor={'none'}
-          >
-            Warning
-          </Link>
-          : You can withdraw (W)TON to your wallet after 93,046 blocks (~14 days) from unstaking. Remember to claim any unclaimed staking reward before unstaking.
-        </Text>
-          : ''
-        }
+        ) : title === 'Unstake' ? (
+          <Text fontSize={'12px'} color={'#3e495c'} flexDir={'row'} mt={'15px'} textAlign={'center'}>
+            <Link mr={'3px'} href={'#'} color="#ff2d78" textDecor={'none'}>
+              Warning
+            </Link>
+            : You can withdraw (W)TON to your wallet after 93,046 blocks (~14 days) from unstaking. Remember to claim
+            any unclaimed staking reward before unstaking.
+          </Text>
+        ) : (
+          ''
+        )}
       </Flex>
-      {
-        account ?
+      {account ? (
         <Flex flexDir={'column'}>
-          <MobileInfo 
-            title={'Your Staked'}
-            value={selectedOp?.stakeOf}
-          /> 
-          <MobileInfo 
-            title={'Unclaimed Staking Reward'}
-            value={minimumAmount ? expectedSeig : '-'}
-          />
+          <MobileInfo title={'Your Staked'} value={selectedOp?.stakeOf} />
+          <MobileInfo title={'Unclaimed Staking Reward'} value={minimumAmount ? expectedSeig : '-'} />
         </Flex>
-          : '' 
-      }
-      {
-        !minimumAmount && account ?
-        (
-          <Text
+      ) : (
+        ''
+      )}
+      {!minimumAmount && account ? (
+        <Text
           fontSize={'12px'}
           color={'#ff2d78'}
           mt={'3px'}
@@ -495,48 +366,39 @@ function MobileStakingComponent(props: {
             mr={'3px'}
           >
             Operator
-          </Link>  
-          must stake at least 
+          </Link>
+          must stake at least
           <Link
             isExternal
-            href={'https://medium.com/onther-tech/staking-on-tokamak-network-a5cca48bea3d#:~:text=Become%20a%20direct%20Operator%20in%20the%20Tokamak%20Network%20by%20operating%20a%20new%20blockchain.%20In%20order%20to%20operate%20a%20chain%2C%20at%20least%201%2C000.1%20TON%20must%20be%20deposited%20(posting%20updated%20on%202024.1.22)'}
+            href={
+              'https://medium.com/tokamak-network/staking-on-tokamak-network-a5cca48bea3d#:~:text=Become%20a%20direct%20Operator%20in%20the%20Tokamak%20Network%20by%20operating%20a%20new%20blockchain.%20In%20order%20to%20operate%20a%20chain%2C%20at%20least%201%2C000.1%20TON%20must%20be%20deposited%20(posting%20updated%20on%202024.1.22)'
+            }
             mx={'3px'}
             color={'#2a72e5'}
             textDecor={'underline'}
           >
-            1,000.1 TON 
+            1,000.1 TON
           </Link>
-          for stakers to receive a staking reward. This operator is managed by 
-          <Link
-            isExternal
-            href={'https://talken.io/'}
-            color={'#2a72e5'}
-            textDecor={'underline'}
-            ml={'3px'}
-          >
+          for stakers to receive a staking reward. This operator is managed by
+          <Link isExternal href={'https://talken.io/'} color={'#2a72e5'} textDecor={'underline'} ml={'3px'}>
             Talken.
           </Link>
         </Text>
-        ) : 
-        userExpectedSeig && userExpectedSeig !== '0.00' ?
+      ) : userExpectedSeig && userExpectedSeig !== '0.00' ? (
         <Flex
           fontSize={'11px'}
           color={'#2a72e5'}
           cursor={'pointer'}
           justifyContent={'end'}
           mt={'12px'}
-          onClick={()=> updateSeig()}
+          onClick={() => updateSeig()}
         >
           Add to Your Staked
-        </Flex> :
+        </Flex>
+      ) : (
         ''
-      }
-      <OperatorSelect
-        operatorList={operatorList}
-        onClose={onClose}
-        isOpen={isOpen}
-        setSelectedOp={setSelectedOp}
-      />
+      )}
+      <OperatorSelect operatorList={operatorList} onClose={onClose} isOpen={isOpen} setSelectedOp={setSelectedOp} />
     </Flex>
   );
 }
