@@ -5,7 +5,7 @@ import { useCandidateList } from '../hooks/staking/useCandidateList';
 
 function Operators() {
   const theme = useTheme();
-  const { candidateList, noStakingRewardList } = useCandidateList();
+  const { candidateList } = useCandidateList();
 
   return (
     <Flex
@@ -22,7 +22,7 @@ function Operators() {
         color="gray.700"
         mb="5px"
       >
-        DAO Candidates
+        Select Your Operator
       </Text>
       <Text
         fontSize={"12px"}
@@ -32,7 +32,7 @@ function Operators() {
         w="250px"
         color={"gray.300"}
       >
-        Choose a DAO candidate to stake, restake, unstake, or withdraw TON (or WTON).
+        Choose an operator to stake, restake, unstake, or withdraw TON (or WTON).
       </Text>
       <Flex w="100%" px="20px" flexDir={"column"}>
         {candidateList.length !== 0 ? (
@@ -44,21 +44,6 @@ function Operators() {
             <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
           </Flex>
         )}
-        
-        {
-          noStakingRewardList.length !== 0 ? (
-            noStakingRewardList.map((operator: any, index: number) => {
-              console.log(index)
-              return (
-                <Flex flexDir={'column'}>
-                  <OperatorCard operator={operator} key={index} />
-                </Flex>
-              )
-            })
-          ) : (
-            <Flex />
-          )
-        }
       </Flex>
     </Flex>
   );

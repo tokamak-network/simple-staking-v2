@@ -20,6 +20,7 @@ import { getOldLayerAddress } from '@/components/getOldLayerAddress';
 import { StakeModalDataType } from "types"
 import WalletModal from '@/common/modal/Wallet';
 import useModal from '@/hooks/useModal';
+import { minimumAmountState } from '@/atom/staking/minimumAmount';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -43,7 +44,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [stakeOfUser, setStakeOfUser] = useState('');
   const [expSeig, setExpSeig] = useState('');
   const [stakeCandidate, setStakeCandidate] = useState('');
-  const [minimumAmount, setMinimumAmount] = useState<boolean>(false);
+  const [minimumAmount, setMinimumAmount] = useRecoilState(minimumAmountState)
+  const [minimumAmountForButton, setMinimumAmountForButton] = useState<boolean>(false);
+  const [isOperator, setIsOperator] = useState<boolean>(false);
 
   const { userTonBalance, userWTonBalance } = useUserBalance(account);
   const { openModal } = useModal('wallet');
@@ -63,6 +66,11 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     setStakeCandidate(data?.stakeOfCandidate);
   }, [data]);
 
+  useEffect(() => {
+    if (account) {
+      setIsOperator(candidates.toLowerCase() === account.toLowerCase())
+    }
+  }, [account, candidates])
   const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account);
   const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength } = useWithdrawable(
     data?.candidateContract,
@@ -116,25 +124,26 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     /*eslint-disable*/
   }, [account, pendingUnstaked, userTonBalance, withdrawable, old_withdrawable]);
 
-  // const candidateAmount = stakeCandidate
-  //   ? convertNumber({
-  //       amount: stakeCandidate,
-  //       type: 'ray',
-  //     })
-  //   : '0.00';
-
-  // const minimumAmount = Number(candidateAmount) > 100;
+  const candidateAmount = stakeCandidate 
+    ? convertNumber({
+      amount: stakeCandidate,
+      type: 'ray',
+    })
+  : '1000.1';
+  
+  const candidateAmountForButton = stakeCandidate
+  ? convertNumber({
+      amount: stakeCandidate,
+      type: 'ray',
+    })
+  : '0.00';
 
   useEffect(() => {
-    if (stakeCandidate && account) {
-      const candidateAmount = stakeCandidate ? convertNumber({
-        amount: stakeCandidate,
-        type: 'ray'
-      }) : '0.00'
-      setMinimumAmount(Number(candidateAmount) > 1000)
-    }
-  }, [stakeCandidate, account])
+    // console.log(Number(candidateAmount), Number(candidateAmount) > 1000)
+    setMinimumAmount(Number(candidateAmount) > 1000)
+    setMinimumAmountForButton(Number(candidateAmountForButton) > 1000)
 
+  }, [account, candidateAmount])
 
   const dataModal: StakeModalDataType = {
     tonBalance: userTonBalance ? userTonBalance : '0.00',
@@ -217,8 +226,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           account ?
           <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
             <Button
-              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account ? false : true}
+              {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={minimumAmountForButton || isOperator ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('staking', dataModal)}
@@ -226,8 +235,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Stake
             </Button>
             <Button
-              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account ? false : true}
+              {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={minimumAmountForButton || isOperator ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('unstaking', dataModal)}
@@ -235,8 +244,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Unstake
             </Button>
             <Button
-              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account ? false : true}
+              {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={minimumAmountForButton || isOperator ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('restaking', dataModal)}
@@ -244,8 +253,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Restake
             </Button>
             <Button
-              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account ? false : true}
+              {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+              isDisabled={minimumAmountForButton || isOperator ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('withdraw', dataModal)}

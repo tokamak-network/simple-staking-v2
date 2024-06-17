@@ -33,8 +33,9 @@ const newWalletLink = () =>
   });
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [1, 4, 5, 11155111],
+  supportedChainIds: [1, 11155111, 5],
 });
+
 
 export const trazorConnector = new TrezorConnector({
   chainId: 1,

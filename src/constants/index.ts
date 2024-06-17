@@ -8,13 +8,15 @@ export const REACT_APP_MODE = process.env.NEXT_PUBLIC_MODE as string;
 export const NetworkContextName = `${new Date().getTime()}-NETWORK`;
 export const DEFAULT_NETWORK: string | undefined =
 // "1"
-REACT_APP_MODE === "PRODUCTION" ? "1" : "5";
+REACT_APP_MODE === "PRODUCTION" ? "1" : "11155111";
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const MAINNET_API = process.env.NEXT_PUBLIC_API_PRODUCTION;
 const DEV_API = process.env.NEXT_PUBLIC_API_DEV;
 const GRAPHQL_MAINNET = process.env.NEXT_PUBLIC_GRAPHQL_API_PRODUCTION;
 const GRAPHQL_DEV = process.env.NEXT_PUBLIC_GRAPHQL_API_DEV;
 export const ETHERSCAN_API = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
+
+export const ETHERSCAN_LINK = REACT_APP_MODE === "PRODUCTION" ? "https://etherscan.io" : "https://sepolia.etherscan.io"
 
 export const BASE_PROVIDER =
 REACT_APP_MODE === "PRODUCTION"

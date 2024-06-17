@@ -53,7 +53,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <Header
                 // walletopen={() => handleWalletModalOpen("wallet")}
                 />
-                <Flex justifyContent="center" w={'100%'} alignItems="center" px={['12px', '24px', '0px']}>
+                <Flex justifyContent="center" w={'100%'} alignItems="center" px={['', '24px', '0px']}>
                   <Flex
                     maxW={['100%', '100%', '100%']}
                     flexDir={'column'}

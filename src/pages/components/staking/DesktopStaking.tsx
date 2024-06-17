@@ -79,7 +79,7 @@ function DesktopStaking () {
     );
 
     const [tableLoading, setTableLoading] = useState<boolean>(true);
-    const { candidateList, noStakingRewardList } = useCandidateList()
+    const { candidateList } = useCandidateList()
     const { account } = useWeb3React();
 
     useEffect(() => {
@@ -176,6 +176,7 @@ function DesktopStaking () {
                   unit={'TON'}
                   type={''}
                   contractInfo={candidateContract}
+                  candidate={candidate}
                   minimumAmount={minimumAmount}
                 />
               </Flex>
@@ -213,8 +214,8 @@ function DesktopStaking () {
     
     return (
       <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
-        <PageHeader title={'DAO Candidates'} subtitle={'Choose a DAO candidate to stake, restake, unstake, or withdraw TON (or WTON).'}/>
-        <Box fontFamily={theme.fonts.roboto}>
+        <PageHeader title={'Select Your Operator'} subtitle={'Choose an operator to stake, restake, unstake, or withdraw TON (or WTON).'}/>
+        <Box fontFamily={theme.fonts.roboto} overflowX={'hidden'}>
           {candidateList.length === 0 ? 
             <Flex justifyContent="center" alignItems={"center"} h='200px'>
               <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
@@ -229,21 +230,6 @@ function DesktopStaking () {
               />
             </Flex>
           }
-          {
-          noStakingRewardList.length !== 0 ? (
-            <Flex flexDir={'column'}>
-              <OpearatorTable 
-                renderDetail={renderRowSubComponent}
-                columns={columns}
-                // @ts-ignore
-                data={noStakingRewardList}
-                isLoading={tableLoading}
-              />
-            </Flex>
-          ) : (
-            <Flex />
-          )
-        }
         </Box>
       </Flex>
     );
