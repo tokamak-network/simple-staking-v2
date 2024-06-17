@@ -170,7 +170,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const { btnStyle } = theme;
 
   return (
-    <Container maxW={'sm'} shadow={'md'} borderRadius={'lg'} border={'solid 1px #f4f6f8'} h={'273px'}>
+    <Container maxW={'sm'} shadow={'md'} borderRadius={'lg'} border={'solid 1px #f4f6f8'} h={'253px'}>
       <Box w={'100%'} p={0} textAlign={'center'} pb={'30px'} px={5}>
         <Flex
           mt={'20px'}
@@ -217,8 +217,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             // )
             }
         </Heading>
-        <Box pt={'5px'} pb={'30px'}>
-          <Text fontSize={'15px'} color={'gray.400'}>
+        <Box pt={'35px'} pb={'20px'}>
+          <Text fontSize={'15px'} color={'#808992'}>
             Available in wallet
           </Text>
         </Box>
@@ -234,24 +234,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             >
               Stake
             </Button>
-            <Button
-              {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
-              isDisabled={minimumAmountForButton || isOperator ? false : true}
-              fontSize={'14px'}
-              opacity={loading === true ? 0.5 : 1}
-              onClick={() => modalButton('unstaking', dataModal)}
-            >
-              Unstake
-            </Button>
-            <Button
-              {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
-              isDisabled={minimumAmountForButton || isOperator ? false : true}
-              fontSize={'14px'}
-              opacity={loading === true ? 0.5 : 1}
-              onClick={() => modalButton('restaking', dataModal)}
-            >
-              Restake
-            </Button>
+            
             <Button
               {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
               isDisabled={minimumAmountForButton || isOperator ? false : true}

@@ -13,6 +13,7 @@ import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { getTransactionHistory, getCommitHistory } from '../../../utils/getTransactionHistory';
 import { useWeb3React } from "@web3-react/core";
 import { convertNumber } from "@/components/number";
+import { StakingInformation } from "./StakingInformation";
 
 function DesktopStaking () {
 
@@ -98,34 +99,6 @@ function DesktopStaking () {
         asCommit,
         stakeOfCandidate
       } = row.original;
-      const txHistory = getTransactionHistory(row.original)
-      const commitHistory = getCommitHistory(row.original)
-
-      const candidateAmount = stakeOfCandidate? convertNumber({
-        amount: stakeOfCandidate,
-        type: 'ray'
-      }) : '0.00'
-
-      const minimumAmount = Number(candidateAmount) >= 1000
-
-      const userExpectedSeig = expectedSeig ? 
-        convertNumber({
-          amount: expectedSeig,
-          type: 'ray',
-          localeString: true
-        }) : '-' 
-      
-      const yourStake = convertNumber({
-        amount: stakeOf, 
-        type: 'ray',
-        localeString: true
-      })
-
-      const pendingUnstaked = convertNumber({
-        amount: pending,
-        type: 'ray',
-        localeString: true
-      })
     
       return (
         <Flex
@@ -133,80 +106,13 @@ function DesktopStaking () {
           m={0}
           justifyContent={'space-between'}
           alignItems="start"
-          pt="70px"
+          // pt="70px"
           border={'none'}
           flexDir={'column'}
         >
-          <Flex>
-            <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
-              <Flex flexDir={'column'} alignItems={'space-between'}>
-                <OperatorDetailInfo 
-                  title={'Total Stakers'}
-                  value={stakedUserList.length}
-                />
-              </Flex>
-              <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
-                <OperatorDetailInfo 
-                  title={'Pending Withdrawal'}
-                  value={pendingUnstaked}
-                  unit={'TON'}
-                  type={''}
-                />
-              </Flex>
-            </Flex>
-            <Box p={0} w={'390px'} borderRadius={'10px'} alignSelf={'flex-start'}>
-              <WalletInformation 
-                data={row.original}
-              />
-            </Box>
-  
-            <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
-              <Flex flexDir={'column'} alignItems={'space-between'}>
-                <OperatorDetailInfo 
-                  title={'Your Staked'}
-                  value={yourStake}
-                  unit={'TON'}
-                  type={''}
-                />
-              </Flex>
-              <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
-                <OperatorDetailInfo 
-                  title={'Unclaimed Staking Reward'}
-                  value={userExpectedSeig}
-                  unit={'TON'}
-                  type={''}
-                  contractInfo={candidateContract}
-                  candidate={candidate}
-                  minimumAmount={minimumAmount}
-                />
-              </Flex>
-            </Flex>
-          </Flex>
-          {/* table area */}
-          <Flex 
-            flexDir={'row'} 
-            mt={'60px'} 
-            ml={'70px'} 
-            justifyContent={'center'} 
-            alignItems={'center'}
-          >
-            {
-              txHistory &&
-              <HistoryTable 
-                columns={historyColumns}
-                data={txHistory}
-                tableType={'Staking'}
-              />
-            }
-            {
-              commitHistory &&
-              <HistoryTable 
-                columns={historyColumns}
-                data={commitHistory}
-                tableType={'Commit'}
-              />
-            }
-          </Flex>
+          <StakingInformation 
+            data={row.original}
+          />
         </Flex>
       )
     }, [historyColumns]);

@@ -59,7 +59,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
   const theme = useTheme();
 
   useEffect(() => {
-    setPageSize(5)
+    setPageSize(3)
   },[setPageSize])
 
   useEffect(() => {

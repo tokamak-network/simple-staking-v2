@@ -61,6 +61,10 @@ const BasicTooltip: React.FC<tooltipProps> = (props) => {
     )
   }
 
+  const tokamakOp = () => {
+    
+  }
+
   const plasma = () => {
     return (
       <Text>

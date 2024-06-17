@@ -88,6 +88,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   const [isOpen, setIsOpen] = useState(
     candidateContract === undefined ? '' : candidateContract,
   );
+  const [tab, setTab] = useState('staking')
   const [toggle, setToggle] = useRecoilState(toggleState)
 
   useEffect(() => {
@@ -136,6 +137,15 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
             </Flex>
             <BasicTooltip 
               label={'candidate'} 
+            />
+          </Flex>
+          {getCircle('candidate')}
+          <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
+          <Flex mr={'3px'}>
+              Tokamak OP
+            </Flex>
+            <BasicTooltip 
+              label={'op'} 
             />
           </Flex>
         </Flex>
@@ -329,7 +339,52 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       margin={0}
                       colSpan={visibleColumns.length}
                     >
-                      {renderDetail({row})}
+                      <Flex flexDir={'column'}>
+                        <Flex
+                          w={'213px'}
+                          h={'30px'}
+                          p={'3px'}
+                          ml={'70px'}
+                          border={'solid 1px #e7ebf2'}
+                          borderRadius={'5px'}
+                          fontSize={'12px'}
+                          fontWeight={'normal'}
+                          mt={'24px'}
+                          mb={'21px'}
+                        >
+                          <Flex
+                            w={'102px'}
+                            textAlign={'center'}
+                            borderRadius={'5px'}
+                            color={tab === 'staking' ? '#fff' : ''}
+                            bg={tab==="staking" ? '#2a72e5' : '#fff'}
+                            justifyContent={'center'}
+                            alignItems={'center'}
+                            onClick={() => setTab('staking')}
+                          >
+                            Staking
+                          </Flex>
+                          <Flex
+                            w={'102px'}
+                            textAlign={'center'}
+                            borderRadius={'5px'}
+                            color={tab === 'l2' ? '#fff' : ''}
+                            bg={tab==="l2" ? '#2a72e5' : '#fff'}
+                            justifyContent={'center'}
+                            alignItems={'center'}
+                            onClick={() => setTab('l2')}
+                          >
+                            L2
+                          </Flex>
+
+                        </Flex>
+                        {
+                          tab === 'staking' ? 
+                          renderDetail({row}) :
+                          ''
+                        }
+
+                      </Flex>
                     </chakra.td>
                   </chakra.tr>
                 ) : null,

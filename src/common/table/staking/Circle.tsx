@@ -25,7 +25,7 @@ export const getCircle = (kind: string) => {
           h={'8px'}
           borderRadius={50}
           bg={
-            kind === 'operator'
+            kind === 'op'
               ? '#eb597b'
               : kind === 'member' 
               ? '#2a72e5'
