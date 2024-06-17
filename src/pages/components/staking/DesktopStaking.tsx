@@ -14,6 +14,7 @@ import { getTransactionHistory, getCommitHistory } from '../../../utils/getTrans
 import { useWeb3React } from "@web3-react/core";
 import { convertNumber } from "@/components/number";
 import { StakingInformation } from "./StakingInformation";
+import { L2Information } from "./L2Information";
 
 function DesktopStaking () {
 
@@ -86,8 +87,28 @@ function DesktopStaking () {
     useEffect(() => {
       candidateList ? setTableLoading(false) : setTableLoading(true)
     }, [candidateList, tableLoading])
+
+    const renderL2Component = useCallback(
+      ({row}: any) => {
+      
+      return (
+        <Flex
+          w="100%"
+          m={0}
+          justifyContent={'space-between'}
+          alignItems="start"
+          // pt="70px"
+          border={'none'}
+          flexDir={'column'}
+        >
+          <L2Information 
+            data={row.original}
+          />
+        </Flex>
+      )
+    }, [])
     
-    const renderRowSubComponent = useCallback(
+    const renderStakingComponent = useCallback(
       ({row}: any) => {
       const { 
         candidateContract, 
@@ -128,7 +149,8 @@ function DesktopStaking () {
             </Flex> :
             <Flex flexDir={'column'}>
               <OpearatorTable 
-                renderDetail={renderRowSubComponent}
+                renderDetail={renderStakingComponent}
+                renderL2={renderL2Component}
                 columns={columns}
                 // @ts-ignore
                 data={candidateList}

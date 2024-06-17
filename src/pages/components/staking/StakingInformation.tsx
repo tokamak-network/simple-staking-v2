@@ -5,6 +5,7 @@ import { convertNumber } from "@/components/number";
 import { Box, Flex } from "@chakra-ui/react";
 import { FC, useMemo } from "react";
 import WalletInformation from "./WalletInformation";
+
 type StakingInformationProps = {
   // dispatch: AppDispatch;
   data: any;

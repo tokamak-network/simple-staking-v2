@@ -40,6 +40,7 @@ type OpearatorTableProps = {
   columns: Column[];
   data: any[];
   renderDetail: Function;
+  renderL2: Function;
   isLoading: boolean;
 };
 
@@ -47,6 +48,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   columns,
   data,
   renderDetail,
+  renderL2,
   isLoading,
 }) => {
   const {
@@ -340,48 +342,62 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       colSpan={visibleColumns.length}
                     >
                       <Flex flexDir={'column'}>
-                        <Flex
-                          w={'213px'}
-                          h={'30px'}
-                          p={'3px'}
-                          ml={'70px'}
-                          border={'solid 1px #e7ebf2'}
-                          borderRadius={'5px'}
-                          fontSize={'12px'}
-                          fontWeight={'normal'}
-                          mt={'24px'}
-                          mb={'21px'}
-                        >
+                        <Flex flexDir={'row'} w={'100%'} justifyContent={'space-between'}>
                           <Flex
-                            w={'102px'}
-                            textAlign={'center'}
+                            w={'213px'}
+                            h={'30px'}
+                            p={'3px'}
+                            ml={'70px'}
+                            border={'solid 1px #e7ebf2'}
                             borderRadius={'5px'}
-                            color={tab === 'staking' ? '#fff' : ''}
-                            bg={tab==="staking" ? '#2a72e5' : '#fff'}
-                            justifyContent={'center'}
-                            alignItems={'center'}
-                            onClick={() => setTab('staking')}
+                            fontSize={'12px'}
+                            fontWeight={'normal'}
+                            mt={'24px'}
+                            mb={'21px'}
+                            justifyContent={'space-between'}
                           >
-                            Staking
-                          </Flex>
-                          <Flex
-                            w={'102px'}
-                            textAlign={'center'}
-                            borderRadius={'5px'}
-                            color={tab === 'l2' ? '#fff' : ''}
-                            bg={tab==="l2" ? '#2a72e5' : '#fff'}
-                            justifyContent={'center'}
-                            alignItems={'center'}
-                            onClick={() => setTab('l2')}
-                          >
-                            L2
-                          </Flex>
+                            <Flex
+                              w={'102px'}
+                              textAlign={'center'}
+                              borderRadius={'5px'}
+                              color={tab === 'staking' ? '#fff' : ''}
+                              bg={tab==="staking" ? '#2a72e5' : '#fff'}
+                              justifyContent={'center'}
+                              alignItems={'center'}
+                              onClick={() => setTab('staking')}
+                            >
+                              Staking
+                            </Flex>
+                            <Flex
+                              w={'102px'}
+                              textAlign={'center'}
+                              borderRadius={'5px'}
+                              color={tab === 'l2' ? '#fff' : ''}
+                              bg={tab==="l2" ? '#2a72e5' : '#fff'}
+                              justifyContent={'center'}
+                              alignItems={'center'}
+                              onClick={() => setTab('l2')}
+                            >
+                              L2
+                            </Flex>
 
+                          </Flex>
+                          {
+                              tab == 'l2' ?
+                              <Flex 
+                                justifyContent={'center'}
+                                alignItems={'center'}
+                                fontSize={'13px'}
+                                fontWeight={500}
+                              >
+                                L1 Contract address
+                              </Flex> : ''
+                            }
                         </Flex>
                         {
                           tab === 'staking' ? 
                           renderDetail({row}) :
-                          ''
+                          renderL2({row})
                         }
 
                       </Flex>
