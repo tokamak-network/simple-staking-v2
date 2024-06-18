@@ -4,6 +4,7 @@ import TON from "@/assets/images/ton.svg"
 import Image from "next/image"
 import { BalanceInput } from "@/common/input/CustomInput"
 import { Unstake } from "./Unstake"
+import { WithdrawToEthereum } from "./WithdrawToEthereum"
 
 type ToEthereumProps = {
 
@@ -58,9 +59,7 @@ export const ToEthereum = (args: ToEthereumProps) => {
       {
         tab === 'unstake' ?
         <Unstake />:
-        <Flex>
-
-        </Flex>
+        <WithdrawToEthereum />
       }
     </Flex>
   )

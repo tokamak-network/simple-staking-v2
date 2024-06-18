@@ -78,8 +78,8 @@ export const Unstake = (args: UnstakeProps) => {
     </Flex>
     <Flex w={'100%'} h={'1px'} my={'25px'} bgColor={'#f4f6f8'} />
     <Flex>
-      <Checkbox iconColor='blue.400'  />
-      <Flex fontSize={'12px'} fontWeight={'normal'} color={'#3e495c'} w={'271px'}>
+      <Checkbox />
+      <Flex ml={'10px'} fontSize={'12px'} fontWeight={'normal'} color={'#3e495c'} w={'271px'}>
         Donec quam lectus vel vulputate mauris. Nullam quam amet adipiscing quis diam nisl maecenas. Ornare fermentum ullamcorper ut ullamcorper amet. Amet et ut posuere.
       </Flex>
     </Flex>
