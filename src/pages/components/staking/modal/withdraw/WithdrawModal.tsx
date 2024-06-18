@@ -22,6 +22,7 @@ import TITAN from '@/assets/images/titan_symbol.svg'
 import ETHEREUM from '@/assets/images/ethereum_symbol.svg'
 import BACK from '@/assets/images/back_icon.svg'
 import { ToEthereum } from './ToEthereum';
+import { ToTitan } from './ToTitan';
 
 function WithdrawModal () {
   const theme = useTheme();
@@ -104,7 +105,7 @@ function WithdrawModal () {
                   type === 'ethereum' ?
                   <ToEthereum /> :
                   type === 'titan' ?
-                  '' : ''
+                  <ToTitan />: ''
                 }
               </Flex>
             </ModalBody>
