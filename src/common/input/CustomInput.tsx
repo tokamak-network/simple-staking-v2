@@ -63,25 +63,37 @@ function BalanceInput(props: InputProp) {
         w={w}
         h={h || 45}
         focusBorderColor={'#fff'}
-        border={type === 'staking' ? 'none' : '1px solid #dfe4ee'}
+        border={type === 'staking' || type === 'unstaking' ? 'none' : '1px solid #dfe4ee'}
         borderRadius={'4px'}
         value={addComma(value)}
-        ml={type==='staking' ? '65px' : ''}
+        ml={type==='staking' || type === 'unstaking' ? '65px' : ''}
       >
         <Flex flexDir={type === 'staking' ? 'column' : 'row'} alignItems={'center'}>
           <NumberInputField
-            {...(type === 'staking' ? {...INPUT_STYLE.inputStaking()}: {...INPUT_STYLE.inputCalc()})}
+            {...(
+              type === 'staking' ? 
+              {...INPUT_STYLE.inputStaking()} : 
+              type === 'unstaking' ?
+              {...INPUT_STYLE.inputUnstaking()} :
+              {...INPUT_STYLE.inputCalc()}
+            )}
             placeholder={placeHolder}
             onChange={onChange}
           /> 
-          {type === 'staking' ? 
+          {
+            type === 'staking' ? 
             <Flex 
               w={5} 
               h={2} 
               borderBottom={value==='' ? 'solid 2px #2a72e5' : ''}
               animation={'blink'}
-            />
-            : 
+            /> :
+            type === 'unstaking' ?
+            <Flex
+            border={''}
+            >
+              
+            </Flex> :
             <Text
               fontSize={'13px'}
               fontWeight={'normal'}
@@ -96,7 +108,8 @@ function BalanceInput(props: InputProp) {
       </NumberInput>
       <Button
         zIndex={100}
-        {...(type === 'staking' ? {...INPUT_STYLE.maxStaking()}: {...INPUT_STYLE.maxCalc()})}
+        {...(type === 'staking' || type === 'unstaking' ? {...INPUT_STYLE.maxStaking()}: {...INPUT_STYLE.maxCalc()})}
+        mt={type === 'unstaking' ? '0px' : ''}
         onClick={() => {
           setValue(String(maxValue));
         }}>

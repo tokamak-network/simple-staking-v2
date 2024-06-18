@@ -13,7 +13,6 @@ import {
   Box,
 } from '@chakra-ui/react';
 import useModal from '@/hooks/useModal';
-
 import { useCallback, useEffect, useState } from 'react';
 import { BalanceInput } from '@/common/input/CustomInput';
 import { getStakeModalComponent } from '@/utils/getStakeModalComponent';
@@ -327,8 +326,7 @@ function StakeModal() {
       isOpen={
         selectedModal === 'staking' ||
         selectedModal === 'unstaking' ||
-        selectedModal === 'restaking' ||
-        selectedModal === 'withdraw'
+        selectedModal === 'restaking'
       }
       isCentered
       onClose={closeThisModal}

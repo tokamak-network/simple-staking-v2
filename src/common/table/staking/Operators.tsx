@@ -212,17 +212,17 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                   borderBottomRadius={
                     isOpen === candidateContract ? '0px' : '10px'
                   }
-                  borderBottom={isOpen === candidateContract ? '1px' : ''}
+                  borderBottom={isOpen === candidateContract ? 'solid 2px #f4f6f8' : ''}
                   borderBottomColor={
                     isOpen === candidateContract ? '#f4f6f8' : ''
                   }
                   px={'16px'}
-                  mb={'12px'}
+                  mb={'15px'}
                   w="100%"
                   bg={'white.100' }
                   border={''}
                   display="flex"
-                  alignItems="center"
+                  alignItems="center"      
                   {...row.getRowProps()}
                 >
                   {row.cells && row.cells.map((cell: any, index: number) => {
@@ -331,8 +331,9 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                     mb={'14px'}
                     mt={-5}
                     bg={'white.100'}
-                    border={''}
-                    borderTopWidth={0}
+                    borderTop={'1px'}
+                    borderTopColor={'#f4f6f8'}
+                    // borderTopWidth={0}
                     borderBottomRadius="10px"
                   >
                     <chakra.td
@@ -380,7 +381,6 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                             >
                               L2
                             </Flex>
-
                           </Flex>
                           {
                               tab == 'l2' ?

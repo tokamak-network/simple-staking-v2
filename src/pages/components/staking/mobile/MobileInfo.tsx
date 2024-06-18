@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import { convertNumber } from '../../../utils/number';
+import { convertNumber } from '@/utils/number';
 
 export default function MobileInfo(props: {
   title: string,

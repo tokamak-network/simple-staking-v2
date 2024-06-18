@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+    <g data-name="TITAN_symbol">
+        <path data-name="Base" transform="translate(11 11)" style="fill:none" d="M0 0h74v74H0z"/>
+        <path data-name="패스 298" d="M73.175 30.614 55.5 0h-37l-.824 1.428L0 32.043l11.783 20.409 5.892 10.205.824 1.429h37l11.783-20.41 5.892-10.205.826-1.428z" transform="translate(11 15.625)" style="fill:#05274c"/>
+        <path data-name="패스 299" d="m63.79 26.114-4.242 7.348H27.5l4.242-7.348zM39.248 43.667H21.6l4.242-7.348h17.649z" transform="translate(17.086 22.981)" style="fill:#85bcfa"/>
+        <path data-name="패스 300" d="M26.325 18.653 15.366 37.634l-4.242-7.348 10.958-18.981z" transform="translate(14.133 18.81)" style="fill:#2470ed"/>
+        <path data-name="패스 301" d="M32.035 26.615 16.01 54.372l-4.242-7.347 16.025-27.758z" transform="translate(14.315 21.052)" style="fill:#2470ed"/>
+        <path data-name="패스 302" d="M33.034 29.986 17.007 2.229h8.485l16.025 27.757zm11.783 0-9.31-16.123h8.485L53.3 29.986z" transform="translate(15.791 16.253)" style="fill:#fff"/>
+    </g>
+</svg>

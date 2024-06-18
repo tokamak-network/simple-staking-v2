@@ -110,6 +110,17 @@ const INPUT_STYLE = {
     border: '',
     ml:'15px',
   }),
+  inputUnstaking: () => ({
+    fontSize:'18px',
+    height:'100%',
+    borderRadius: 0,
+    textAlign:'right',
+    overflow:'auto',
+    fontWeight: 'bold',
+    _placeholder:{ color: '#c6cbd9' },
+    border: '',
+    // ml:'15px',
+  }),
   inputCalc: () => ({
     fontSize:'13px',
     fontWeight: 'normal',
