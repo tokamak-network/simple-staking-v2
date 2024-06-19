@@ -24,6 +24,7 @@ export type StakeModalDataType = {
   seig: string,
   candidate: string,
   minimumAmount: boolean,
+  requests: any[]
 }
 
 export type StakeModalComponentType = {

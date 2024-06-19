@@ -4,12 +4,12 @@ import Image from "next/image"
 import TON from "@/assets/images/ton.svg"
 
 type UnstakeBalanceInputProps = {
-
+  stakedAmount: string
 }
 
 export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
-  const {} = args
-  
+  const {stakedAmount} = args
+
   return (
     <Flex
       w={'320px'}
@@ -47,7 +47,7 @@ export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
             h={'24px'}
             placeHolder={'0.00'}
             type={'unstaking'}
-            maxValue={'1000'}
+            maxValue={stakedAmount.replace(/\,/g,'')}
           />
         </Flex>
       </Flex>
@@ -61,7 +61,7 @@ export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
         mr={'20px'}
       >
         <Flex>
-          Balance: 0.00 TON 
+          Balance: {stakedAmount} TON 
         </Flex>
         <Flex mx={'3px'}>
           /

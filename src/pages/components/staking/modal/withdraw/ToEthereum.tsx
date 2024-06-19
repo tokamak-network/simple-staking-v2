@@ -5,13 +5,14 @@ import Image from "next/image"
 import { BalanceInput } from "@/common/input/CustomInput"
 import { Unstake } from "./Unstake"
 import { WithdrawToEthereum } from "./WithdrawToEthereum"
+import { StakeModalDataType } from '@/types/index';
 
-type ToEthereumProps = {
-
+type ToEthereumProps = { 
+  selectedModalData: StakeModalDataType
 }
 
 export const ToEthereum = (args: ToEthereumProps) => {
-  const {} = args
+  const {selectedModalData} = args
 
   const [tab, setTab] = useState('unstake')
 
@@ -58,7 +59,9 @@ export const ToEthereum = (args: ToEthereumProps) => {
       </Flex>
       {
         tab === 'unstake' ?
-        <Unstake />:
+        <Unstake 
+          selectedModalData={selectedModalData}
+        />:
         <WithdrawToEthereum />
       }
     </Flex>

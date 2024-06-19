@@ -6,7 +6,7 @@ import Image from "next/image"
 import { UnstakeBalanceInput } from "./UnstakeBalanceInput"
 
 type ToTitanProps = {
-
+  
 }
 
 export const ToTitan = (args: ToTitanProps) => {
@@ -58,7 +58,9 @@ export const ToTitan = (args: ToTitanProps) => {
           </Flex>
         </Flex>
       </Flex>
-      <UnstakeBalanceInput />
+      <UnstakeBalanceInput 
+        stakedAmount={'1000'}
+      />
       <Flex w={'100%'} h={'1px'} my={'25px'} bgColor={'#f4f6f8'} />
       <Flex>
         <Checkbox />

@@ -11,9 +11,12 @@ export function useWithdrawable (layer2: string) {
   const { blockNumber } = useBlockNumber()
   const { DepositManager_CONTRACT, Old_DepositManager_CONTRACT } = useCallContract();
   const { account } = useWeb3React();
+  
   const [withdrawable, setWithdrawable] = useState('0.00')
   const [notWithdrawable, setNotWithdrawable] = useState('0.00')
   const [withdrawableLength, setWithdrawableLength] = useState('0.00')
+
+  const [requests, setRequests] = useState<any[]>([])
 
   const [old_withdrawable, old_setWithdrawable] = useState('0.00')
   const [old_notWithdrawable, old_setNotWithdrawable] = useState('0.00')
@@ -33,12 +36,12 @@ export function useWithdrawable (layer2: string) {
           const old_address = getOldLayerAddress(layer2)
           numPendingRequests = await DepositManager_CONTRACT.numPendingRequests(layer2, account)
           let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(layer2, account)
-          
+
           for (const _ of range(numPendingRequests)) {
             pendingRequests.push(await DepositManager_CONTRACT.withdrawalRequest(layer2, account, requestIndex));
             requestIndex++;
           }
-          
+          setRequests(pendingRequests)
           
           const withdrawbleList = pendingRequests.filter(
             (request: any) => parseInt(request.withdrawableBlockNumber) <= blockNumber
@@ -47,13 +50,10 @@ export function useWithdrawable (layer2: string) {
             (request: any) => parseInt(request.withdrawableBlockNumber) > blockNumber
           )
 
-          
-        
           setWithdrawableLength(withdrawbleList.length)
           const reducer = (amount:any, request: any) => amount.add(request.amount)
           const withdrawableAmount = withdrawbleList.reduce(reducer, initial)
           const notWithdrawableAmount = notWithdrawableList.reduce(reducer, initial)
-
           const convert = convertNumber({
             amount: withdrawableAmount.toString(),
             type: 'ray',
@@ -127,6 +127,7 @@ export function useWithdrawable (layer2: string) {
     notWithdrawable,
     old_withdrawable, 
     old_withdrawableLength, 
-    old_notWithdrawable
+    old_notWithdrawable,
+    requests
   }
 }

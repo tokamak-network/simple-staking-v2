@@ -73,7 +73,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     }
   }, [account, candidates])
   const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account);
-  const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength } = useWithdrawable(
+  const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength, requests } = useWithdrawable(
     data?.candidateContract,
   );
 
@@ -149,17 +149,18 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const dataModal: StakeModalDataType = {
     tonBalance: userTonBalance ? userTonBalance : '0.00',
     wtonBalance: userWTonBalance ? userWTonBalance : '0.00',
-    pendingUnstaked: pendingUnstaked,
     stakedAmount: yourStaked ? yourStaked : '0.00',
-    withdrawable: withdrawable,
-    old_withdrawable: old_withdrawable,
     layer2: candidateContracts,
-    old_layer2: getOldLayerAddress(candidateContracts) ? getOldLayerAddress(candidateContracts) : '',
     withdrawableLength: withdrawableLength,
-    old_withdrawableLength: old_withdrawableLength,
     seig: expectedSeigs ? expectedSeigs : '0.00',
     candidate: candidates,
     minimumAmount: minimumAmount,
+    pendingUnstaked: pendingUnstaked,
+    withdrawable: withdrawable,
+    old_withdrawableLength: old_withdrawableLength,
+    old_withdrawable: old_withdrawable,
+    old_layer2: getOldLayerAddress(candidateContracts) ? getOldLayerAddress(candidateContracts) : '',
+    requests: requests
   };
 
   const modalButton = useCallback(async (modalType: ModalType, data: any) => {

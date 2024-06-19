@@ -23,6 +23,7 @@ import ETHEREUM from '@/assets/images/ethereum_symbol.svg'
 import BACK from '@/assets/images/back_icon.svg'
 import { ToEthereum } from './ToEthereum';
 import { ToTitan } from './ToTitan';
+import { StakeModalComponentType } from '@/types';
 
 function WithdrawModal () {
   const theme = useTheme();
@@ -30,6 +31,8 @@ function WithdrawModal () {
 
   const { selectedModalData, selectedModal, closeModal, isModalLoading } = useModal();
   const { account, library } = useWeb3React();
+  const [modalComponent, setModalComponent] = useState<StakeModalComponentType>()
+  
   const [modalName, setModalName] = useState('Withdraw')
   const [type, setType] = useState('main')
 
@@ -61,7 +64,7 @@ function WithdrawModal () {
     >
       <ModalOverlay>
         <ModalContent maxW={type === 'main' ? '690px' : '350px'} bg={'#fff'} borderRadius={'15px'} boxShadow={'0 2px 6px 0 rgba(61, 73, 93, 0.1)'}>
-          {/* {modalComponent ? ( */}
+          {selectedModalData ? (
             <ModalBody>
               <Flex w="100%" flexDir={'column'} alignItems={'center'} py={'20px'}>
                 <Flex flexDir={'row'}  justifyContent={type !== 'main' ? 'start' : 'center'} w={'100%'}>
@@ -103,13 +106,15 @@ function WithdrawModal () {
                     />
                   </Flex> :
                   type === 'ethereum' ?
-                  <ToEthereum /> :
+                  <ToEthereum 
+                    selectedModalData={selectedModalData}
+                  /> :
                   type === 'titan' ?
                   <ToTitan />: ''
                 }
               </Flex>
             </ModalBody>
-          {/* ): ''} */}
+          ): ''} 
         </ModalContent>
       </ModalOverlay>
       
