@@ -20,3 +20,9 @@ export function getColumnWidthWalletMobile(columnName: string) {
     columnName === 'amount' ? '30%' :
     columnName === 'status' ? '13.9%' : ''
 }
+
+export function getColumnWidthWithdraw (columnName: string) {
+  return columnName === 'checkbox' ? '40px' :
+    columnName === 'amount' ? '160px' :
+    columnName === 'status' ? '120px' : ''
+}

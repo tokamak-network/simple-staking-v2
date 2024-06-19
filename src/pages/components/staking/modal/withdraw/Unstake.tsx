@@ -60,7 +60,6 @@ export const Unstake = (args: UnstakeProps) => {
       console.log(e);
     }
   }, [DepositManager_CONTRACT, input, selectedModalData, setTx, setTxPending]);
-  // console.log(selectedModalData)
 
   return (
     <Flex flexDir={'column'} w={'350px'} alignItems={'center'}>
@@ -69,7 +68,13 @@ export const Unstake = (args: UnstakeProps) => {
       />
       <Flex w={'100%'} h={'1px'} my={'25px'} bgColor={'#f4f6f8'} />
       <Flex>
-        <Checkbox />
+        <Checkbox 
+          bgColor={'#e9edf1'} 
+          borderRadius={'4px'} 
+          border={'solid 1px #e7ebf2'} 
+          w={'18px'}
+          h={'18px'}
+        />
         <Flex ml={'10px'} fontSize={'12px'} fontWeight={'normal'} color={'#3e495c'} w={'271px'}>
           Donec quam lectus vel vulputate mauris. Nullam quam amet adipiscing quis diam nisl maecenas. Ornare fermentum ullamcorper ut ullamcorper amet. Amet et ut posuere.
         </Flex>

@@ -1,4 +1,4 @@
-import {FC, useState, useEffect} from 'react';
+import { FC, useState, useRef, Fragment, useEffect } from 'react';
 import {
   Column,
   useExpanded,
@@ -11,36 +11,41 @@ import {
   Flex,
   Box,
   useTheme,
+  Switch,
+  Text,
+  FormControl,
+  FormLabel
 } from '@chakra-ui/react';
+import { WithdrawTableHeader } from './WithdrawTableHeader';
+// import { WithdrawTableRow } from './table/WithdrawTableRow';
 import { Pagination } from '@/common/table/Pagination';
-import { TableRow } from '@/common/table/wallet/TableRow';
-import { TableHeader } from '@/common/table/wallet/TableHeader';
-import useCallContract from '../../../hooks/useCallContract';
+import { useRecoilState } from 'recoil';
+import { toggleState } from '@/atom/staking/toggle';
+import WithdrawTableRow from './WithdrawTableRow';
 
-type MyHistoryTableProps = {
+type WithdrawTableProps = {
   columns: Column[];
   data: any[];
-  isLoading: boolean;
-};
+  
+}
 
-export const MyHistoryTable: FC<MyHistoryTableProps> = ({
+export const WithdrawTable: FC<WithdrawTableProps> = ({
   columns,
   data,
-  isLoading
+  
 }) => {
   const {
     getTableProps,
     getTableBodyProps,
-    headerGroups,
+    prepareRow,
     visibleColumns,
     canPreviousPage,
     canNextPage,
     pageOptions,
+    page,
     setPageSize,
-    prepareRow,
     previousPage,
     nextPage,
-    page,
     state: {pageIndex, pageSize},
   } = useTable(
     {columns, data, initialState: {pageIndex: 0}},
@@ -48,27 +53,15 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
     useExpanded,
     usePagination,
   );
-
   const [currentPage, setCurrentPage] = useState(0)
   const [buttonClick, setButtonClick] = useState(Boolean)
-  const [withdrawalDelay,setWithdrawalDelay] = useState(0)
-
-  const { DepositManager_CONTRACT } = useCallContract()
-
+  const [toggle, setToggle] = useRecoilState(toggleState)
   const theme = useTheme();
 
-  useEffect(() => {
-    async function fetch() {
-      if (DepositManager_CONTRACT) {
-        const delay = await DepositManager_CONTRACT.globalWithdrawalDelay()
-        setWithdrawalDelay(Number(delay.toString()))
-      }
-    }
-    fetch()
-  }, [])
+  console.log(data)
 
   useEffect(() => {
-    setPageSize(5)
+    setPageSize(3)
   },[setPageSize])
 
   useEffect(() => {
@@ -85,56 +78,58 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
     nextPage();
     setButtonClick(true)
   };
- 
 
   return (
-    <Flex flexDir={'column'} mt={'50px'}>
-      <Flex fontSize={'18px'} fontWeight={'bold'} mb={'15px'} justifyContent={'center'}>
-        History
-      </Flex>
+    <Flex 
+      w={'320px'}
+      flexDir={'column'}
+      fontFamily={theme.fonts.Roboto}
+      justifyContent={'start'}
+      h={'100%'}
+    >
       <Box overflowX={'auto'}>
         <chakra.table
-          width={'full'}
+          width={'320px'}
           {...getTableProps()}
-          display='flex'
-          flexDirection='column'
+          display="flex"
+          flexDirection="column"
+          justifyContent={"start"}
           mr={'30px'}
         >
-          <TableHeader />
+          <WithdrawTableHeader/>
           <chakra.tbody
             {...getTableBodyProps()}
-            display='flex'
-            flexDirection='column'
+            display="flex"
+            flexDirection="column"
           >
-            {page && page.map((row: any, i) => {
+            {page ? page.map((row: any, i) => {
               prepareRow(row);
-
+              console.log(page)
               return [
                 <chakra.tr
+                  boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}
                   h={'38px'}
                   key={i}
-                  w='100%'
+                  w="100%"
+                  bg={'white.100' }
                   border={''}
-                  display='flex'
-                  alignItems='center'
+                  display="flex"
+                  alignItems="center"
                   {...row.getRowProps()}
                 >
-                  {row.cells && row.cells.map((cell: any, index: number) => {
-                    return (
-                      //@ts-ignore
-                      // eslint-disable-next-line react/jsx-key
-                      <TableRow 
+                  {row.cells ? row.cells.map((cell: any, index: number) => {
+                    return (         
+                      <WithdrawTableRow 
                         key={index}
-                        index={i}
+                        index={index}
                         cell={cell}
-                        delay={withdrawalDelay}
                       />
                     )
-                  })}
+                  }) : ''}
                 </chakra.tr>
               ]
-            }) }
-            <Pagination 
+            }) : ''}
+            {/* <Pagination 
               columns={columns}
               data={data}
               currentPage={currentPage}
@@ -145,7 +140,7 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
               canNextPage={canNextPage}
               pageOptions={pageOptions}
               pageIndex={pageIndex}
-            />
+            /> */}
           </chakra.tbody>
         </chakra.table>
       </Box>
@@ -153,4 +148,4 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
   )
 }
 
-export default MyHistoryTable
+export default WithdrawTable

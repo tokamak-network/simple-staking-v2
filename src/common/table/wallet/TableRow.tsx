@@ -9,15 +9,18 @@ import moment from 'moment';
 import { getCountdown } from '@/api';
 import { useWeb3React } from '@web3-react/core';
 import { calcCountDown } from '../../../utils/number';
+import useCallContract from 'hooks/useCallContract';
 
 type TableRowProps = {
   index: number
   cell: any
+  delay: number
 }
 
 export const TableRow: FC<TableRowProps> = ({
   index,
   cell,
+  delay,
 }) => {
   // console.log(cell?.row.original)
   const {
@@ -49,12 +52,16 @@ export const TableRow: FC<TableRowProps> = ({
 
   const { library } = useWeb3React()
   const [ remainTime, setRemainTime ] = useState('')
+
+  const {DepositManager_CONTRACT} = useCallContract()
   
   useEffect(() => {
     async function fetch () {
-      if (typeName === 'Unstake') {
-        const withdrawableBlock = Number(blockNo) + 93046
+      if (typeName === 'Unstake' && delay) {
+        
+        const withdrawableBlock = Number(blockNo) + delay
         const currentBlock = await library.getBlockNumber()
+        
         if (currentBlock > withdrawableBlock) {
           setRemainTime('0')
         } else {

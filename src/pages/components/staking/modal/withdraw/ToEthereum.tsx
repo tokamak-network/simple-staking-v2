@@ -62,7 +62,9 @@ export const ToEthereum = (args: ToEthereumProps) => {
         <Unstake 
           selectedModalData={selectedModalData}
         />:
-        <WithdrawToEthereum />
+        <WithdrawToEthereum 
+          selectedModalData={selectedModalData}
+        />
       }
     </Flex>
   )

@@ -1,14 +1,16 @@
-import { Text, Button, Checkbox, Flex, FormControl, FormLabel, Menu, MenuButton, Select, Switch, useTheme, MenuList } from "@chakra-ui/react"
-import {useEffect, useState} from 'react';
+import { Text, Button, Checkbox, Flex, FormControl, FormLabel, Menu, MenuButton, Select, Switch, useTheme, MenuList, Grid } from "@chakra-ui/react"
+import {useEffect, useMemo, useState} from 'react';
 import Image from "next/image";
 import arrow from "@/assets/images/select-1-arrow-inactive.svg";
+import { StakeModalDataType } from '../../../../../types/index';
+import WithdrawTable from "./WithdrawTable";
 
 type WithdrawToEthereumProps ={
-
+  selectedModalData: StakeModalDataType
 }
 
 export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
-  const {} = args
+  const {selectedModalData} = args
   const theme = useTheme();
   const { btnStyle } = theme;
   const [toggle, setToggle] = useState('Withdraw')
@@ -18,6 +20,40 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     setMenuState(false);
   }, [])
   const options = ['WTON', 'TON']
+  // console.log(selectedModalData)
+
+  const columns = useMemo(
+    () => [
+      {
+        accessor: 'checkbox',
+        Header: (props: any) => {
+          return (
+            <Flex>
+              <Checkbox {...props()} />
+            </Flex>
+          )
+        },
+      },
+      {
+        accessor: 'amount',
+        Header: () => {
+          return (
+            <Flex>
+              Amount
+              <Flex color={'#2a72e5'}>
+                TON
+              </Flex>
+            </Flex>
+          )
+        },
+      },
+      {
+        accessor: 'status',
+        Header: 'Status',
+      },
+    ],
+    [],
+  )
 
   return (
     <Flex flexDir={'column'} w={'350px'} alignItems={'center'}>
@@ -51,6 +87,9 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
             Restake
           </FormLabel>
           <Switch 
+            bgColor={'#e7ebf2'}
+            borderRadius={'100px'}
+            p={'1px'}
             colorScheme='green' 
             onChange={() =>
               toggle === 'Withdraw'
@@ -61,7 +100,10 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
         </FormControl>
       </Flex>
       <Flex>
-        Table
+        <WithdrawTable 
+          columns={columns}
+          data={selectedModalData.requests}
+        />
       </Flex>
       <Flex my={'21px'} h={'75px'} flexDir={'column'} justifyContent={'center'} alignItems={'center'}>
         <Flex
@@ -86,7 +128,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           color={'#3d495d'}
         >
           <Flex mr={'9px'}>
-            20,000.00
+            {selectedModalData.stakedAmount}
           </Flex>
           {
             toggle === 'Restake' ?
@@ -153,7 +195,13 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
         {
           toggle === 'Restake' ?
           <Flex mt={'25px'}>
-            <Checkbox />
+            <Checkbox 
+              bgColor={'#e9edf1'} 
+              borderRadius={'4px'} 
+              border={'solid 1px #e7ebf2'} 
+              w={'18px'}
+              h={'18px'}
+            />
             <Flex ml={'10px'} fontSize={'12px'} fontWeight={'normal'} color={'#3e495c'} w={'271px'}>
               Donec quam lectus vel vulputate mauris. Nullam quam amet adipiscing quis diam nisl maecenas. Ornare fermentum ullamcorper ut ullamcorper amet. Amet et ut posuere.
             </Flex>
