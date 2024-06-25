@@ -41,6 +41,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
       h={'30px'}
     >
      {
+      
        type === 'checkbox' ? (
         <Flex 
           justifyContent={'center'}

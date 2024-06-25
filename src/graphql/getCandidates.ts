@@ -10,6 +10,10 @@ export const GET_CANDIDATE = gql`
       name
       stakedAmount
       commissionRate
+      layer2Candidate {
+        id
+        registeredTime
+      }
       stakedUserList: stakedUserList(first:1000, orderBy:stakedAmount, orderDirection: desc) {
         id
         stakedAmount
