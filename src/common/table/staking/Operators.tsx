@@ -35,6 +35,7 @@ import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
 import BasicTooltip from '../../tooltip/index';
 import { MEMBER_ADDRESS_TEMP } from '@/constants';
 import { useRouter } from 'next/router';
+import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -111,6 +112,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   const clickOpen = (candidateContract: string, index: number) => {
     setIsOpen(candidateContract);
     setToggle('All')
+    setTab('staking')
     setTimeout(() => {
       focusTarget?.current[index]?.scrollIntoView({
         behavior: 'smooth',
@@ -141,7 +143,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
               label={'candidate'} 
             />
           </Flex>
-          {getCircle('candidate')}
+          {getCircle('op')}
           <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
           <Flex mr={'3px'}>
               Tokamak OP
@@ -183,10 +185,11 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
             flexDirection="column"
           >
             {page && page.map((row: any, i) => {
-              const { candidateContract, stakedAmount, candidate } = row.original;
+              const { candidateContract, stakedAmount, candidate, layer2Candidate } = row.original;
               const stakedId = candidateContract
               const { userStakeds } = useUserStaked(`${account?.toLocaleLowerCase()}-${stakedId.toLocaleLowerCase()}`)
               const expectedSeig = useExpectedSeig(candidateContract, stakedAmount, candidate)
+              const a = useL2CandidateInfo(layer2Candidate)
               
               row.original = {
                 ...row.original,
@@ -233,10 +236,11 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       kind,
                       stakedAmount,
                       stakeOf,
-                      stakeOfCandidate
+                      stakeOfCandidate,
+                      layer2Candidate
                       // yourStaked,
                     } = cell.row.original;
-
+                    
                     const candidateAmount = stakeOfCandidate? convertNumber({
                       amount: stakeOfCandidate,
                       type: 'ray'
@@ -293,12 +297,13 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                           <Flex alignItems={'center'} mr={'30px'}>
                             <Flex 
                               flexDir={'column'} 
-                              justifyContent={isMember ? 'space-between' : 'center'} 
+                              justifyContent={isMember || layer2Candidate !== null ? 'space-between' : 'center'} 
                               h={'25px'}
                               mr={minimumAmount ? '' : '20px'}
                             >
                               {minimumAmount ? getCircle(kind) : ''}
                               {isMember ? getCircle('member') : ''}
+                              {layer2Candidate !== null ? getCircle('op') : ''}
                             </Flex>
                             <Box mr={'12px'}>
                               <OperatorImage imageLink={''}/>
@@ -344,46 +349,52 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                     >
                       <Flex flexDir={'column'}>
                         <Flex flexDir={'row'} w={'100%'} justifyContent={'space-between'}>
-                          <Flex
-                            w={'213px'}
-                            h={'30px'}
-                            p={'3px'}
-                            ml={'70px'}
-                            border={'solid 1px #e7ebf2'}
-                            borderRadius={'5px'}
-                            fontSize={'12px'}
-                            fontWeight={'normal'}
-                            mt={'24px'}
-                            mb={'21px'}
-                            justifyContent={'space-between'}
-                          >
-                            <Flex
-                              w={'102px'}
-                              textAlign={'center'}
-                              borderRadius={'5px'}
-                              color={tab === 'staking' ? '#fff' : ''}
-                              bg={tab==="staking" ? '#2a72e5' : '#fff'}
-                              justifyContent={'center'}
-                              alignItems={'center'}
-                              onClick={() => setTab('staking')}
-                            >
-                              Staking
-                            </Flex>
-                            <Flex
-                              w={'102px'}
-                              textAlign={'center'}
-                              borderRadius={'5px'}
-                              color={tab === 'l2' ? '#fff' : ''}
-                              bg={tab==="l2" ? '#2a72e5' : '#fff'}
-                              justifyContent={'center'}
-                              alignItems={'center'}
-                              onClick={() => setTab('l2')}
-                            >
-                              L2
-                            </Flex>
-                          </Flex>
                           {
-                              tab == 'l2' ?
+                            layer2Candidate !== null ?
+                            (
+                            <Flex
+                              w={'213px'}
+                              h={'30px'}
+                              p={'3px'}
+                              ml={'70px'}
+                              border={'solid 1px #e7ebf2'}
+                              borderRadius={'5px'}
+                              fontSize={'12px'}
+                              fontWeight={'normal'}
+                              mt={'24px'}
+                              mb={'21px'}
+                              justifyContent={'space-between'}
+                              cursor={'pointer'}
+                            >
+                              <Flex
+                                w={'102px'}
+                                textAlign={'center'}
+                                borderRadius={'5px'}
+                                color={tab === 'staking' ? '#fff' : ''}
+                                bg={tab==="staking" ? '#2a72e5' : '#fff'}
+                                justifyContent={'center'}
+                                alignItems={'center'}
+                                onClick={() => setTab('staking')}
+                              >
+                                Staking
+                              </Flex>
+                              <Flex
+                                w={'102px'}
+                                textAlign={'center'}
+                                borderRadius={'5px'}
+                                color={tab === 'l2' ? '#fff' : ''}
+                                bg={tab==="l2" ? '#2a72e5' : '#fff'}
+                                justifyContent={'center'}
+                                alignItems={'center'}
+                                onClick={() => setTab('l2')}
+                              >
+                                L2
+                              </Flex>
+                            </Flex>
+                            ) : ''
+                          }
+                          {
+                              tab == 'l2' && layer2Candidate !== null ?
                               <Flex 
                                 justifyContent={'center'}
                                 alignItems={'center'}
@@ -395,9 +406,9 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                             }
                         </Flex>
                         {
-                          tab === 'staking' ? 
-                          renderDetail({row}) :
-                          renderL2({row})
+                          tab === 'l2' && layer2Candidate !== null ? 
+                          renderL2({row}) :
+                          renderDetail({row}) 
                         }
 
                       </Flex>

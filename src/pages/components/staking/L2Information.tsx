@@ -1,3 +1,5 @@
+import { getDate } from "@/components/getDate";
+import { useL2CandidateInfo } from "@/hooks/staking/useL2CandidateInfo";
 import { Box, Flex } from "@chakra-ui/react";
 import { FC, useMemo } from "react";
 import { L2Content } from "./L2Content";
@@ -9,6 +11,11 @@ type L2InformationProps ={
 export const L2Information: FC<L2InformationProps> = ({
   data
 }) => {
+  const {
+    registeredTime
+  } = data.layer2Candidate
+  // console.log(data.layer2Candidate)
+  // const a = useL2CandidateInfo(data.layer2Candidate)
 
   return (
     <Flex
@@ -61,12 +68,12 @@ export const L2Information: FC<L2InformationProps> = ({
         >
           <L2Content 
             title={'L2 registry registered date'}
-            content={'2023.4.23'}
+            content={getDate(registeredTime)}
             type={'date'}
           />
           <L2Content 
             title={'L2 open date'}
-            content={''}
+            content={getDate(registeredTime)}
             type={'date'}
           />
           <L2Content 

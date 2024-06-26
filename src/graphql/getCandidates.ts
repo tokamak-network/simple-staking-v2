@@ -1,4 +1,3 @@
-import { orderBy } from 'lodash';
 import { gql } from "@apollo/client";
 
 export const GET_CANDIDATE = gql`
@@ -13,6 +12,13 @@ export const GET_CANDIDATE = gql`
       layer2Candidate {
         id
         registeredTime
+        systemConfig
+        operator
+        memo
+        bridge
+        portal
+        txData
+        stateRoot
       }
       stakedUserList: stakedUserList(first:1000, orderBy:stakedAmount, orderDirection: desc) {
         id

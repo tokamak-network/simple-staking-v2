@@ -90,7 +90,10 @@ function DesktopStaking () {
 
     const renderL2Component = useCallback(
       ({row}: any) => {
-      
+      const {
+        layer2Candidate
+      } = row.original
+
       return (
         <Flex
           w="100%"
@@ -128,6 +131,7 @@ function DesktopStaking () {
           justifyContent={'space-between'}
           alignItems="start"
           // pt="70px"
+          mt={'40px'}
           border={'none'}
           flexDir={'column'}
         >
