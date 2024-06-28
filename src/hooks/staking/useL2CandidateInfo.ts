@@ -11,9 +11,9 @@ export function useL2CandidateInfo (data: any) {
   useEffect(() => {
     async function fetch() {
       if (Layer2Registry_CONTRACT && data !== null) {
-        console.log('aa')
-        const type = await Layer2Registry_CONTRACT.systemConfigType(data.systemConfig)
-        console.log(type)
+        // console.log('aa')
+        // const type = await Layer2Registry_CONTRACT.systemConfigType(data.systemConfig)
+        // console.log(type)
       }
     }
     fetch()

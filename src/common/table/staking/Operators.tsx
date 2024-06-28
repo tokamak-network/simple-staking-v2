@@ -17,11 +17,10 @@ import {
   useColorMode,
   Center,
   useTheme,
-  Image,
   Button,
 } from '@chakra-ui/react';
 import {ChevronRightIcon, ChevronLeftIcon} from '@chakra-ui/icons';
-
+import Image from 'next/image';
 import { convertNumber } from '../../../utils/number';
 import { getCircle } from '@/common/table/staking/Circle';
 import { OperatorImage } from '@/common/table/staking/Oval';
@@ -36,6 +35,8 @@ import BasicTooltip from '../../tooltip/index';
 import { MEMBER_ADDRESS_TEMP } from '@/constants';
 import { useRouter } from 'next/router';
 import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
+import LIST from '@/assets/images/list.svg'
+import ContractAddressInfo from './ContractAddressInfo';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -400,8 +401,14 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                                 alignItems={'center'}
                                 fontSize={'13px'}
                                 fontWeight={500}
+                                color={'#304156'}
                               >
-                                L1 Contract address
+                                <Flex mr={'6px'}>
+                                  L1 Contract address
+                                </Flex>
+                                <ContractAddressInfo 
+                                  label={layer2Candidate}
+                                />
                               </Flex> : ''
                             }
                         </Flex>
