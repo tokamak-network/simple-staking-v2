@@ -2,10 +2,11 @@ import { range } from 'lodash'
 import { useBlockNumber } from '../useBlockNumber';
 import useCallContract from '../useCallContract';
 import { useWeb3React } from '@web3-react/core';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BigNumber } from 'ethers';
-import { convertNumber } from '../../utils/number';
+import { calcCountDown2, convertNumber } from '../../utils/number';
 import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
+import { getCountdown } from '@/api';
 
 export function useWithdrawable (layer2: string) {
   const { blockNumber } = useBlockNumber()
@@ -130,4 +131,39 @@ export function useWithdrawable (layer2: string) {
     old_notWithdrawable,
     requests
   }
+}
+
+export function useWithdrawRequests () {
+  const { DepositManager_CONTRACT } = useCallContract();
+  const { account, library } = useWeb3React();
+
+  const withdrawRequests = useCallback(
+    async (layer2: string) => {
+      if (account && DepositManager_CONTRACT && layer2) {
+        const pendingRequests: any = [];
+        const numPendingRequests = await DepositManager_CONTRACT.numPendingRequests(layer2, account)
+        let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(layer2, account)
+        const currentBlock = await library.getBlock('latest')
+        
+        for (const _ of range(numPendingRequests)) {
+          const request = await DepositManager_CONTRACT.withdrawalRequest(layer2, account, requestIndex)
+          
+          const withdrawableBlock = request.withdrawableBlockNumber.toString()
+          const withdrawable = withdrawableBlock < currentBlock.number ? true : false
+          const withdrawableTime = withdrawable ? 'Withdrawable' : await getCountdown(withdrawableBlock)
+          const data = {
+            amount: request.amount,
+            time: withdrawableTime === 'Withdrawable' ? 'Withdrawable' : calcCountDown2(withdrawableTime.EstimateTimeInSec),
+            requestIndex: requestIndex
+            // process: request.process
+          }
+
+          pendingRequests.push(data);
+          requestIndex++;
+        }
+        return pendingRequests
+      }
+  }, [])
+  
+  return {withdrawRequests}
 }

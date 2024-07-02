@@ -76,7 +76,7 @@ export const Unstake = (args: UnstakeProps) => {
           h={'18px'}
         />
         <Flex ml={'10px'} fontSize={'12px'} fontWeight={'normal'} color={'#3e495c'} w={'271px'}>
-          Donec quam lectus vel vulputate mauris. Nullam quam amet adipiscing quis diam nisl maecenas. Ornare fermentum ullamcorper ut ullamcorper amet. Amet et ut posuere.
+        To withdraw staked TON, it needs to be unstaked first and after 93,046 blocks (~14 days) they can be withdrawn to your account.
         </Flex>
       </Flex>
       <Flex justifyContent={'center'}>

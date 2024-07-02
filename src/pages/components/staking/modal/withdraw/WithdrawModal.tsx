@@ -24,6 +24,7 @@ import BACK from '@/assets/images/back_icon.svg'
 import { ToEthereum } from './ToEthereum';
 import { ToTitan } from './ToTitan';
 import { StakeModalComponentType } from '@/types';
+import { useWithdrawRequests } from '@/hooks/staking/useWithdrawable';
 
 function WithdrawModal () {
   const theme = useTheme();
@@ -31,8 +32,11 @@ function WithdrawModal () {
 
   const { selectedModalData, selectedModal, closeModal, isModalLoading } = useModal();
   const { account, library } = useWeb3React();
+  const { withdrawRequests } = useWithdrawRequests()
+
   const [modalComponent, setModalComponent] = useState<StakeModalComponentType>()
-  
+  const [requests, setRequests] = useState()
+
   const [modalName, setModalName] = useState('Withdraw')
   const [type, setType] = useState('main')
 
@@ -52,8 +56,17 @@ function WithdrawModal () {
     : setModalName('Withdraw to TITAN')
   }, [type])
 
-  
-  // console.log(type)
+  useEffect(() => {
+    const fetch = async () => {
+      if (selectedModalData) {
+        const withdrawRequest = await withdrawRequests(selectedModalData.layer2)
+        
+        setRequests(withdrawRequest)
+      }
+    }
+    fetch()
+  }, [selectedModalData])
+
   return (
     <Modal
       isOpen={
@@ -94,13 +107,13 @@ function WithdrawModal () {
                   <Flex justifyContent={'space-between'} alignItems={'space-between'} mt={'30px'} w={'100%'}>
                     <WithdrawType 
                       name={'Withdraw to Ethereum'}
-                      content={'Donec quam lectus vel vulputate mauris. Nullam quam amet adipiscing quis diam nisl maecenas. Ornare fermentum ullamcorper ut ullamcorper amet. Amet et ut posuere.'}
+                      content={'Staked TON can be unstaked and can be withdrawn after 93,046 blocks from unstaking (~14 days).'}
                       src={ETHEREUM}
                       onClick={() => setType('ethereum')}
                     />
                     <WithdrawType 
                       name={'Withdraw to Titan'}
-                      content={'Donec quam lectus vel vulputate mauris. Nullam quam amet adipiscing quis diam nisl maecenas. Ornare fermentum ullamcorper ut ullamcorper amet. Amet et ut posuere.'}
+                      content={'Instead of withdrawing to Ethereum, staked TON can be withdrawn to this layer as TON. By withdrawing to this layer, TON can be used right away without needing to wait for 14 days.'}
                       src={TITAN}
                       onClick={() => setType('titan')}
                     />
@@ -108,6 +121,7 @@ function WithdrawModal () {
                   type === 'ethereum' ?
                   <ToEthereum 
                     selectedModalData={selectedModalData}
+                    requests={requests}
                   /> :
                   type === 'titan' ?
                   <ToTitan />: ''

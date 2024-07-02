@@ -14,7 +14,8 @@ const MAINNET_API = process.env.NEXT_PUBLIC_API_PRODUCTION;
 const DEV_API = process.env.NEXT_PUBLIC_API_DEV;
 const GRAPHQL_MAINNET = process.env.NEXT_PUBLIC_GRAPHQL_API_PRODUCTION;
 const GRAPHQL_DEV = process.env.NEXT_PUBLIC_GRAPHQL_API_DEV;
-export const ETHERSCAN_API = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
+export const ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
+export const ETHERSCAN_API = REACT_APP_MODE === "PRODUCTION" ? "https://api.etherscan.io" : "https://api-sepolia.etherscan.io"
 
 export const ETHERSCAN_LINK = REACT_APP_MODE === "PRODUCTION" ? "https://etherscan.io" : "https://sepolia.etherscan.io"
 

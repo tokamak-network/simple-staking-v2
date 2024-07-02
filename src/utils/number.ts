@@ -164,3 +164,13 @@ export function calcCountDown (sec: string) {
 
   return `(${days < 10 ? `0${days}` : days} days ${hours < 10 ? `0${hours}` : hours} hours left)`
 }
+
+export function calcCountDown2 (sec: string) {
+  if (sec === '0') return '(00 days 00 hours left)'
+  
+  const numSec = Number(sec)
+  const days = Math.floor(numSec / (60*60*24))
+  const hours = Math.floor((numSec % (60*60*24))/(60*60));
+
+  return `${days < 10 ? `0${days}` : days} days ${hours < 10 ? `0${hours}` : hours} hours left`
+}

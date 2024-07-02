@@ -166,7 +166,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const modalButton = useCallback(async (modalType: ModalType, data: any) => {
     setSelectedModal(modalType);
     setSelectedModalData(data);
-  }, []);
+  }, [dataModal]);
 
   const theme = useTheme();
   const { btnStyle } = theme;

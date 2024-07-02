@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API } from '@/constants';
 import { DEFAULT_NETWORK } from '@/constants/index';
-import { ETHERSCAN_API } from '@/constants'
+import { ETHERSCAN_API_KEY, ETHERSCAN_API } from '@/constants'
 
 function createInstatnceCandidate () {
   return axios.create({
@@ -11,7 +11,7 @@ function createInstatnceCandidate () {
 
 function createInstanceEtherscan () {
   return axios.create({
-    baseURL: 'https://api.etherscan.io'
+    baseURL: ETHERSCAN_API
   })
 }
 
@@ -24,7 +24,7 @@ export async function getCountdown (blockNumber: number) {
       module: 'block',
       action: 'getBlockcountdown',
       blockno: blockNumber,
-      apikey: ETHERSCAN_API
+      apikey: ETHERSCAN_API_KEY
     }
   })
   return res.data.result

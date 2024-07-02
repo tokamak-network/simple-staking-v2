@@ -7,10 +7,11 @@ import WithdrawTable from "./WithdrawTable";
 
 type WithdrawToEthereumProps ={
   selectedModalData: StakeModalDataType
+  requests: any
 }
 
 export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
-  const {selectedModalData} = args
+  const {selectedModalData, requests} = args
   const theme = useTheme();
   const { btnStyle } = theme;
   const [toggle, setToggle] = useState('Withdraw')
@@ -20,7 +21,6 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     setMenuState(false);
   }, [])
   const options = ['WTON', 'TON']
-  // console.log(selectedModalData)
 
   const columns = useMemo(
     () => [
@@ -102,7 +102,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
       <Flex>
         <WithdrawTable 
           columns={columns}
-          data={selectedModalData.requests}
+          data={requests}
         />
       </Flex>
       <Flex my={'21px'} h={'75px'} flexDir={'column'} justifyContent={'center'} alignItems={'center'}>
@@ -203,7 +203,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
               h={'18px'}
             />
             <Flex ml={'10px'} fontSize={'12px'} fontWeight={'normal'} color={'#3e495c'} w={'271px'}>
-              Donec quam lectus vel vulputate mauris. Nullam quam amet adipiscing quis diam nisl maecenas. Ornare fermentum ullamcorper ut ullamcorper amet. Amet et ut posuere.
+            Restaking unstaked TON earns you TON from staking. However, to withdraw, they need to be unstaked and wait for 93,046 blocks (~14 days).
             </Flex>
           </Flex> : ''
 

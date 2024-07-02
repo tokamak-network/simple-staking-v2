@@ -22,7 +22,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
   const {
     data,
     amount,
-    withdrawableBlockNumber,
+    time,
   } = cell.row?.original;
 
   const values = amount ? amount : data?.amount
@@ -41,7 +41,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
       h={'30px'}
     >
      {
-      
+
        type === 'checkbox' ? (
         <Flex 
           justifyContent={'center'}
@@ -77,7 +77,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
           justifyContent={'center'}
           alignItems={"center"}
         >
-          {withdrawableBlockNumber.toString()}
+          {time}
         </Flex>
       ) : ('')}
     </chakra.td>
