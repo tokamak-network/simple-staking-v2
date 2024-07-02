@@ -154,23 +154,6 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
             />
           </Flex>
         </Flex>
-        {/* <Select
-          w={'145px'}
-          h={'32px'}
-          color={'#86929d'}
-          fontSize={'13px'}
-          bgColor={'#fff'}
-          boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.14)'}
-          borderRadius={'4px'}
-          border={'none'}
-          placeholder="Operator Sort"
-          onChange={onChangeSelectBox}
-        >
-          <option value="Total Staked">Total Staked</option>
-          <option value="name">Name</option>
-          <option value="Recent Commit">Recent Commit</option>
-          <option value="User Staked">User Staked</option>
-        </Select> */}
       </Flex>
       <Box overflowX={'auto'}>
         <chakra.table
@@ -190,12 +173,14 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
               const stakedId = candidateContract
               const { userStakeds } = useUserStaked(`${account?.toLocaleLowerCase()}-${stakedId.toLocaleLowerCase()}`)
               const expectedSeig = useExpectedSeig(candidateContract, stakedAmount, candidate)
-              const a = useL2CandidateInfo(layer2Candidate)
+              const lockedInBridge = useL2CandidateInfo(layer2Candidate)
+              
               
               row.original = {
                 ...row.original,
                 userStakeds,
-                expectedSeig
+                expectedSeig,
+                lockedInBridge
               }
               prepareRow(row);
               return [

@@ -23,7 +23,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
   const tooltipControl = () => {
     !isLabelOpen ? setIsLabelOpen(true) : setIsLabelOpen(false)
   }
-  console.log(label)
+  
   return (
     <Tooltip
       display={label?.length === 0 ? "none" : "flex"}

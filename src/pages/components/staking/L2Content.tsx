@@ -7,7 +7,7 @@ import Image from "next/image";
 
 type L2ContentProps = {
   title: string;
-  content: string;
+  content: string | undefined;
   type: string;
 }
 
@@ -19,7 +19,7 @@ export const L2Content = (args: L2ContentProps) => {
   } = args
 
   const convert = type === 'address' ? trimAddress({
-    address: content,
+    address: content ? content : '',
     firstChar: 6,
     lastChar: 4,
     dots: '...'
@@ -43,9 +43,21 @@ export const L2Content = (args: L2ContentProps) => {
         fontSize={type === 'link' ? '14px' : '20px'}
         color={'#304156'}
       >
-        <Flex>
+        <Flex fontWeight={type === 'ton' ? 'bold' : 500}>
           {convert}
         </Flex>
+        {
+          type === 'ton' ?
+          <Flex 
+            fontSize={'13px'}
+            fontWeight={500}
+            ml={'4px'}
+            alignItems={'end'}
+            mb={'2px'}
+          >
+            TON
+          </Flex> : ''
+        }
         {
           type === 'address' || type === 'link' ?
           <Flex 

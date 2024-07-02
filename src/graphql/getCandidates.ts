@@ -19,6 +19,12 @@ export const GET_CANDIDATE = gql`
         portal
         txData
         stateRoot
+        seigGiven: seigGiven(first: 10, orderBy: blockTimestamp, orderDirection: desc) {
+          id
+          l2TotalSeigs
+          layer2Seigs
+          blockTimestamp
+        }
       }
       stakedUserList: stakedUserList(first:1000, orderBy:stakedAmount, orderDirection: desc) {
         id

@@ -1,8 +1,8 @@
 import { getDate } from "@/components/getDate";
-import { useL2CandidateInfo } from "@/hooks/staking/useL2CandidateInfo";
 import { Box, Flex } from "@chakra-ui/react";
 import { FC, useMemo } from "react";
 import { L2Content } from "./L2Content";
+import { convertNumber } from "@/components/number";
 
 type L2InformationProps ={
   data: any
@@ -12,10 +12,22 @@ export const L2Information: FC<L2InformationProps> = ({
   data
 }) => {
   const {
-    registeredTime
+    registeredTime,
+    portal,
   } = data.layer2Candidate
-  // console.log(data.layer2Candidate)
-  // const a = useL2CandidateInfo(data.layer2Candidate)
+  console.log()
+  const earned = data.layer2Candidate.seigGiven[0] ?  convertNumber({
+    amount: data.layer2Candidate.seigGiven[0].layer2Seigs,
+    type: 'ray',
+    localeString: true
+  }) : '0.00'
+
+  const converted = data.lockedInBridge ? convertNumber({
+    amount: data.lockedInBridge,
+    type: 'ray',
+    localeString: true
+  }) : '0.00'
+  // console.log(converted)
 
   return (
     <Flex
@@ -78,12 +90,12 @@ export const L2Information: FC<L2InformationProps> = ({
           />
           <L2Content 
             title={'TON locked in Bridge'}
-            content={''}
+            content={converted}
             type={'ton'}
           />
           <L2Content 
             title={'Earned seigniorage'}
-            content={''}
+            content={earned}
             type={'ton'}
           />
 
