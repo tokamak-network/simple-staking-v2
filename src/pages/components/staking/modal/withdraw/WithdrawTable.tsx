@@ -26,11 +26,13 @@ import WithdrawTableRow from './WithdrawTableRow';
 type WithdrawTableProps = {
   columns: Column[];
   data: any[];
+  getCheckboxProps: any
 }
 
 export const WithdrawTable: FC<WithdrawTableProps> = ({
   columns,
   data,
+  getCheckboxProps
 }) => {
   const {
     getTableProps,
@@ -90,11 +92,13 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
                   {...row.getRowProps()}
                 >
                   {row.cells ? row.cells.map((cell: any, index: number) => {
+                    
                     return (         
                       <WithdrawTableRow 
                         key={index}
                         index={index}
                         cell={cell}
+                        props={getCheckboxProps({ value: cell.row.original.requestIndex })}
                       />
                     )
                   }) : ''}

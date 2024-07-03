@@ -25,6 +25,8 @@ import { ToEthereum } from './ToEthereum';
 import { ToTitan } from './ToTitan';
 import { StakeModalComponentType } from '@/types';
 import { useWithdrawRequests } from '@/hooks/staking/useWithdrawable';
+import { inputState } from '@/atom/global/input';
+import { useRecoilState } from 'recoil';
 
 function WithdrawModal () {
   const theme = useTheme();
@@ -40,9 +42,11 @@ function WithdrawModal () {
   const [modalName, setModalName] = useState('Withdraw')
   const [type, setType] = useState('main')
 
+  const [input, setInput] = useRecoilState(inputState);
+
   const closeThisModal = useCallback(() => {
     // setResetValue();
-    // setInput('0');
+    setInput('0');
     // setTokenType('ton')
     setType('main')
     closeModal();
@@ -122,6 +126,7 @@ function WithdrawModal () {
                   <ToEthereum 
                     selectedModalData={selectedModalData}
                     requests={requests}
+                    closeThisModal={closeThisModal}
                   /> :
                   type === 'titan' ?
                   <ToTitan />: ''

@@ -14,10 +14,11 @@ import { StakeModalDataType } from "@/types"
 
 type UnstakeProps = {
   selectedModalData: StakeModalDataType
+  closeThisModal: any
 }
 
 export const Unstake = (args: UnstakeProps) => {
-  const { selectedModalData } = args
+  const { selectedModalData, closeThisModal } = args
   const theme = useTheme();
   const { btnStyle } = theme;
   const { TON_CONTRACT, WTON_CONTRACT, Old_DepositManager_CONTRACT, DepositManager_CONTRACT, SeigManager_CONTRACT } =
@@ -27,6 +28,10 @@ export const Unstake = (args: UnstakeProps) => {
   const [input, setInput] = useRecoilState(inputState);
   const [, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setIsChecked(e.target.checked);
 
   const {
     stakedAmount
@@ -41,20 +46,15 @@ export const Unstake = (args: UnstakeProps) => {
         // const bal = await coinage.balanceOf(account)
         // console.log(bal.toString(), convertToRay(amount.toString()))
         // operator 일 경우 minimum amount 남겨둬야함
-        if (
-          confirm(
-            `Warning:\nYou may lose unclaimed staking reward if you unstake before claiming them.\nCome back after 93,046 blocks (~14 days) from unstaking to withdraw (W)TON to your account.`,
-          )
-        ) {
-          const tx = await DepositManager_CONTRACT.requestWithdrawal(
-            
-            selectedModalData.layer2,
-            convertToRay(amount.toString()),
-          );
-          setTx(tx);
-          setTxPending(true);
-        }
-        // return closeThisModal();
+        
+        const tx = await DepositManager_CONTRACT.requestWithdrawal(
+          selectedModalData.layer2,
+          convertToRay(amount.toString()),
+        );
+        setTx(tx);
+        setTxPending(true);
+        
+        return closeThisModal();
       }
     } catch (e) {
       console.log(e);
@@ -74,6 +74,7 @@ export const Unstake = (args: UnstakeProps) => {
           border={'solid 1px #e7ebf2'} 
           w={'18px'}
           h={'18px'}
+          onChange={handleCheckboxChange}
         />
         <Flex ml={'10px'} fontSize={'12px'} fontWeight={'normal'} color={'#3e495c'} w={'271px'}>
         To withdraw staked TON, it needs to be unstaked first and after 93,046 blocks (~14 days) they can be withdrawn to your account.
@@ -87,6 +88,7 @@ export const Unstake = (args: UnstakeProps) => {
           mt={'25px'}
           fontSize={'14px'}
           fontWeight={500}
+          isDisabled={!isChecked}
           onClick={() => unStaking()}
         >
           Unstake

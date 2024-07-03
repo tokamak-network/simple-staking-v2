@@ -1,34 +1,35 @@
-import { getEventName } from "@/components/getEventName";
 import { convertNumber } from "@/components/number";
-import trimAddress from "@/components/trimAddress";
-import { chakra, Checkbox, Flex, Link, Text } from "@chakra-ui/react";
-import moment from "moment";
-import { FC } from "react";
-import { getColumnWidthStaking } from '@/utils/getColumnWidth';
+import { Box, chakra, Checkbox, Flex, Link, Text, useCheckbox } from "@chakra-ui/react";
+import { FC, useState } from "react";
 import { useTheme } from '@chakra-ui/react';
-import { getColumnWidthWithdraw } from '../../../../../utils/getColumnWidth';
+import { getColumnWidthWithdraw } from '@/utils/getColumnWidth';
+import TICK from '@/assets/images/Tick.svg'
+import Image from "next/image";
 
 type WithdrawTableRowProps = {
   // key: number
   index: number
   cell: any
+  props: any
 }
 
 export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
   // key,
   index,
   cell,
+  props
 }) => {
   const {
     data,
     amount,
     time,
   } = cell.row?.original;
-
+  const { state, getCheckboxProps, getInputProps, getLabelProps, htmlProps } = useCheckbox(props)
   const values = amount ? amount : data?.amount
   const theme = useTheme()
   const type = cell.column.id;
-
+  // console.log(htmlProps)
+  // console.log(time)
   return  (
     <chakra.td
       key={index}
@@ -41,20 +42,30 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
       h={'30px'}
     >
      {
-
        type === 'checkbox' ? (
-        <Flex 
-          justifyContent={'center'}
-          alignItems={"center"}
+        <chakra.label
+          display='flex'
+          flexDirection='row'
+          alignItems='center'
+          pl={'10px'}
+          cursor='pointer'
+          {...htmlProps}
         >
-          <Checkbox 
-            bgColor={'#e9edf1'} 
-            borderRadius={'4px'} 
-            border={'solid 1px #e7ebf2'} 
+          <input {...getInputProps()} disabled={time!=='Withdrawable'} />
+          <Flex
+            alignItems='center'
+            justifyContent='center'
+            border='1px solid'
+            borderRadius={'4px'}
+            borderColor='#e7ebf2'
+            bgColor={'#e9edf1'}
             w={'18px'}
             h={'18px'}
-          />
-        </Flex>
+            {...getCheckboxProps()}
+          >
+            {state.isChecked && <Image src={TICK} alt={''} />}
+          </Flex>
+        </chakra.label>
        ) : ('')
      }
       { type === 'amount' ? (

@@ -10,10 +10,11 @@ import { StakeModalDataType } from '@/types/index';
 type ToEthereumProps = { 
   selectedModalData: StakeModalDataType
   requests: any
+  closeThisModal: any
 }
 
 export const ToEthereum = (args: ToEthereumProps) => {
-  const {selectedModalData, requests} = args
+  const {selectedModalData, requests, closeThisModal} = args
 
   const [tab, setTab] = useState('unstake')
 
@@ -62,10 +63,12 @@ export const ToEthereum = (args: ToEthereumProps) => {
         tab === 'unstake' ?
         <Unstake 
           selectedModalData={selectedModalData}
+          closeThisModal={closeThisModal}
         />:
         <WithdrawToEthereum 
           selectedModalData={selectedModalData}
           requests={requests}
+          closeThisModal={closeThisModal}
         />
       }
     </Flex>

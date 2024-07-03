@@ -1,4 +1,17 @@
-import { Text, Button, Checkbox, Flex, FormControl, FormLabel, Menu, MenuButton, Select, Switch, useTheme, MenuList, Grid } from "@chakra-ui/react"
+import { 
+  Text,
+  Button,
+  Checkbox,
+  Flex,
+  FormControl,
+  FormLabel,
+  Menu,
+  MenuButton,
+  Switch,
+  useTheme,
+  MenuList,
+  useCheckboxGroup 
+} from "@chakra-ui/react"
 import {useEffect, useMemo, useState} from 'react';
 import Image from "next/image";
 import arrow from "@/assets/images/select-1-arrow-inactive.svg";
@@ -8,10 +21,11 @@ import WithdrawTable from "./WithdrawTable";
 type WithdrawToEthereumProps ={
   selectedModalData: StakeModalDataType
   requests: any
+  closeThisModal: any
 }
 
 export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
-  const {selectedModalData, requests} = args
+  const {selectedModalData, requests, closeThisModal} = args
   const theme = useTheme();
   const { btnStyle } = theme;
   const [toggle, setToggle] = useState('Withdraw')
@@ -20,6 +34,22 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   useEffect(() => {
     setMenuState(false);
   }, [])
+
+  const { value, setValue, getCheckboxProps, isDisabled } = useCheckboxGroup()
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setIsChecked(e.target.checked);
+
+  useEffect(() => {
+    let arr = []
+    for (let i = 0; i < value[0]; i ++) {
+      arr.push((i+1).toString())
+    }
+    
+    // setValue(arr)
+  }, [value])
+
   const options = ['WTON', 'TON']
 
   const columns = useMemo(
@@ -103,6 +133,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
         <WithdrawTable 
           columns={columns}
           data={requests}
+          getCheckboxProps={getCheckboxProps}
         />
       </Flex>
       <Flex my={'21px'} h={'75px'} flexDir={'column'} justifyContent={'center'} alignItems={'center'}>
@@ -201,6 +232,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
               border={'solid 1px #e7ebf2'} 
               w={'18px'}
               h={'18px'}
+              onChange={handleCheckboxChange}
             />
             <Flex ml={'10px'} fontSize={'12px'} fontWeight={'normal'} color={'#3e495c'} w={'271px'}>
             Restaking unstaked TON earns you TON from staking. However, to withdraw, they need to be unstaked and wait for 93,046 blocks (~14 days).
@@ -215,6 +247,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
         mt={'25px'}
         fontSize={'14px'}
         fontWeight={500}
+        isDisabled={!isChecked && toggle === 'Restake'}
         bgColor={toggle === 'Restake' ? '#36af47' : ''}
       >
         {toggle}

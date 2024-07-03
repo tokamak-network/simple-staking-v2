@@ -136,6 +136,7 @@ export function useWithdrawable (layer2: string) {
 export function useWithdrawRequests () {
   const { DepositManager_CONTRACT } = useCallContract();
   const { account, library } = useWeb3React();
+  const { blockNumber } = useBlockNumber()
 
   const withdrawRequests = useCallback(
     async (layer2: string) => {
@@ -163,7 +164,7 @@ export function useWithdrawRequests () {
         }
         return pendingRequests
       }
-  }, [])
+  }, [blockNumber])
   
   return {withdrawRequests}
 }
