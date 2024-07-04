@@ -2,14 +2,22 @@ import { Flex, Text } from '@chakra-ui/react';
 import CLOSE_ICON from 'assets/images/popup-close-icon.svg';
 import Image from 'next/image';
 
-export const ModalHeader = (args: { main: string; sub: string; closeThisModal: any }) => {
-  const { main, sub, closeThisModal } = args;
+export const ModalHeader = (args: { main: string; sub: string; closeThisModal: any; type?: boolean }) => {
+  const { main, sub, closeThisModal, type } = args;
 
   return (
     <Flex pos={'relative'} flexDir={'column'} alignItems={'center'}>
       <Flex
         pos={'absolute'}
-        right={main === 'Unstake' ? '-90px' : '-130px'}
+        right={
+          main === 'Withdraw' && type
+          ? '-330px'
+          : main === 'Withdraw'
+          ? '-160px'
+          : main === 'Stake'
+          ? '-80px'
+          : '-110px'
+        }
         top={'-60px'}
         cursor={'pointer'}
         onClick={() => closeThisModal()}

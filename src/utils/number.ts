@@ -23,6 +23,7 @@ type ConverNumberFunc = {
 export const floatParser = (num: string) => {
   try {
     if (num === '0') return;
+    // console.log(num.indexOf(','))
     const parsed: number = parseFloat(num.replaceAll(',', ''));
     return parsed;
   } catch (e) {

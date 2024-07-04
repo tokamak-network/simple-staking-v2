@@ -46,7 +46,7 @@ function WithdrawModal () {
 
   const closeThisModal = useCallback(() => {
     // setResetValue();
-    setInput('0');
+    setInput('');
     // setTokenType('ton')
     setType('main')
     closeModal();
@@ -64,12 +64,12 @@ function WithdrawModal () {
     const fetch = async () => {
       if (selectedModalData) {
         const withdrawRequest = await withdrawRequests(selectedModalData.layer2)
-        
         setRequests(withdrawRequest)
       }
     }
     fetch()
   }, [selectedModalData])
+
 
   return (
     <Modal
@@ -80,7 +80,7 @@ function WithdrawModal () {
       onClose={closeThisModal}
     >
       <ModalOverlay>
-        <ModalContent maxW={type === 'main' ? '690px' : '350px'} bg={'#fff'} borderRadius={'15px'} boxShadow={'0 2px 6px 0 rgba(61, 73, 93, 0.1)'}>
+        <ModalContent maxW={selectedModalData?.isL2 && type === 'main' ? '690px' : '350px'} bg={'#fff'} borderRadius={'15px'} boxShadow={'0 2px 6px 0 rgba(61, 73, 93, 0.1)'}>
           {selectedModalData ? (
             <ModalBody>
               <Flex w="100%" flexDir={'column'} alignItems={'center'} py={'20px'}>
@@ -103,6 +103,7 @@ function WithdrawModal () {
                     main={modalName}
                     sub={''}
                     closeThisModal={closeThisModal}
+                    type={selectedModalData.isL2}
                   />
                 </Flex>
                 <Flex bgColor={'#f4f6f8'} h={'1px'}  w={'100%'} />
@@ -115,12 +116,15 @@ function WithdrawModal () {
                       src={ETHEREUM}
                       onClick={() => setType('ethereum')}
                     />
-                    <WithdrawType 
-                      name={'Withdraw to Titan'}
-                      content={'Instead of withdrawing to Ethereum, staked TON can be withdrawn to this layer as TON. By withdrawing to this layer, TON can be used right away without needing to wait for 14 days.'}
-                      src={TITAN}
-                      onClick={() => setType('titan')}
-                    />
+                    {
+                      selectedModalData.isL2 ?
+                      <WithdrawType 
+                        name={'Withdraw to Titan'}
+                        content={'Instead of withdrawing to Ethereum, staked TON can be withdrawn to this layer as TON. By withdrawing to this layer, TON can be used right away without needing to wait for 14 days.'}
+                        src={TITAN}
+                        onClick={() => setType('titan')}
+                      /> : ''
+                    }
                   </Flex> :
                   type === 'ethereum' ?
                   <ToEthereum 
@@ -129,7 +133,10 @@ function WithdrawModal () {
                     closeThisModal={closeThisModal}
                   /> :
                   type === 'titan' ?
-                  <ToTitan />: ''
+                  <ToTitan 
+                    selectedModalData={selectedModalData}
+                    closeThisModal={closeThisModal}
+                  />: ''
                 }
               </Flex>
             </ModalBody>

@@ -48,6 +48,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [minimumAmount, setMinimumAmount] = useRecoilState(minimumAmountState)
   const [minimumAmountForButton, setMinimumAmountForButton] = useState<boolean>(false);
   const [isOperator, setIsOperator] = useState<boolean>(false);
+  const [isL2, setIsL2] = useState<boolean>(false);
 
   const { userTonBalance, userWTonBalance } = useUserBalance(account);
   const { openModal } = useModal('wallet');
@@ -58,13 +59,17 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   //   expectedSeig,
   //   stakeOfCandidate
   // } = data
+  
 
   useEffect(() => {
-    setCandidateContracts(data?.candidateContract);
-    setCandidates(data?.candidate);
-    setStakeOfUser(data?.stakeOf);
-    setExpSeig(data?.expectedSeig);
-    setStakeCandidate(data?.stakeOfCandidate);
+    if (data) {
+      setCandidateContracts(data.candidateContract);
+      setCandidates(data.candidate);
+      setStakeOfUser(data.stakeOf);
+      setExpSeig(data.expectedSeig);
+      setStakeCandidate(data.stakeOfCandidate);
+      setIsL2(data.layer2Candidate !== null)
+    }
   }, [data]);
 
   useEffect(() => {
@@ -160,7 +165,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     old_withdrawableLength: old_withdrawableLength,
     old_withdrawable: old_withdrawable,
     old_layer2: getOldLayerAddress(candidateContracts) ? getOldLayerAddress(candidateContracts) : '',
-    requests: requests
+    requests: requests,
+    isL2: isL2
   };
 
   const modalButton = useCallback(async (modalType: ModalType, data: any) => {
