@@ -10,13 +10,14 @@ import {
   Switch,
   useTheme,
   MenuList,
-  useCheckboxGroup 
+  useCheckboxGroup, 
+  MenuItem
 } from "@chakra-ui/react"
-import {useEffect, useMemo, useState} from 'react';
-import Image from "next/image";
-import arrow from "@/assets/images/select-1-arrow-inactive.svg";
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import { StakeModalDataType } from '../../../../../types/index';
 import WithdrawTable from "./WithdrawTable";
+import { TokenSelector } from "@/common/menulist/TokenSelector";
+import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox";
 
 type WithdrawToEthereumProps ={
   selectedModalData: StakeModalDataType
@@ -51,6 +52,10 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   }, [value])
 
   const options = ['WTON', 'TON']
+  const handleSetOption = useCallback((option: any) => {
+    setOption(option)
+    setMenuState(false)
+  }, [])
 
   const columns = useMemo(
     () => [
@@ -166,58 +171,13 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
             <Flex>
               TON
             </Flex> :
-            <Menu>
-              <MenuButton
-                w={'62px'}
-                px={'6px'}
-                mx={0}
-                h={'24px'}
-                color={'#3e495c'}
-                fontSize={'12px'}
-                bgColor={'#fff'}
-                boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.14)'}
-                borderRadius={'4px'}
-                border={'solid 1px #dfe4ee'}
-                placeholder="WTON"
-              // onChange={onChangeSelectBox}
-              >
-                <Flex alignItems={'center'} justifyContent={'space-between'}>
-                  <Text>{option}</Text>
-                  <Flex
-                    marginLeft={"4px"}
-                    height={"24px"}
-                    transform={menuState === true ? "rotate(180deg)" : ""}
-                  >
-                    <Image src={arrow} alt="icon_arrow" />
-                  </Flex>
-                </Flex>
-              </MenuButton>
-              <MenuList
-                onClick={() => setMenuState(false)}
-                color={'#3e495c'}
-                bgColor={'#fff'}
-                maxW={'62px'}
-                width={'62px'}
-                boxShadow={'0 2px 4px 0 rgba(96, 97, 112, 0.14)'}
-                fontSize={'12px'}
-                p={'7px 0px 7px 10px'}
-                
-              >
-                {options.map((option: any) => {
-                  return (
-                    <Flex
-                      mb={'6px'}
-                      mt={'4px'}
-                      // maxW={'62px'}
-                      cursor={'pointer'}
-                      onClick={() => setOption(option)}
-                    >
-                      {option}
-                    </Flex>
-                  )
-                })}
-              </MenuList>
-            </Menu>
+            <TokenSelector 
+              option={option}
+              setOption={handleSetOption}
+              menuState={menuState}
+              setMenuState={setMenuState}
+              options={options}
+            />
           }
         </Flex>
       </Flex>
@@ -225,19 +185,11 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
       <Flex flexDir={'column'} alignItems={'center'}>
         {
           toggle === 'Restake' ?
-          <Flex mt={'25px'}>
-            <Checkbox 
-              bgColor={'#e9edf1'} 
-              borderRadius={'4px'} 
-              border={'solid 1px #e7ebf2'} 
-              w={'18px'}
-              h={'18px'}
-              onChange={handleCheckboxChange}
-            />
-            <Flex ml={'10px'} fontSize={'12px'} fontWeight={'normal'} color={'#3e495c'} w={'271px'}>
-            Restaking unstaked TON earns you TON from staking. However, to withdraw, they need to be unstaked and wait for 93,046 blocks (~14 days).
-            </Flex>
-          </Flex> : ''
+          <StakingCheckbox 
+            content={'Restaking unstaked TON earns you TON from staking. However, to withdraw, they need to be unstaked and wait for 93,046 blocks (~14 days).'}
+            handleCheckboxChange={handleCheckboxChange}
+          />
+           : ''
 
         }
       <Button

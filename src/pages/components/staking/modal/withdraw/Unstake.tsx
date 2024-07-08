@@ -11,6 +11,7 @@ import { useRecoilState } from "recoil"
 import { inputState } from "@/atom/global/input"
 import { txState } from "@/atom/global/transaction"
 import { StakeModalDataType } from "@/types"
+import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
 
 type UnstakeProps = {
   selectedModalData: StakeModalDataType
@@ -21,7 +22,7 @@ export const Unstake = (args: UnstakeProps) => {
   const { selectedModalData, closeThisModal } = args
   const theme = useTheme();
   const { btnStyle } = theme;
-  const { TON_CONTRACT, WTON_CONTRACT, Old_DepositManager_CONTRACT, DepositManager_CONTRACT, SeigManager_CONTRACT } =
+  const { DepositManager_CONTRACT, SeigManager_CONTRACT } =
     useCallContract();
   
   const { account, library } = useWeb3React();
@@ -41,12 +42,6 @@ export const Unstake = (args: UnstakeProps) => {
     try {
       const amount = floatParser(input);
       if (DepositManager_CONTRACT && SeigManager_CONTRACT && amount && account && selectedModalData) {
-        
-        // const coinage = getContract(await SeigManager_CONTRACT.coinages(selectedModalData.layer2), Coinage, library, account)
-        // const bal = await coinage.balanceOf(account)
-        // console.log(bal.toString(), convertToRay(amount.toString()))
-        // operator 일 경우 minimum amount 남겨둬야함
-        
         const tx = await DepositManager_CONTRACT.requestWithdrawal(
           selectedModalData.layer2,
           convertToRay(amount.toString()),
@@ -67,19 +62,10 @@ export const Unstake = (args: UnstakeProps) => {
         stakedAmount={stakedAmount}
       />
       <Flex w={'100%'} h={'1px'} my={'25px'} bgColor={'#f4f6f8'} />
-      <Flex>
-        <Checkbox 
-          bgColor={'#e9edf1'} 
-          borderRadius={'4px'} 
-          border={'solid 1px #e7ebf2'} 
-          w={'18px'}
-          h={'18px'}
-          onChange={handleCheckboxChange}
-        />
-        <Flex ml={'10px'} fontSize={'12px'} fontWeight={'normal'} color={'#3e495c'} w={'271px'}>
-        To withdraw staked TON, it needs to be unstaked first and after 93,046 blocks (~14 days) they can be withdrawn to your account.
-        </Flex>
-      </Flex>
+      <StakingCheckbox 
+        content={'To withdraw staked TON, it needs to be unstaked first and after 93,046 blocks (~14 days) they can be withdrawn to your account.'}
+        handleCheckboxChange={handleCheckboxChange}
+      />
       <Flex justifyContent={'center'}>
         <Button
           {...btnStyle.btnAble()}
