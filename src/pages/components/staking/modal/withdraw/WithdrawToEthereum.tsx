@@ -42,14 +42,14 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
 
-  useEffect(() => {
-    let arr = []
-    for (let i = 0; i < value[0]; i ++) {
-      arr.push((i+1).toString())
-    }
+  // useEffect(() => {
+  //   let arr = []
+  //   for (let i = 0; i < value[0]; i ++) {
+  //     arr.push((i+1).toString())
+  //   }
     
-    // setValue(arr)
-  }, [value])
+  //   // setValue(arr)
+  // }, [value])
 
   const options = ['WTON', 'TON']
   const handleSetOption = useCallback((option: any) => {

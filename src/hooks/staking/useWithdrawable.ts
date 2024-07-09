@@ -7,6 +7,8 @@ import { BigNumber } from 'ethers';
 import { calcCountDown2, convertNumber } from '../../utils/number';
 import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
 import { getCountdown } from '@/api';
+import { useQuery } from '@apollo/client';
+import { GET_WITHDRAWAL_AND_DEPOSITED } from '@/graphql/getWithdrawalAndDeposited';
 
 export function useWithdrawable (layer2: string) {
   const { blockNumber } = useBlockNumber()
@@ -167,4 +169,20 @@ export function useWithdrawRequests () {
   }, [blockNumber])
   
   return {withdrawRequests}
+}
+
+export function useWithdrawalAndDeposited () {
+  const { data } = useQuery(GET_WITHDRAWAL_AND_DEPOSITED, {
+    pollInterval: 10000
+  });
+  const request = useCallback(
+    async (layer2: string) => {
+      if (data) {
+        const filter = data.withdrawalAndDepositeds.filter((data: any) => {
+          return data.candidate.id === layer2
+        })
+        return filter
+      }
+    }, [data])
+  return { request }
 }

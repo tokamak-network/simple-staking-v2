@@ -4,7 +4,7 @@ import TITAN_SYMBOL from '@/assets/images/symbol.svg'
 import Arrow from '@/assets/images/right_arrow.svg'
 import Image from "next/image"
 import { UnstakeBalanceInput } from "./UnstakeBalanceInput"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import useCallContract from "@/hooks/useCallContract"
 import { convertToRay, floatParser } from "@/components/number"
 import { StakeModalDataType } from "@/types"
@@ -12,6 +12,9 @@ import { useWeb3React } from "@web3-react/core"
 import { useRecoilState } from "recoil"
 import { inputState } from "@/atom/global/input"
 import { txState } from "@/atom/global/transaction"
+import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
+import { useWithdrawalAndDeposited } from '@/hooks/staking/useWithdrawable';
+import WithdrawL2Table from "./WithdrawL2Table"
 
 type ToTitanProps = {
   selectedModalData: StakeModalDataType
@@ -29,9 +32,35 @@ export const ToTitan = (args: ToTitanProps) => {
   const [input, setInput] = useRecoilState(inputState);
   const [, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
+  const [withdrawTx, setWithdrawTx] = useState<any[]>([]);
 
-  const { DepositManager_CONTRACT } =
-    useCallContract();
+  const { request } = useWithdrawalAndDeposited();
+
+  const columns = useMemo(
+    () => [
+      {
+        accessor: 'amount',
+        Header: 'Amount'
+      },
+      {
+        accessor: 'status',
+        Header: 'Status'
+      }
+    ],
+    []
+  )
+  
+  useEffect(() => {
+    async function fetch() {
+      if (selectedModalData) {
+        const queryData = await request(selectedModalData.layer2)
+        setWithdrawTx(queryData)
+      }
+    }
+    fetch()
+  }, [])
+  console.log(withdrawTx)
+  const { DepositManager_CONTRACT } = useCallContract();
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
@@ -39,6 +68,7 @@ export const ToTitan = (args: ToTitanProps) => {
   const {
     stakedAmount
   } = selectedModalData
+  // console.log(selectedModalData)
 
   const withdrawL2 = useCallback(async () => {
     const amount = floatParser(input);
@@ -107,19 +137,10 @@ export const ToTitan = (args: ToTitanProps) => {
         stakedAmount={stakedAmount}
       />
       <Flex w={'100%'} h={'1px'} my={'25px'} bgColor={'#f4f6f8'} />
-      <Flex>
-        <Checkbox 
-          bgColor={'#e9edf1'} 
-          borderRadius={'4px'} 
-          border={'solid 1px #e7ebf2'} 
-          w={'18px'}
-          h={'18px'}
-          onChange={handleCheckboxChange}
-        />
-        <Flex ml={'10px'} fontSize={'12px'} fontWeight={'normal'} color={'#3e495c'} w={'271px'}>
-        Restaking unstaked TON earns you TON from staking. However, to withdraw, they need to be unstaked and wait for 93,046 blocks (~14 days).
-        </Flex>
-      </Flex>
+      <StakingCheckbox 
+        content={'Restaking unstaked TON earns you TON from staking. However, to withdraw, they need to be unstaked and wait for 93,046 blocks (~14 days).'}
+        handleCheckboxChange={handleCheckboxChange}
+      />
       <Flex justifyContent={'center'}>
         <Button
           {...btnStyle.btnAble()}
@@ -134,6 +155,10 @@ export const ToTitan = (args: ToTitanProps) => {
           Withdraw
         </Button>
       </Flex>
+      <WithdrawL2Table 
+        columns={columns}
+        data={withdrawTx}
+      />
     </Flex>
   )
 }

@@ -12,13 +12,13 @@ import { calculateExpectedSeig } from "tokamak-staking-lib";
 import BN from "bn.js";
 import CONTRACT_ADDRESS from "services/addresses/contract";
 import Coinage from "services/abi/AutoRefactorCoinage.json"
-import { network } from '../../connectors/index';
 
 export function useCandidateList () {
   const [candidateList, setCandidateList] = useState<any[]>([]);
   const { data } = useQuery(GET_CANDIDATE, {
     pollInterval: 10000
   });
+
   const { account, library, chainId } = useWeb3React();
   const { 
     SeigManager_CONTRACT, 
