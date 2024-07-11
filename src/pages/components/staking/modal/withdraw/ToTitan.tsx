@@ -15,6 +15,7 @@ import { txState } from "@/atom/global/transaction"
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
 import { useWithdrawalAndDeposited } from '@/hooks/staking/useWithdrawable';
 import WithdrawL2Table from "./WithdrawL2Table"
+import { WithdrawL2Image } from "./WithdrawL2Image"
 
 type ToTitanProps = {
   selectedModalData: StakeModalDataType
@@ -59,7 +60,7 @@ export const ToTitan = (args: ToTitanProps) => {
     }
     fetch()
   }, [])
-  console.log(withdrawTx)
+
   const { DepositManager_CONTRACT } = useCallContract();
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -90,49 +91,9 @@ export const ToTitan = (args: ToTitanProps) => {
 
   return (
     <Flex flexDir={'column'}>
-      <Flex
-        h={'134px'}
-        flexDir={'row'}
-        justifyContent={'center'} 
-        alignItems={'center'}
-        fontSize={'12px'}
-        fontWeight={'normal'}
-        color={'#07070c'}
-      >
-        <Flex flexDir={'column'} alignItems={'center'}>
-          <Flex 
-            w={'40px'} 
-            h={'40px'} 
-            bgColor={'#383736'} 
-            borderRadius={'100px'} 
-            justifyContent={'center'} 
-            alignItems={'center'}
-          >
-            <Image src={ETH_SYMBOL} alt={''} />
-          </Flex>
-          <Flex mt={'6px'}>
-            Ethereum
-          </Flex>
-        </Flex>
-        <Flex mx={'15px'} mb={'25px'}>
-          <Image src={Arrow} alt={''} />
-        </Flex>
-        <Flex flexDir={'column'} alignItems={'center'}>
-          <Flex 
-            w={'40px'} 
-            h={'40px'} 
-            bgColor={'#383736'} 
-            borderRadius={'100px'} 
-            justifyContent={'center'} 
-            alignItems={'center'}
-          >
-            <Image src={TITAN_SYMBOL} alt={''} />
-          </Flex>
-          <Flex mt={'6px'}>
-            TITAN
-          </Flex>
-        </Flex>
-      </Flex>
+      <WithdrawL2Image 
+        l2Image={TITAN_SYMBOL}
+      />
       <UnstakeBalanceInput 
         stakedAmount={stakedAmount}
       />
@@ -155,10 +116,13 @@ export const ToTitan = (args: ToTitanProps) => {
           Withdraw
         </Button>
       </Flex>
-      <WithdrawL2Table 
-        columns={columns}
-        data={withdrawTx}
-      />
+      {
+        withdrawTx.length > 0 ?
+        <WithdrawL2Table 
+          columns={columns}
+          data={withdrawTx}
+        /> : ''
+      }
     </Flex>
   )
 }
