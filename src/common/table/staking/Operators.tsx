@@ -37,6 +37,7 @@ import { useRouter } from 'next/router';
 import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
 import LIST from '@/assets/images/list.svg'
 import ContractAddressInfo from './ContractAddressInfo';
+import { InfoTypeSelector } from '@/common/selector/InfoType';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -338,45 +339,10 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                           {
                             layer2Candidate !== null ?
                             (
-                            <Flex
-                              w={'213px'}
-                              h={'30px'}
-                              p={'3px'}
-                              ml={'70px'}
-                              border={'solid 1px #e7ebf2'}
-                              borderRadius={'5px'}
-                              fontSize={'12px'}
-                              fontWeight={'normal'}
-                              mt={'24px'}
-                              mb={'21px'}
-                              justifyContent={'space-between'}
-                              cursor={'pointer'}
-                            >
-                              <Flex
-                                w={'102px'}
-                                textAlign={'center'}
-                                borderRadius={'5px'}
-                                color={tab === 'staking' ? '#fff' : ''}
-                                bg={tab==="staking" ? '#2a72e5' : '#fff'}
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                                onClick={() => setTab('staking')}
-                              >
-                                Staking
-                              </Flex>
-                              <Flex
-                                w={'102px'}
-                                textAlign={'center'}
-                                borderRadius={'5px'}
-                                color={tab === 'l2' ? '#fff' : ''}
-                                bg={tab==="l2" ? '#2a72e5' : '#fff'}
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                                onClick={() => setTab('l2')}
-                              >
-                                L2
-                              </Flex>
-                            </Flex>
+                              <InfoTypeSelector 
+                                tab={tab}
+                                setTab={setTab}
+                              />
                             ) : ''
                           }
                           {
