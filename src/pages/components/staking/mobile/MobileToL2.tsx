@@ -1,12 +1,8 @@
 import { Button, Checkbox, Flex, useTheme } from "@chakra-ui/react"
-import ETH_SYMBOL from "@/assets/images/ETH-symbol.svg"
 import TITAN_SYMBOL from '@/assets/images/symbol.svg'
-import Arrow from '@/assets/images/right_arrow.svg'
-import Image from "next/image"
-import { UnstakeBalanceInput } from "./UnstakeBalanceInput"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import useCallContract from "@/hooks/useCallContract"
-import { convertToRay, floatParser } from "@/components/number"
+import { convertNumber, convertToRay, floatParser } from "@/components/number"
 import { StakeModalDataType } from "@/types"
 import { useWeb3React } from "@web3-react/core"
 import { useRecoilState } from "recoil"
@@ -14,19 +10,21 @@ import { inputState } from "@/atom/global/input"
 import { txState } from "@/atom/global/transaction"
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
 import { useWithdrawalAndDeposited } from '@/hooks/staking/useWithdrawable';
-import WithdrawL2Table from "./WithdrawL2Table"
-import { WithdrawL2Image } from "./WithdrawL2Image"
+import WithdrawL2Table from "../modal/withdraw/WithdrawL2Table"
+import { UnstakeBalanceInput } from '../modal/withdraw/UnstakeBalanceInput';
+import { WithdrawL2Image } from "../modal/withdraw/WithdrawL2Image"
 
-type ToTitanProps = {
-  selectedModalData: StakeModalDataType
-  closeThisModal: any
+
+type MobileToL2Props = {
+  selectedOp: any
+  onClose: any
 }
 
-export const ToTitan = (args: ToTitanProps) => {
+export const MobileToL2 = (args: MobileToL2Props) => {
   const theme = useTheme();
   const { btnStyle } = theme;
 
-  const { selectedModalData, closeThisModal } = args
+  const { selectedOp, onClose } = args
   
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const { account, library } = useWeb3React();
@@ -53,14 +51,14 @@ export const ToTitan = (args: ToTitanProps) => {
   
   useEffect(() => {
     async function fetch() {
-      console.log(selectedModalData)
-      if (selectedModalData) {
-        const queryData = await request(selectedModalData.layer2)
+      if (selectedOp) {
+        const queryData = await request(selectedOp.candidateContract)
+        console.log(queryData)
         setWithdrawTx(queryData)
       }
     }
     fetch()
-  }, [selectedModalData])
+  }, [])
 
   const { DepositManager_CONTRACT } = useCallContract();
 
@@ -68,37 +66,54 @@ export const ToTitan = (args: ToTitanProps) => {
     setIsChecked(e.target.checked);
 
   const {
-    stakedAmount
-  } = selectedModalData
-  // console.log(selectedModalData)
+    stakeOf
+  } = selectedOp
+  
+  const myStaked = stakeOf ? convertNumber({
+    amount: stakeOf,
+    type: 'ray',
+    localeString: true
+  }) : '0.00'
 
   const withdrawL2 = useCallback(async () => {
     const amount = floatParser(input);
     try {
-      if (DepositManager_CONTRACT && amount && account && selectedModalData) {
+      if (DepositManager_CONTRACT && amount && account && selectedOp) {
         const tx = await DepositManager_CONTRACT.withdrawAndDepositL2(
-          selectedModalData.layer2,
+          selectedOp.candidateContract,
           convertToRay(amount.toString()),
         );
         setTx(tx);
         setTxPending(true);
+        close()
         
-        return closeThisModal();
+        if (tx) {
+          await tx.wait().then((receipt: any) => {
+            if (receipt.status) {
+              setTxPending(false);
+              setTx(undefined);
+            }
+          });
+        }
       }
     } catch (e) {
       console.log(e)
     }
-  }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending])
-  console.log(withdrawTx)
+  }, [DepositManager_CONTRACT, input, selectedOp, setTx, setTxPending])
+
+  const close = () => {
+    setInput('')
+    onClose()
+  }
+
   return (
     <Flex flexDir={'column'}>
       <WithdrawL2Image 
         l2Image={TITAN_SYMBOL}
       />
       <UnstakeBalanceInput 
-        stakedAmount={stakedAmount}
+        stakedAmount={myStaked ? myStaked : '0.00'}
       />
-      <Flex w={'100%'} h={'1px'} my={'25px'} bgColor={'#f4f6f8'} />
       <StakingCheckbox 
         content={'Restaking unstaked TON earns you TON from staking. However, to withdraw, they need to be unstaked and wait for 93,046 blocks (~14 days).'}
         handleCheckboxChange={handleCheckboxChange}
@@ -106,9 +121,10 @@ export const ToTitan = (args: ToTitanProps) => {
       <Flex justifyContent={'center'}>
         <Button
           {...btnStyle.btnAble()}
-          w={'130px'}
-          h={'38px'}
+          w={'100%'}
+          h={'40px'}
           mt={'25px'}
+          // mb={'15px'}
           fontSize={'14px'}
           fontWeight={500}
           isDisabled={!isChecked}
@@ -118,7 +134,7 @@ export const ToTitan = (args: ToTitanProps) => {
         </Button>
       </Flex>
       {
-        withdrawTx ?
+        withdrawTx.length > 0 ?
         <WithdrawL2Table 
           columns={columns}
           data={withdrawTx}

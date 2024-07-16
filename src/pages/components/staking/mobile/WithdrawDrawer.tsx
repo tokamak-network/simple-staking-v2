@@ -11,6 +11,7 @@ import icon_close from "assets/images/icon_close.png";
 import Image from "next/image";
 import React, { SetStateAction, useEffect, useState } from "react";
 import { MobileToEthereum } from "./MobileToEthereum";
+import { MobileToL2 } from "./MobileToL2";
 
 type WithdrawDrawerProps = {
   onClose: any;
@@ -44,7 +45,10 @@ export function WithdrawDrawer (args: WithdrawDrawerProps) {
               selectedOp={selectedOp}
               onClose={onClose}
             /> :
-            ''
+            <MobileToL2 
+              selectedOp={selectedOp}
+              onClose={onClose}
+            />
           }
         </DrawerBody>
       </DrawerContent>

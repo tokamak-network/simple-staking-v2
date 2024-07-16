@@ -28,7 +28,7 @@ export const WithdrawTypeSelector = (args: WithdrawTypeSelectorProps) => {
       <Flex
         w={mobile ? '50%' : '102px'}
         textAlign={'center'}
-        h={'30px'}
+        h={mobile ? '30px' : '24px'}
         borderRadius={'5px'}
         color={tab === 'unstake' ? '#fff' : ''}
         bg={tab==="unstake" ? '#2a72e5' : '#fff'}
@@ -42,6 +42,7 @@ export const WithdrawTypeSelector = (args: WithdrawTypeSelectorProps) => {
       <Flex
         w={mobile ? '50%' :'102px'}
         textAlign={'center'}
+        h={mobile ? '30px' : '24px'}
         borderRadius={'5px'}
         color={tab === 'withdraw' ? '#fff' : ''}
         bg={tab === "withdraw" ? '#2a72e5' : '#fff'}

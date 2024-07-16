@@ -12,9 +12,7 @@ type MobileWithdrawProps = {
 
 export function MobileWithdraw (args: MobileWithdrawProps) {
   const { selectedOp } = args
-
   const { isOpen, onOpen, onClose } = useDisclosure();
-  
   const [type, setType] = useState('')
 
   const openDrawer = (type: string) => {
@@ -32,13 +30,13 @@ export function MobileWithdraw (args: MobileWithdrawProps) {
           onClick={() => openDrawer('Ethereum')}
         />
         {
-          
+          selectedOp.layer2Candidate !== null ?
           <WithdrawType 
             name={'Withdraw to Titan'}
             content={'Instead of withdrawing to Ethereum, staked TON can be withdrawn to this layer as TON. By withdrawing to this layer, TON can be used right away without needing to wait for 14 days.'}
             src={TITAN}
             onClick={() => openDrawer('Titan')}
-          /> 
+          /> : ''
         }
       </Flex>
       <WithdrawDrawer 

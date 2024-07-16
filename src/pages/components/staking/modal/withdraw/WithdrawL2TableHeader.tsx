@@ -24,7 +24,7 @@ export const WithdrawL2TableHeader: FC<WithdrawL2TableHeaderProps> = ({
         fontSize={'11px'}
         fontWeight={500}
         color={'#3e495c'}
-        h={'40px'}
+        h={'33px'}
       >
         <chakra.th
           w={'160px'}

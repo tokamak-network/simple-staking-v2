@@ -75,7 +75,7 @@ export const WithdrawL2Table: FC<WithdrawL2TableProps> = ({
               return [
                 <chakra.tr
                   boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}
-                  h={'38px'}
+                  h={'30px'}
                   key={i}
                   w="100%"
                   bg={'white.100' }

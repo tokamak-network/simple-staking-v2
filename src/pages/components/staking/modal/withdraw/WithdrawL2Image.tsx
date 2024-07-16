@@ -10,10 +10,10 @@ type WithdrawL2ImageProps = {
 
 export const WithdrawL2Image = (args: WithdrawL2ImageProps) => {
   const { l2Image } = args
-  
+
   return (
     <Flex
-      h={'134px'}
+      h={'112px'}
       flexDir={'row'}
       justifyContent={'center'} 
       alignItems={'center'}
