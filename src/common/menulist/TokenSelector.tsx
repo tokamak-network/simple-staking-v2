@@ -50,7 +50,7 @@ export const TokenSelector = (args: TokenSelectorProps) => {
         p={'7px 0px 7px 4px'}
         
       >
-        {options.map((option: any) => {
+        {options.map((option: any, index: number) => {
           return (
             <MenuItem
               mb={'6px'}
@@ -60,6 +60,7 @@ export const TokenSelector = (args: TokenSelectorProps) => {
               bg={'none'}
               _hover={{bg:"none"}}
               onClick={() => setOption(option)}
+              key={index}
             >
               {option}
             </MenuItem>

@@ -1,4 +1,4 @@
-import { FC, useState, useRef, Fragment, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import {
   Column,
   useExpanded,
@@ -12,8 +12,6 @@ import {
   Box,
   useTheme,
 } from '@chakra-ui/react';
-import { useRecoilState } from 'recoil';
-import { toggleState } from '@/atom/staking/toggle';
 import WithdrawL2TableHeader from './WithdrawL2TableHeader';
 import WithdrawL2TableRow from './WithdrawL2TableRow';
 
@@ -32,19 +30,19 @@ export const WithdrawL2Table: FC<WithdrawL2TableProps> = ({
     prepareRow,
     page,
     setPageSize,
-    state: {pageIndex, pageSize},
+    // state: {pageIndex, pageSize},
   } = useTable(
     {columns, data, initialState: {pageIndex: 0}},
     useSortBy,
     useExpanded,
     usePagination,
   );
-  const [toggle, setToggle] = useRecoilState(toggleState)
+  
   const theme = useTheme();
 
   useEffect(() => {
     setPageSize(4)
-  },[setPageSize])
+  },[])
 
   return (
     <Flex 

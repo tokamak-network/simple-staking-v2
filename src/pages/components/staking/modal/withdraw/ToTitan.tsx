@@ -34,6 +34,7 @@ export const ToTitan = (args: ToTitanProps) => {
   const [, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
   const [withdrawTx, setWithdrawTx] = useState<any[]>([]);
+  const { DepositManager_CONTRACT } = useCallContract();
 
   const { request } = useWithdrawalAndDeposited();
 
@@ -50,6 +51,10 @@ export const ToTitan = (args: ToTitanProps) => {
     ],
     []
   )
+
+  const {
+    stakedAmount
+  } = selectedModalData
   
   useEffect(() => {
     async function fetch() {
@@ -62,15 +67,8 @@ export const ToTitan = (args: ToTitanProps) => {
     fetch()
   }, [selectedModalData])
 
-  const { DepositManager_CONTRACT } = useCallContract();
-
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
-
-  const {
-    stakedAmount
-  } = selectedModalData
-  // console.log(selectedModalData)
 
   const withdrawL2 = useCallback(async () => {
     const amount = floatParser(input);
@@ -118,7 +116,7 @@ export const ToTitan = (args: ToTitanProps) => {
         </Button>
       </Flex>
       {
-        withdrawTx ?
+        withdrawTx && withdrawTx.length > 0 ?
         <WithdrawL2Table 
           columns={columns}
           data={withdrawTx}

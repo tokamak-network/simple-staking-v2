@@ -135,11 +135,14 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
         </FormControl>
       </Flex>
       <Flex>
-        <WithdrawTable 
-          columns={columns}
-          data={requests}
-          getCheckboxProps={getCheckboxProps}
-        />
+        {
+          requests ?
+          <WithdrawTable 
+            columns={columns}
+            data={requests}
+            getCheckboxProps={getCheckboxProps}
+          /> : ''
+        }
       </Flex>
       <Flex my={'21px'} h={'75px'} flexDir={'column'} justifyContent={'center'} alignItems={'center'}>
         <Flex

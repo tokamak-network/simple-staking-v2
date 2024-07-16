@@ -1,8 +1,5 @@
 import { Flex } from "@chakra-ui/react"
 import { useState } from "react"
-import TON from "@/assets/images/ton.svg"
-import Image from "next/image"
-import { BalanceInput } from "@/common/input/CustomInput"
 import { Unstake } from "./Unstake"
 import { WithdrawToEthereum } from "./WithdrawToEthereum"
 import { StakeModalDataType } from '@/types/index';

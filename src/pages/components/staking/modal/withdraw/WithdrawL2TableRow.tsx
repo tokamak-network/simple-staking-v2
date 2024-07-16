@@ -26,7 +26,6 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
     <chakra.td
       key={index}
       w={'160px'}
-      // {...theme.STAKING_Withdraw_TABLE_STYLE.tableRow()}
       {...cell.getCellProps()}
       fontSize={'12px'}
       justifyContent={'center'}
