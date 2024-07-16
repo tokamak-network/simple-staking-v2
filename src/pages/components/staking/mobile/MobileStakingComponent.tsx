@@ -145,7 +145,9 @@ function  MobileStakingComponent(props: {
     <Flex w="100%" px="20px" flexDir={'column'}>
       {
           title === 'Withdraw' ?
-          <MobileWithdraw /> :
+          <MobileWithdraw 
+            selectedOp={selectedOp}
+          /> :
           <Flex
             w="100%"
             // h="205px"
@@ -158,60 +160,43 @@ function  MobileStakingComponent(props: {
           >
             <Flex alignItems={"center"} h="35px">
               <Text color="gray.300" fontSize={"12px"} mr={'5px'}>
-                {
-                  title === 'Withdraw' 
-                  ? 'Withdrawable Amount:' 
-                  : title === 'Restake' 
-                  ? 'Restakable Balance:'
-                  : title === 'Unstake' 
-                  ? 'Unstakable Balance:'
-                  : 'Balance:'
-                }
+                Balance:
               </Text>
-              {
-                title === 'Withdraw' ? '' :
-                <Flex>
-                  <Text fontSize={"13px"} color="gray.700">
-                    {
-                      title === 'Stake' ?
-                      userTonBalance :
-                      title === 'Unstake' ?
-                      staked :
-                      pendingUnstaked
-                    } TON
-                  </Text>
-                  <Text 
-                    fontSize={"13px"} 
-                    color="gray.700"
-                    ml={'3px'}
-                  >
-                    {`/ ${userWTonBalance}`} WTON
-                  </Text> 
-                </Flex>
-              }
+              <Flex>
+                <Text fontSize={"13px"} color="gray.700">
+                  {
+                    title === 'Stake' ?
+                    userTonBalance :
+                    title === 'Unstake' ?
+                    staked :
+                    pendingUnstaked
+                  } TON
+                </Text>
+                <Text 
+                  fontSize={"13px"} 
+                  color="gray.700"
+                  ml={'3px'}
+                >
+                  {`/ ${userWTonBalance}`} WTON
+                </Text> 
+              </Flex>
             </Flex>
-            { 
-              title === 'Stake' ?
-              (
-                <MobileCustomInput
-                  w={"147px"}
-                  placeHolder={"0.00"}
-                  type={title}
-                  maxValue={
-                    title === 'Stake' && tokenType === 'TON' 
-                    ? userTonBalance 
-                    : title === 'Stake' && tokenType === 'WTON'  
-                    ? userWTonBalance
-                    : staked
-                  }
-                  setAmount={setAmount}
-                  setTokenType={setTokenType}
-                  tokenType={tokenType}
-                  maxButton={true}
-                />
-              ) : ''
-            }
-            
+            <MobileCustomInput
+              w={"147px"}
+              placeHolder={"0.00"}
+              type={title}
+              maxValue={
+                title === 'Stake' && tokenType === 'TON' 
+                ? userTonBalance 
+                : title === 'Stake' && tokenType === 'WTON'  
+                ? userWTonBalance
+                : staked
+              }
+              setAmount={setAmount}
+              setTokenType={setTokenType}
+              tokenType={tokenType}
+              maxButton={true}
+            />
             <Flex
               mt="10px"
               h="40px"
