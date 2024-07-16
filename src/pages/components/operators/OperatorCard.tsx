@@ -105,9 +105,6 @@ function OperatorCard(props: { operator: any }) {
       localeString: true
     }) : '0.00'
 
-  
-  console.log(operator?.layer2Candidate)
-
   const earned = operator?.layer2Candidate?.seigGiven[0] ?  convertNumber({
     amount: operator?.layer2Candidate?.seigGiven[0].layer2Seigs,
     type: 'ray',

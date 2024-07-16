@@ -34,18 +34,21 @@ function MobileStaking() {
         color="gray.700"
         mb="5px"
       >
-        Stake
+        {selectedTab}
       </Text>
-      <Text
-        fontSize={"12px"}
-        textAlign="center"
-        mt="5px"
-        mb="20px"
-        w="100%"
-        color={"gray.300"}
-      >
-        Stake TON (or WTON) to earn staking rewards.
-      </Text>
+      {
+        selectedTab === 'Stake' ?
+        <Text
+          fontSize={"12px"}
+          textAlign="center"
+          mt="5px"
+          mb="20px"
+          w="100%"
+          color={"gray.300"}
+        >
+          Stake TON (or WTON) to earn staking rewards.
+        </Text> : ''
+      }
       <Flex w="100%" px="20px">
         <Flex
           bg="white.100"
@@ -58,7 +61,7 @@ function MobileStaking() {
           mb="15px"
         >
           <Button
-            w="25%"
+            w="50%"
             h="100%"
             bg={selectedTab === "Stake" ? "blue.200" : "white.100"}
             _focus={{ bg: "#2a72e5", color: "white.100" }}
@@ -73,34 +76,7 @@ function MobileStaking() {
             Stake
           </Button>
           <Button
-            w="25%"
-            h="100%"
-            color={selectedTab === "Restake" ? "white.100" : "gray.1000"}
-            bg={selectedTab === "Restake" ? "blue.200" : "white.100"}
-            _focus={{ bg: "#2a72e5", color: "white.100" }}
-            fontSize={"13px"}
-            fontWeight={500}
-            onClick={() => setSelectedTab("Restake")}
-          >
-            Restake
-          </Button>
-          <Button
-            w="25%"
-            h="100%"
-            bg={selectedTab === "Unstake" ? "blue.200" : "white.100"}
-            _focus={{ bg: "#2a72e5", color: "white.100" }}
-            color={selectedTab === "Unstake" ? "white.100" : "gray.1000"}
-            fontSize={"13px"}
-            fontWeight={500}
-            onClick={() => {
-              setValue('')
-              setSelectedTab("Unstake")
-            }}
-          >
-            Unstake
-          </Button>
-          <Button
-            w="25%"
+            w="50%"
             h="100%"
             bg={selectedTab === "Withdraw" ? "blue.200" : "white.100"}
             _focus={{ bg: "#2a72e5", color: "white.100" }}

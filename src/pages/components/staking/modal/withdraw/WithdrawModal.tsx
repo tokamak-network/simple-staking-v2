@@ -136,7 +136,7 @@ function WithdrawModal () {
                   <ToTitan 
                     selectedModalData={selectedModalData}
                     closeThisModal={closeThisModal}
-                  />: ''
+                  /> : ''
                 }
               </Flex>
             </ModalBody>
