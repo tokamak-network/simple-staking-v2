@@ -22,6 +22,7 @@ import { Pagination } from '@/common/table/Pagination';
 import { useRecoilState } from 'recoil';
 import { toggleState } from '@/atom/staking/toggle';
 import WithdrawTableRow from './WithdrawTableRow';
+import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 
 type WithdrawTableProps = {
   columns: Column[];
@@ -50,13 +51,16 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
   const [toggle, setToggle] = useRecoilState(toggleState)
   const theme = useTheme();
 
+  const [width] = useWindowDimensions();
+  const mobile = width && width < 1040;
+
   useEffect(() => {
     setPageSize(data.length)
   },[setPageSize])
 
   return (
     <Flex 
-      w={'320px'}
+      w={mobile ? '100%' : '320px'}
       flexDir={'column'}
       fontFamily={theme.fonts.Roboto}
       justifyContent={'start'}
@@ -64,12 +68,12 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
     >
       <Box overflowX={'auto'}>
         <chakra.table
-          width={'320px'}
+          width={mobile ? '100%' : '320px'}
           {...getTableProps()}
           display="flex"
           flexDirection="column"
           justifyContent={"start"}
-          mr={'30px'}
+          mr={mobile ? '0px' : '30px'}
         >
           <WithdrawTableHeader />
           <chakra.tbody
