@@ -1,6 +1,6 @@
 import { convertNumber } from "@/components/number";
 import { Box, chakra, Checkbox, Flex, Link, Text, useCheckbox } from "@chakra-ui/react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTheme } from '@chakra-ui/react';
 import { getColumnWidthWithdraw } from '@/utils/getColumnWidth';
 import TICK from '@/assets/images/Tick.svg'
@@ -11,13 +11,17 @@ type WithdrawTableRowProps = {
   index: number
   cell: any
   props: any
+  setValue: any
+  toggle: string
 }
 
 export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
   // key,
   index,
   cell,
-  props
+  props,
+  setValue,
+  toggle
 }) => {
   const {
     data,
@@ -28,8 +32,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
   const values = amount ? amount : data?.amount
   const theme = useTheme()
   const type = cell.column.id;
-  // console.log(htmlProps)
-  // console.log(time)
+
   return  (
     <chakra.td
       key={index}
@@ -51,7 +54,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
           cursor='pointer'
           {...htmlProps}
         >
-          <input {...getInputProps()} disabled={time!=='Withdrawable'} />
+          <input {...getInputProps()} disabled={time!=='Withdrawable' || toggle == 'Withdraw'} />
           <Flex
             alignItems='center'
             justifyContent='center'

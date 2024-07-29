@@ -31,6 +31,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   const { btnStyle } = theme;
   const [toggle, setToggle] = useState('Withdraw')
   const [option, setOption] = useState('WTON')
+
   const [menuState, setMenuState] = useState(false);
   useEffect(() => {
     setMenuState(false);
@@ -38,6 +39,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
 
   const { value, setValue, getCheckboxProps, isDisabled } = useCheckboxGroup()
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  // console.log(value)
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
@@ -141,6 +143,8 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
             columns={columns}
             data={requests}
             getCheckboxProps={getCheckboxProps}
+            setValue={setValue}
+            toggle={toggle}
           /> : ''
         }
       </Flex>

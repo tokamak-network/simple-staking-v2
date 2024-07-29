@@ -60,7 +60,7 @@ export const WithdrawL2Table: FC<WithdrawL2TableProps> = ({
           display="flex"
           flexDirection="column"
           justifyContent={"start"}
-          mr={'30px'}
+          // mr={'30px'}
         >
           <WithdrawL2TableHeader />
           <chakra.tbody

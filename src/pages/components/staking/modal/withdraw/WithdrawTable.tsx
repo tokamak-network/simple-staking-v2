@@ -17,10 +17,6 @@ import {
   FormLabel
 } from '@chakra-ui/react';
 import { WithdrawTableHeader } from './WithdrawTableHeader';
-// import { WithdrawTableRow } from './table/WithdrawTableRow';
-import { Pagination } from '@/common/table/Pagination';
-import { useRecoilState } from 'recoil';
-import { toggleState } from '@/atom/staking/toggle';
 import WithdrawTableRow from './WithdrawTableRow';
 import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 
@@ -28,12 +24,16 @@ type WithdrawTableProps = {
   columns: Column[];
   data: any[];
   getCheckboxProps: any
+  setValue: any
+  toggle: string
 }
 
 export const WithdrawTable: FC<WithdrawTableProps> = ({
   columns,
   data,
-  getCheckboxProps
+  getCheckboxProps,
+  setValue,
+  toggle
 }) => {
   const {
     getTableProps,
@@ -48,8 +48,19 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
     useExpanded,
     usePagination,
   );
-  const [toggle, setToggle] = useRecoilState(toggleState)
   const theme = useTheme();
+
+  useEffect(() => {
+    if (toggle === 'Withdraw') {
+      let value: any[] = []
+      data.map((values: any) => {
+        if (values.time === 'Withdrawable') value.push(values.requestIndex.toString())
+      })
+      setValue(value)
+    } else {
+      setValue([])
+    }
+  }, [toggle])
 
   const [width] = useWindowDimensions();
   const mobile = width && width < 1040;
@@ -96,13 +107,14 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
                   {...row.getRowProps()}
                 >
                   {row.cells ? row.cells.map((cell: any, index: number) => {
-                    
                     return (         
                       <WithdrawTableRow 
                         key={index}
                         index={index}
                         cell={cell}
                         props={getCheckboxProps({ value: cell.row.original.requestIndex })}
+                        setValue={setValue}
+                        toggle={toggle}
                       />
                     )
                   }) : ''}

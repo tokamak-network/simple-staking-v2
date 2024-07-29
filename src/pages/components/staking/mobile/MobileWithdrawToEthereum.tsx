@@ -135,13 +135,16 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
             />
           </FormControl>
         </Flex>
-        <Flex>
-          <WithdrawTable 
-            columns={columns}
-            data={requests}
-            getCheckboxProps={getCheckboxProps}
-          />
-        </Flex>
+        {
+          requests ?
+          <Flex>
+            <WithdrawTable 
+              columns={columns}
+              data={requests}
+              getCheckboxProps={getCheckboxProps}
+            />
+          </Flex> : ''
+        }
         <Flex my={'21px'} h={'75px'} flexDir={'column'} justifyContent={'center'} alignItems={'center'}>
           <Flex
             fontSize={'12px'}

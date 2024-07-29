@@ -134,7 +134,7 @@ export const MobileToL2 = (args: MobileToL2Props) => {
         </Button>
       </Flex>
       {
-        withdrawTx.length > 0 ?
+        withdrawTx && withdrawTx.length > 0 ?
         <WithdrawL2Table 
           columns={columns}
           data={withdrawTx}
