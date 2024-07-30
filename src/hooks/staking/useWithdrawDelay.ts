@@ -8,11 +8,11 @@ export function useWithdrawDelay (layer2: string) {
   const { DepositManager_CONTRACT } = useCallContract();
   
   useEffect(() => {
-    async function fetchList () {  
+    async function fetch () {  
       if (DepositManager_CONTRACT && layer2) {
         const withdrawDelay = await DepositManager_CONTRACT.withdrawalDelay(layer2)
         const globalWithdrawDelay = await DepositManager_CONTRACT.globalWithdrawalDelay()
-        console.log(withdrawDelay.toString(), withdrawDelay.toString() === '0')
+        // console.log(withdrawDelay.toString(), withdrawDelay.toString() === '0')
         const condition = 
           withdrawDelay.toString() === '0' 
           ? false
@@ -22,7 +22,7 @@ export function useWithdrawDelay (layer2: string) {
         setCheckDelay(condition)
       } 
     }
-    fetchList()
+    fetch()
   }, [DepositManager_CONTRACT, layer2])
 
   return checkDelay
