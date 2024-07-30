@@ -47,8 +47,6 @@ export function useWithdrawable (layer2: string) {
             (request: any) => parseInt(request.withdrawableBlockNumber) > blockNumber
           )
 
-          
-        
           setWithdrawableLength(withdrawbleList.length)
           const reducer = (amount:any, request: any) => amount.add(request.amount)
           const withdrawableAmount = withdrawbleList.reduce(reducer, initial)
