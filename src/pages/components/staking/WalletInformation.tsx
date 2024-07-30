@@ -108,7 +108,6 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   };
 
   const btnDisabledUnStake = () => {
-    // console.log(account === undefined || yourStaked === '0.00' || yourStaked === '-' || !checkDelay)
     return account === undefined || yourStaked === '0.00' || yourStaked === '-' || !checkDelay
       ? setUnstakeDisabled(true)
       : setUnstakeDisabled(false);
