@@ -49,18 +49,20 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
     usePagination,
   );
   const theme = useTheme();
+  const [all, setAll] = useState<any[]>()
 
   useEffect(() => {
-    if (toggle === 'Withdraw') {
-      let value: any[] = []
-      data.map((values: any) => {
-        if (values.time === 'Withdrawable') value.push(values.requestIndex.toString())
-      })
-      setValue(value)
-    } else {
-      setValue([])
-    }
+    let value: any[] = []
+    let allArr: any[] = []
+    data.map((values: any) => {
+      if (toggle === 'Withdraw' && values.time === 'Withdrawable') value.push(values.requestIndex.toString())
+      allArr.push(values.requestIndex.toString())
+    })
+    setAll(allArr)
+    setValue(value)
+    
   }, [toggle])
+  // console.log(all)
 
   const [width] = useWindowDimensions();
   const mobile = width && width < 1040;
@@ -86,7 +88,10 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
           justifyContent={"start"}
           mr={mobile ? '0px' : '30px'}
         >
-          <WithdrawTableHeader />
+          <WithdrawTableHeader 
+            props={getCheckboxProps({ value: all })}
+            toggle={toggle}
+          />
           <chakra.tbody
             {...getTableBodyProps()}
             display="flex"
