@@ -21,6 +21,7 @@ import { StakeModalDataType } from "types"
 import WalletModal from '@/common/modal/Wallet';
 import useModal from '@/hooks/useModal';
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
+import { useWithdrawDelay } from '@/hooks/staking/useWithdrawDelay';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -75,9 +76,11 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength } = useWithdrawable(
     data?.candidateContract,
   );
-
+  const checkDelay = useWithdrawDelay(data?.candidateContract)
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [, setSelectedModalData] = useRecoilState(modalData);
+
+  // console.log(checkDelay)
 
   const yourStaked = stakeOfUser
     ? convertNumber({
@@ -105,7 +108,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   };
 
   const btnDisabledUnStake = () => {
-    return account === undefined || yourStaked === '0.00' || yourStaked === '-'
+    // console.log(account === undefined || yourStaked === '0.00' || yourStaked === '-' || !checkDelay)
+    return account === undefined || yourStaked === '0.00' || yourStaked === '-' || !checkDelay
       ? setUnstakeDisabled(true)
       : setUnstakeDisabled(false);
   };
@@ -123,7 +127,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     btnDisabledWithdraw();
     /*eslint-disable*/
   }, [account, pendingUnstaked, userTonBalance, withdrawable, old_withdrawable]);
-
+  
   const candidateAmount = stakeCandidate
     ? convertNumber({
         amount: stakeCandidate,
@@ -236,7 +240,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             </Button>
             <Button
               {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
-              isDisabled={minimumAmountForButton || isOperator ? false : true}
+              isDisabled={(minimumAmountForButton || isOperator) && unstakeDisabled ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('unstaking', dataModal)}
