@@ -58,6 +58,7 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
       if (toggle === 'Withdraw' && values.time === 'Withdrawable') value.push(values.requestIndex.toString())
       allArr.push(values.requestIndex.toString())
     })
+    allArr.push('a')
     setAll(allArr)
     setValue(value)
     
@@ -89,8 +90,10 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
           mr={mobile ? '0px' : '30px'}
         >
           <WithdrawTableHeader 
-            props={getCheckboxProps({ value: all })}
+            props={getCheckboxProps({value: 'a'})}
             toggle={toggle}
+            setValue={setValue}
+            all={all}
           />
           <chakra.tbody
             {...getTableBodyProps()}

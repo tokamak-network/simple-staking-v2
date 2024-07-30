@@ -1,20 +1,28 @@
 import { chakra, Checkbox, Flex, useCheckbox } from "@chakra-ui/react";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { getColumnWidthWithdraw } from '@/utils/getColumnWidth';
 import TICK from '@/assets/images/Tick.svg'
 import Image from "next/image";
+import { useEagerConnect } from "@/hooks/useWeb3";
 
 type WithdrawTableHeaderProps = {
   props: any
   toggle: string
+  setValue: any
+  all: any
 }
 
 export const WithdrawTableHeader: FC<WithdrawTableHeaderProps> = ({
   props,
-  toggle
+  toggle,
+  setValue,
+  all
 }) => {
   const { state, getCheckboxProps, getInputProps, getLabelProps, htmlProps } = useCheckbox(props)
-  
+  useEffect(() => {
+    if (all) state.isChecked === true ? setValue(all) : setValue([])
+  }, [state.isChecked])
+
   return  (
     <chakra.thead
       borderBottom={'1px solid #f4f6f8'}

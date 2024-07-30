@@ -54,7 +54,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
           cursor='pointer'
           {...htmlProps}
         >
-          <input {...getInputProps()} disabled={time!=='Withdrawable' || toggle == 'Withdraw'} />
+          <input {...getInputProps()} disabled={(time !== 'Withdrawable' && toggle == 'Withdraw')} />
           <Flex
             alignItems='center'
             justifyContent='center'
