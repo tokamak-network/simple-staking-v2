@@ -54,7 +54,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   }, [])
 
   const { value, setValue, getCheckboxProps, isDisabled } = useCheckboxGroup()
-  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(true);
   
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -90,9 +90,17 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     } else {
       setArrLength(value.length)
     }
+    if (value.includes('a') && arrLength === 1) setValue([])
   }, [value])
   
   const options = ['WTON', 'TON']
+
+  const handleToggle = useCallback(() => {
+    setIsChecked(false)
+    setToggle('Restake')
+  },[]) 
+
+  
   const handleSetOption = useCallback((option: any) => {
     setOption(option)
     setMenuState(false)
@@ -167,6 +175,8 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     }
   }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending]);
 
+  console.log(value)
+
   return (
     <Flex flexDir={'column'} w={'350px'} alignItems={'center'}>
       <Flex
@@ -205,7 +215,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
             colorScheme='green' 
             onChange={() =>
               toggle === 'Withdraw'
-                ? setToggle('Restake')
+                ? handleToggle()
                 : setToggle('Withdraw')
             }
           />
@@ -285,7 +295,11 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           mt={'25px'}
           fontSize={'14px'}
           fontWeight={500}
-          isDisabled={!isChecked && toggle === 'Restake' && arrLength !== 0}
+          isDisabled={!(isChecked && arrLength > 0)}
+          // isDisabled={ 
+          //   toggle === 'Restake' 
+          //   ? !(isChecked && arrLength > 0) 
+          //   : toggle === 'Withdraw' ? arrLength > 0 : ''}
           bgColor={toggle === 'Restake' ? '#36af47' : ''}
           _hover={toggle === 'Restake' ?{
             bgColor: '#36af47'
