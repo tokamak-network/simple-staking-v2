@@ -43,7 +43,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   } = useCallContract();
 
   const [input,] = useRecoilState(inputState);
-  const { account, library } = useWeb3React();
+  const { account } = useWeb3React();
   const [, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
   const [arrLength, setArrLength] = useState(0);
@@ -62,16 +62,14 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
 
   useEffect(() => {
     let isMounted = true;
-    let maxIndex =0
+    let maxIndex = 0
     async function fetch() {
       if (DepositManager_CONTRACT) {
         let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(selectedModalData.layer2, account)
-        console.log('a', requestIndex.toString())
+        // console.log('a', requestIndex.toString())
         if (isMounted) {
           if (value.includes('a')) return;
-          
           maxIndex = findMax(value);
-          
           const fillRange = range(+requestIndex.toString(), maxIndex);
           if (!arraysEqual(fillRange, value)) {
             setValue(fillRange);
@@ -86,13 +84,14 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   }, [value])
 
   useEffect(() => {
+    console.log(value)
     if (value.includes('a')) {
       setArrLength(value.length - 1)
     } else {
       setArrLength(value.length)
     }
   }, [value])
-  console.log(arrLength)
+  
   const options = ['WTON', 'TON']
   const handleSetOption = useCallback((option: any) => {
     setOption(option)
@@ -221,6 +220,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
             getCheckboxProps={getCheckboxProps}
             setValue={setValue}
             toggle={toggle}
+            value={value}
           /> : ''
         }
       </Flex>
@@ -247,7 +247,11 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           color={'#3d495d'}
         >
           <Flex mr={'9px'}>
-            {selectedModalData.stakedAmount}
+            {
+              toggle === 'Withdraw'
+                ? selectedModalData.stakedAmount
+                : selectedModalData.pendingUnstaked
+            }
           </Flex>
           {
             toggle === 'Restake' ?
@@ -273,7 +277,6 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
             handleCheckboxChange={handleCheckboxChange}
           />
            : ''
-
         }
         <Button
           {...btnStyle.btnAble()}
@@ -282,7 +285,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           mt={'25px'}
           fontSize={'14px'}
           fontWeight={500}
-          isDisabled={!isChecked && toggle === 'Restake'}
+          isDisabled={!isChecked && toggle === 'Restake' && arrLength !== 0}
           bgColor={toggle === 'Restake' ? '#36af47' : ''}
           _hover={toggle === 'Restake' ?{
             bgColor: '#36af47'

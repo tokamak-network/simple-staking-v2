@@ -26,6 +26,7 @@ type WithdrawTableProps = {
   getCheckboxProps: any
   setValue: any
   toggle: string
+  value: any
 }
 
 export const WithdrawTable: FC<WithdrawTableProps> = ({
@@ -33,7 +34,8 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
   data,
   getCheckboxProps,
   setValue,
-  toggle
+  toggle,
+  value
 }) => {
   const {
     getTableProps,
@@ -121,7 +123,7 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
                         index={index}
                         cell={cell}
                         props={getCheckboxProps({ value: cell.row.original.requestIndex })}
-                        setValue={setValue}
+                        value={value}
                         toggle={toggle}
                       />
                     )
