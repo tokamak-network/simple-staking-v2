@@ -62,13 +62,9 @@ function Footer() {
         rowGap={mobile ? '15px' : 0}
       >
         <Flex h={'17px'} justifyContent={'space-between'}>
-          <Text mr={'5px'}>
-            Copyright © 2024
+          <Text color={'#999999'} fontWeight={'bold'} mr={'25px'}>
+          Copyright © 2024 <span style={{color: '#1c1c1c'}}>Tokamak Network</span> All Rights Reserved.
           </Text>
-          <Text fontWeight={'bold'} color={'black.100'} mr={'5px'}>Tokamak Network</Text>
-          <Flex>
-            All Rights Reserved.
-          </Flex>
         </Flex>
 
         <Flex h={'17px'} justifyContent={mobile ? 'center' : 'flex-end'}>

@@ -30,6 +30,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { useWithdrawable } from "@/hooks/staking/useWithdrawable";
 import { getCommitHistory } from '../../../utils/getTransactionHistory';
 import { candidateState } from "@/atom/global/candidateList";
+import { ETHERSCAN_LINK } from "@/constants";
 
 function OperatorCard(props: { operator: any }) {
   const { operator } = props;
@@ -74,7 +75,7 @@ function OperatorCard(props: { operator: any }) {
       setMinimumAmount(Number(candidateAmount) > 1000)
 
     }
-    console.log(minimumAmount)
+   
   }, [candidate, account])
 
   const commissionRate = candidate?.commissionRate ?
@@ -313,10 +314,10 @@ function OperatorCard(props: { operator: any }) {
             Stake
           </Button> */}
           {
-            !minimumAmount ?
+            account && !minimumAmount ?
             <Text
               fontSize={'12px'}
-              color={'#3e495c'}
+              color={'#ff2d78'}
               flexDir={'row'}
               mb={'15px'}
               textAlign={'center'}
@@ -327,18 +328,26 @@ function OperatorCard(props: { operator: any }) {
                 color="#ff2d78"
                 textDecor={'none'}
               >
-                Warning: 
+                Warning: The
               </ChakraLink>
-              operator have not met the minimum staked balance requirement (at least 1,000.1 TON). As a result, there will be
+            <ChakraLink
+              color={'#2a72e5'}
+              mx={'3px'}
+              href={`${ETHERSCAN_LINK}/address/${candidate.candidate}`}
+              isExternal
+            >
+              operator
+            </ChakraLink>
+            is required to stake at least
               <ChakraLink
-                mx={'4px'}
-                color="#2a72e5"
-                textDecor={'none'}
-                href={'#'}
+                isExternal
+                href={'https://medium.com/onther-tech/staking-on-tokamak-network-a5cca48bea3d#:~:text=Become%20a%20direct%20Operator%20in%20the%20Tokamak%20Network%20by%20operating%20a%20new%20blockchain.%20In%20order%20to%20operate%20a%20chain%2C%20at%20least%201%2C000.1%20TON%20must%20be%20deposited%20(posting%20updated%20on%202024.1.22)'}
+                color={'#2a72e5'}
+                mx={'3px'}
               >
-                no staking reward 
+                1,000.1 TON
               </ChakraLink>
-              for staking on this layer2.
+              on this layer2 before stakers can receive the staking reward. Users are unable to stake until this minimum collateral requirement is fulfilled.
             </Text>
             : ''
           }

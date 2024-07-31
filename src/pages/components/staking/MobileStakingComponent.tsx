@@ -29,6 +29,8 @@ import { useExpectedSeig } from "@/hooks/staking/useCalculateExpectedSeig";
 import { getContract } from "@/components/getContract";
 import Candidate from 'services/abi/Candidate.json';
 import { candidateValues } from '@/atom/global/candidateList';
+import { ETHERSCAN_LINK } from "@/constants";
+import { useWithdrawDelay } from "@/hooks/staking/useWithdrawDelay";
 
 function MobileStakingComponent(props: { 
   operatorList: any 
@@ -48,6 +50,7 @@ function MobileStakingComponent(props: {
   const [disabled, setDisabled] = useState<boolean>(true);
   const [amount, setAmount] = useState(0);
   const [tokenType, setTokenType] = useState('TON')
+  const [minimumAmount, setMinimumAmount] = useState<boolean>(true);
   const [txPending, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
   const { withdrawable, withdrawableLength } = useWithdrawable(selectedOp?.candidateContract)
@@ -58,12 +61,18 @@ function MobileStakingComponent(props: {
   const tonB = userTonBalance ? floatParser(userTonBalance): 0
   const wtonB = userWTonBalance ? floatParser(userWTonBalance) : 0
   const expectedSeig = useExpectedSeig(selectedOp?.candidateContract, selectedOp?.stakedAmount, selectedOp?.candidate)
-  
+  const checkDelay = useWithdrawDelay(selectedOp?.candidateContract)
+
   const candidateAmount = selectedOp?.stakeOfCandidate ? convertNumber({
     amount: selectedOp?.stakeOfCandidate,
     type: 'ray'
-  }) : '0.00'
-  const minimumAmount = Number(candidateAmount) > 1000
+  }) : '1000.1'
+
+  useEffect(() => {
+    // console.log(candidateAmount)
+    setMinimumAmount(Number(candidateAmount) > 1000)
+
+  }, [candidateAmount])
 
   const userExpectedSeig = expectedSeig? convertNumber({
     amount: expectedSeig,
@@ -93,7 +102,7 @@ function MobileStakingComponent(props: {
         setTx(undefined);
       }
     }
-  }, [account, library, selectedOp])
+  }, [library, selectedOp])
   
   useEffect(() => {
     let disable = true
@@ -106,10 +115,11 @@ function MobileStakingComponent(props: {
           Number.isNaN(amount) ||
           amount === undefined  || 
           (tonB && tokenType === 'TON' && amount > tonB ? true : false) || 
-          (wtonB && tokenType === 'WTON' && amount > wtonB ? true : false)
+          (wtonB && tokenType === 'WTON' && amount > wtonB ? true : false) ||
+          !minimumAmount
         )
       } else if (title === 'Unstake') {
-        disable = (staked ?  amount > Number(staked) : false) || amount === 0 || Number.isNaN(amount) || amount === undefined
+        disable = (staked ?  amount > Number(staked) : false) || amount === 0 || Number.isNaN(amount) || amount === undefined || checkDelay
       } else if (title === 'Restake') {
         disable = pendingUnstaked === "0.00"
       } else {
@@ -117,7 +127,8 @@ function MobileStakingComponent(props: {
       }
     }
     setDisabled(disable)
-  }, [title, amount, tokenType])
+  }, [title, amount, tokenType, minimumAmount, checkDelay])
+  
   
   const staked = selectedOp?.stakeOf ?
     convertNumber({

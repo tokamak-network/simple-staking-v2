@@ -15,7 +15,7 @@ import { inputState } from "@/atom/global/input";
 function MobileStaking() {
   const theme = useTheme();
   const [selectedTab, setSelectedTab] = useState("Stake");
-  const { candidateList, noStakingRewardList } = useCandidateList();
+  const { candidateList } = useCandidateList();
   const [, setValue] = useRecoilState(inputState);
   // const { account } = useWeb3React();
   
@@ -116,7 +116,7 @@ function MobileStaking() {
         </Flex>
       </Flex>
       <MobileStakingComponent 
-        operatorList={candidateList.concat(noStakingRewardList)}
+        operatorList={candidateList}
         title={selectedTab}
       />
     </Flex>

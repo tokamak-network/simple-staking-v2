@@ -15,7 +15,6 @@ import Coinage from "services/abi/AutoRefactorCoinage.json"
 
 export function useCandidateList () {
   const [candidateList, setCandidateList] = useState<any[]>([]);
-  const [noStakingRewardList, setNoStakingRewardList] = useState<any[]>([]);
   const { data } = useQuery(GET_CANDIDATE, {
     pollInterval: 10000
   });
@@ -56,7 +55,6 @@ export function useCandidateList () {
             try{
               if (account) {
                 stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
-
                 if (mobile && stakeOf !== '0' && TON_CONTRACT) {
                   const blockNumber = library && await library.getBlockNumber();
                   const Tot = getContract(await SeigManager_CONTRACT.tot(), Coinage, library, account)
@@ -83,7 +81,6 @@ export function useCandidateList () {
                   );
                 }
               }
-              
               stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
               const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
               if (oldCandidate) {
@@ -97,7 +94,7 @@ export function useCandidateList () {
               console.log(e)
             }
           }
-          
+
           tempObj = {
             ...obj,
             stakeOf: stakeOf ? stakeOf.toString() : '0.00',
@@ -111,19 +108,11 @@ export function useCandidateList () {
           return tempObj
         }))
         
-        const noRewardList = candidates.filter((candidate: any) => {
-          return candidate.asCommit.length === 0
-        })
-        const rewardList = candidates.filter((candidate: any) => {
-          return candidate.asCommit.length !== 0
-        })
-
-        setNoStakingRewardList(noRewardList)
-        setCandidateList(rewardList)
+        setCandidateList(candidates)
       }
     }
     fetch()
   }, [data, account])
 
-  return { candidateList, noStakingRewardList }
+  return { candidateList }
 }

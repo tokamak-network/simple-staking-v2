@@ -5,7 +5,7 @@ import { useCandidateList } from '../hooks/staking/useCandidateList';
 
 function Operators() {
   const theme = useTheme();
-  const { candidateList, noStakingRewardList } = useCandidateList();
+  const { candidateList } = useCandidateList();
 
   return (
     <Flex
@@ -44,6 +44,7 @@ function Operators() {
             <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
           </Flex>
         )}
+<<<<<<< HEAD
         
         {
           noStakingRewardList.length !== 0 ? (
@@ -59,6 +60,8 @@ function Operators() {
             <Flex />
           )
         }
+=======
+>>>>>>> sepolia
       </Flex>
     </Flex>
   );

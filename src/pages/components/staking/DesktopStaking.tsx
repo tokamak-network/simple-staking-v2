@@ -79,7 +79,7 @@ function DesktopStaking () {
     );
 
     const [tableLoading, setTableLoading] = useState<boolean>(true);
-    const { candidateList, noStakingRewardList } = useCandidateList()
+    const { candidateList } = useCandidateList()
     const { account } = useWeb3React();
 
     useEffect(() => {
@@ -176,6 +176,7 @@ function DesktopStaking () {
                   unit={'TON'}
                   type={''}
                   contractInfo={candidateContract}
+                  candidate={candidate}
                   minimumAmount={minimumAmount}
                 />
               </Flex>
@@ -229,7 +230,7 @@ function DesktopStaking () {
               />
             </Flex>
           }
-          {
+          {/* {
           noStakingRewardList.length !== 0 ? (
             <Flex flexDir={'column'}>
               <OpearatorTable 
@@ -243,7 +244,7 @@ function DesktopStaking () {
           ) : (
             <Flex />
           )
-        }
+        } */}
         </Box>
       </Flex>
     );

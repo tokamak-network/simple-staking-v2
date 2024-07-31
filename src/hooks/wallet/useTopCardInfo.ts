@@ -48,7 +48,7 @@ export function useTopCardInfo () {
             obj
           ) {
             try{
-              if (account) {
+              if (account && obj.candidateContract) {
                 stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
                 const pendingUnstakedAmount = await DepositManager_CONTRACT.pendingUnstaked(obj.candidateContract, account)
                 staked = staked.add(stakeOf)

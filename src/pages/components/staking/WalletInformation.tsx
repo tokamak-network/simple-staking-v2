@@ -20,6 +20,8 @@ import { getOldLayerAddress } from '@/components/getOldLayerAddress';
 import { StakeModalDataType } from "types"
 import WalletModal from '@/common/modal/Wallet';
 import useModal from '@/hooks/useModal';
+import { minimumAmountState } from '@/atom/staking/minimumAmount';
+import { useWithdrawDelay } from '@/hooks/staking/useWithdrawDelay';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -67,9 +69,11 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength } = useWithdrawable(
     data?.candidateContract,
   );
-
+  const checkDelay = useWithdrawDelay(data?.candidateContract)
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [, setSelectedModalData] = useRecoilState(modalData);
+
+  // console.log(checkDelay)
 
   const yourStaked = stakeOfUser
     ? convertNumber({
@@ -97,7 +101,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   };
 
   const btnDisabledUnStake = () => {
-    return account === undefined || yourStaked === '0.00' || yourStaked === '-'
+    return account === undefined || yourStaked === '0.00' || yourStaked === '-' || !checkDelay
       ? setUnstakeDisabled(true)
       : setUnstakeDisabled(false);
   };
@@ -216,7 +220,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         {
           account ?
           <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
-            <Button
+             <Button
               {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
               isDisabled={account ? false : true}
               fontSize={'14px'}
@@ -227,7 +231,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             </Button>
             <Button
               {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account ? false : true}
+              isDisabled={account && unstakeDisabled ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('unstaking', dataModal)}
