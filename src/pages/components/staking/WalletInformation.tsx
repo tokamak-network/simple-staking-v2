@@ -231,7 +231,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             </Button>
             <Button
               {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account && unstakeDisabled ? false : true}
+              isDisabled={account && !checkDelay ? false : true}
               fontSize={'14px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('unstaking', dataModal)}
