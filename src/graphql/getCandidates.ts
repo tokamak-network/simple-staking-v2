@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 
 export const GET_CANDIDATE = gql`
   query GetCandidate($id: String) {
-    candidates(first: 1000, orderBy: stakedAmount, orderDirection: desc) {
+    candidates(where: {stakedAmount_gt: 0}, orderBy: stakedAmount, orderDirection: desc) {
       id
       candidate
       candidateContract
