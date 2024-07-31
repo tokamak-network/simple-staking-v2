@@ -44,24 +44,6 @@ function Operators() {
             <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
           </Flex>
         )}
-<<<<<<< HEAD
-        
-        {
-          noStakingRewardList.length !== 0 ? (
-            noStakingRewardList.map((operator: any, index: number) => {
-              console.log(index)
-              return (
-                <Flex flexDir={'column'}>
-                  <OperatorCard operator={operator} key={index} />
-                </Flex>
-              )
-            })
-          ) : (
-            <Flex />
-          )
-        }
-=======
->>>>>>> sepolia
       </Flex>
     </Flex>
   );
