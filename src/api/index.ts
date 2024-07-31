@@ -202,12 +202,12 @@ export async function getCandidates () {
 // }
 
 export async function getTotalSupply () {
-  const res =  await axios.get('https://price-api.tokamak.network/totalsupply');
+  const res =  await axios.get('https://price.api.tokamak.network/totalsupply');
   return res.data;
 }
 
 export async function getTotalStaked() {
-  const res = await axios.get('https://price-api.tokamak.network/staking/current');
+  const res = await axios.get('https://price.api.tokamak.network/staking/current');
   return res.data;
   
 }
