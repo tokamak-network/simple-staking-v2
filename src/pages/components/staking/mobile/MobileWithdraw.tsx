@@ -37,7 +37,7 @@ export function MobileWithdraw (args: MobileWithdrawProps) {
       <Flex flexDir={'column'} justifyContent={'space-between'} alignItems={'space-between'} mt={'20px'} w={'100%'}>
         <Flex 
           px={'20px'}
-          py={'15px'}
+          py={'5px'}
           w={'100%'}
           borderRadius={'10px'}
           border={'solid 1px #e7ebf2'}

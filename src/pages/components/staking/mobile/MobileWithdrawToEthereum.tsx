@@ -20,6 +20,12 @@ import { TokenSelector } from "@/common/menulist/TokenSelector";
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox";
 import WithdrawTable from "../modal/withdraw/WithdrawTable";
 import { convertNumber } from "@/components/number";
+import useCallContract from "@/hooks/useCallContract";
+import { useRecoilState } from "recoil";
+import { useWeb3React } from "@web3-react/core";
+import { arraysEqual, findMax, range } from "@/components/array";
+import { inputState } from "@/atom/global/input";
+import { txState } from "@/atom/global/transaction";
 
 type MobileWithdrawToEthereumProps ={
   selectedOp: any 
@@ -34,9 +40,20 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
   const [toggle, setToggle] = useState('Withdraw')
   const [option, setOption] = useState('WTON')
   const [menuState, setMenuState] = useState(false);
+  
   useEffect(() => {
     setMenuState(false);
   }, [])
+
+  const { 
+    DepositManager_CONTRACT, 
+  } = useCallContract();
+
+  const [input,] = useRecoilState(inputState);
+  const { account } = useWeb3React();
+  const [, setTxPending] = useRecoilState(txState);
+  const [tx, setTx] = useState();
+  const [arrLength, setArrLength] = useState(0);
 
   const { value, setValue, getCheckboxProps, isDisabled } = useCheckboxGroup()
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -50,6 +67,15 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
       type: 'ray',
       localeString: true
     }) : '0.00'
+
+  useEffect(() => {
+    if (value.includes('a')) {
+      setArrLength(value.length - 1)
+    } else {
+      setArrLength(value.length)
+    }
+    if (value.includes('a') && arrLength === 1) setValue([])
+  }, [value])
 
   const options = ['WTON', 'TON']
   const handleSetOption = useCallback((option: any) => {
@@ -89,6 +115,65 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
     ],
     [],
   )
+
+  useEffect(() => {
+    let isMounted = true;
+    let maxIndex = 0
+    async function fetch() {
+      if (DepositManager_CONTRACT) {
+        let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(selectedOp.candidateContract, account)
+        // console.log('a', requestIndex.toString())
+        if (isMounted) {
+          if (value.includes('a')) return;
+          maxIndex = findMax(value);
+          const fillRange = range(+requestIndex.toString(), maxIndex);
+          if (!arraysEqual(fillRange, value)) {
+            setValue(fillRange);
+          }
+        }
+      }
+    }
+    fetch()
+    return () => {
+      isMounted = false;
+    };
+  }, [value])
+
+  const reStaking = useCallback(async () => {
+    try {
+      if (DepositManager_CONTRACT && account && selectedOp && arrLength !== 0) {
+        console.log(arrLength)
+        const tx = await DepositManager_CONTRACT.redepositMulti(selectedOp.candidateContract, arrLength);
+        setTx(tx);
+        setTxPending(true);
+
+        return onClose();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [input, DepositManager_CONTRACT, account, selectedOp, setTxPending, onClose]);
+
+  const withdraw = useCallback(async () => {
+    try {
+      if (selectedOp && DepositManager_CONTRACT && selectedOp) {
+        const tx =
+            selectedOp.withdrawableLength === '0' 
+            ? '' 
+            : await DepositManager_CONTRACT.processRequests( 
+              selectedOp.candidateContract,
+              arrLength,
+              option === 'TON' ? true : false,
+            );
+        setTx(tx);
+        setTxPending(true);
+
+        return onClose();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [DepositManager_CONTRACT, onClose, selectedOp, setTxPending]);
 
   return (
     <Flex flexDir={'column'} w={'100%'} alignItems={'center'} h={'100%'}>
@@ -142,6 +227,9 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
               columns={columns}
               data={requests}
               getCheckboxProps={getCheckboxProps}
+              setValue={setValue}
+              toggle={toggle}
+              value={value}
             />
           </Flex> : ''
         }
@@ -205,6 +293,12 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
           fontWeight={500}
           isDisabled={!isChecked && toggle === 'Restake'}
           bgColor={toggle === 'Restake' ? '#36af47' : ''}
+          _hover={
+            toggle === 'Restake' ?
+            { bgColor: '#36af47' } : 
+            ''
+          }
+          onClick={() => toggle === 'Restake' ? reStaking() : withdraw()}
         >
           {toggle}
         </Button>

@@ -301,9 +301,11 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           //   ? !(isChecked && arrLength > 0) 
           //   : toggle === 'Withdraw' ? arrLength > 0 : ''}
           bgColor={toggle === 'Restake' ? '#36af47' : ''}
-          _hover={toggle === 'Restake' ?{
-            bgColor: '#36af47'
-          } : ''}
+          _hover={
+            toggle === 'Restake' ?
+            { bgColor: '#36af47' } : 
+            ''
+          }
           onClick={() => toggle === 'Restake' ? reStaking() : withdraw()}
         >
           {toggle}
