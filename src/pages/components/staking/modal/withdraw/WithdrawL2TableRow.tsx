@@ -8,12 +8,14 @@ type WithdrawL2TableRowProps = {
   // key: number
   index: number
   cell: any
+  tonPrice: number
 }
 
 export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
   // key,
   index,
   cell,
+  tonPrice
 }) => {
   const {
     amount,
@@ -21,6 +23,7 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
 
   const values = amount 
   const type = cell.column.id;
+  const usdValue =  ((tonPrice * +values) / Math.pow(10, 27)).toLocaleString(undefined, {maximumFractionDigits: 3})
   
   return  (
     <chakra.td
@@ -42,7 +45,7 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
             })} 
           </Text>
           <Text color={'#646d7c'} ml={'3px'}>
-            ($0,000)
+            {`($ ${usdValue})`}
           </Text>
         </Flex>
       ) : ('')}

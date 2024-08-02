@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import WithdrawL2TableHeader from './WithdrawL2TableHeader';
 import WithdrawL2TableRow from './WithdrawL2TableRow';
+import { useTONPrice } from '@/hooks/staking/useTONPrice';
 
 type WithdrawL2TableProps = {
   columns: Column[];
@@ -39,7 +40,8 @@ export const WithdrawL2Table: FC<WithdrawL2TableProps> = ({
   );
   
   const theme = useTheme();
-
+  const { tonPriceUSD } = useTONPrice()
+  console.log(tonPriceUSD)
   useEffect(() => {
     setPageSize(4)
   },[])
@@ -89,6 +91,7 @@ export const WithdrawL2Table: FC<WithdrawL2TableProps> = ({
                         key={index}
                         index={index}
                         cell={cell}
+                        tonPrice={tonPriceUSD}
                       />
                     )
                   }) : ''}

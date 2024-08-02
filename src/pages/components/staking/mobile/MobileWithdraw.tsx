@@ -9,6 +9,7 @@ import { SelectOperator } from "./components/SelectOperators"
 import OperatorSelect from "./OperatorSelect"
 import { BalanceDisplay } from "./components/BalanceDisplay"
 import { convertNumber } from "@/components/number"
+import { UnstakeBalanceInput } from "../modal/withdraw/UnstakeBalanceInput"
 
 type MobileWithdrawProps = {
   operatorList: any
@@ -51,9 +52,8 @@ export function MobileWithdraw (args: MobileWithdrawProps) {
             onOpen={onOpen}
             setSelectedOp={setSelectedOp}
           />
-          <BalanceDisplay 
-            tonBalance={staked}
-            wtonBalance={''}
+          <UnstakeBalanceInput 
+            stakedAmount={staked}      
           />
         </Flex>
         {

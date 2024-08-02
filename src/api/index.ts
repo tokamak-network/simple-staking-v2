@@ -18,6 +18,11 @@ function createInstanceEtherscan () {
 const candidate = createInstatnceCandidate();
 const etherscan = createInstanceEtherscan();
 
+export async function getTONPrice() {
+  const res = await axios.get('https://api.upbit.com/v1/ticker?markets=KRW-TON')
+  return res.data[0]
+}
+
 export async function getCountdown (blockNumber: number) {
   const res = await etherscan.get('/api', {
     params: {
@@ -186,7 +191,10 @@ export async function getCandidates () {
   return res.data === '' ? [] : res.data.datas;
 }
 
-
+export async function getUSDInfo() {
+  const res = await axios.get('https://api.frankfurter.app/latest?from=KRW')
+  return res.data.rates.USD
+}
 
 // export async function getManagers () {
 //   const res = await instance.get('/managers');

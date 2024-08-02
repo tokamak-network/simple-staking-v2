@@ -14,6 +14,7 @@ type WithdrawTableRowProps = {
   props: any
   value: any
   toggle: string
+  tonPrice: number
 }
 
 export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
@@ -22,7 +23,8 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
   cell,
   props,
   value,
-  toggle
+  toggle,
+  tonPrice
 }) => {
   const {
     data,
@@ -34,6 +36,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
   const values = amount ? amount : data?.amount
   const theme = useTheme()
   const type = cell.column.id;
+  const usdValue =  ((tonPrice * +values) / Math.pow(10, 27)).toLocaleString(undefined, {maximumFractionDigits: 3})
 
   return  (
     <chakra.td
@@ -86,7 +89,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
             })} 
           </Text>
           <Text color={'#646d7c'} ml={'3px'}>
-            ($0,000)
+            {`($ ${usdValue})`}
           </Text>
         </Flex>
       ) : ('')}

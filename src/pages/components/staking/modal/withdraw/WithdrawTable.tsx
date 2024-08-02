@@ -19,6 +19,7 @@ import {
 import { WithdrawTableHeader } from './WithdrawTableHeader';
 import WithdrawTableRow from './WithdrawTableRow';
 import { useWindowDimensions } from '@/hooks/useWindowDimensions';
+import { useTONPrice } from '@/hooks/staking/useTONPrice';
 
 type WithdrawTableProps = {
   columns: Column[];
@@ -52,6 +53,8 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
   );
   const theme = useTheme();
   const [all, setAll] = useState<any[]>()
+
+  const { tonPriceUSD } = useTONPrice()
 
   useEffect(() => {
     let value: any[] = []
@@ -125,6 +128,7 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
                         props={getCheckboxProps({ value: cell.row.original.requestIndex })}
                         value={value}
                         toggle={toggle}
+                        tonPrice={tonPriceUSD}
                       />
                     )
                   }) : ''}
