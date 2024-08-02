@@ -59,7 +59,6 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     async function fetch() {
       if (DepositManager_CONTRACT) {
         let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(selectedModalData.layer2, account)
-        // console.log('a', requestIndex.toString())
         if (isMounted) {
           if (value.includes('a')) return;
           maxIndex = findMax(value);
@@ -78,7 +77,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
 
   useEffect(() => {
     value.includes('a') 
-      ? setArrLength(value.length) 
+      ? setArrLength(value.length - 1) 
       : setArrLength(value.length)
     if (value.includes('a') && arrLength === 1) setValue([])
   }, [value])
@@ -286,10 +285,6 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           fontSize={'14px'}
           fontWeight={500}
           isDisabled={!(isChecked && arrLength > 0)}
-          // isDisabled={ 
-          //   toggle === 'Restake' 
-          //   ? !(isChecked && arrLength > 0) 
-          //   : toggle === 'Withdraw' ? arrLength > 0 : ''}
           bgColor={toggle === 'Restake' ? '#36af47' : ''}
           _hover={
             toggle === 'Restake' ?

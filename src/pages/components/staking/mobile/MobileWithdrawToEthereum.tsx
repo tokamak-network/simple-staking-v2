@@ -61,6 +61,13 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
 
+  const pendingUnstaked = selectedOp ?
+    convertNumber({
+      amount: selectedOp.pending,
+      type: 'ray',
+      localeString: true
+    }) : '0.00'
+
   const staked = selectedOp ?
     convertNumber({
       amount: selectedOp.stakeOf,
@@ -70,7 +77,7 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
 
   useEffect(() => {
     value.includes('a') 
-      ? setArrLength(value.length) 
+      ? setArrLength(value.length - 1) 
       : setArrLength(value.length)
     if (value.includes('a') && arrLength === 1) setValue([])
   }, [value])
@@ -253,7 +260,11 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
             color={'#3d495d'}
           >
             <Flex mr={'9px'}>
-              {staked}
+            {
+              toggle === 'Withdraw'
+                ? staked
+                : pendingUnstaked
+            }
             </Flex>
             {
               toggle === 'Restake' ?
@@ -288,7 +299,7 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
           mb={'15px'}
           fontSize={'14px'}
           fontWeight={500}
-          isDisabled={!isChecked && toggle === 'Restake'}
+          isDisabled={!(isChecked && arrLength > 0)}
           bgColor={toggle === 'Restake' ? '#36af47' : ''}
           _hover={
             toggle === 'Restake' ?
