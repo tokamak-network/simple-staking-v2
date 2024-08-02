@@ -32,6 +32,8 @@ import { candidateValues } from '@/atom/global/candidateList';
 import { ETHERSCAN_LINK } from "@/constants";
 import { MobileWithdraw } from "./MobileWithdraw";
 import { WarningMessage } from "./WarningMessage";
+import { SelectOperator } from "./components/SelectOperators";
+import { BalanceDisplay } from "./components/BalanceDisplay";
 
 function  MobileStakingComponent(props: { 
   operatorList: any 
@@ -146,7 +148,7 @@ function  MobileStakingComponent(props: {
       {
           title === 'Withdraw' ?
           <MobileWithdraw 
-            selectedOp={selectedOp}
+            operatorList={operatorList}
           /> :
           <Flex
             w="100%"
@@ -158,29 +160,16 @@ function  MobileStakingComponent(props: {
             px="20px"
             flexDir={"column"}
           >
-            <Flex alignItems={"center"} h="35px">
-              <Text color="gray.300" fontSize={"12px"} mr={'5px'}>
-                Balance:
-              </Text>
-              <Flex>
-                <Text fontSize={"13px"} color="gray.700">
-                  {
-                    title === 'Stake' ?
-                    userTonBalance :
-                    title === 'Unstake' ?
-                    staked :
-                    pendingUnstaked
-                  } TON
-                </Text>
-                <Text 
-                  fontSize={"13px"} 
-                  color="gray.700"
-                  ml={'3px'}
-                >
-                  {`/ ${userWTonBalance}`} WTON
-                </Text> 
-              </Flex>
-            </Flex>
+            <BalanceDisplay 
+              tonBalance={
+                title === 'Stake' ?
+                  userTonBalance :
+                  title === 'Unstake' ?
+                  staked :
+                  pendingUnstaked
+              }
+              wtonBalance={userWTonBalance}
+            />
             <MobileCustomInput
               w={"147px"}
               placeHolder={"0.00"}
@@ -194,32 +183,15 @@ function  MobileStakingComponent(props: {
               }
               setAmount={setAmount}
               setTokenType={setTokenType}
-              tokenType={tokenType}
+              tokenType={tokenType}  
               maxButton={true}
             />
-            <Flex
-              mt="10px"
-              h="40px"
-              borderRadius={"4px"}
-              border="solid 1px #dfe4ee"
-              justifyContent={"space-between"}
-              alignItems="center"
-              px="10px"
-            >
-              <Text fontSize={"12px"}>Select an operator</Text>
-              <Flex alignItems={"center"}>
-                <OperatorImage height="20px" width="20px" />
-                <Text ml="7px" fontSize={"13px"} fontWeight="bold">
-                  {selectedOp?.name}
-                </Text>
-                <Flex height={"9px"} width={"8px"} ml="10px" onClick={onOpen}>
-                  <Image
-                    src={select1_arrow_inactive}
-                    alt={"select1_arrow_inactive"}
-                  />
-                </Flex>
-              </Flex>
-            </Flex>
+            <SelectOperator 
+              selectedOp={selectedOp}
+              onOpen={onOpen}
+              setSelectedOp={setSelectedOp}
+              operatorList={operatorList}
+            />
             <Button
               mt="15px"
               bg="blue.200"
