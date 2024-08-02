@@ -69,11 +69,9 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
     }) : '0.00'
 
   useEffect(() => {
-    if (value.includes('a')) {
-      setArrLength(value.length - 1)
-    } else {
-      setArrLength(value.length)
-    }
+    value.includes('a') 
+      ? setArrLength(value.length) 
+      : setArrLength(value.length)
     if (value.includes('a') && arrLength === 1) setValue([])
   }, [value])
 
@@ -142,7 +140,6 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
   const reStaking = useCallback(async () => {
     try {
       if (DepositManager_CONTRACT && account && selectedOp && arrLength !== 0) {
-        console.log(arrLength)
         const tx = await DepositManager_CONTRACT.redepositMulti(selectedOp.candidateContract, arrLength);
         setTx(tx);
         setTxPending(true);
@@ -152,7 +149,7 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
     } catch (e) {
       console.log(e);
     }
-  }, [input, DepositManager_CONTRACT, account, selectedOp, setTxPending, onClose]);
+  }, [arrLength, DepositManager_CONTRACT, account, selectedOp, setTxPending, onClose]);
 
   const withdraw = useCallback(async () => {
     try {

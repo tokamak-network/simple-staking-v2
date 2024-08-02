@@ -1,17 +1,12 @@
 import { 
-  Text,
   Button,
   Checkbox,
   Flex,
   FormControl,
   FormLabel,
-  Menu,
-  MenuButton,
   Switch,
   useTheme,
-  MenuList,
   useCheckboxGroup, 
-  MenuItem
 } from "@chakra-ui/react"
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import { StakeModalDataType } from '../../../../../types/index';
@@ -22,7 +17,6 @@ import useCallContract from "@/hooks/useCallContract";
 import { useWeb3React } from "@web3-react/core";
 import { useRecoilState } from "recoil";
 import { txState } from "@/atom/global/transaction";
-import { inputState } from "@/atom/global/input";
 import { arraysEqual, findMax, range } from "@/components/array";
 
 type WithdrawToEthereumProps ={
@@ -42,7 +36,6 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     DepositManager_CONTRACT, 
   } = useCallContract();
 
-  const [input,] = useRecoilState(inputState);
   const { account } = useWeb3React();
   const [, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
@@ -84,12 +77,9 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   }, [value])
 
   useEffect(() => {
-    console.log(value)
-    if (value.includes('a')) {
-      setArrLength(value.length - 1)
-    } else {
-      setArrLength(value.length)
-    }
+    value.includes('a') 
+      ? setArrLength(value.length) 
+      : setArrLength(value.length)
     if (value.includes('a') && arrLength === 1) setValue([])
   }, [value])
   
@@ -152,7 +142,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     } catch (e) {
       console.log(e);
     }
-  }, [input, DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal]);
+  }, [arrLength, DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal]);
 
   const withdraw = useCallback(async () => {
     try {
