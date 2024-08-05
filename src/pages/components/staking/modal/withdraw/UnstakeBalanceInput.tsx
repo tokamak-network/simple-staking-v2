@@ -51,7 +51,7 @@ export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
             h={'24px'}
             placeHolder={'0.00'}
             type={'unstaking'}
-            maxValue={stakedAmount.replace(/\,/g,'')}
+            maxValue={stakedAmount ? stakedAmount.replace(/\,/g,'') : '0.00'}
           />
         </Flex>
       </Flex>

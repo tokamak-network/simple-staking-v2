@@ -41,7 +41,7 @@ export const WithdrawL2Table: FC<WithdrawL2TableProps> = ({
   
   const theme = useTheme();
   const { tonPriceUSD } = useTONPrice()
-  console.log(tonPriceUSD)
+  
   useEffect(() => {
     setPageSize(4)
   },[])

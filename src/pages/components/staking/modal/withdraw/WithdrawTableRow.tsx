@@ -1,7 +1,6 @@
 import { convertNumber } from "@/components/number";
-import { Box, chakra, Checkbox, Flex, Link, Text, useCheckbox } from "@chakra-ui/react";
+import { chakra, Flex, Text, useCheckbox } from "@chakra-ui/react";
 import { FC } from "react";
-import { useTheme } from '@chakra-ui/react';
 import { getColumnWidthWithdraw } from '@/utils/getColumnWidth';
 import TICK from '@/assets/images/Tick.svg'
 import Image from "next/image";
@@ -34,7 +33,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
 
   const { state, getCheckboxProps, getInputProps, getLabelProps, htmlProps } = useCheckbox(props)
   const values = amount ? amount : data?.amount
-  const theme = useTheme()
+  
   const type = cell.column.id;
   const usdValue =  ((tonPrice * +values) / Math.pow(10, 27)).toLocaleString(undefined, {maximumFractionDigits: 3})
 
