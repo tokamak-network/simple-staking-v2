@@ -16,6 +16,7 @@ import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
 import { useWithdrawalAndDeposited } from '@/hooks/staking/useWithdrawable';
 import WithdrawL2Table from "./WithdrawL2Table"
 import { WithdrawL2Image } from "./WithdrawL2Image"
+import useGetTransaction from "@/hooks/staking/useGetTransaction"
 
 type ToTitanProps = {
   selectedModalData: StakeModalDataType
@@ -35,6 +36,8 @@ export const ToTitan = (args: ToTitanProps) => {
   const [tx, setTx] = useState();
   const [withdrawTx, setWithdrawTx] = useState<any[]>([]);
   const { DepositManager_CONTRACT } = useCallContract();
+  const tData = useGetTransaction();
+  
 
   const { request } = useWithdrawalAndDeposited();
 
@@ -58,10 +61,15 @@ export const ToTitan = (args: ToTitanProps) => {
   
   useEffect(() => {
     async function fetch() {
-      console.log(selectedModalData)
+      // console.log(selectedModalData)
       if (selectedModalData) {
         const queryData = await request(selectedModalData.layer2)
+        console.log(tData)
+        tData.depositTxs.map((tx: any) => {
+          console.log(tx.l2txHash)
+        })
         setWithdrawTx(queryData)
+        
       }
     }
     fetch()
@@ -74,6 +82,7 @@ export const ToTitan = (args: ToTitanProps) => {
     const amount = floatParser(input);
     try {
       if (DepositManager_CONTRACT && amount && account && selectedModalData) {
+        console.log(selectedModalData.layer2)
         const tx = await DepositManager_CONTRACT.withdrawAndDepositL2(
           selectedModalData.layer2,
           convertToRay(amount.toString()),
@@ -87,7 +96,7 @@ export const ToTitan = (args: ToTitanProps) => {
       console.log(e)
     }
   }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending])
-  console.log(withdrawTx)
+  
   return (
     <Flex flexDir={'column'}>
       <WithdrawL2Image 
@@ -119,7 +128,7 @@ export const ToTitan = (args: ToTitanProps) => {
         withdrawTx && withdrawTx.length > 0 ?
         <WithdrawL2Table 
           columns={columns}
-          data={withdrawTx}
+          data={tData.depositTxs}
         /> : ''
       }
     </Flex>

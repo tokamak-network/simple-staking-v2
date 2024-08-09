@@ -23,6 +23,7 @@
     "@fontsource/titillium-web": "^4.5.9",
     "@ledgerhq/hw-transport-node-hid": "^6.27.10",
     "@tanstack/react-query": "^5.51.18",
+    "@tokamak-network/tokamak-layer2-sdk": "^0.0.4",
     "apollo": "^2.34.0",
     "axios": "^1.2.1",
     "bignumber.js": "^9.1.1",

@@ -3,6 +3,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import { FC, useMemo } from "react";
 import { L2Content } from "./L2Content";
 import { convertNumber } from "@/components/number";
+import { useIsOperator } from "@/hooks/staking/useIsOperator";
 
 type L2InformationProps ={
   data: any
@@ -16,6 +17,9 @@ export const L2Information: FC<L2InformationProps> = ({
     portal,
   } = data.layer2Candidate
 
+  console.log(data)
+  const a = useIsOperator(data.candidateContract)
+  console.log(a)
   const earned = data.layer2Candidate.seigGiven[0] ?  convertNumber({
     amount: data.layer2Candidate.seigGiven[0].layer2Seigs,
     type: 'ray',

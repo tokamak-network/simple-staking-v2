@@ -9,6 +9,8 @@ import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
 import { getCountdown } from '@/api';
 import { useQuery } from '@apollo/client';
 import { GET_WITHDRAWAL_AND_DEPOSITED } from '@/graphql/getWithdrawalAndDeposited';
+import { useRecoilState } from 'recoil';
+import { txState } from '@/atom/global/transaction';
 
 export function useWithdrawable (layer2: string) {
   const { blockNumber } = useBlockNumber()
@@ -172,17 +174,19 @@ export function useWithdrawRequests () {
 }
 
 export function useWithdrawalAndDeposited () {
+  const [txPending, ] = useRecoilState(txState);
+  const { account } = useWeb3React();
   const { data } = useQuery(GET_WITHDRAWAL_AND_DEPOSITED, {
     pollInterval: 10000
   });
   const request = useCallback(
     async (layer2: string) => {
-      if (data) {
+      if (data && account) {
         const filter = data.withdrawalAndDepositeds.filter((data: any) => {
-          return data.candidate.id === layer2
+          return data.candidate.id === layer2 && data.sender === account.toLowerCase()
         })
         return filter
       }
-    }, [data])
+    }, [data, txPending, account])
   return { request }
 }

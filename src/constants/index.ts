@@ -19,6 +19,10 @@ export const ETHERSCAN_API = REACT_APP_MODE === "PRODUCTION" ? "https://api.ethe
 
 export const ETHERSCAN_LINK = REACT_APP_MODE === "PRODUCTION" ? "https://etherscan.io" : "https://sepolia.etherscan.io"
 
+export const TITAN_SUBGRAPH = REACT_APP_MODE === "PRODUCTION" ? process.env.NEXT_PUBLIC_TITAN_SUBGRAPH : process.env.NEXT_PUBLIC_TITAN_SEPOLIA_SUBGRAPH
+export const THANOS_SUBGRAPH = REACT_APP_MODE === "PRODUCTION" ? process.env.NEXT_PUBLIC_THANOS_SUBGRAPH : process.env.NEXT_PUBLIC_THANOS_SEPOLIA_SUBGRAPH
+export const TITAN_RPC = REACT_APP_MODE === "PRODUCTION" ? process.env.NEXT_PUBLIC_TITAN_RPC : process.env.NEXT_PUBLIC_TITAN_SEPOLIA_RPC
+
 export const BASE_PROVIDER =
 REACT_APP_MODE === "PRODUCTION"
     ? ethers.getDefaultProvider("mainnet")

@@ -8,7 +8,6 @@ export const GET_WITHDRAWAL_AND_DEPOSITED = gql`
       timestamp
       eventName
       sender
-      
       candidate {
         id
       }

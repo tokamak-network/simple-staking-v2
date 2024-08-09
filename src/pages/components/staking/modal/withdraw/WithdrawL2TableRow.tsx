@@ -1,8 +1,9 @@
 import { convertNumber } from "@/components/number";
 import { Box, chakra, Checkbox, Flex, Link, Text, useCheckbox } from "@chakra-ui/react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTheme } from '@chakra-ui/react';
 import { getColumnWidthWithdraw } from '@/utils/getColumnWidth';
+import { differenceInSeconds, format, fromUnixTime } from "date-fns";
 
 type WithdrawL2TableRowProps = {
   // key: number
@@ -18,12 +19,44 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
   tonPrice
 }) => {
   const {
-    amount,
+    _amount,
+    l1timeStamp,
+    l2txHash
   } = cell.row?.original;
+  const [duration, setDuration] = useState("0");
 
-  const values = amount 
+  const values = _amount
+  
   const type = cell.column.id;
-  const usdValue =  ((tonPrice * +values) / Math.pow(10, 27)).toLocaleString(undefined, {maximumFractionDigits: 3})
+  const usdValue =  ((tonPrice * +values) / Math.pow(10, 18)).toLocaleString(undefined, {maximumFractionDigits: 3})
+
+  useEffect(() => {
+    if (l2txHash) {
+      setDuration('Withdrawn')
+    } else if (l1timeStamp) {
+      const getDuration = setInterval(() => {
+        const startDate = new Date(Number(l1timeStamp) * 1000);
+        const currentTime = new Date(Date.now());
+        const elapsedTimeInSeconds = differenceInSeconds(
+          currentTime,
+          startDate
+        );
+        
+        if (elapsedTimeInSeconds > 1000) {
+          setDuration('Failed')
+        } else {
+          const formattedTime = format(
+            new Date(elapsedTimeInSeconds * 1000),
+            "mm:ss"
+          );
+          setDuration(formattedTime);
+        }
+      }, 1000);
+      return () => clearInterval(getDuration);
+    }
+  }, []);
+
+  // console.log(duration)
   
   return  (
     <chakra.td
@@ -40,7 +73,7 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
           <Text textAlign={'center'} color={'#000000'} >
             {convertNumber({
               amount: values,
-              type: 'ray',
+              type: 'wei',
               localeString: true,
             })} 
           </Text>
@@ -55,7 +88,7 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
           justifyContent={'center'}
           alignItems={"center"}
         >
-          {'Withdrawn'}
+          {duration}
         </Flex>
       ) : ('')}
     </chakra.td>

@@ -1,15 +1,12 @@
 import { Flex, useDisclosure } from "@chakra-ui/react"
 import { useCallback, useState } from "react"
 import { WithdrawType } from "../modal/withdraw/WithdrawType"
-import Image from 'next/image'
 import TITAN from '@/assets/images/titan_symbol.svg'
 import ETHEREUM from '@/assets/images/ethereum_symbol.svg'
 import { WithdrawDrawer } from "./WithdrawDrawer"
 import { SelectOperator } from "./components/SelectOperators"
-import OperatorSelect from "./OperatorSelect"
-import { BalanceDisplay } from "./components/BalanceDisplay"
 import { convertNumber } from "@/components/number"
-import { UnstakeBalanceInput } from "../modal/withdraw/UnstakeBalanceInput"
+import { UnstakableBalance } from "@/common/balance/UnstakableBalance"
 
 type MobileWithdrawProps = {
   operatorList: any
@@ -52,8 +49,9 @@ export function MobileWithdraw (args: MobileWithdrawProps) {
             onOpen={onOpen}
             setSelectedOp={setSelectedOp}
           />
-          <UnstakeBalanceInput 
-            stakedAmount={staked}      
+          <UnstakableBalance 
+            stakedAmount={staked}
+            justify={'start'}
           />
         </Flex>
         {

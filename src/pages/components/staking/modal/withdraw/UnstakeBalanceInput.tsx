@@ -2,8 +2,7 @@ import { BalanceInput } from "@/common/input/CustomInput"
 import { Flex } from "@chakra-ui/react"
 import Image from "next/image"
 import TON from "@/assets/images/ton.svg"
-import { useTONPrice } from "@/hooks/staking/useTONPrice"
-import { floatParser } from "@/components/number"
+import { UnstakableBalance } from "@/common/balance/UnstakableBalance"
 
 type UnstakeBalanceInputProps = {
   stakedAmount: string | undefined
@@ -11,8 +10,6 @@ type UnstakeBalanceInputProps = {
 
 export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
   const {stakedAmount} = args
-  const {tonPriceUSD} = useTONPrice()
-  const dollor = stakedAmount ? parseFloat(stakedAmount.replaceAll(',', '')) * tonPriceUSD : '0.00'
   
   return (
     <Flex
@@ -55,7 +52,11 @@ export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
           />
         </Flex>
       </Flex>
-      <Flex 
+      <UnstakableBalance 
+        stakedAmount={stakedAmount}
+        justify={'end'}
+      />
+      {/* <Flex 
         flexDir={'row'} 
         fontSize={'12px'} 
         fontWeight={'normal'} 
@@ -73,7 +74,7 @@ export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
         <Flex>
           {`$ ${dollor.toLocaleString(undefined, {maximumFractionDigits: 2})}`}
         </Flex>
-      </Flex>
+      </Flex> */}
     </Flex>
   )
 }
