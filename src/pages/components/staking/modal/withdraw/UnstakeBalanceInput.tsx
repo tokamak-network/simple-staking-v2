@@ -20,7 +20,7 @@ export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
       flexDir={'column'}
     >
       <Flex mt={'15px'} ml={'14px'} w={'100%'}>
-        <Flex justifyContent={'space-between'}>
+        <Flex justifyContent={'start'}>
           <Flex 
             w={'24px'} 
             h={'24px'} 
@@ -56,25 +56,6 @@ export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
         stakedAmount={stakedAmount}
         justify={'end'}
       />
-      {/* <Flex 
-        flexDir={'row'} 
-        fontSize={'12px'} 
-        fontWeight={'normal'} 
-        color={'#7e7e8f'} 
-        mt={'8px'} 
-        justifyContent={'end'}
-        mr={'20px'}
-      >
-        <Flex>
-          Balance: {stakedAmount} TON 
-        </Flex>
-        <Flex mx={'3px'}>
-          /
-        </Flex>
-        <Flex>
-          {`$ ${dollor.toLocaleString(undefined, {maximumFractionDigits: 2})}`}
-        </Flex>
-      </Flex> */}
     </Flex>
   )
 }

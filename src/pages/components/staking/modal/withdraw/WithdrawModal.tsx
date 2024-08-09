@@ -5,12 +5,6 @@ import {
   ModalContent,
   ModalOverlay,
   useTheme,
-  Text,
-  Button,
-  Checkbox,
-  Radio,
-  RadioGroup,
-  Box,
 } from '@chakra-ui/react';
 import useModal from '@/hooks/useModal';
 import { useCallback, useEffect, useState } from 'react';
@@ -72,8 +66,6 @@ function WithdrawModal () {
     }
     fetch()
   }, [selectedModalData])
-  console.log(input, type, modalName, selectedModalData)
-
 
   return (
     <Modal

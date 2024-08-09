@@ -77,6 +77,9 @@ function BalanceInput(props: InputProp) {
               {...INPUT_STYLE.inputUnstaking()} :
               {...INPUT_STYLE.inputCalc()}
             )}
+            w={'200px'}
+            ml={type === 'unstaking' ? "-60px" : '15px'}
+            mr={type === 'unstaking' ? '-20px' : ''}
             placeholder={placeHolder}
             onChange={onChange}
           /> 
@@ -90,7 +93,7 @@ function BalanceInput(props: InputProp) {
             /> :
             type === 'unstaking' ?
             <Flex
-            border={''}
+              border={''}
             >
               
             </Flex> :
