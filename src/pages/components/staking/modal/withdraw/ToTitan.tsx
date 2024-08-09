@@ -39,7 +39,7 @@ export const ToTitan = (args: ToTitanProps) => {
   const tData = useGetTransaction();
   
 
-  const { request } = useWithdrawalAndDeposited();
+  // const { request } = useWithdrawalAndDeposited();
 
   const columns = useMemo(
     () => [
@@ -59,22 +59,6 @@ export const ToTitan = (args: ToTitanProps) => {
     stakedAmount
   } = selectedModalData
   
-  useEffect(() => {
-    async function fetch() {
-      // console.log(selectedModalData)
-      if (selectedModalData) {
-        const queryData = await request(selectedModalData.layer2)
-        console.log(tData)
-        tData.depositTxs.map((tx: any) => {
-          console.log(tx.l2txHash)
-        })
-        setWithdrawTx(queryData)
-        
-      }
-    }
-    fetch()
-  }, [selectedModalData])
-
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
 
@@ -82,14 +66,13 @@ export const ToTitan = (args: ToTitanProps) => {
     const amount = floatParser(input);
     try {
       if (DepositManager_CONTRACT && amount && account && selectedModalData) {
-        console.log(selectedModalData.layer2)
         const tx = await DepositManager_CONTRACT.withdrawAndDepositL2(
           selectedModalData.layer2,
           convertToRay(amount.toString()),
         );
         setTx(tx);
         setTxPending(true);
-        
+        setInput('')
         return closeThisModal();
       }
     } catch (e) {
@@ -125,7 +108,7 @@ export const ToTitan = (args: ToTitanProps) => {
         </Button>
       </Flex>
       {
-        withdrawTx && withdrawTx.length > 0 ?
+        tData.depositTxs && tData.depositTxs.length > 0 ?
         <WithdrawL2Table 
           columns={columns}
           data={tData.depositTxs}

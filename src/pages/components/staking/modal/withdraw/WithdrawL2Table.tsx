@@ -43,7 +43,7 @@ export const WithdrawL2Table: FC<WithdrawL2TableProps> = ({
   const { tonPriceUSD } = useTONPrice()
   
   useEffect(() => {
-    setPageSize(4)
+    setPageSize(6)
   },[])
 
   return (

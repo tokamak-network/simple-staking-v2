@@ -1,9 +1,10 @@
 import { convertNumber } from "@/components/number";
 import { Box, chakra, Checkbox, Flex, Link, Text, useCheckbox } from "@chakra-ui/react";
 import { FC, useEffect, useState } from "react";
-import { useTheme } from '@chakra-ui/react';
-import { getColumnWidthWithdraw } from '@/utils/getColumnWidth';
 import { differenceInSeconds, format, fromUnixTime } from "date-fns";
+import HELP from '@/assets/images/get-help_icon.svg'
+import Image from "next/image";
+import { ETHERSCAN_LINK, TITAN_EXPLORER_LINK } from "@/constants";
 
 type WithdrawL2TableRowProps = {
   // key: number
@@ -84,11 +85,44 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
       ) : ('')}
       {type === 'status' ? (
         <Flex 
-          color={'#828d99'}
+          color={
+            duration === 'Withdrawn' ? 
+            '#2a72e5' : 
+            duration === 'Failed' ? 
+            '#e23738' : 
+            '#828d99'
+          }
           justifyContent={'center'}
           alignItems={"center"}
         >
-          {duration}
+          {duration !== 'Withdrawn' ? duration : ''}
+          {
+            duration === 'Failed' ?
+            (
+              <Link
+                href="https://docs.google.com/forms/d/16H_To1WJjIVvdS5h6Ng9rTi2EXZhwgz5Oz4IGOdfdwc/edit"
+                isExternal
+                cursor={'pointer'}
+                flexDir={'row'}
+              >
+                <Image src={HELP} alt={''} />
+              </Link>
+            ) : 
+            duration === 'Withdrawn' ?
+            (
+              <Link
+                href={`${TITAN_EXPLORER_LINK}/tx/${l2txHash}`}
+                isExternal
+                cursor={'pointer'}
+                _hover={{
+                  textDecor:'underline'
+                }}
+                mr={'5px'}
+              >
+                {duration}
+              </Link>
+            ) : ''
+          }
         </Flex>
       ) : ('')}
     </chakra.td>

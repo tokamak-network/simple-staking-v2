@@ -311,12 +311,12 @@ function StakeModal() {
 
   useEffect(() => {
     if (modalComponent)  {
-      if (selectedModal == 'withdraw' && modalComponent.balance2 !== '0.00') {
+      if ( modalComponent.balance2 !== '0.00') {
         setWithdrawType('old'); 
-        setInput(modalComponent.balance2);
-      } else if (selectedModal == 'withdraw' && modalComponent.balance2 === '0.00') {
+        
+      } else if ( modalComponent.balance2 === '0.00') {
         setWithdrawType('new')      
-        setInput(modalComponent.balance3)
+        
       }
     }
   }, [selectedModal]);

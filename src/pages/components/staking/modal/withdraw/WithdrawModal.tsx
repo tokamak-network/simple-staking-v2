@@ -45,12 +45,15 @@ function WithdrawModal () {
   const [input, setInput] = useRecoilState(inputState);
 
   const closeThisModal = useCallback(() => {
-    // setResetValue();
     setInput('');
-    // setTokenType('ton')
     setType('main')
     closeModal();
   }, [closeModal]);
+
+  const back = useCallback(() => {
+    setType('main')
+    setInput('')
+  }, [])
 
   useEffect(() => {
     type === 'main' 
@@ -69,6 +72,7 @@ function WithdrawModal () {
     }
     fetch()
   }, [selectedModalData])
+  console.log(input, type, modalName, selectedModalData)
 
 
   return (
@@ -94,7 +98,7 @@ function WithdrawModal () {
                       w={'24px'} 
                       mr={type === 'ethereum' ? '26px' : '44px'}
                       cursor={'pointer'}
-                      onClick={() => setType('main')}
+                      onClick={() => back()}
                     >
                       <Image src={BACK} alt={''} />
                     </Flex> : ''

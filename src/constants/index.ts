@@ -18,6 +18,7 @@ export const ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
 export const ETHERSCAN_API = REACT_APP_MODE === "PRODUCTION" ? "https://api.etherscan.io" : "https://api-sepolia.etherscan.io"
 
 export const ETHERSCAN_LINK = REACT_APP_MODE === "PRODUCTION" ? "https://etherscan.io" : "https://sepolia.etherscan.io"
+export const TITAN_EXPLORER_LINK = REACT_APP_MODE === "PRODUCTION" ? "https://explorer.titan.tokamak.network" : "https://explorer.titan-sepolia.tokamak.network"
 
 export const TITAN_SUBGRAPH = REACT_APP_MODE === "PRODUCTION" ? process.env.NEXT_PUBLIC_TITAN_SUBGRAPH : process.env.NEXT_PUBLIC_TITAN_SEPOLIA_SUBGRAPH
 export const THANOS_SUBGRAPH = REACT_APP_MODE === "PRODUCTION" ? process.env.NEXT_PUBLIC_THANOS_SUBGRAPH : process.env.NEXT_PUBLIC_THANOS_SEPOLIA_SUBGRAPH

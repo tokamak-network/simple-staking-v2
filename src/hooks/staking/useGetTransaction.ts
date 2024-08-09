@@ -14,10 +14,12 @@ import { userTransactions } from "@/atom/staking/transaction";
 import { useWeb3React } from "@web3-react/core";
 import { TITAN_RPC } from "@/constants";
 import { ethers } from "ethers";
+import { refreshState } from "@/atom/staking/refresh";
 
 export default function useGetTransaction() {
   const [tDataDeposit, setTDataDeposit] = useState<FullDepTx[]>([]);
   const [tDataWithdraw, setTDataWithdraw] = useState<any[]>([]);
+  const [refresh, setRefresh] = useRecoilState(refreshState)
   
   const { account, library } = useWeb3React();
   const l2Provider = new ethers.providers.JsonRpcProvider(TITAN_RPC)
@@ -41,17 +43,18 @@ export default function useGetTransaction() {
   //data from the subgraphs are re-fetched every time the user address, connected layer, or the network status changes
   useEffect(() => {
     const subgraphData = async () => {
-      if (isConnectedToMainNetwork !== undefined && account) {
+      if (isConnectedToMainNetwork !== undefined && account && refresh) {
         const userAllTransactions = await fetchUserTransactions(
           account,
           isConnectedToMainNetwork
         );
+        setRefresh(false)
         return setUserTxfromSubgraph(userAllTransactions);
       }
+      
     };
     subgraphData();
-  }, [account, isConnectedToMainNetwork]);
-
+  }, [account, isConnectedToMainNetwork, refresh]);
 
   //this function fetches the deposit txs and their data and reformats the data
   //takes the input boolean parameter 'set' to check if the loading status of the txs should be set or not
