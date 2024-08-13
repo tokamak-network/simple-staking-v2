@@ -65,12 +65,9 @@ export function MobileToL2 (args: MobileToL2Props) {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
 
-  const {
-    stakeOf
-  } = selectedOp
   
-  const myStaked = stakeOf ? convertNumber({
-    amount: stakeOf,
+  const myStaked = selectedOp?.stakeOf ? convertNumber({
+    amount: selectedOp?.stakeOf,
     type: 'ray',
     localeString: true
   }) : '0.00'

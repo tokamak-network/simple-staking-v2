@@ -31,16 +31,16 @@ export function MobileUnstake (args: MobileUnstakeProps) {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
 
-  const {
-    stakeOf
-  } = selectedOp
+  // const {
+  //   stakeOf
+  // } = selectedOp
 
   const unStaking = useCallback(async () => {
     try {
       const amount = floatParser(input);
       if (DepositManager_CONTRACT && SeigManager_CONTRACT && amount && account && selectedOp) {
         const tx = await DepositManager_CONTRACT.requestWithdrawal(
-          selectedOp.candidateContract,
+          selectedOp?.candidateContract,
           convertToRay(amount.toString()),
         );
         setTx(tx);
@@ -68,8 +68,8 @@ export function MobileUnstake (args: MobileUnstakeProps) {
     onClose()
   }
 
-  const myStaked = stakeOf ? convertNumber({
-    amount: stakeOf,
+  const myStaked = selectedOp?.stakeOf ? convertNumber({
+    amount: selectedOp?.stakeOf,
     type: 'ray',
     localeString: true
   }) : '0.00'

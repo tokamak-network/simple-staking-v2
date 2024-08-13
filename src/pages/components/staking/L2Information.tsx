@@ -12,22 +12,22 @@ type L2InformationProps ={
 function L2Information ({
   data
 }: L2InformationProps) {
-  const {
-    registeredTime,
-    portal,
-  } = data.layer2Candidate
+  // const {
+    
+    
+  // } = data?.layer2Candidate
 
-  console.log(data)
-  const a = useIsOperator(data.candidateContract)
-  console.log(a)
-  const earned = data.layer2Candidate.seigGiven[0] ?  convertNumber({
-    amount: data.layer2Candidate.seigGiven[0].layer2Seigs,
+  // console.log(data)
+  // const a = useIsOperator(data.candidateContract)
+  // console.log(a)
+  const earned = data?.layer2Candidate.seigGiven[0] ?  convertNumber({
+    amount: data?.layer2Candidate.seigGiven[0].layer2Seigs,
     type: 'ray',
     localeString: true
   }) : '0.00'
 
-  const converted = data.lockedInBridge ? convertNumber({
-    amount: data.lockedInBridge,
+  const converted = data?.lockedInBridge ? convertNumber({
+    amount: data?.lockedInBridge,
     type: 'ray',
     localeString: true
   }) : '0.00'
@@ -59,7 +59,7 @@ function L2Information ({
         >
           <L2Content 
             title={'Bridge'}
-            content={data.candidateContract}
+            content={data?.candidateContract}
             type={'address'}
           />
           <L2Content 
@@ -84,12 +84,12 @@ function L2Information ({
         >
           <L2Content 
             title={'L2 registry registered date'}
-            content={getDate(registeredTime)}
+            content={getDate(data?.layer2Candidate?.registeredTime)}
             type={'date'}
           />
           <L2Content 
             title={'L2 open date'}
-            content={getDate(registeredTime)}
+            content={getDate(data?.layer2Candidate?.registeredTime)}
             type={'date'}
           />
           <L2Content 

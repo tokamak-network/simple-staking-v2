@@ -14,16 +14,7 @@ type StakingInformationProps = {
 export const StakingInformation: FC<StakingInformationProps> = ({
   data
 }) => {
-  const { 
-    candidateContract, 
-    expectedSeig, 
-    candidate, 
-    pending, 
-    stakeOf, 
-    stakedUserList, 
-    asCommit,
-    stakeOfCandidate
-  } = data;
+  
   const txHistory = getTransactionHistory(data)
   const commitHistory = getCommitHistory(data)
 
@@ -54,28 +45,28 @@ export const StakingInformation: FC<StakingInformationProps> = ({
     [],
   );
 
-  const candidateAmount = stakeOfCandidate? convertNumber({
-    amount: stakeOfCandidate,
+  const candidateAmount = data?.stakeOfCandidate ? convertNumber({
+    amount: data?.stakeOfCandidate,
     type: 'ray'
   }) : '0.00'
 
   const minimumAmount = Number(candidateAmount) >= 1000
 
-  const userExpectedSeig = expectedSeig ? 
+  const userExpectedSeig = data?.expectedSeig ? 
     convertNumber({
-      amount: expectedSeig,
+      amount: data?.expectedSeig,
       type: 'ray',
       localeString: true
     }) : '-' 
   
   const yourStake = convertNumber({
-    amount: stakeOf, 
+    amount: data?.stakeOf, 
     type: 'ray',
     localeString: true
   })
 
   const pendingUnstaked = convertNumber({
-    amount: pending,
+    amount: data?.pending,
     type: 'ray',
     localeString: true
   })
@@ -94,7 +85,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
           <Flex flexDir={'column'} alignItems={'space-between'}>
             <OperatorDetailInfo 
               title={'Total Stakers'}
-              value={stakedUserList.length}
+              value={data?.stakedUserList.length}
             />
           </Flex>
           <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
@@ -127,8 +118,8 @@ export const StakingInformation: FC<StakingInformationProps> = ({
               value={userExpectedSeig}
               unit={'TON'}
               type={''}
-              contractInfo={candidateContract}
-              candidate={candidate}
+              contractInfo={data?.candidateContract}
+              candidate={data?.candidate}
               minimumAmount={minimumAmount}
             />
           </Flex>
