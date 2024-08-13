@@ -25,7 +25,6 @@ export function getCommitHistory (data: any) {
         return b.timestamp - a.timestamp;
       })
     }
-    // console.log(concatData[0])
     return concatData
   }
 }
