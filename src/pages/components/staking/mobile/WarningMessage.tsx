@@ -108,3 +108,5 @@ export function WarningMessage (args: WarningMessageProps) {
     </Flex>
   )
 }
+
+export default WarningMessage

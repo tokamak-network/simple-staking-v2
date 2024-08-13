@@ -21,7 +21,7 @@ import { StakeModalDataType } from "types"
 import WalletModal from '@/common/modal/Wallet';
 import useModal from '@/hooks/useModal';
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
-import WithdrawModal from './modal/withdraw/WithdrawModal';
+import WithdrawModal from '../../../common/modal/withdraw/WithdrawModal';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;

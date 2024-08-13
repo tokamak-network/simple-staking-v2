@@ -14,7 +14,7 @@ import { getTransactionHistory, getCommitHistory } from '../../../utils/getTrans
 import { useWeb3React } from "@web3-react/core";
 import { convertNumber } from "@/components/number";
 import { StakingInformation } from "./StakingInformation";
-import { L2Information } from "./L2Information";
+import L2Information from "./L2Information";
 
 function DesktopStaking () {
 

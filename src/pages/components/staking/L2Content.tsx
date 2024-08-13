@@ -11,7 +11,7 @@ type L2ContentProps = {
   type: string;
 }
 
-export const L2Content = (args: L2ContentProps) => {
+export function L2Content (args: L2ContentProps) {
   const {
     title,
     content,
@@ -75,3 +75,5 @@ export const L2Content = (args: L2ContentProps) => {
     </Flex>
   )
 }
+
+export default L2Content

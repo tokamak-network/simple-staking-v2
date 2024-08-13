@@ -162,3 +162,5 @@ export const StakingInformation: FC<StakingInformationProps> = ({
     </Flex>
   )
 } 
+
+export default StakingInformation

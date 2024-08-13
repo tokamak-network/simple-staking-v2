@@ -1,6 +1,6 @@
 import { Flex, useDisclosure } from "@chakra-ui/react"
 import { useCallback, useState } from "react"
-import { WithdrawType } from "../modal/withdraw/WithdrawType"
+import { WithdrawType } from "../../../../common/modal/withdraw/WithdrawType"
 import TITAN from '@/assets/images/titan_symbol.svg'
 import ETHEREUM from '@/assets/images/ethereum_symbol.svg'
 import { WithdrawDrawer } from "./WithdrawDrawer"
@@ -89,3 +89,5 @@ export function MobileWithdraw (args: MobileWithdrawProps) {
     </Flex>
   )
 }
+
+export default MobileWithdraw

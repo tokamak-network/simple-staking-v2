@@ -9,7 +9,7 @@ import {
 import useModal from '@/hooks/useModal';
 import { useCallback, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { ModalHeader } from '../ModalHeader';
+import { ModalHeader } from '../../../pages/components/staking/modal/ModalHeader';
 import { WithdrawType } from './WithdrawType';
 import Image from 'next/image'
 import TITAN from '@/assets/images/titan_symbol.svg'

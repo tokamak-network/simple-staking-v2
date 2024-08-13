@@ -55,3 +55,5 @@ export function SelectOperator (args: SelectOperatorProps) {
     </Flex>
   )
 }
+
+export default SelectOperator

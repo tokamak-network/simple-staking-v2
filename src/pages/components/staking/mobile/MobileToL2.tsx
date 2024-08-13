@@ -10,9 +10,9 @@ import { inputState } from "@/atom/global/input"
 import { txState } from "@/atom/global/transaction"
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
 import { useWithdrawalAndDeposited } from '@/hooks/staking/useWithdrawable';
-import WithdrawL2Table from "../modal/withdraw/WithdrawL2Table"
-import { UnstakeBalanceInput } from '../modal/withdraw/UnstakeBalanceInput';
-import { WithdrawL2Image } from "../modal/withdraw/WithdrawL2Image"
+import WithdrawL2Table from "../../../../common/modal/withdraw/WithdrawL2Table"
+import { UnstakeBalanceInput } from '../../../../common/modal/withdraw/UnstakeBalanceInput';
+import { WithdrawL2Image } from "../../../../common/modal/withdraw/WithdrawL2Image"
 
 
 type MobileToL2Props = {
@@ -20,7 +20,7 @@ type MobileToL2Props = {
   onClose: any
 }
 
-export const MobileToL2 = (args: MobileToL2Props) => {
+export function MobileToL2 (args: MobileToL2Props) {
   const theme = useTheme();
   const { btnStyle } = theme;
 
@@ -143,3 +143,5 @@ export const MobileToL2 = (args: MobileToL2Props) => {
     </Flex>
   )
 }
+
+export default MobileToL2

@@ -28,3 +28,5 @@ export function BalanceDisplay (args: BalanceDisplayProps) {
     </Flex>
   )
 }
+
+export default BalanceDisplay

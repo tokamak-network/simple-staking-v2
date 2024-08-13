@@ -9,7 +9,7 @@ import {
   useCheckboxGroup, 
 } from "@chakra-ui/react"
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import { StakeModalDataType } from '../../../../../types/index';
+import { StakeModalDataType } from '../../../types/index';
 import WithdrawTable from "./WithdrawTable";
 import { TokenSelector } from "@/common/menulist/TokenSelector";
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox";

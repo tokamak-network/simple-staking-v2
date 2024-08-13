@@ -18,7 +18,7 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 // import WithdrawTable from "./WithdrawTable";
 import { TokenSelector } from "@/common/menulist/TokenSelector";
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox";
-import WithdrawTable from "../modal/withdraw/WithdrawTable";
+import WithdrawTable from "../../../../common/modal/withdraw/WithdrawTable";
 import { convertNumber } from "@/components/number";
 import useCallContract from "@/hooks/useCallContract";
 import { useRecoilState } from "recoil";
@@ -33,7 +33,7 @@ type MobileWithdrawToEthereumProps ={
   onClose: any
 }
 
-export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) => {
+export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
   const {selectedOp, requests, onClose} = args
   const theme = useTheme();
   const { btnStyle } = theme;
@@ -314,3 +314,5 @@ export const MobileWithdrawToEthereum = (args: MobileWithdrawToEthereumProps) =>
     </Flex>
   )
 }
+
+export default MobileWithdrawToEthereum

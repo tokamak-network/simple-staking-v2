@@ -8,14 +8,14 @@ import { useRecoilState } from "recoil"
 import { inputState } from "@/atom/global/input"
 import { txState } from "@/atom/global/transaction"
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
-import { UnstakeBalanceInput } from "../modal/withdraw/UnstakeBalanceInput"
+import { UnstakeBalanceInput } from "../../../../common/modal/withdraw/UnstakeBalanceInput"
 
 type MobileUnstakeProps = {
   selectedOp: any
   onClose: any
 }
 
-export const MobileUnstake = (args: MobileUnstakeProps) => {
+export function MobileUnstake (args: MobileUnstakeProps) {
   const { selectedOp, onClose } = args
   const theme = useTheme();
   const { btnStyle } = theme;
@@ -111,3 +111,5 @@ export const MobileUnstake = (args: MobileUnstakeProps) => {
     </Flex>
   )
 }
+
+export default MobileUnstake

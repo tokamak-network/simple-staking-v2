@@ -47,3 +47,5 @@ export function MobileToEthereum (args: MobileToEthereumProps) {
     </Flex>
   )
 }
+
+export default MobileToEthereum

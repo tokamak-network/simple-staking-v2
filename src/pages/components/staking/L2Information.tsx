@@ -1,7 +1,7 @@
 import { getDate } from "@/components/getDate";
 import { Box, Flex } from "@chakra-ui/react";
 import { FC, useMemo } from "react";
-import { L2Content } from "./L2Content";
+import L2Content from "./L2Content";
 import { convertNumber } from "@/components/number";
 import { useIsOperator } from "@/hooks/staking/useIsOperator";
 
@@ -9,9 +9,9 @@ type L2InformationProps ={
   data: any
 }
 
-export const L2Information: FC<L2InformationProps> = ({
+function L2Information ({
   data
-}) => {
+}: L2InformationProps) {
   const {
     registeredTime,
     portal,
@@ -109,3 +109,5 @@ export const L2Information: FC<L2InformationProps> = ({
     </Flex>
   )
 }
+
+export default L2Information

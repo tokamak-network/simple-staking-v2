@@ -55,3 +55,5 @@ export function WithdrawDrawer (args: WithdrawDrawerProps) {
     </Drawer>
   )
 }
+
+export default WithdrawDrawer
