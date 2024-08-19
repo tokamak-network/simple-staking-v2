@@ -59,8 +59,8 @@ function L2Information ({
         >
           <L2Content 
             title={'Bridge'}
-            content={data?.candidateContract}
-            type={'address'}
+            content={'https://bridge.tokamak.network'}
+            type={'link'}
           />
           <L2Content 
             title={'Block explorer'}

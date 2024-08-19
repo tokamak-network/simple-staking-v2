@@ -1,5 +1,5 @@
 
-import { Flex } from "@chakra-ui/react"
+import { Flex, Link } from "@chakra-ui/react"
 import trimAddress from '../../../utils/trimAddress';
 import NEWTAB from '@/assets/images/newtab-icon.png'
 import Image from "next/image";
@@ -30,7 +30,8 @@ export function L2Content (args: L2ContentProps) {
       flexDir={'column'}
       fontWeight={500}
       textAlign={'left'}
-      w={'240px'}
+      w={type === 'link' ? '100%' : '250px'}
+      mr={type === 'link' ? '20px' : ''}
     >
       <Flex
         fontSize={'13px'}
@@ -43,7 +44,10 @@ export function L2Content (args: L2ContentProps) {
         fontSize={type === 'link' ? '14px' : '20px'}
         color={'#304156'}
       >
-        <Flex fontWeight={type === 'ton' ? 'bold' : 500}>
+        <Flex 
+          fontWeight={type === 'ton' ? 'bold' : 500}
+          // w={'100%'}
+        >
           {convert}
         </Flex>
         {
@@ -60,16 +64,17 @@ export function L2Content (args: L2ContentProps) {
         }
         {
           type === 'address' || type === 'link' ?
-          <Flex 
-            width={'20px'} 
+          <Link 
+            w={'20px'} 
             height={'20px'} 
             justifyContent={'center'} 
             alignItems={'center'}
             ml={'6px'}
-            mt={'5px'}
+            href={convert}
+            isExternal
           >
             <Image src={NEWTAB} alt={''} /> 
-          </Flex> : ''
+          </Link> : ''
         }
       </Flex>      
     </Flex>
