@@ -1,22 +1,52 @@
 
-import { Flex, Link } from "@chakra-ui/react"
+import { Button, Flex, Link } from "@chakra-ui/react"
 import trimAddress from '../../../utils/trimAddress';
 import NEWTAB from '@/assets/images/newtab-icon.png'
 import Image from "next/image";
+import { useCallback, useState } from "react";
+import { useWeb3React } from "@web3-react/core";
+import { getContract } from "@/components/getContract";
+import Layer2Candidate from 'services/abi/Layer2Candidate.json'
+import { useRecoilState } from "recoil";
+import { txState } from "@/atom/global/transaction";
 
 
 type L2ContentProps = {
   title: string;
   content: string | undefined;
   type: string;
+  contractAddress? : string;
 }
 
 export function L2Content (args: L2ContentProps) {
   const {
     title,
     content,
-    type
+    type,
+    contractAddress
   } = args
+  
+  const { library, account } = useWeb3React()
+  const [tx, setTx] = useState();
+  const [, setTxPending] = useRecoilState(txState);
+
+
+  const updateSeig = useCallback(async () => {
+    if (account && library && contractAddress) {
+      try {
+        console.log(contractAddress)
+        const Candidate_CONTRACT = getContract(contractAddress, Layer2Candidate, library, account)
+        console.log(Candidate_CONTRACT)
+        const tx = await Candidate_CONTRACT.updateSeigniorage(1)
+        setTx(tx);
+        setTxPending(true);
+      } catch (e) {
+        console.log(e)
+        setTxPending(false);
+        setTx(undefined);
+      }
+    }
+  }, [])
 
   const convert = type === 'address' ? trimAddress({
     address: content ? content : '',
@@ -75,6 +105,28 @@ export function L2Content (args: L2ContentProps) {
           >
             <Image src={NEWTAB} alt={''} /> 
           </Link> : ''
+        }
+        {
+          title === 'Earned seigniorage' && account ?
+          <Flex ml={'6px'}>
+            <Button
+              w={'80px'}
+              h={'25px'}
+              borderRadius={'4px'}
+              border={'solid 1px #dfe4ee'}
+              bgColor={'#fff'}
+              color={'#86929d'}
+              fontSize={'12px'}
+              fontWeight={'normal'}
+              _hover={{
+                borderColor: '#2a72e5',
+                color: '#2a72e5'
+              }}
+              onClick={()=> { updateSeig()}}
+            >
+              Claim
+            </Button>
+          </Flex> : ''
         }
       </Flex>      
     </Flex>

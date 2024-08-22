@@ -17,8 +17,8 @@ function L2Information ({
     
   // } = data?.layer2Candidate
 
-  // console.log(data)
-  // const a = useIsOperator(data.candidateContract)
+  console.log(data)
+  const a = useIsOperator(data.candidateContract)
   // console.log(a)
   const earned = data?.layer2Candidate.seigGiven[0] ?  convertNumber({
     amount: data?.layer2Candidate.seigGiven[0].layer2Seigs,
@@ -101,6 +101,7 @@ function L2Information ({
             title={'Earned seigniorage'}
             content={earned}
             type={'ton'}
+            contractAddress={data.candidateContract}
           />
 
         </Flex>

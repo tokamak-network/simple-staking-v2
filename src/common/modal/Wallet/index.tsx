@@ -25,15 +25,10 @@ import {
 import { WalletPending } from './Pending';
 import usePrevious from '@/hooks/usePrevious';
 import { useEagerConnect, useInactiveListener } from '@/hooks/useWeb3';
-// import {selectExplorerLink, selectNetwork} from 'store/app/app.reducer';
-// import {useAppSelector} from 'hooks/useRedux';
 import { useLocalStorage } from 'hooks/useStorage';
-// import store from 'store'
-// import {fetchUserInfo} from 'store/app/user.reducer';
 import { useRecoilValue } from 'recoil';
 import { selectedModalState } from '@/atom/global/modal';
 import useModal from '@/hooks/useModal';
-// import { useConfig } from '@/hooks/useConfig';
 import Image from 'next/image';
 
 import ACCOUNT_COPY from '@/assets/images/account_copy_icon.png'
@@ -52,7 +47,6 @@ function WalletModal() {
   // @ts-ignore
   const selectedModal = useRecoilValue(selectedModalState);
   const { closeModal } = useModal();
-  // const { config } = useConfig();
   // @ts-ignore
   const [copyText, setCopyText] = useState<string>('Copy Address');
   const [walletView, setWalletView] = useState<string>(WALLET_VIEWS.ACCOUNT);

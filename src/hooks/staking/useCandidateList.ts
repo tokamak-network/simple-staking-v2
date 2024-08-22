@@ -12,6 +12,8 @@ import { calculateExpectedSeig } from "tokamak-staking-lib";
 import BN from "bn.js";
 import CONTRACT_ADDRESS from "services/addresses/contract";
 import Coinage from "services/abi/AutoRefactorCoinage.json"
+import { txState } from "@/atom/global/transaction";
+import { useRecoilState } from "recoil";
 
 export function useCandidateList () {
   const [candidateList, setCandidateList] = useState<any[]>([]);
@@ -20,12 +22,14 @@ export function useCandidateList () {
   });
 
   const { account, library, chainId } = useWeb3React();
+  const [txPending, ] = useRecoilState(txState);
   const { 
     SeigManager_CONTRACT, 
     DepositManager_CONTRACT, 
     Old_DepositManager_CONTRACT, 
     TON_CONTRACT 
   } = useCallContract();
+
   const [width] = useWindowDimensions();
   const mobile = width && width < 1040;
 
@@ -41,7 +45,7 @@ export function useCandidateList () {
           let oldHistory
           let expSeig
 
-          // console.log(obj)
+          console.log(obj)
 
           const oldCandidate = getOldLayerAddress(obj.candidateContract)
 
@@ -115,7 +119,7 @@ export function useCandidateList () {
       }
     }
     fetch()
-  }, [data, account, chainId])
+  }, [data, account, chainId, txPending])
 
   return { candidateList }
 }

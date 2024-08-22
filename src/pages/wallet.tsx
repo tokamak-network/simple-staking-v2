@@ -13,8 +13,6 @@ function Wallet () {
   const theme = useTheme();
   const { userHistory } = useUserHistory();
   const [tableLoading, setTableLoading] = useState<boolean>(true);
-  // const { accumulatedReward } = useAccumulatedReward()
-  // const { userTotalStaked } = useOperatorList()
   const { userTotalStaked, userPendingWithdrawal } = useTopCardInfo()
 
   const myTotalStaked = userTotalStaked ? convertNumber({
