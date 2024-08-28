@@ -15,13 +15,13 @@ function L2Information ({
   // const {
     
     
-  // } = data?.layer2Candidate
+  // } = data?.candidateAddOn
 
   console.log(data)
-  const a = useIsOperator(data.candidateContract)
+  // const a = useIsOperator(data?.candidateContract)
   // console.log(a)
-  const earned = data?.layer2Candidate.seigGiven[0] ?  convertNumber({
-    amount: data?.layer2Candidate.seigGiven[0].layer2Seigs,
+  const earned = data?.candidateAddOn.seigGiven[0] ?  convertNumber({
+    amount: data?.candidateAddOn.seigGiven[0].layer2Seigs,
     type: 'ray',
     localeString: true
   }) : '0.00'
@@ -84,12 +84,12 @@ function L2Information ({
         >
           <L2Content 
             title={'L2 registry registered date'}
-            content={getDate(data?.layer2Candidate?.registeredTime)}
+            content={getDate(data?.candidateAddOn?.registeredTime)}
             type={'date'}
           />
           <L2Content 
             title={'L2 open date'}
-            content={getDate(data?.layer2Candidate?.registeredTime)}
+            content={getDate(data?.candidateAddOn?.registeredTime)}
             type={'date'}
           />
           <L2Content 
@@ -101,7 +101,7 @@ function L2Information ({
             title={'Earned seigniorage'}
             content={earned}
             type={'ton'}
-            contractAddress={data.candidateContract}
+            contractAddress={data?.candidateContract}
           />
 
         </Flex>

@@ -9,10 +9,10 @@ export const GET_CANDIDATE = gql`
       name
       stakedAmount
       commissionRate
-      layer2Candidate {
+      candidateAddOn {
         id
         registeredTime
-        systemConfig
+        rollupConfig
         operator
         memo
         bridge

@@ -59,7 +59,7 @@ function OperatorCard(props: { operator: any }) {
     notWithdrawable
   } = useWithdrawable(operator?.candidateContract)
 
-  const lockedInBridge = useL2CandidateInfo(operator?.layer2Candidate)
+  const lockedInBridge = useL2CandidateInfo(operator?.candidateAddOn)
 
   useEffect(() => {
     setCandidate(operator)
@@ -105,8 +105,8 @@ function OperatorCard(props: { operator: any }) {
       localeString: true
     }) : '0.00'
 
-  const earned = operator?.layer2Candidate?.seigGiven[0] ?  convertNumber({
-    amount: operator?.layer2Candidate?.seigGiven[0].layer2Seigs,
+  const earned = operator?.candidateAddOn?.seigGiven[0] ?  convertNumber({
+    amount: operator?.candidateAddOn?.seigGiven[0].layer2Seigs,
     type: 'ray',
     localeString: true
   }) : '0.00'
@@ -125,10 +125,10 @@ function OperatorCard(props: { operator: any }) {
       title: 'Sequencer seigniorage', value: 'title',
     },
     {
-      title: 'L2 registry registered date', value: getDate(operator?.layer2Candidate?.registeredTime),
+      title: 'L2 registry registered date', value: getDate(operator?.candidateAddOn?.registeredTime),
     },
     {
-      title: 'L2 open date', value: getDate(operator?.layer2Candidate?.registeredTime),
+      title: 'L2 open date', value: getDate(operator?.candidateAddOn?.registeredTime),
     },
     {
       title: 'TON locked in Bridge', value: lockedInBridges,
@@ -140,13 +140,13 @@ function OperatorCard(props: { operator: any }) {
       title: 'L1 Contract address', value: 'address',
     },
     {
-      title: 'Calldata', value: operator?.layer2Candidate?.txData,
+      title: 'Calldata', value: operator?.candidateAddOn?.txData,
     },
     {
-      title: 'State root', value: operator?.layer2Candidate?.stateRoot,
+      title: 'State root', value: operator?.candidateAddOn?.stateRoot,
     },
     {
-      title: 'Bridge', value: operator?.layer2Candidate?.bridge,
+      title: 'Bridge', value: operator?.candidateAddOn?.bridge,
     }
   ]
   
@@ -451,7 +451,7 @@ function OperatorCard(props: { operator: any }) {
                     pt="20px"
                   >
                     {
-                      candidate?.layer2Candidate !== null ?
+                      candidate?.candidateAddOn !== null ?
                       (
                         <InfoTypeSelector 
                           tab={tab}

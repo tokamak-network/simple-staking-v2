@@ -55,7 +55,7 @@ export function MobileWithdraw (args: MobileWithdrawProps) {
           />
         </Flex>
         {
-          selectedOp && selectedOp.layer2Candidate !== null ?
+          selectedOp && selectedOp.candidateAddOn !== null ?
           <Flex flexDir={'column'}>
             <WithdrawType 
               name={'Withdraw to Ethereum'}

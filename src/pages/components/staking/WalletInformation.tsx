@@ -68,7 +68,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
       setStakeOfUser(data.stakeOf);
       setExpSeig(data.expectedSeig);
       setStakeCandidate(data.stakeOfCandidate);
-      setIsL2(data.layer2Candidate !== null)
+      setIsL2(data.candidateAddOn !== null)
     }
   }, [data]);
 

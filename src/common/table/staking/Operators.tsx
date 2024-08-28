@@ -170,13 +170,13 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
             flexDirection="column"
           >
             {page && page.map((row: any, i) => {
-              const { candidateContract, stakedAmount, candidate, layer2Candidate } = row.original;
+              const { candidateContract, stakedAmount, candidate, candidateAddOn } = row.original;
               const stakedId = candidateContract
               const { userStakeds } = useUserStaked(`${account?.toLocaleLowerCase()}-${stakedId.toLocaleLowerCase()}`)
               const expectedSeig = useExpectedSeig(candidateContract, stakedAmount, candidate)
-              const lockedInBridge = useL2CandidateInfo(layer2Candidate)
+              const lockedInBridge = useL2CandidateInfo(candidateAddOn)
               
-              
+              console.log(candidateAddOn)
               row.original = {
                 ...row.original,
                 userStakeds,
@@ -224,7 +224,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       stakedAmount,
                       stakeOf,
                       stakeOfCandidate,
-                      layer2Candidate
+                      candidateAddOn
                       // yourStaked,
                     } = cell.row.original;
                     
@@ -284,13 +284,13 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                           <Flex alignItems={'center'} mr={'30px'}>
                             <Flex 
                               flexDir={'column'} 
-                              justifyContent={isMember || layer2Candidate !== null ? 'space-between' : 'center'} 
+                              justifyContent={isMember || candidateAddOn !== null ? 'space-between' : 'center'} 
                               h={'25px'}
                               mr={minimumAmount ? '' : '20px'}
                             >
                               {minimumAmount ? getCircle(kind) : ''}
                               {isMember ? getCircle('member') : ''}
-                              {layer2Candidate !== null ? getCircle('op') : ''}
+                              {candidateAddOn !== null ? getCircle('op') : ''}
                             </Flex>
                             <Box mr={'12px'}>
                               <OperatorImage imageLink={''}/>
@@ -337,7 +337,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       <Flex flexDir={'column'}>
                         <Flex flexDir={'row'} w={'100%'} justifyContent={'space-between'}>
                           {
-                            layer2Candidate !== null ?
+                            candidateAddOn !== null ?
                             (
                               <InfoTypeSelector 
                                 tab={tab}
@@ -346,7 +346,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                             ) : ''
                           }
                           {
-                              tab == 'l2' && layer2Candidate !== null ?
+                              tab == 'l2' && candidateAddOn !== null ?
                               <Flex 
                                 justifyContent={'center'}
                                 alignItems={'center'}
@@ -358,13 +358,13 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                                   L1 Contract address
                                 </Flex>
                                 <ContractAddressInfo 
-                                  label={layer2Candidate}
+                                  label={candidateAddOn}
                                 />
                               </Flex> : ''
                             }
                         </Flex>
                         {
-                          tab === 'l2' && layer2Candidate !== null ? 
+                          tab === 'l2' && candidateAddOn !== null ? 
                           renderL2({row}) :
                           renderDetail({row}) 
                         }
