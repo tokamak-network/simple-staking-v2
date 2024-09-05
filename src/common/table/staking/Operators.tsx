@@ -176,7 +176,6 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
               const expectedSeig = useExpectedSeig(candidateContract, stakedAmount, candidate)
               const lockedInBridge = useL2CandidateInfo(candidateAddOn)
               
-              console.log(candidateAddOn)
               row.original = {
                 ...row.original,
                 userStakeds,

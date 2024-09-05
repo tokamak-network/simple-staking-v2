@@ -66,7 +66,7 @@ function WithdrawModal () {
     }
     fetch()
   }, [selectedModalData])
-
+  
   return (
     <Modal
       isOpen={
@@ -76,7 +76,19 @@ function WithdrawModal () {
       onClose={closeThisModal}
     >
       <ModalOverlay>
-        <ModalContent maxW={selectedModalData?.isL2 && type === 'main' ? '690px' : '350px'} bg={'#fff'} borderRadius={'15px'} boxShadow={'0 2px 6px 0 rgba(61, 73, 93, 0.1)'}>
+        <ModalContent 
+          maxW={
+            selectedModalData?.isL2 && (+selectedModalData?.old_withdrawableLength) >= 1 && type === 'main' 
+            ? '1020px'
+            : selectedModalData?.isL2 && type === 'main' 
+              || selectedModalData?.old_withdrawableLength !== '0.00' && type === 'main' 
+            ? '690px' 
+            : '350px'
+          } 
+          bg={'#fff'} 
+          borderRadius={'15px'} 
+          boxShadow={'0 2px 6px 0 rgba(61, 73, 93, 0.1)'}
+        >
           {selectedModalData ? (
             <ModalBody>
               <Flex w="100%" flexDir={'column'} alignItems={'center'} py={'20px'}>
@@ -106,6 +118,14 @@ function WithdrawModal () {
                 {
                   type === 'main' ?
                   <Flex justifyContent={'space-between'} alignItems={'space-between'} mt={'30px'} w={'100%'}>
+                    {
+                      (+selectedModalData.old_withdrawableLength) >= 1 ?
+                      <WithdrawType 
+                        name={'Prior to Patch'}
+                        content={'Donec quam lectus vel vulputate mauris. Nullam quam amet adipiscing quis diam nisl maecenas.'}
+
+                      /> : ''
+                    }
                     <WithdrawType 
                       name={'Withdraw to Ethereum'}
                       content={'Staked TON can be unstaked and can be withdrawn after 93,046 blocks from unstaking (~14 days).'}

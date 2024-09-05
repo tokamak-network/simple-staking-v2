@@ -1,13 +1,14 @@
 import { useWindowDimensions } from "@/hooks/useWindowDimensions"
-import { Flex } from "@chakra-ui/react"
+import { Button, Flex } from "@chakra-ui/react"
 import Image, { StaticImageData } from 'next/image'
-
+import { useCallback, useEffect, useState } from "react"
+import { TokenSelector } from "@/common/menulist/TokenSelector";
 
 type WithdrawTypeProps = {
   name: string
   content: string
-  onClick: any
-  src: StaticImageData
+  onClick?: any
+  src?: StaticImageData
 }
 
 export const WithdrawType = (args: WithdrawTypeProps) => {
@@ -15,6 +16,19 @@ export const WithdrawType = (args: WithdrawTypeProps) => {
 
   const [ width ] = useWindowDimensions();
   const mobile = width && width < 1040;
+  const options = ['WTON', 'TON']
+
+  const [option, setOption] = useState('WTON')
+  
+  const [menuState, setMenuState] = useState(false);
+  useEffect(() => {
+    setMenuState(false);
+  }, [])
+
+  const handleSetOption = useCallback((option: any) => {
+    setOption(option)
+    setMenuState(false)
+  }, [])
   
   return (
     <Flex
@@ -54,13 +68,60 @@ export const WithdrawType = (args: WithdrawTypeProps) => {
           {content}
         </Flex>
       </Flex>
-      <Flex 
-        w={mobile ? '60px' : '96px'} 
-        h={mobile ? '60px' : '96px'}
-        mr={mobile ? '12px' : ''}
-      >
-        <Image src={src} alt={''} />
-      </Flex>
+      {
+        src ?
+        <Flex 
+          w={mobile ? '60px' : '96px'} 
+          h={mobile ? '60px' : '96px'}
+          mr={mobile ? '12px' : ''}
+        >
+          <Image src={src} alt={''} />
+        </Flex> : 
+        name === 'Prior to Patch' ?
+          <Flex flexDir={'column'} alignItems={'center'}>
+            <Flex
+              fontSize={'12px'}
+              fontWeight={500}
+              color={'#808992'}
+              mb={'9px'}
+            >
+              Withdrawable Balance
+            </Flex>
+            <Flex h={'24px'} flexDir={'row'}>
+              <Flex 
+                mr={'9px'}
+                color={'#3d495c'}
+                fontSize={'18px'}
+                fontWeight={500}
+              >
+                {'20,000.00'}
+              </Flex>
+              <TokenSelector
+                option={option}
+                setOption={handleSetOption}
+                menuState={menuState}
+                setMenuState={setMenuState}
+                options={options}
+              />
+            </Flex>
+            <Flex>
+              <Button
+                w={'130px'}
+                h={'38px'}
+                borderRadius={'4px'}
+                bgColor={'#257eee'}
+                color={'#fff'}
+                fontSize={'14px'}
+                fontWeight={500}
+                mt={'25px'}
+              >
+                Withdraw
+              </Button>
+              
+            </Flex>
+          </Flex>
+        : ''
+      }
     </Flex>
   )
 }
