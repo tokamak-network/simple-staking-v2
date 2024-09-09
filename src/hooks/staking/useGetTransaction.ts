@@ -21,7 +21,8 @@ export default function useGetTransaction() {
   const [tDataWithdraw, setTDataWithdraw] = useState<any[]>([]);
   const [refresh, setRefresh] = useRecoilState(refreshState)
   
-  const { account, library } = useWeb3React();
+  const {  library } = useWeb3React();
+  const account = '0x43700f09B582eE2BFcCe4b5Db40ee41B4649D977'
   const l2Provider = new ethers.providers.JsonRpcProvider(TITAN_RPC)
   //titanSDK as an L2 provider for certain functions
   const l2ProSDK = titanSDK.asL2Provider(l2Provider);

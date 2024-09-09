@@ -248,7 +248,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           <Flex mr={'9px'}>
             {
               toggle === 'Withdraw'
-                ? selectedModalData.stakedAmount
+                ? selectedModalData.withdrawable
                 : selectedModalData.pendingUnstaked
             }
           </Flex>

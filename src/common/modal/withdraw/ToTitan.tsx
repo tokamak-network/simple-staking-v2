@@ -79,7 +79,7 @@ export const ToTitan = (args: ToTitanProps) => {
       console.log(e)
     }
   }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending])
-  
+  console.log(tData)
   return (
     <Flex flexDir={'column'}>
       <WithdrawL2Image 

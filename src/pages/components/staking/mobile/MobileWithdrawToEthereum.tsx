@@ -26,6 +26,7 @@ import { useWeb3React } from "@web3-react/core";
 import { arraysEqual, findMax, range } from "@/components/array";
 import { inputState } from "@/atom/global/input";
 import { txState } from "@/atom/global/transaction";
+import { useWithdrawable } from '@/hooks/staking/useWithdrawable';
 
 type MobileWithdrawToEthereumProps ={
   selectedOp: any 
@@ -40,7 +41,10 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
   const [toggle, setToggle] = useState('Withdraw')
   const [option, setOption] = useState('WTON')
   const [menuState, setMenuState] = useState(false);
+
   
+  const [withRequests, setWithRequests] = useState()
+
   useEffect(() => {
     setMenuState(false);
   }, [])
@@ -61,6 +65,20 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
 
+  const { withdrawable, withdrawableLength } = useWithdrawable(
+    selectedOp?.candidateContract,
+  );
+
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     if (selectedOp) {
+  //       const withdrawRequest = await useWithdrawable(selectedOp.candidateContract)
+  //       setWithRequests(withdrawRequest)
+  //     }
+  //   }
+  //   fetch()
+  // }, [selectedOp])
+
   const pendingUnstaked = selectedOp ?
     convertNumber({
       amount: selectedOp.pending,
@@ -68,6 +86,11 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
       localeString: true
     }) : '0.00'
 
+    // const withdrawble = requests.filter((request: any) => {
+    //   return request.time === 'Withdrawable'
+    // })
+
+  console.log(withdrawable)
   const staked = selectedOp ?
     convertNumber({
       amount: selectedOp.stakeOf,
@@ -262,7 +285,7 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
             <Flex mr={'9px'}>
             {
               toggle === 'Withdraw'
-                ? staked
+                ? withdrawable
                 : pendingUnstaked
             }
             </Flex>
