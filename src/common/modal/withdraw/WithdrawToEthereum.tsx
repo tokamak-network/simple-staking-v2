@@ -233,7 +233,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           Total amount of {
             toggle === 'Withdraw' ?
             <Flex color={'#2a72e5'} mx={'3px'}>
-              Withdaw
+              Withdraw
             </Flex> :
             <Flex color={'#36af47'} mx={'3px'}>
               Restake

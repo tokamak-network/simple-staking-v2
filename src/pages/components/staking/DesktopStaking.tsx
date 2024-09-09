@@ -145,7 +145,7 @@ function DesktopStaking () {
     
     return (
       <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
-        <PageHeader title={'Select Your Operator'} subtitle={'Choose an operator to stake, restake, unstake, or withdraw TON (or WTON).'}/>
+        <PageHeader title={'DAO Candidates'} subtitle={'Choose a DAO candidate to stake, restake, unstake, or withdraw TON (or WTON).'}/>
         <Box fontFamily={theme.fonts.roboto} overflowX={'hidden'}>
           {candidateList.length === 0 ? 
             <Flex justifyContent="center" alignItems={"center"} h='200px'>

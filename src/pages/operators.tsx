@@ -22,7 +22,7 @@ function Operators() {
         color="gray.700"
         mb="5px"
       >
-        Select Your Operator
+        DAO Candidates
       </Text>
       <Text
         fontSize={"12px"}
@@ -32,7 +32,7 @@ function Operators() {
         w="250px"
         color={"gray.300"}
       >
-        Choose an operator to stake, restake, unstake, or withdraw TON (or WTON).
+        Choose a DAO candidate to stake, restake, unstake, or withdraw TON (or WTON).
       </Text>
       <Flex w="100%" px="20px" flexDir={"column"}>
         {candidateList.length !== 0 ? (
