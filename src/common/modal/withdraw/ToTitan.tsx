@@ -1,8 +1,5 @@
 import { Button, Checkbox, Flex, useTheme } from "@chakra-ui/react"
-import ETH_SYMBOL from "@/assets/images/ETH-symbol.svg"
 import TITAN_SYMBOL from '@/assets/images/symbol.svg'
-import Arrow from '@/assets/images/right_arrow.svg'
-import Image from "next/image"
 import { UnstakeBalanceInput } from "./UnstakeBalanceInput"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import useCallContract from "@/hooks/useCallContract"
@@ -13,7 +10,6 @@ import { useRecoilState } from "recoil"
 import { inputState } from "@/atom/global/input"
 import { txState } from "@/atom/global/transaction"
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
-import { useWithdrawalAndDeposited } from '@/hooks/staking/useWithdrawable';
 import WithdrawL2Table from "./WithdrawL2Table"
 import { WithdrawL2Image } from "./WithdrawL2Image"
 import useGetTransaction from "@/hooks/staking/useGetTransaction"
@@ -34,12 +30,8 @@ export const ToTitan = (args: ToTitanProps) => {
   const [input, setInput] = useRecoilState(inputState);
   const [, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
-  const [withdrawTx, setWithdrawTx] = useState<any[]>([]);
   const { DepositManager_CONTRACT } = useCallContract();
   const tData = useGetTransaction();
-  
-
-  // const { request } = useWithdrawalAndDeposited();
 
   const columns = useMemo(
     () => [

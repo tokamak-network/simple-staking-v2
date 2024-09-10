@@ -12,6 +12,7 @@ import {
   Link,
   useClipboard,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
 import { AbstractConnector } from '@web3-react/abstract-connector';
@@ -30,7 +31,7 @@ import { useRecoilValue } from 'recoil';
 import { selectedModalState } from '@/atom/global/modal';
 import useModal from '@/hooks/useModal';
 import Image from 'next/image';
-
+import copy from "copy-to-clipboard";
 import ACCOUNT_COPY from '@/assets/images/account_copy_icon.png'
 import ETHERSCAN_LINK from '@/assets/images/etherscan_link_icon.png'
 
@@ -46,6 +47,7 @@ function WalletModal() {
   const { onCopy } = useClipboard(account as string);
   // @ts-ignore
   const selectedModal = useRecoilValue(selectedModalState);
+  const toast = useToast();
   const { closeModal } = useModal();
   // @ts-ignore
   const [copyText, setCopyText] = useState<string>('Copy Address');
@@ -93,11 +95,13 @@ function WalletModal() {
   }, []);
 
   const handleCopyAction = useCallback(() => {
-    onCopy();
-    setCopyText('Copied!');
-    setTimeout(() => {
-      setCopyText(copyText);
-    }, 1000);
+    copy(account !== null && account ? account : "");
+    toast({
+      title: "Copied to Clipboard",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
   }, [copyText, onCopy]);
 
   const tryActivation = async (connector: AbstractConnector | undefined) => {
