@@ -2,15 +2,17 @@ import { Flex, Text } from '@chakra-ui/react';
 import CLOSE_ICON from 'assets/images/popup-close-icon.svg';
 import Image from 'next/image';
 
-export const ModalHeader = (args: { main: string; sub: string; closeThisModal: any; type?: boolean }) => {
+export const ModalHeader = (args: { main: string; sub: string; closeThisModal: any; type?: number }) => {
   const { main, sub, closeThisModal, type } = args;
-
+  console.log(type)
   return (
     <Flex pos={'relative'} flexDir={'column'} alignItems={'center'}>
       <Flex
         pos={'absolute'}
         right={
-          main === 'Withdraw' && type
+          main === 'Withdraw' && type === 3
+          ? '-490px'
+          : main === 'Withdraw' && type === 2
           ? '-330px'
           : main === 'Withdraw'
           ? '-160px'

@@ -35,6 +35,7 @@ function WithdrawModal () {
 
   const [modalName, setModalName] = useState('Withdraw')
   const [type, setType] = useState('main')
+  const [number, setNumber] = useState(1)
 
   const [input, setInput] = useRecoilState(inputState);
 
@@ -66,6 +67,15 @@ function WithdrawModal () {
     }
     fetch()
   }, [selectedModalData])
+
+  useEffect(() => {
+    let numberOf = 1
+    if (selectedModalData) {
+      numberOf = selectedModalData.isL2 ?  numberOf + 1 : numberOf
+      numberOf = selectedModalData.withdrawable !== '0.00' ? numberOf + 1 : numberOf
+    }
+    setNumber(numberOf)
+  }, [selectedModalData])
   
   return (
     <Modal
@@ -78,10 +88,10 @@ function WithdrawModal () {
       <ModalOverlay>
         <ModalContent 
           maxW={
-            selectedModalData?.isL2 && (+selectedModalData?.old_withdrawableLength) >= 1 && type === 'main' 
+            // selectedModalData?.isL2 && (+selectedModalData?.old_withdrawableLength) >= 1 && type === 'main' 
+            number === 3 && type === 'main'
             ? '1020px'
-            : selectedModalData?.isL2 && type === 'main' 
-              || selectedModalData?.old_withdrawableLength !== '0.00' && type === 'main' 
+            : number === 2 && type === 'main'
             ? '690px' 
             : '350px'
           } 
@@ -111,7 +121,7 @@ function WithdrawModal () {
                     main={modalName}
                     sub={''}
                     closeThisModal={closeThisModal}
-                    type={selectedModalData.isL2}
+                    type={number}
                   />
                 </Flex>
                 <Flex bgColor={'#f4f6f8'} h={'1px'}  w={'100%'} />
@@ -119,7 +129,7 @@ function WithdrawModal () {
                   type === 'main' ?
                   <Flex justifyContent={'space-between'} alignItems={'space-between'} mt={'30px'} w={'100%'}>
                     {
-                      (+selectedModalData.old_withdrawableLength) >= 1 ?
+                      selectedModalData.old_withdrawable !== '0.00' ?
                       <WithdrawType 
                         name={'Prior to Patch'}
                         content={'Donec quam lectus vel vulputate mauris. Nullam quam amet adipiscing quis diam nisl maecenas.'}
