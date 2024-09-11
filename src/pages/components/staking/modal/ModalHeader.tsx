@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export const ModalHeader = (args: { main: string; sub: string; closeThisModal: any; type?: number }) => {
   const { main, sub, closeThisModal, type } = args;
-  console.log(type)
+
   return (
     <Flex pos={'relative'} flexDir={'column'} alignItems={'center'}>
       <Flex

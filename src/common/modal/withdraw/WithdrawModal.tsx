@@ -88,7 +88,6 @@ function WithdrawModal () {
       <ModalOverlay>
         <ModalContent 
           maxW={
-            // selectedModalData?.isL2 && (+selectedModalData?.old_withdrawableLength) >= 1 && type === 'main' 
             number === 3 && type === 'main'
             ? '1020px'
             : number === 2 && type === 'main'

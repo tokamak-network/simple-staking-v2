@@ -285,6 +285,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                               flexDir={'column'} 
                               justifyContent={isMember || candidateAddOn !== null ? 'space-between' : 'center'} 
                               h={'25px'}
+                              w={'18px'}
                               mr={minimumAmount ? '' : '20px'}
                             >
                               {minimumAmount ? getCircle(kind) : ''}
