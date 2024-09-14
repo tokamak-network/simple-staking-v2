@@ -1,9 +1,11 @@
+import { selectedToggleState } from "@/atom/staking/toggle";
 import { selectedTypeState, typeFilterState } from "@/atom/staking/txTypeFilter";
 import HistoryTable from "@/common/table/staking/HistoryTable";
 import OperatorDetailInfo from "@/common/table/staking/OperatorDetail";
 import { getCommitHistory, getTransactionHistory } from "@/components/getTransactionHistory";
 import { convertNumber } from "@/components/number";
 import { Box, Flex } from "@chakra-ui/react";
+import { useWeb3React } from "@web3-react/core";
 import { FC, useEffect, useMemo, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import WalletInformation from "./WalletInformation";
@@ -16,12 +18,13 @@ type StakingInformationProps = {
 export const StakingInformation: FC<StakingInformationProps> = ({
   data
 }) => {
-  
+  const { account } = useWeb3React();
   const txHistory = getTransactionHistory(data)
   const commitHistory = getCommitHistory(data)
 
   const txTypeValue = useRecoilValue(selectedTypeState)
-  // const [typeFilter, setTypeFilter] = useRecoilState(typeFilterState);
+  const toggleType = useRecoilValue(selectedToggleState);
+  const [typeFilter, setTypeFilter] = useRecoilState(typeFilterState);
   const [filteredTxHistory, setFilteredTxHistory] = useState(txHistory);
 
   const historyColumns = useMemo(
@@ -49,18 +52,29 @@ export const StakingInformation: FC<StakingInformationProps> = ({
     ],
     [],
   );
-  // console.log(txTypeValue)
+
+  useEffect(() => {
+    setTypeFilter('All')
+  }, [])
+  
   useEffect(() => {
     if (txHistory) {
+      console.log(txHistory.length)
       const filtered = txTypeValue === 'All' 
         ? txHistory 
         : txHistory.filter((history: any) => {
           return history.eventName === txTypeValue
         })
-        setFilteredTxHistory(filtered)
+      const toggleFilter = toggleType === 'All' 
+        ? filtered
+        : filtered.filter((history: any) => {
+          return history.sender.toLowerCase() === account?.toLowerCase()
+        })
+        
+      setFilteredTxHistory(toggleFilter)
     }
 
-  }, [txTypeValue])
+  }, [txTypeValue, toggleType, data?.candidateContract])
 
   const candidateAmount = data?.stakeOfCandidate ? convertNumber({
     amount: data?.stakeOfCandidate,

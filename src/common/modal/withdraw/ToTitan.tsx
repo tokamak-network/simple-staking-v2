@@ -71,7 +71,7 @@ export const ToTitan = (args: ToTitanProps) => {
       console.log(e)
     }
   }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending])
-  console.log(tData)
+  
   return (
     <Flex flexDir={'column'}>
       <WithdrawL2Image 
@@ -100,11 +100,19 @@ export const ToTitan = (args: ToTitanProps) => {
         </Button>
       </Flex>
       {
-        tData.depositTxs && tData.depositTxs.length > 0 ?
+        selectedModalData?.name === 'Titan-sepolia' ?
         <WithdrawL2Table 
           columns={columns}
           data={tData.depositTxs}
-        /> : ''
+        /> : 
+        <Flex 
+          fontSize={'12px'}
+          textAlign={'center'}
+          mt={'25px'}
+          fontWeight={400}
+        >
+          Withdraw history is not supported for this L2. Please check Etherscan and relevant L2 block explorer.
+        </Flex>
       }
     </Flex>
   )

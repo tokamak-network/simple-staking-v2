@@ -55,7 +55,7 @@ function WithdrawModal () {
     ? setModalName('Withdraw')
     : type === 'ethereum'
     ? setModalName('Withdraw to Ethereum')
-    : setModalName('Withdraw to TITAN')
+    : setModalName(`Withdraw to ${selectedModalData?.name}`)
   }, [type])
 
   useEffect(() => {
@@ -131,7 +131,7 @@ function WithdrawModal () {
                       selectedModalData.old_withdrawable !== '0.00' ?
                       <WithdrawType 
                         name={'Prior to Patch'}
-                        content={'Donec quam lectus vel vulputate mauris. Nullam quam amet adipiscing quis diam nisl maecenas.'}
+                        content={'Any unstaked TON from the original staking contract with the zero-day vulnerability can be withdrawn to Ethereum.'}
 
                       /> : ''
                     }
@@ -144,7 +144,7 @@ function WithdrawModal () {
                     {
                       selectedModalData.isL2 ?
                       <WithdrawType 
-                        name={'Withdraw to Titan'}
+                        name={`Withdraw to ${selectedModalData.name}`}
                         content={'Instead of withdrawing to Ethereum, staked TON can be withdrawn to this layer as TON. By withdrawing to this layer, TON can be used right away without needing to wait for 14 days.'}
                         src={TITAN}
                         onClick={() => setType('titan')}

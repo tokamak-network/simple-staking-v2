@@ -45,7 +45,7 @@ export const WithdrawL2Table: FC<WithdrawL2TableProps> = ({
   useEffect(() => {
     setPageSize(6)
   },[])
-
+  // console.log(page.length)
   return (
     <Flex 
       w={'320px'}
@@ -70,7 +70,7 @@ export const WithdrawL2Table: FC<WithdrawL2TableProps> = ({
             display="flex"
             flexDirection="column"
           >
-            {page ? page.map((row: any, i) => {
+            {page && page.length !== 0 ? page.map((row: any, i) => {
               prepareRow(row);
               return [
                 <chakra.tr
@@ -94,10 +94,19 @@ export const WithdrawL2Table: FC<WithdrawL2TableProps> = ({
                         tonPrice={tonPriceUSD}
                       />
                     )
-                  }) : ''}
+                  }) : 'No history'}
                 </chakra.tr>
               ]
-            }) : ''}
+            }) : 
+              <Flex 
+                fontSize={'12px'}
+                minW={'100%'}
+                justifyContent={'center'}
+                my={'20px'}
+              >
+                No history
+              </Flex>
+            }
           </chakra.tbody>
         </chakra.table>
       </Box>

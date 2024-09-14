@@ -109,12 +109,8 @@ export const HistoryTable: FC<HistoryTableProps> = ({
               color={'#808992'}
             >
               Commit count: {data.length}
-            </Text> : ''
-          }
-        </Flex>
-        {/* {
-          tableType === 'Staking' ? 
-          <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
+            </Text> : 
+            <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
             <FormLabel color={'#828d99'} fontSize={'11px'} mt={'7px'}>
               {toggle} Tx Hash
             </FormLabel>
@@ -126,9 +122,10 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                   : setToggle('All')
               }
             /> 
-          </FormControl>       
-          : ''
-        } */}
+          </FormControl>  
+          }
+        </Flex>
+      
       </Flex>
       <Box overflowX={'auto'}>
         <chakra.table

@@ -150,7 +150,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     setMinimumAmountForButton(Number(candidateAmountForButton) > 1000)
 
   }, [account, candidateAmount])
-
+  
   const dataModal: StakeModalDataType = {
     tonBalance: userTonBalance ? userTonBalance : '0.00',
     wtonBalance: userWTonBalance ? userWTonBalance : '0.00',
@@ -167,7 +167,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     old_withdrawable: old_withdrawable,
     old_layer2: getOldLayerAddress(candidateContracts) ? getOldLayerAddress(candidateContracts) : '',
     requests: requests,
-    isL2: isL2
+    isL2: isL2,
+    name: data.name
   };
 
   const modalButton = useCallback(async (modalType: ModalType, data: any) => {
