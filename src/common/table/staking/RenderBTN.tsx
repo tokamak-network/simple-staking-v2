@@ -4,7 +4,7 @@ import { Flex } from "@chakra-ui/react";
 export const renderBtn = (layer2: string, isOpen: string) => {
   if (isOpen === layer2)
     return (
-      <Flex w={'100%'} justifyContent="flex-end" _hover={{cursor: 'pointer'}} ml={'90px'}>
+      <Flex w={'100%'} justifyContent="flex-end" _hover={{cursor: 'pointer'}} ml={'70px'}>
         <TriangleUpIcon color="blue.100" _hover={{cursor: 'pointer'}} />
       </Flex>
     );
@@ -14,7 +14,7 @@ export const renderBtn = (layer2: string, isOpen: string) => {
       justifyContent="flex-end"
       // onClick={() => clickOpen(contractAddress, index)}
       _hover={{cursor: 'pointer'}}
-      ml={'90px'}
+      ml={'70px'}
     >
       <TriangleDownIcon
         color="blue.100"

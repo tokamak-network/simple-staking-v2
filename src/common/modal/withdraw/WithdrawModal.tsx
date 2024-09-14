@@ -72,7 +72,7 @@ function WithdrawModal () {
     let numberOf = 1
     if (selectedModalData) {
       numberOf = selectedModalData.isL2 ?  numberOf + 1 : numberOf
-      numberOf = selectedModalData.withdrawable !== '0.00' ? numberOf + 1 : numberOf
+      numberOf = selectedModalData.old_withdrawable !== '0.00' ? numberOf + 1 : numberOf
     }
     setNumber(numberOf)
   }, [selectedModalData])

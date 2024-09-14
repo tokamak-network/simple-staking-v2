@@ -1,6 +1,17 @@
-import { chakra } from "@chakra-ui/react";
-import { FC } from "react";
+import { 
+  chakra, 
+  Flex,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Center,
+  Text
+} from "@chakra-ui/react";
+import { FC, useState } from "react";
 import { getColumnWidthStaking } from '@/utils/getColumnWidth';
+import LIST_ICON from '@/assets/images/list-arrow_icon.svg';
+import Image from "next/image";
 
 type HistoryTableHeaderProps = {
   tableType: string
@@ -41,13 +52,103 @@ const HeaderColumn = (tableType: string, columnName: string) => {
       w={ getColumnWidthStaking(tableType, columnName) }
       textAlign={columnName === 'Account' || columnName === 'TX Hash'? 'left' : 'center'}
     >
-      {
-        tableType === 'Staking' && columnName === 'Account' ? 'Account' :
-        columnName === 'TX Hash' ? 'TX Hash' :
-        tableType === 'Staking' && columnName === 'Type' ? 'Type' :
-        tableType === 'Staking' && columnName === 'Amount' ? 'Amount' :
-        columnName === 'Time' ? 'Time' : ''
-      }
+      <Flex flexDir={'row'} justifyContent={'center'}>
+        {
+          tableType === 'Staking' && columnName === 'Account' ? 'Account' :
+          columnName === 'TX Hash' ? 'TX Hash' :
+          tableType === 'Staking' && columnName === 'Type' ? <TypeItem /> :
+          tableType === 'Staking' && columnName === 'Amount' ? 'Amount' :
+          columnName === 'Time' ? 'Time' : ''
+        }
+      </Flex>
     </chakra.th>
+  )
+}
+
+const typeItemList = [
+  'All', 'Stake', 'Unstake', 'Withdraw'
+]
+
+const TypeItem = () => {
+  const [menuState, setMenuState] = useState(false);
+  const [hover, setHover] = useState(false);
+  const handleMenuButtonClick = (event: any) => {
+    event.preventDefault();
+
+    !menuState && setMenuState(!menuState);
+  };
+
+  return (
+    <Menu
+      onClose={() => {
+        setMenuState(false);
+      }}
+      isOpen={menuState}
+    >
+      <MenuButton 
+        as={Center}
+        fontSize={'13px'}
+        cursor={"pointer"}
+        h={'40px'}
+        // onMouseEnter={handleMenuButtonhover}
+        // // onMouseLeave={()=> setHoverOn(false)}
+        // onMouseDown={handleMenuButtonClick}
+        borderBottom={menuState ? "none" : ""}
+        onClick={handleMenuButtonClick}
+        display={"flex"}
+        flexDir={"row"}
+        
+      >
+        <Flex>
+          <Text>Type</Text>
+          <Flex
+            marginLeft={"3px"}
+            height={"20px"}
+            justifyContent={'center'}
+            alignItems={'center'}
+            // width={"24px"}
+            transform={menuState === true ? "rotate(180deg)" : ""}
+          >
+            <Image src={LIST_ICON} alt="icon_arrow" />
+          </Flex>
+        </Flex>
+      </MenuButton>
+      <MenuList
+        onMouseLeave={() => setMenuState(false)}
+        bg="#fff"
+        mt={"-15px"}
+        border={"1px"}
+        borderColor={'#E7EBF2'}
+        fontSize={'12px'}
+        fontWeight={'normal'}
+        color={'#7a7e87'}
+        py={0}
+        style={{
+          minWidth: "77px",
+          marginLeft: "-20px"
+        }}
+      >
+        {
+          typeItemList.map((item: string) => {   
+            return [
+              <MenuItem
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+                h={'26px'}
+                _hover={{ bg: '#2a72e5', color: '#fff' }}
+                // color={hover ? '#fff' : '#304156'}
+                // bgColor={hover ? '#2a72e5' : '#fff'}
+                borderTop={item !== 'All' ? '1px' : ''}
+                borderColor={'#e7ebf2'}
+                justifyContent={'center'}
+                // onClick={() => }
+              >
+                {item}
+              </MenuItem>
+            ]
+          })
+        }
+      </MenuList>
+    </Menu>
   )
 }
