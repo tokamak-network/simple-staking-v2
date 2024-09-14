@@ -145,15 +145,6 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
               label={'candidate'} 
             />
           </Flex>
-          {getCircle('op')}
-          <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
-          <Flex mr={'3px'}>
-              Tokamak OP
-            </Flex>
-            <BasicTooltip 
-              label={'op'} 
-            />
-          </Flex>
         </Flex>
       </Flex>
       <Box overflowX={'auto'}>
@@ -262,11 +253,11 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                         m={0}
                         w={
                           type === 'name'
-                            ? '300px'
+                            ? '350px'
                             : type === 'totalStaked'
                             ? '235px'
                             : type === 'commisionRate'
-                            ? '200px'
+                            ? '160px'
                             : type === 'yourStaked'
                             ? '220px'
                             : '10px'
@@ -283,19 +274,40 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                           <Flex alignItems={'center'} mr={'30px'}>
                             <Flex 
                               flexDir={'column'} 
-                              justifyContent={isMember || candidateAddOn !== null ? 'space-between' : 'center'} 
+                              justifyContent={isMember ? 'space-between' : 'center'} 
                               h={'25px'}
                               w={'18px'}
-                              mr={minimumAmount ? '' : '20px'}
+                              
                             >
                               {minimumAmount ? getCircle(kind) : ''}
                               {isMember ? getCircle('member') : ''}
-                              {candidateAddOn !== null ? getCircle('op') : ''}
                             </Flex>
                             <Box mr={'12px'}>
                               <OperatorImage imageLink={''}/>
                             </Box>
-                            <Text w={'176px'} color={'#304156'} fontWeight={500}>{name}</Text>
+                            <Text 
+                              // w={'176px'} 
+                              color={'#304156'} 
+                              fontWeight={500}
+                            >
+                              {name}
+                            </Text>
+                            {
+                              candidateAddOn !== null ?
+                              <Flex
+                                w={'34px'}
+                                h={'18px'}
+                                bgColor={'#257eee'}
+                                fontSize={'12px'}
+                                color={'#fff'}
+                                borderRadius={'3px'}
+                                justifyContent={'center'}
+                                ml={'9px'}
+                              >
+                                L2
+                              </Flex>
+                              : ''
+                            }
                           </Flex>
                         ) : ('')}
                         {type === 'totalStaked' ? (
