@@ -56,6 +56,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
   const [currentPage, setCurrentPage] = useState(0)
   const [buttonClick, setButtonClick] = useState(Boolean)
   const [toggle, setToggle] = useRecoilState(toggleState)
+  
   const theme = useTheme();
 
   useEffect(() => {
@@ -66,6 +67,10 @@ export const HistoryTable: FC<HistoryTableProps> = ({
     if (pageIndex % 4 === 0 && buttonClick) setCurrentPage(pageIndex)
     if (pageIndex % 4 === 3 && !buttonClick) setCurrentPage(pageIndex - 3)
   }, [buttonClick, pageIndex])
+
+  useEffect(() => {
+
+  }, [])
 
   const goPrevPage = () => {
     previousPage();

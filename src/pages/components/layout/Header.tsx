@@ -312,7 +312,6 @@ export const Header = () => {
                 </Text>
               </MenuItem>
             </MenuList>
-
           </Menu>
         </Flex>
         <Flex>

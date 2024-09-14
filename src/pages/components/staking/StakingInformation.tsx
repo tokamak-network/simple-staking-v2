@@ -1,9 +1,11 @@
+import { selectedTypeState, typeFilterState } from "@/atom/staking/txTypeFilter";
 import HistoryTable from "@/common/table/staking/HistoryTable";
 import OperatorDetailInfo from "@/common/table/staking/OperatorDetail";
 import { getCommitHistory, getTransactionHistory } from "@/components/getTransactionHistory";
 import { convertNumber } from "@/components/number";
 import { Box, Flex } from "@chakra-ui/react";
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import WalletInformation from "./WalletInformation";
 
 type StakingInformationProps = {
@@ -18,6 +20,9 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   const txHistory = getTransactionHistory(data)
   const commitHistory = getCommitHistory(data)
 
+  const txTypeValue = useRecoilValue(selectedTypeState)
+  // const [typeFilter, setTypeFilter] = useRecoilState(typeFilterState);
+  const [filteredTxHistory, setFilteredTxHistory] = useState(txHistory);
 
   const historyColumns = useMemo(
     () => [
@@ -44,6 +49,18 @@ export const StakingInformation: FC<StakingInformationProps> = ({
     ],
     [],
   );
+  // console.log(txTypeValue)
+  useEffect(() => {
+    if (txHistory) {
+      const filtered = txTypeValue === 'All' 
+        ? txHistory 
+        : txHistory.filter((history: any) => {
+          return history.eventName === txTypeValue
+        })
+        setFilteredTxHistory(filtered)
+    }
+
+  }, [txTypeValue])
 
   const candidateAmount = data?.stakeOfCandidate ? convertNumber({
     amount: data?.stakeOfCandidate,
@@ -134,10 +151,10 @@ export const StakingInformation: FC<StakingInformationProps> = ({
         alignItems={'center'}
       >
         {
-          txHistory &&
+          filteredTxHistory &&
           <HistoryTable 
             columns={historyColumns}
-            data={txHistory}
+            data={filteredTxHistory}
             tableType={'Staking'}
           />
         }

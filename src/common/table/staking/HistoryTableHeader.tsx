@@ -12,6 +12,8 @@ import { FC, useState } from "react";
 import { getColumnWidthStaking } from '@/utils/getColumnWidth';
 import LIST_ICON from '@/assets/images/list-arrow_icon.svg';
 import Image from "next/image";
+import { useRecoilState } from "recoil";
+import { typeFilterState } from "@/atom/staking/txTypeFilter";
 
 type HistoryTableHeaderProps = {
   tableType: string
@@ -78,6 +80,8 @@ const TypeItem = () => {
     !menuState && setMenuState(!menuState);
   };
 
+  const [typeFilter, setTypeFilter] = useRecoilState(typeFilterState);
+
   return (
     <Menu
       onClose={() => {
@@ -97,7 +101,6 @@ const TypeItem = () => {
         onClick={handleMenuButtonClick}
         display={"flex"}
         flexDir={"row"}
-        
       >
         <Flex>
           <Text>Type</Text>
@@ -136,12 +139,10 @@ const TypeItem = () => {
                 onMouseLeave={() => setHover(false)}
                 h={'26px'}
                 _hover={{ bg: '#2a72e5', color: '#fff' }}
-                // color={hover ? '#fff' : '#304156'}
-                // bgColor={hover ? '#2a72e5' : '#fff'}
                 borderTop={item !== 'All' ? '1px' : ''}
                 borderColor={'#e7ebf2'}
                 justifyContent={'center'}
-                // onClick={() => }
+                onClick={() => setTypeFilter(item)}
               >
                 {item}
               </MenuItem>
