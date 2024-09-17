@@ -9,6 +9,7 @@ import { getContract } from "@/components/getContract";
 import Layer2Candidate from 'services/abi/Layer2Candidate.json'
 import { useRecoilState } from "recoil";
 import { txState } from "@/atom/global/transaction";
+import ETHERSCAN_LINK from '@/assets/images/etherscan_link_icon.png'
 
 
 type L2ContentProps = {
@@ -31,13 +32,13 @@ export function L2Content (args: L2ContentProps) {
   const [, setTxPending] = useRecoilState(txState);
 
 
-  const updateSeig = useCallback(async () => {
+  const updateSeig = useCallback(async (type: number) => {
     if (account && library && contractAddress) {
       try {
         console.log(contractAddress)
         const Candidate_CONTRACT = getContract(contractAddress, Layer2Candidate, library, account)
         console.log(Candidate_CONTRACT)
-        const tx = await Candidate_CONTRACT.updateSeigniorage(1)
+        const tx = await Candidate_CONTRACT.updateSeigniorage(type)
         setTx(tx);
         setTxPending(true);
       } catch (e) {
@@ -48,20 +49,39 @@ export function L2Content (args: L2ContentProps) {
     }
   }, [])
 
-  const convert = type === 'address' ? trimAddress({
-    address: content ? content : '',
-    firstChar: 6,
-    lastChar: 4,
-    dots: '...'
-  }) : content
+
+  const convert = type === 'address' 
+    ? trimAddress({
+      address: content ? content : '',
+      firstChar: 6,
+      lastChar: 4,
+      dots: '...'
+    }) 
+    : type === 'link' ?
+    trimAddress({
+      address: content ? content : '',
+      firstChar: 29,
+      lastChar: 0,
+      dots: content ? content.length > 28 ? '...' : '' : ''
+    }) 
+    : content
 
   return (
     <Flex
       flexDir={'column'}
       fontWeight={500}
       textAlign={'left'}
-      w={type === 'link' ? '100%' : '250px'}
-      mr={type === 'link' ? '20px' : ''}
+      w={
+        type === 'link' || type === 'string' 
+        ? '100%' 
+        : '250px'
+      }
+      mr={
+        type === 'link' || type === 'string' 
+        ? '20px' 
+        : ''
+      }
+      minW={type === 'string' ? '100px' : ''}
     >
       <Flex
         fontSize={'13px'}
@@ -71,26 +91,75 @@ export function L2Content (args: L2ContentProps) {
         {title}
       </Flex>
       <Flex
-        fontSize={type === 'link' ? '14px' : '20px'}
+        fontSize={type === 'link' || type === 'string' ? '14px' : '20px'}
         color={'#304156'}
       >
-        <Flex 
-          fontWeight={type === 'ton' ? 'bold' : 500}
-          // w={'100%'}
-        >
-          {convert}
-        </Flex>
         {
           type === 'ton' ?
-          <Flex 
-            fontSize={'13px'}
-            fontWeight={500}
-            ml={'4px'}
-            alignItems={'end'}
-            mb={'2px'}
+          <Flex>
+            <Flex
+              fontWeight={'bold'}
+            >
+              {convert}
+            </Flex>
+            <Flex 
+              fontSize={'13px'}
+              fontWeight={500}
+              ml={'4px'}
+              alignItems={'end'}
+              mb={'2px'}
+            >
+              TON
+            </Flex> 
+          </Flex> : 
+          type === 'seig' ?
+          <Flex
+            flexDir={'row'}
           >
-            TON
-          </Flex> : ''
+            <Flex
+              fontWeight={'bold'}
+            >
+              {convert}
+            </Flex>
+            <Flex 
+              fontSize={'13px'}
+              fontWeight={500}
+              ml={'4px'}
+              alignItems={'end'}
+              mb={'2px'}
+            >
+              TON
+            </Flex> 
+            <Flex 
+              color={'#C7D1D8'}
+              fontSize={'20px'}
+              mx={'6px'}
+              fontWeight={400}
+            >
+              /
+            </Flex>
+            <Flex
+              fontWeight={'bold'}
+            >
+              {convert}
+            </Flex>
+            <Flex 
+              fontSize={'13px'}
+              fontWeight={500}
+              ml={'4px'}
+              alignItems={'end'}
+              mb={'2px'}
+            >
+              TON
+            </Flex> 
+            
+          </Flex> :
+          <Flex 
+            fontWeight={500}
+            // w={'100%'}
+          >
+            {convert}
+          </Flex> 
         }
         {
           type === 'address' || type === 'link' ?
@@ -103,12 +172,16 @@ export function L2Content (args: L2ContentProps) {
             href={convert}
             isExternal
           >
-            <Image src={NEWTAB} alt={''} /> 
+            <Image src={ETHERSCAN_LINK} alt={'alt'} />
           </Link> : ''
         }
         {
           title === 'Earned seigniorage' && account ?
-          <Flex ml={'6px'}>
+          <Flex 
+            ml={'6px'} 
+            justifyContent={'space-between'} 
+            w={'180px'}
+          >
             <Button
               w={'80px'}
               h={'25px'}
@@ -122,9 +195,26 @@ export function L2Content (args: L2ContentProps) {
                 borderColor: '#2a72e5',
                 color: '#2a72e5'
               }}
-              onClick={()=> { updateSeig()}}
+              onClick={()=> { updateSeig(1)}}
             >
               Claim
+            </Button>
+            <Button
+              w={'80px'}
+              h={'25px'}
+              borderRadius={'4px'}
+              border={'solid 1px #dfe4ee'}
+              bgColor={'#fff'}
+              color={'#86929d'}
+              fontSize={'12px'}
+              fontWeight={'normal'}
+              _hover={{
+                borderColor: '#2a72e5',
+                color: '#2a72e5'
+              }}
+              onClick={()=> { updateSeig(2)}}
+            >
+              Stake
             </Button>
           </Flex> : ''
         }

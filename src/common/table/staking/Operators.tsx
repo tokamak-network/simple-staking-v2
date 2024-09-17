@@ -347,7 +347,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                       colSpan={visibleColumns.length}
                     >
                       <Flex flexDir={'column'}>
-                        <Flex flexDir={'row'} w={'100%'} justifyContent={'space-between'}>
+                        <Flex flexDir={'row'} minW={'1000px'} justifyContent={'space-between'}>
                           {
                             candidateAddOn !== null ?
                             (

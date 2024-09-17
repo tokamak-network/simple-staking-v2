@@ -31,17 +31,19 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
       pointerEvents={"all"}
       label={
         <Flex 
-          flexDir={'row'}
+          flexDir={'column'}
           justifyContent={'space-between'}
-          w={'210px'}
-          h={'212px'}
+          // w={'210px'}
+          // h={'212px'}
+          px={'0px'}
+          mx={'0px'}
+          mr={'10px'}
         >
           <Flex flexDir={'column'}>
             <L1ContractInfo 
               title={'L2 txn data'}
               content={label.txData}
             />
-            <Flex />
             <L1ContractInfo 
               title={'L2 state root'}
               content={label.stateRoot}
@@ -52,13 +54,14 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
             />
           </Flex>
           <Flex 
-            justifyContent={'start'} 
-            alignItems={'start'} 
-            mt={'15px'}
-            cursor={'pointer'}
-            onClick={() => setIsLabelOpen(false)}
+            p={'15px'}
+            fontWeight={400}
+            fontSize={'12px'}
+            color={'#808992'}
+            w={'210px'}
           >
-            <Image src={CLOSE} alt={''} />
+            This data is provided by the L2 operator and may not be accurate. Please conduct your own research.
+
           </Flex>
         </Flex>
       }
@@ -66,10 +69,10 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
       borderRadius={"15px"}
       color={"#3d495c"}
       fontSize="16px"
-      h={'210px'}
-      maxW={'210px'}
+      // h={'210px'}
+      // maxW={'210px'}
       mr={'120px'}
-      px={'15px'}
+      px={'0px'}
       bgColor={'#fff'}
       boxShadow={'0 2px 6px 0 rgba(61, 73, 93, 0.1)'}
       isOpen={isLabelOpen}
