@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useCallback, useState } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { getContract } from "@/components/getContract";
-import Layer2Candidate from 'services/abi/Layer2Candidate.json'
+import CandidateAddOn from 'services/abi/CandidateAddOn.json'
 import { useRecoilState } from "recoil";
 import { txState } from "@/atom/global/transaction";
 import ETHERSCAN_LINK from '@/assets/images/etherscan_link_icon.png'
@@ -17,6 +17,7 @@ type L2ContentProps = {
   content: string | undefined;
   type: string;
   contractAddress? : string;
+  content2?: string | undefined;
 }
 
 export function L2Content (args: L2ContentProps) {
@@ -24,7 +25,8 @@ export function L2Content (args: L2ContentProps) {
     title,
     content,
     type,
-    contractAddress
+    contractAddress,
+    content2,
   } = args
   
   const { library, account } = useWeb3React()
@@ -36,8 +38,9 @@ export function L2Content (args: L2ContentProps) {
     if (account && library && contractAddress) {
       try {
         console.log(contractAddress)
-        const Candidate_CONTRACT = getContract(contractAddress, Layer2Candidate, library, account)
-        console.log(Candidate_CONTRACT)
+        const Candidate_CONTRACT = getContract(contractAddress, CandidateAddOn, library, account)
+        console.log(await Candidate_CONTRACT.operator())
+        
         const tx = await Candidate_CONTRACT.updateSeigniorage(type)
         setTx(tx);
         setTxPending(true);
@@ -49,7 +52,6 @@ export function L2Content (args: L2ContentProps) {
     }
   }, [])
 
-
   const convert = type === 'address' 
     ? trimAddress({
       address: content ? content : '',
@@ -57,31 +59,14 @@ export function L2Content (args: L2ContentProps) {
       lastChar: 4,
       dots: '...'
     }) 
-    : type === 'link' ?
-    trimAddress({
-      address: content ? content : '',
-      firstChar: 29,
-      lastChar: 0,
-      dots: content ? content.length > 28 ? '...' : '' : ''
-    }) 
     : content
-
+    
   return (
     <Flex
       flexDir={'column'}
       fontWeight={500}
       textAlign={'left'}
-      w={
-        type === 'link' || type === 'string' 
-        ? '100%' 
-        : '250px'
-      }
-      mr={
-        type === 'link' || type === 'string' 
-        ? '20px' 
-        : ''
-      }
-      minW={type === 'string' ? '100px' : ''}
+      w={'250px'}
     >
       <Flex
         fontSize={'13px'}
@@ -91,7 +76,7 @@ export function L2Content (args: L2ContentProps) {
         {title}
       </Flex>
       <Flex
-        fontSize={type === 'link' || type === 'string' ? '14px' : '20px'}
+        fontSize={'20px'}
         color={'#304156'}
       >
         {
@@ -141,7 +126,7 @@ export function L2Content (args: L2ContentProps) {
             <Flex
               fontWeight={'bold'}
             >
-              {convert}
+              {content2}
             </Flex>
             <Flex 
               fontSize={'13px'}
@@ -152,28 +137,7 @@ export function L2Content (args: L2ContentProps) {
             >
               TON
             </Flex> 
-            
-          </Flex> :
-          <Flex 
-            fontWeight={500}
-            // w={'100%'}
-          >
-            {convert}
-          </Flex> 
-        }
-        {
-          type === 'address' || type === 'link' ?
-          <Link 
-            w={'20px'} 
-            height={'20px'} 
-            justifyContent={'center'} 
-            alignItems={'center'}
-            ml={'6px'}
-            href={convert}
-            isExternal
-          >
-            <Image src={ETHERSCAN_LINK} alt={'alt'} />
-          </Link> : ''
+          </Flex> : '' 
         }
         {
           title === 'Earned seigniorage' && account ?
@@ -202,6 +166,7 @@ export function L2Content (args: L2ContentProps) {
             <Button
               w={'80px'}
               h={'25px'}
+              ml={'6px'}
               borderRadius={'4px'}
               border={'solid 1px #dfe4ee'}
               bgColor={'#fff'}

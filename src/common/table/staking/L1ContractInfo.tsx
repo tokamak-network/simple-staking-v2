@@ -11,11 +11,12 @@ import { useState } from "react"
 type L1ContractInfoType = {
   title: string
   content: string
+  setIsLabelOpen?: any
 }
 
 export const L1ContractInfo = (props: L1ContractInfoType) => {
-  const {title, content} = props
-  const [isLabelOpen, setIsLabelOpen] = useState(false)
+  const {title, content, setIsLabelOpen} = props
+  
   return (
     <Flex 
       h={'70px'}

@@ -1,15 +1,9 @@
 import {
   Tooltip,
-  useColorMode,
-  PlacementWithLogical,
-  Text,
   Flex,
-  Link
 } from "@chakra-ui/react";
-import { QuestionOutlineIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import LIST from '@/assets/images/list.svg'
-import CLOSE from '@/assets/images/popup_close_s_icon.svg'
 import Image from 'next/image';
 import { L1ContractInfo } from "./L1ContractInfo";
 
@@ -43,6 +37,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
             <L1ContractInfo 
               title={'L2 txn data'}
               content={label.txData}
+              setIsLabelOpen={setIsLabelOpen}
             />
             <L1ContractInfo 
               title={'L2 state root'}
@@ -83,6 +78,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
         h={"20px"}
         w={"20px"}
         color={'#333'}
+        cursor={'pointer'}
         onClick={() => tooltipControl()}
       >
         <Image src={LIST} alt={''} />

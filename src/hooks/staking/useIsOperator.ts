@@ -1,5 +1,6 @@
 import useContract from "hooks/useContract";
-import Layer2Candidate from "services/abi/Layer2Candidate.json"
+import CandidateAddOn from "services/abi/CandidateAddOn.json"
+import OperatorManager from "services/abi/OperatorManager.json"
 import { useWeb3React } from "@web3-react/core";
 import { useEffect } from "react";
 import useCallContract from "../useCallContract";
@@ -7,7 +8,7 @@ import useCallContract from "../useCallContract";
 export function useIsOperator (layer2: string) {
   const { account } = useWeb3React()
   
-  const L2Candidate_CONTRACT = useContract(layer2, Layer2Candidate);
+  const L2Candidate_CONTRACT = useContract(layer2, CandidateAddOn);
   const { SeigManager_CONTRACT } = useCallContract();
   
   useEffect(() => {
