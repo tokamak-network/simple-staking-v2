@@ -9,7 +9,9 @@ import { getContract } from "@/components/getContract";
 import CandidateAddOn from 'services/abi/CandidateAddOn.json'
 import { useRecoilState } from "recoil";
 import { txState } from "@/atom/global/transaction";
-import ETHERSCAN_LINK from '@/assets/images/etherscan_link_icon.png'
+import ETHERSCAN_LINK_Image from '@/assets/images/etherscan_link_icon.png';
+import { ETHERSCAN_LINK } from "@/constants";
+import CONTRACT_ADDRESS from "@/services/addresses/contract";
 
 
 type L2ContentProps = {
@@ -73,7 +75,23 @@ export function L2Content (args: L2ContentProps) {
         color={'#808992'}
         mb={'8px'}
       >
-        {title}
+        <Flex>
+          {title}
+        </Flex>
+        {
+          type === 'ton' ?
+          <Link 
+            w={'20px'} 
+            height={'20px'} 
+            justifyContent={'center'} 
+            alignItems={'center'}
+            ml={'6px'}
+            href={`${ETHERSCAN_LINK}/address/${CONTRACT_ADDRESS.TON_ADDRESS}#readContract#F2`}
+            isExternal
+          >
+            <Image src={ETHERSCAN_LINK_Image} alt={'alt'} />
+          </Link> : ''
+        }
       </Flex>
       <Flex
         fontSize={'20px'}

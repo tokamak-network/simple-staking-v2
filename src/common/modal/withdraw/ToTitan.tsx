@@ -54,6 +54,22 @@ export const ToTitan = (args: ToTitanProps) => {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
 
+  useEffect(() => {
+    async function waitReceipt() {
+      if (tx && !tx['status']) {
+        //@ts-ignore
+        await tx.wait().then((receipt: any) => {
+          if (receipt.status) {
+            setTxPending(false);
+            setTx(undefined);
+          }
+        });
+      }
+    }
+    waitReceipt();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tx]);
+
   const withdrawL2 = useCallback(async () => {
     const amount = floatParser(input);
     try {
@@ -65,12 +81,12 @@ export const ToTitan = (args: ToTitanProps) => {
         setTx(tx);
         setTxPending(true);
         setInput('')
-        return closeThisModal();
+        // return closeThisModal();
       }
     } catch (e) {
       console.log(e)
     }
-  }, [DepositManager_CONTRACT, closeThisModal, input, selectedModalData, setTx, setTxPending])
+  }, [DepositManager_CONTRACT, input, selectedModalData, setTx, setTxPending])
   
   return (
     <Flex flexDir={'column'}>

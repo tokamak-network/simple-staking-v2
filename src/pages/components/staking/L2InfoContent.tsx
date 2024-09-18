@@ -28,15 +28,13 @@ export function L2InfoContent (args: L2ContentProps) {
     title,
     content,
     type,
-    contractAddress,
-    
+    contractAddress,    
     editStat
   } = args
 
 
   const linkType = type === 'bridge' || type === 'explorer' ? true : false
   const stringType = type === 'string' || type === 'logo' ? true : false
-
 
   const convert = linkType ?
     trimAddress({
