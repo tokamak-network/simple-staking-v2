@@ -1,10 +1,15 @@
 import { getDate } from '@/components/getDate';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import { FC, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import L2Content from './L2Content';
 import { convertNumber } from '@/components/number';
 import { useIsOperator } from '@/hooks/staking/useIsOperator';
 import L2InfoContent from './L2InfoContent';
+import ClaimModal from '@/common/modal/L2Info/ClaimModal';
+import { ClaimModalDataType } from '@/types';
+import { ModalType } from '@/types/modal';
+import { modalData, modalState } from '@/atom/global/modal';
+import { useRecoilState } from 'recoil';
 
 type L2InformationProps = {
   data: any;
@@ -15,8 +20,37 @@ function L2Information({ data }: L2InformationProps) {
 
   // } = data?.candidateAddOn
   const [editStat, setEditStat] = useState(false);
+  const [address, setAddress] = useState('');
+  const [amount, setAmount] = useState('');
+  const [target, setTarget] = useState('');
+  const [name, setName] = useState('');
+
+  const [selectedModal, setSelectedModal] = useRecoilState(modalState);
+  const [, setSelectedModalData] = useRecoilState(modalData);
 
   console.log(data);
+
+  useEffect(() => {
+    if (data) {
+      setAddress('')
+      setAmount('')
+      setTarget('')
+    }
+  },[]);
+
+  const dataModal: ClaimModalDataType = {
+    amount: amount,
+    target: target,
+    address: address,
+    name: name
+  }
+
+  const modalButton = useCallback(async (modalType: ModalType, name: string, data: any) => {
+    setName(name)
+    setSelectedModal(modalType);
+    setSelectedModalData(data);
+  }, [dataModal]);
+  
   // const a = useIsOperator(data?.candidateContract)
   // console.log(a)
   const layer2Seigs = data?.candidateAddOn.seigGiven[0]
@@ -134,8 +168,51 @@ function L2Information({ data }: L2InformationProps) {
             type={'seig'}
             contractAddress={data?.candidateContract}
           />
+          <Flex 
+            ml={'6px'} 
+            alignItems={'end'}
+            justifyContent={'center'} 
+            w={'180px'}
+          >
+            <Button
+              w={'80px'}
+              h={'25px'}
+              borderRadius={'4px'}
+              border={'solid 1px #dfe4ee'}
+              bgColor={'#fff'}
+              color={'#86929d'}
+              fontSize={'12px'}
+              fontWeight={'normal'}
+              _hover={{
+                borderColor: '#2a72e5',
+                color: '#2a72e5'
+              }}
+              onClick={()=> { modalButton('claim', 'Claim',  dataModal)}}
+            >
+              Claim
+            </Button>
+            <Button
+              w={'80px'}
+              h={'25px'}
+              ml={'6px'}
+              borderRadius={'4px'}
+              border={'solid 1px #dfe4ee'}
+              bgColor={'#fff'}
+              color={'#86929d'}
+              fontSize={'12px'}
+              fontWeight={'normal'}
+              _hover={{
+                borderColor: '#2a72e5',
+                color: '#2a72e5'
+              }}
+              onClick={()=> { modalButton('claim', 'Stake',  dataModal)}}
+            >
+              Stake
+            </Button>
+          </Flex>
         </Flex>
       </Flex>
+      <ClaimModal />
     </Flex>
   );
 }

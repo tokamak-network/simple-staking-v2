@@ -5,14 +5,14 @@ import { useRecoilState } from "recoil";
 import { ModalType } from "types/modal";
 import { ClaimModalDataType, StakeModalDataType } from "types"
 
-function useModal<T>(
+function useClaimModal<T>(
   modalType?: ModalType,
-  modalDataObj?: StakeModalDataType  | undefined,
+  modalDataObj?:  ClaimModalDataType | undefined,
   setInitialValue?: React.Dispatch<SetStateAction<any>>
 ) {
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState<
-    StakeModalDataType  | undefined
+     ClaimModalDataType | undefined
   >(modalData);
   const [value, setValue] = useRecoilState(inputState);
   const [isModalLoading, setIsModalLoading] = useRecoilState(modalLoadingState);
@@ -51,4 +51,4 @@ function useModal<T>(
   };
 }
 
-export default useModal;
+export default useClaimModal;

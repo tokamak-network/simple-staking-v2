@@ -22,6 +22,7 @@ import WalletModal from '@/common/modal/Wallet';
 import useModal from '@/hooks/useModal';
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
 import WithdrawModal from '../../../common/modal/withdraw/WithdrawModal';
+import ClaimModal from '@/common/modal/L2Info/ClaimModal';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -44,6 +45,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [candidates, setCandidates] = useState('');
   const [stakeOfUser, setStakeOfUser] = useState('');
   const [expSeig, setExpSeig] = useState('');
+  const [name, setName] = useState('');
   const [stakeCandidate, setStakeCandidate] = useState('');
   const [minimumAmount, setMinimumAmount] = useRecoilState(minimumAmountState)
   const [minimumAmountForButton, setMinimumAmountForButton] = useState<boolean>(false);
@@ -69,6 +71,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
       setExpSeig(data.expectedSeig);
       setStakeCandidate(data.stakeOfCandidate);
       setIsL2(data.candidateAddOn !== null)
+      setName(data.name)
     }
   }, [data]);
 
@@ -168,7 +171,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     old_layer2: getOldLayerAddress(candidateContracts) ? getOldLayerAddress(candidateContracts) : '',
     requests: requests,
     isL2: isL2,
-    name: data.name
+    name: name
   };
 
   const modalButton = useCallback(async (modalType: ModalType, data: any) => {

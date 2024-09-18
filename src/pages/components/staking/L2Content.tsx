@@ -20,6 +20,8 @@ type L2ContentProps = {
   type: string;
   contractAddress? : string;
   content2?: string | undefined;
+  modalButton?: any;
+  dataModal?: any;
 }
 
 export function L2Content (args: L2ContentProps) {
@@ -29,6 +31,8 @@ export function L2Content (args: L2ContentProps) {
     type,
     contractAddress,
     content2,
+    modalButton,
+    dataModal
   } = args
   
   const { library, account } = useWeb3React()
@@ -157,50 +161,7 @@ export function L2Content (args: L2ContentProps) {
             </Flex> 
           </Flex> : '' 
         }
-        {
-          title === 'Earned seigniorage' && account ?
-          <Flex 
-            ml={'6px'} 
-            justifyContent={'space-between'} 
-            w={'180px'}
-          >
-            <Button
-              w={'80px'}
-              h={'25px'}
-              borderRadius={'4px'}
-              border={'solid 1px #dfe4ee'}
-              bgColor={'#fff'}
-              color={'#86929d'}
-              fontSize={'12px'}
-              fontWeight={'normal'}
-              _hover={{
-                borderColor: '#2a72e5',
-                color: '#2a72e5'
-              }}
-              onClick={()=> { updateSeig(1)}}
-            >
-              Claim
-            </Button>
-            <Button
-              w={'80px'}
-              h={'25px'}
-              ml={'6px'}
-              borderRadius={'4px'}
-              border={'solid 1px #dfe4ee'}
-              bgColor={'#fff'}
-              color={'#86929d'}
-              fontSize={'12px'}
-              fontWeight={'normal'}
-              _hover={{
-                borderColor: '#2a72e5',
-                color: '#2a72e5'
-              }}
-              onClick={()=> { updateSeig(2)}}
-            >
-              Stake
-            </Button>
-          </Flex> : ''
-        }
+       
       </Flex>      
     </Flex>
   )

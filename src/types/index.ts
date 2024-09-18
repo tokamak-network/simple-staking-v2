@@ -29,6 +29,13 @@ export type StakeModalDataType = {
   name: string,
 }
 
+export type ClaimModalDataType = {
+  name: string,
+  target: string,
+  address: string,
+  amount: string,
+}
+
 export type StakeModalComponentType = {
   header: string,
   subHeader: string,

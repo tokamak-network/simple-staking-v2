@@ -14,7 +14,7 @@ export const ModalHeader = (args: { main: string; sub: string; closeThisModal: a
           ? '-490px'
           : main === 'Withdraw' && type === 2
           ? '-330px'
-          : main === 'Withdraw'
+          : main === 'Withdraw' || main === 'Claim'
           ? '-160px'
           : main === 'Stake'
           ? '-80px'
