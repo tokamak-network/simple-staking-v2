@@ -72,7 +72,7 @@ export function L2Content (args: L2ContentProps) {
       flexDir={'column'}
       fontWeight={500}
       textAlign={'left'}
-      w={'250px'}
+      w={type === 'seig' ? '170px' : '250px'}
     >
       <Flex
         fontSize={'13px'}

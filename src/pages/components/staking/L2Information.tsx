@@ -159,7 +159,7 @@ function L2Information({ data }: L2InformationProps) {
             mt={'2px'}
           >
             {
-              !editStat ?
+              isOperator && !editStat ?
               <Button 
                 w={'59px'}
                 h={'21px'}
@@ -173,6 +173,7 @@ function L2Information({ data }: L2InformationProps) {
               >
                 Edit
               </Button> :
+              isOperator && editStat ?
               <Flex>
                 <Button 
                   w={'59px'}
@@ -201,7 +202,7 @@ function L2Information({ data }: L2InformationProps) {
                 >
                   Cancel
                 </Button>
-              </Flex>
+              </Flex> : ''
             }
           </Flex>
         </Flex>
@@ -238,48 +239,51 @@ function L2Information({ data }: L2InformationProps) {
             type={'seig'}
             contractAddress={data?.candidateContract}
           />
-          <Flex 
-            ml={'6px'} 
-            alignItems={'end'}
-            justifyContent={'center'} 
-            w={'180px'}
-          >
-            <Button
-              w={'80px'}
-              h={'25px'}
-              borderRadius={'4px'}
-              border={'solid 1px #dfe4ee'}
-              bgColor={'#fff'}
-              color={'#86929d'}
-              fontSize={'12px'}
-              fontWeight={'normal'}
-              _hover={{
-                borderColor: '#2a72e5',
-                color: '#2a72e5'
-              }}
-              onClick={()=> { modalButton('claim', 'Claim',  dataModal)}}
+          {
+            isOperator ?
+            <Flex 
+              ml={'6px'} 
+              alignItems={'end'}
+              justifyContent={'center'} 
+              w={'180px'}
             >
-              Claim
-            </Button>
-            <Button
-              w={'80px'}
-              h={'25px'}
-              ml={'6px'}
-              borderRadius={'4px'}
-              border={'solid 1px #dfe4ee'}
-              bgColor={'#fff'}
-              color={'#86929d'}
-              fontSize={'12px'}
-              fontWeight={'normal'}
-              _hover={{
-                borderColor: '#2a72e5',
-                color: '#2a72e5'
-              }}
-              onClick={()=> { modalButton('claim', 'Stake',  dataModal)}}
-            >
-              Stake
-            </Button>
-          </Flex>
+              <Button
+                w={'80px'}
+                h={'25px'}
+                borderRadius={'4px'}
+                border={'solid 1px #dfe4ee'}
+                bgColor={'#fff'}
+                color={'#86929d'}
+                fontSize={'12px'}
+                fontWeight={'normal'}
+                _hover={{
+                  borderColor: '#2a72e5',
+                  color: '#2a72e5'
+                }}
+                onClick={()=> { modalButton('claim', 'Claim',  dataModal)}}
+              >
+                Claim
+              </Button>
+              <Button
+                w={'80px'}
+                h={'25px'}
+                ml={'6px'}
+                borderRadius={'4px'}
+                border={'solid 1px #dfe4ee'}
+                bgColor={'#fff'}
+                color={'#86929d'}
+                fontSize={'12px'}
+                fontWeight={'normal'}
+                _hover={{
+                  borderColor: '#2a72e5',
+                  color: '#2a72e5'
+                }}
+                onClick={()=> { modalButton('claim', 'Stake',  dataModal)}}
+              >
+                Stake
+              </Button>
+            </Flex> : ''
+          }
         </Flex>
       </Flex>
       <ClaimModal />
