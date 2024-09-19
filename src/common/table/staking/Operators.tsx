@@ -170,8 +170,6 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
               const lockedInBridge = useL2CandidateInfo(candidateAddOn)
 
               const [logo, setLogo] = useState<string>('')
-              
-              
               const { l2Infos } = useIsOperator(candidateAddOn?.id)
               
               useEffect(() => {

@@ -12,11 +12,12 @@ export function useIsOperator (layer2: string) {
   const CandidateAddOn_CONTRACT = useContract(layer2, CandidateAddOn);
   const [isOperator, setIsOperator] = useState<boolean>(false)
   const [l2Infos, setL2Infos] = useState<l2InfoType>({})
+  const [bridgeTypes, setBridgeTypes]= useState()
   
   useEffect(() => {
     async function fetch() {
       
-      if (CandidateAddOn_CONTRACT && account) {
+      if (CandidateAddOn_CONTRACT && account && layer2) {
         try {
           const operatorAddress = await CandidateAddOn_CONTRACT.operator()
           const OperatorManager_CONTRACT = await getContract(operatorAddress, OperatorManager, library, account)
@@ -24,9 +25,11 @@ export function useIsOperator (layer2: string) {
             const manager = await OperatorManager_CONTRACT.manager()
             const checkIsOperator = manager.toLowerCase() === account.toLowerCase()
             const l2Info = await OperatorManager_CONTRACT.l2Info()
-            // console.log(JSON.parse(l2Info))
+            const bridgeType = await OperatorManager_CONTRACT.checkL1Bridge()
+            
             setIsOperator(checkIsOperator !== undefined ? checkIsOperator : false);
             setL2Infos(JSON.parse(l2Info))
+            setBridgeTypes(bridgeType._type)
           }
         } catch (e) {
           console.log(e)
@@ -36,5 +39,5 @@ export function useIsOperator (layer2: string) {
     fetch()
     
   }, [CandidateAddOn_CONTRACT, account])
-  return { isOperator, l2Infos }
+  return { isOperator, l2Infos, bridgeTypes }
 }

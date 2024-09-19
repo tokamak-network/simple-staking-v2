@@ -68,7 +68,7 @@ function L2Information({ data }: L2InformationProps) {
   
   const CandidateAddOn_CONTRACT = useContract(data?.candidateContract, CandidateAddOn);
   
-  const { isOperator, l2Infos } = useIsOperator(data?.candidateContract)
+  const { isOperator, l2Infos, bridgeTypes } = useIsOperator(data?.candidateContract)
   
   useEffect(() => {
     if (l2Infos) {
@@ -208,7 +208,17 @@ function L2Information({ data }: L2InformationProps) {
         <Flex flexDir={'row'}>
           {
             editStat ? '' :
-            <L2InfoContent title={'L2 Rollup Type'} content={'Titan Tokamak'} type={'string'} />
+            <L2InfoContent 
+              title={'L2 Rollup Type'} 
+              content={
+                bridgeTypes === 1 
+                ? 'Titan Tokamak'
+                : bridgeTypes === 2
+                ? 'Thanos Tokamak'
+                : 'Unknown'
+              } 
+              type={'string'} 
+            />
           }
           <L2InfoContent title={'Bridge'} content={l2Infos?.bridge} type={'bridge'} editStat={editStat} />
           <L2InfoContent title={'Block explorer'} content={l2Infos?.explorer} type={'explorer'} editStat={editStat} />
