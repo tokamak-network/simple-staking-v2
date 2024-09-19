@@ -10,6 +10,12 @@ export type CheckBoxValueType = {
   pageKey: PageKey;
 };
 
+export type l2InfoType = {
+  bridge: string,
+  explorer: string,
+  url: string  
+} | any
+
 export type StakeModalDataType = {
   tonBalance: string,
   wtonBalance: string,

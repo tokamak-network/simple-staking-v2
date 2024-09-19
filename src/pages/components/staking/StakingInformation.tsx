@@ -59,7 +59,6 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   
   useEffect(() => {
     if (txHistory) {
-      console.log(txHistory.length)
       const filtered = txTypeValue === 'All' 
         ? txHistory 
         : txHistory.filter((history: any) => {

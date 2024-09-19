@@ -90,7 +90,7 @@ export function L2Content (args: L2ContentProps) {
             justifyContent={'center'} 
             alignItems={'center'}
             ml={'6px'}
-            href={`${ETHERSCAN_LINK}/address/${CONTRACT_ADDRESS.TON_ADDRESS}#readContract#F2`}
+            href={`${ETHERSCAN_LINK}/token/${CONTRACT_ADDRESS.TON_ADDRESS}?a=${content2}`}
             isExternal
           >
             <Image src={ETHERSCAN_LINK_Image} alt={'alt'} />

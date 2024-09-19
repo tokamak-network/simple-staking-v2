@@ -16,7 +16,7 @@ import OperatorImage from "@/common/table/staking/Oval";
 
 type L2ContentProps = {
   title: string;
-  content: string | undefined;
+  content: string ;
   type: string;
   contractAddress? : string;
   content2?: string | undefined;
@@ -52,7 +52,7 @@ export function L2InfoContent (args: L2ContentProps) {
       textAlign={'left'}
       w={'100%'}
       mr={'20px'}
-      minW={stringType ? '100px' : ''}
+      minW={stringType ? '100px' : '250px'}
     >
       <Flex
         fontSize={'13px'}
@@ -91,14 +91,14 @@ export function L2InfoContent (args: L2ContentProps) {
           : ''
         }
         {
-          linkType && !editStat ?
+          linkType && !editStat && content && content.length > 0 ?
           <Link 
             w={'20px'} 
             height={'20px'} 
             justifyContent={'center'} 
             alignItems={'center'}
             ml={'6px'}
-            href={convert}
+            href={content}
             isExternal
           >
             <Image src={ETHERSCAN_LINK} alt={'alt'} />

@@ -9,13 +9,21 @@ import ClaimModal from '@/common/modal/L2Info/ClaimModal';
 import { ClaimModalDataType } from '@/types';
 import { ModalType } from '@/types/modal';
 import { modalData, modalState } from '@/atom/global/modal';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { editL2Info_bridge_input, editL2Info_bridge_state, editL2Info_explorer_input, editL2Info_explorer_state, editL2Info_logo_input, editL2Info_logo_state } from '@/atom/staking/editL2Info';
+import useContract from '@/hooks/useContract';
+import CandidateAddOn from "services/abi/CandidateAddOn.json"
+import OperatorManager from "services/abi/OperatorManager.json"
+import { useWeb3React } from '@web3-react/core';
+import { getContract } from '@/components/getContract';
+import { txState } from '@/atom/global/transaction';
 
 type L2InformationProps = {
   data: any;
 };
 
 function L2Information({ data }: L2InformationProps) {
+  const { account, library } = useWeb3React()
   // const {
 
   // } = data?.candidateAddOn
@@ -27,6 +35,8 @@ function L2Information({ data }: L2InformationProps) {
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [, setSelectedModalData] = useRecoilState(modalData);
+  const [, setTxPending] = useRecoilState(txState);
+  const [tx, setTx] = useState();
 
   console.log(data);
 
@@ -36,7 +46,7 @@ function L2Information({ data }: L2InformationProps) {
       setAmount('')
       setTarget('')
     }
-  },[]);
+  },[data]);
 
   const dataModal: ClaimModalDataType = {
     amount: amount,
@@ -50,9 +60,24 @@ function L2Information({ data }: L2InformationProps) {
     setSelectedModal(modalType);
     setSelectedModalData(data);
   }, [dataModal]);
+
+  const [bridgeValue, setBridgeValue] = useRecoilState(editL2Info_bridge_input);
+  const [explorerValue, setExplorerValue] = useRecoilState(editL2Info_explorer_input);
+  const [logoValue, setLogoValue] = useRecoilState(editL2Info_logo_input);
+
   
-  // const a = useIsOperator(data?.candidateContract)
-  // console.log(a)
+  const CandidateAddOn_CONTRACT = useContract(data?.candidateContract, CandidateAddOn);
+  
+  const { isOperator, l2Infos } = useIsOperator(data?.candidateContract)
+  
+  useEffect(() => {
+    if (l2Infos) {
+      setBridgeValue(l2Infos.bridge)
+      setExplorerValue(l2Infos.explorer)
+      setLogoValue(l2Infos.logo)
+    }
+  }, [l2Infos])
+  
   const layer2Seigs = data?.candidateAddOn.seigGiven[0]
     ? convertNumber({
         amount: data?.candidateAddOn.seigGiven[0].layer2Seigs,
@@ -76,7 +101,42 @@ function L2Information({ data }: L2InformationProps) {
         localeString: true,
       })
     : '0.00';
-  // console.log(converted)
+  
+  const setL2Info = useCallback(async () => {
+    if (data) {
+      try{
+        if (CandidateAddOn_CONTRACT && account) {
+          const operatorAddress = await CandidateAddOn_CONTRACT.operator()
+          const OperatorManager_CONTRACT = await getContract(operatorAddress, OperatorManager, library, account)
+          const data = {
+            bridge: bridgeValue,
+            explorer: explorerValue,
+            logo: logoValue
+          }
+          const stringifyData = JSON.stringify(data)
+          const tx = await OperatorManager_CONTRACT.setL2Info(stringifyData)
+  
+          setTx(tx);
+          setTxPending(true);
+          setEditStat(false)
+          setBridgeValue('')
+          setExplorerValue('')
+          setLogoValue('')
+          if (tx) {
+            await tx.wait().then((receipt: any) => {
+              if (receipt.status) {
+                setTxPending(false);
+                setTx(undefined);
+              }
+            });
+          }
+        }
+
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }, [bridgeValue, explorerValue, logoValue])
 
   return (
     <Flex
@@ -123,7 +183,7 @@ function L2Information({ data }: L2InformationProps) {
                   color={'#2a72e5'}
                   fontSize={'12px'}
                   fontWeight={400}
-                  onClick={() => setEditStat(false)}
+                  onClick={() => setL2Info()}
                 >
                   Confirm
                 </Button>
@@ -150,8 +210,8 @@ function L2Information({ data }: L2InformationProps) {
             editStat ? '' :
             <L2InfoContent title={'L2 Rollup Type'} content={'Titan Tokamak'} type={'string'} />
           }
-          <L2InfoContent title={'Bridge'} content={'https://bridge.tokamak.network'} type={'bridge'} editStat={editStat} />
-          <L2InfoContent title={'Block explorer'} content={'https://explorer.titan.tokamak.network'} type={'explorer'} editStat={editStat} />
+          <L2InfoContent title={'Bridge'} content={l2Infos?.bridge} type={'bridge'} editStat={editStat} />
+          <L2InfoContent title={'Block explorer'} content={l2Infos?.explorer} type={'explorer'} editStat={editStat} />
           <L2InfoContent title={'L2 Logo'} content={data?.name} type={'logo'} editStat={editStat} />
         </Flex>
       </Flex>
@@ -160,7 +220,7 @@ function L2Information({ data }: L2InformationProps) {
           Sequencer seigniorage
         </Flex>
         <Flex flexDir={'row'}>
-          <L2Content title={'TON locked in Bridge'} content={converted} type={'ton'} />
+          <L2Content title={'TON locked in Bridge'} content={converted} content2={data?.candidateAddOn.bridge} type={'ton'} />
           <L2Content
             title={'Earned seigniorage'}
             content={layer2Seigs}

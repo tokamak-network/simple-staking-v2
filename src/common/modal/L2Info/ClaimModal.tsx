@@ -11,11 +11,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { ModalHeader } from '../../../pages/components/staking/modal/ModalHeader';
 
-import Image from 'next/image'
-import TITAN from '@/assets/images/titan_symbol.svg'
-import ETHEREUM from '@/assets/images/ethereum_symbol.svg'
-import BACK from '@/assets/images/back_icon.svg'
-
 import { StakeModalComponentType } from '@/types';
 import { useWithdrawRequests } from '@/hooks/staking/useWithdrawable';
 import { inputState } from '@/atom/global/input';
@@ -31,7 +26,7 @@ function ClaimModal () {
 
   const [requests, setRequests] = useState()
 
-  const [modalName, setModalName] = useState('Withdraw')
+  const [modalName, setModalName] = useState('')
   const [type, setType] = useState('main')
   const [number, setNumber] = useState(1)
 
@@ -44,9 +39,9 @@ function ClaimModal () {
   }, [closeModal]);
 
   useEffect(() => {
-    type === 'claim' 
-    ? setModalName('Claim')
-    : setModalName('Stake')
+    if (selectedModalData) {
+      setModalName(selectedModalData.name)
+    }
   }, [type])
 
   

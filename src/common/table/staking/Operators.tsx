@@ -26,7 +26,7 @@ import { getCircle } from '@/common/table/staking/Circle';
 import { OperatorImage } from '@/common/table/staking/Oval';
 import { renderBtn } from '@/common/table/staking/RenderBTN';
 import { Info } from '@/common/table/staking/OperatorInfo';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { toggleState } from '@/atom/staking/toggle';
 import { useUserStaked } from '../../../hooks/staking/useUserStaked';
 import { useWeb3React } from '@web3-react/core';
@@ -38,6 +38,8 @@ import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
 import LIST from '@/assets/images/list.svg'
 import ContractAddressInfo from './ContractAddressInfo';
 import { InfoTypeSelector } from '@/common/selector/InfoType';
+import { editL2Info_logo_state } from '@/atom/staking/editL2Info';
+import { useIsOperator } from '@/hooks/staking/useIsOperator';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -166,6 +168,18 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
               const { userStakeds } = useUserStaked(`${account?.toLocaleLowerCase()}-${stakedId.toLocaleLowerCase()}`)
               const expectedSeig = useExpectedSeig(candidateContract, stakedAmount, candidate)
               const lockedInBridge = useL2CandidateInfo(candidateAddOn)
+
+              const [logo, setLogo] = useState<string>('')
+              
+              
+              const { l2Infos } = useIsOperator(candidateAddOn?.id)
+              
+              useEffect(() => {
+                if (l2Infos) {
+                  setLogo(l2Infos.logo)
+                }
+              }, [l2Infos])
+            
               
               row.original = {
                 ...row.original,
@@ -283,7 +297,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                               {isMember ? getCircle('member') : ''}
                             </Flex>
                             <Box mr={'12px'}>
-                              <OperatorImage imageLink={''}/>
+                              <OperatorImage imageLink={logo}/>
                             </Box>
                             <Text 
                               // w={'176px'} 
