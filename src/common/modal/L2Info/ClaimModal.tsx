@@ -114,12 +114,14 @@ function ClaimModal () {
                     mb={'9px'}
                   >
                     
-                    {trimAddress({
-                      address: selectedModalData.target,
-                      firstChar: 4,
-                      lastChar: 4,
-                      dots:' ...'
-                    })}
+                    {selectedModalData.target ? 
+                      trimAddress({
+                        address: selectedModalData.target,
+                        firstChar: 4,
+                        lastChar: 4,
+                        dots:' ...'
+                      }) : ''
+                    }
                   </Flex>
                   <Flex
                     fontWeight={500}
@@ -182,12 +184,15 @@ function ClaimModal () {
                         fontWeight: 600
                       }}
                     >
-                      {trimAddress({
-                        address: selectedModalData.address,
-                        firstChar: 4,
-                        lastChar: 4,
-                        dots:' ...'
-                      })}
+                      {
+                        selectedModalData.address ? 
+                          trimAddress({
+                            address: selectedModalData.address,
+                            firstChar: 4,
+                            lastChar: 4,
+                            dots:' ...'
+                          }) : ''
+                      }
                     </span>
                   </Flex>
                 </Flex>

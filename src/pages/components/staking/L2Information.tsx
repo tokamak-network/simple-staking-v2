@@ -33,6 +33,7 @@ function L2Information({ data }: L2InformationProps) {
   const [contractAddress, setContractAddress] = useState('');
   const [amount, setAmount] = useState('');
   const [target, setTarget] = useState('');
+  const [address, setAddress] = useState('');
   const [layerName, setLayerName] = useState('');
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
@@ -41,15 +42,6 @@ function L2Information({ data }: L2InformationProps) {
   const [tx, setTx] = useState();
 
   console.log(data);
-
-  useEffect(() => {
-    if (data) {
-      setContractAddress(data.candidateContract)
-      setAmount('')
-      setTarget('')
-      setLayerName(data.name)
-    }
-  },[data]);
 
   const [bridgeValue, setBridgeValue] = useRecoilState(editL2Info_bridge_input);
   const [explorerValue, setExplorerValue] = useRecoilState(editL2Info_explorer_input);
@@ -73,6 +65,16 @@ function L2Information({ data }: L2InformationProps) {
       setLogoValue(l2Infos.logo)
     }
   }, [l2Infos])
+
+  useEffect(() => {
+    if (data) {
+      setContractAddress(data.candidateContract)
+      setAmount('')
+      setAddress(managers)
+      setTarget(operatorManager)
+      setLayerName(data.name)
+    }
+  },[data, managers, operatorManager]);
   
   const claimableAmount = claimable
     ? convertNumber({
@@ -106,8 +108,8 @@ function L2Information({ data }: L2InformationProps) {
 
     const dataModal: ClaimModalDataType = {
       amount: amount,
-      target: operatorManager,
-      address: managers,
+      target: target,
+      address: address,
       name: '',
       contractAddress: contractAddress,
       claimable: claimableAmount ? claimableAmount : '0.00',
@@ -120,7 +122,7 @@ function L2Information({ data }: L2InformationProps) {
       setSelectedModal(modalType);
       setSelectedModalData({
         ...data,
-        name: name
+        name: name,
       });
     }, [dataModal]);
   
