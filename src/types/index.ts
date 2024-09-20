@@ -40,6 +40,10 @@ export type ClaimModalDataType = {
   target: string,
   address: string,
   amount: string,
+  contractAddress: string,
+  claimable: string,
+  expectedSeig: string,
+  layerName: string,
 }
 
 export type StakeModalComponentType = {

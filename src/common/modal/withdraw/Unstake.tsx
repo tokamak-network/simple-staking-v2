@@ -3,7 +3,7 @@ import { Button, Checkbox, Flex, useTheme } from "@chakra-ui/react"
 import TON from "@/assets/images/ton.svg"
 import Image from "next/image"
 import { UnstakeBalanceInput } from "./UnstakeBalanceInput"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { convertToRay, floatParser } from "@/components/number"
 import useCallContract from "@/hooks/useCallContract"
 import { useWeb3React } from "@web3-react/core"
@@ -37,6 +37,22 @@ export const Unstake = (args: UnstakeProps) => {
   const {
     stakedAmount
   } = selectedModalData
+
+  useEffect(() => {
+    async function waitReceipt() {
+      if (tx && !tx['status']) {
+        //@ts-ignore
+        await tx.wait().then((receipt: any) => {
+          if (receipt.status) {
+            setTxPending(false);
+            setTx(undefined);
+          }
+        });
+      }
+    }
+    waitReceipt();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tx]);
 
   const unStaking = useCallback(async () => {
     try {

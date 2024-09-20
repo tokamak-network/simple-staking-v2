@@ -1,4 +1,5 @@
 import {
+  Button,
   Flex,
   Modal,
   ModalBody,
@@ -10,11 +11,12 @@ import useClaimModal from '@/hooks/useClaimModal';
 import { useCallback, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { ModalHeader } from '../../../pages/components/staking/modal/ModalHeader';
-
-import { StakeModalComponentType } from '@/types';
-import { useWithdrawRequests } from '@/hooks/staking/useWithdrawable';
 import { inputState } from '@/atom/global/input';
 import { useRecoilState } from 'recoil';
+import trimAddress from '@/components/trimAddress';
+import { txState } from '@/atom/global/transaction';
+import { getContract } from '@/components/getContract';
+import CandidateAddOn from 'services/abi/CandidateAddOn.json'
 
 function ClaimModal () {
   const theme = useTheme();
@@ -22,13 +24,11 @@ function ClaimModal () {
 
   const { selectedModalData, selectedModal, closeModal, isModalLoading } = useClaimModal();
   const { account, library } = useWeb3React();
-  const { withdrawRequests } = useWithdrawRequests()
-
-  const [requests, setRequests] = useState()
 
   const [modalName, setModalName] = useState('')
   const [type, setType] = useState('main')
-  const [number, setNumber] = useState(1)
+  const [tx, setTx] = useState();
+  const [, setTxPending] = useRecoilState(txState);
 
   const [input, setInput] = useRecoilState(inputState);
 
@@ -42,8 +42,31 @@ function ClaimModal () {
     if (selectedModalData) {
       setModalName(selectedModalData.name)
     }
-  }, [type])
+  }, [selectedModalData])
 
+  const updateSeig = useCallback(async (type: number) => {
+    if (account && library && selectedModalData) {
+      try {
+        const CandidateAddOn_CONTRACT = getContract(selectedModalData.contractAddress, CandidateAddOn, library, account)
+        
+        const tx = await CandidateAddOn_CONTRACT.updateSeigniorage(type)
+        setTx(tx);
+        setTxPending(true);
+        if (tx) {
+          await tx.wait().then((receipt: any) => {
+            if (receipt.status) {
+              setTxPending(false);
+              setTx(undefined);
+            }
+          });
+        }
+      } catch (e) {
+        console.log(e)
+        setTxPending(false);
+        setTx(undefined);
+      }
+    }
+  }, [account, library, selectedModalData])
   
   return (
     <Modal
@@ -68,7 +91,7 @@ function ClaimModal () {
                     main={modalName}
                     sub={''}
                     closeThisModal={closeThisModal}
-                    type={number}
+                    type={4}
                   />
                 </Flex>
                 <Flex bgColor={'#f4f6f8'} h={'1px'}  w={'100%'} />
@@ -90,25 +113,100 @@ function ClaimModal () {
                     fontWeight={500}
                     mb={'9px'}
                   >
-                    0xaaaaa
-                    {/* {selectedModalData.address} */}
+                    
+                    {trimAddress({
+                      address: selectedModalData.target,
+                      firstChar: 4,
+                      lastChar: 4,
+                      dots:' ...'
+                    })}
                   </Flex>
                   <Flex
                     fontWeight={500}
                     fontSize={'21px'}
                     color={'#3e495c'}
                   >
-                    100 TON
+                    {
+                      selectedModalData.name === 'Claim' 
+                      ? selectedModalData.claimable 
+                      : selectedModalData.expectedSeig
+                    } TON
                   </Flex>
                   <Flex 
                     mt={'39px'}
                     fontSize={'13px'}
                     color={'#808992'}
+                    fontWeight={500}
                   >
-                    {`Will transfer`}
+                    {
+                      selectedModalData.name === 'Claim'
+                      ? <Flex>
+                        Will transfer 
+                        <span 
+                          style={{
+                            marginLeft:'3px',
+                            color: '#3E495C',
+                            fontWeight: 600
+                          }}
+                        >
+                          {selectedModalData.claimable} TON
+                        </span>
+                      </Flex>
+                      : 
+                      <Flex>
+                        Will stake 
+                        <span 
+                          style={{
+                            marginLeft:'3px',
+                            marginRight:'3px',
+                            color: '#3E495C',
+                            fontWeight: 600
+                          }}
+                        >
+                          {selectedModalData.expectedSeig} TON 
+                        </span>
+                        to {selectedModalData.layerName}
+                      </Flex>
+                    }
+                  </Flex>
+                  <Flex 
+                    fontSize={'13px'}
+                    color={'#808992'}
+                    fontWeight={500}
+                  >
+                    {'to'} 
+                    <span 
+                      style={{
+                        marginLeft:'3px',
+                        color: '#3E495C',
+                        fontWeight: 600
+                      }}
+                    >
+                      {trimAddress({
+                        address: selectedModalData.address,
+                        firstChar: 4,
+                        lastChar: 4,
+                        dots:' ...'
+                      })}
+                    </span>
                   </Flex>
                 </Flex>
                 <Flex bgColor={'#f4f6f8'} h={'1px'}  w={'100%'} />
+                <Flex>
+                <Button
+                  {...btnStyle.btnAble()}
+                  w={'130px'}
+                  h={'38px'}
+                  mt={'25px'}
+                  fontSize={'14px'}
+                  fontWeight={500}
+                  border={'none'}
+                  // isDisabled={!isChecked}
+                  onClick={() => updateSeig(selectedModalData.name === 'Claim' ? 1 : 2)}
+                >
+                  {selectedModalData.name}
+                </Button>
+                </Flex>
               </Flex>
             </ModalBody>
           ): ''} 

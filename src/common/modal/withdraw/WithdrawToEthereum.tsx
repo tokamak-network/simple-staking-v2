@@ -128,6 +128,22 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     [],
   )
 
+  useEffect(() => {
+    async function waitReceipt() {
+      if (tx && !tx['status']) {
+        //@ts-ignore
+        await tx.wait().then((receipt: any) => {
+          if (receipt.status) {
+            setTxPending(false);
+            setTx(undefined);
+          }
+        });
+      }
+    }
+    waitReceipt();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tx]);
+
   const reStaking = useCallback(async () => {
     try {
       if (DepositManager_CONTRACT && account && selectedModalData && arrLength !== 0) {

@@ -52,7 +52,7 @@ export function L2InfoContent (args: L2ContentProps) {
       textAlign={'left'}
       w={'100%'}
       mr={'20px'}
-      minW={stringType ? '100px' : '250px'}
+      minW={stringType ? '120px' : '250px'}
     >
       <Flex
         fontSize={'13px'}

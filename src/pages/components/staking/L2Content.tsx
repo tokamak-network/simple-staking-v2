@@ -39,25 +39,6 @@ export function L2Content (args: L2ContentProps) {
   const [tx, setTx] = useState();
   const [, setTxPending] = useRecoilState(txState);
 
-
-  const updateSeig = useCallback(async (type: number) => {
-    if (account && library && contractAddress) {
-      try {
-        console.log(contractAddress)
-        const Candidate_CONTRACT = getContract(contractAddress, CandidateAddOn, library, account)
-        console.log(await Candidate_CONTRACT.operator())
-        
-        const tx = await Candidate_CONTRACT.updateSeigniorage(type)
-        setTx(tx);
-        setTxPending(true);
-      } catch (e) {
-        console.log(e)
-        setTxPending(false);
-        setTx(undefined);
-      }
-    }
-  }, [])
-
   const convert = type === 'address' 
     ? trimAddress({
       address: content ? content : '',
@@ -72,7 +53,7 @@ export function L2Content (args: L2ContentProps) {
       flexDir={'column'}
       fontWeight={500}
       textAlign={'left'}
-      w={type === 'seig' ? '170px' : '250px'}
+      w={type === 'seig' ? '' : '250px'}
     >
       <Flex
         fontSize={'13px'}

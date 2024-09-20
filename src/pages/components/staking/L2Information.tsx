@@ -17,6 +17,8 @@ import OperatorManager from "services/abi/OperatorManager.json"
 import { useWeb3React } from '@web3-react/core';
 import { getContract } from '@/components/getContract';
 import { txState } from '@/atom/global/transaction';
+import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
+import { floatParser } from '../../../utils/number';
 
 type L2InformationProps = {
   data: any;
@@ -28,10 +30,10 @@ function L2Information({ data }: L2InformationProps) {
 
   // } = data?.candidateAddOn
   const [editStat, setEditStat] = useState(false);
-  const [address, setAddress] = useState('');
+  const [contractAddress, setContractAddress] = useState('');
   const [amount, setAmount] = useState('');
   const [target, setTarget] = useState('');
-  const [name, setName] = useState('');
+  const [layerName, setLayerName] = useState('');
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [, setSelectedModalData] = useRecoilState(modalData);
@@ -42,33 +44,27 @@ function L2Information({ data }: L2InformationProps) {
 
   useEffect(() => {
     if (data) {
-      setAddress('')
+      setContractAddress(data.candidateContract)
       setAmount('')
       setTarget('')
+      setLayerName(data.name)
     }
   },[data]);
-
-  const dataModal: ClaimModalDataType = {
-    amount: amount,
-    target: target,
-    address: address,
-    name: name
-  }
-
-  const modalButton = useCallback(async (modalType: ModalType, name: string, data: any) => {
-    setName(name)
-    setSelectedModal(modalType);
-    setSelectedModalData(data);
-  }, [dataModal]);
 
   const [bridgeValue, setBridgeValue] = useRecoilState(editL2Info_bridge_input);
   const [explorerValue, setExplorerValue] = useRecoilState(editL2Info_explorer_input);
   const [logoValue, setLogoValue] = useRecoilState(editL2Info_logo_input);
 
-  
   const CandidateAddOn_CONTRACT = useContract(data?.candidateContract, CandidateAddOn);
   
-  const { isOperator, l2Infos, bridgeTypes } = useIsOperator(data?.candidateContract)
+  const { 
+    isOperator, 
+    l2Infos, 
+    bridgeTypes, 
+    operatorManager,
+    managers,
+    claimable
+  } = useIsOperator(data?.candidateContract)
   
   useEffect(() => {
     if (l2Infos) {
@@ -78,17 +74,17 @@ function L2Information({ data }: L2InformationProps) {
     }
   }, [l2Infos])
   
-  const layer2Seigs = data?.candidateAddOn.seigGiven[0]
+  const claimableAmount = claimable
     ? convertNumber({
-        amount: data?.candidateAddOn.seigGiven[0].layer2Seigs,
+        amount: claimable,
         type: 'ray',
         localeString: true,
       })
     : '0.00';
   
-    const l2TotalSeigs = data?.candidateAddOn.seigGiven[0]
+    const expectedSeig = data?.expectedSeig
     ? convertNumber({
-        amount: data?.candidateAddOn.seigGiven[0].l2TotalSeigs,
+        amount: data?.expectedSeig,
         type: 'ray',
         localeString: true,
       })
@@ -101,6 +97,32 @@ function L2Information({ data }: L2InformationProps) {
         localeString: true,
       })
     : '0.00';
+
+    
+    //@ts-ignore
+    const stakableAmount = floatParser(claimableAmount) + floatParser(expectedSeig) 
+    const stakable = stakableAmount.toLocaleString(undefined,{maximumFractionDigits: 2})
+    
+
+    const dataModal: ClaimModalDataType = {
+      amount: amount,
+      target: operatorManager,
+      address: managers,
+      name: '',
+      contractAddress: contractAddress,
+      claimable: claimableAmount ? claimableAmount : '0.00',
+      expectedSeig: stakable,
+      layerName: layerName
+    }
+  
+    const modalButton = useCallback(async (modalType: ModalType, name: string, data: any) => {
+      // setName(name)
+      setSelectedModal(modalType);
+      setSelectedModalData({
+        ...data,
+        name: name
+      });
+    }, [dataModal]);
   
   const setL2Info = useCallback(async () => {
     if (data) {
@@ -122,6 +144,7 @@ function L2Information({ data }: L2InformationProps) {
           setBridgeValue('')
           setExplorerValue('')
           setLogoValue('')
+
           if (tx) {
             await tx.wait().then((receipt: any) => {
               if (receipt.status) {
@@ -234,8 +257,8 @@ function L2Information({ data }: L2InformationProps) {
           <L2Content title={'TON locked in Bridge'} content={converted} content2={data?.candidateAddOn.bridge} type={'ton'} />
           <L2Content
             title={'Earned seigniorage'}
-            content={layer2Seigs}
-            content2={l2TotalSeigs}
+            content={claimableAmount}
+            content2={stakable}
             type={'seig'}
             contractAddress={data?.candidateContract}
           />

@@ -96,6 +96,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
           w={'100%'}
           flexDir={'row'}
           justifyContent={'space-between'}
+          h={'31px'}
           mt={tableType === 'Commit' ? '0px' : ''}
         >
           <Text>
