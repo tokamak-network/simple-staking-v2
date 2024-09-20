@@ -51,8 +51,9 @@ export const ToTitan = (args: ToTitanProps) => {
     stakedAmount
   } = selectedModalData
   
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(e.target.checked);
+  }
 
   useEffect(() => {
     async function waitReceipt() {
@@ -81,7 +82,8 @@ export const ToTitan = (args: ToTitanProps) => {
         setTx(tx);
         setTxPending(true);
         setInput('')
-        // return closeThisModal();
+        setIsChecked(false)
+        return closeThisModal();
       }
     } catch (e) {
       console.log(e)

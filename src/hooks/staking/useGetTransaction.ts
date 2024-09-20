@@ -45,7 +45,6 @@ export default function useGetTransaction() {
   useEffect(() => {
     const subgraphData = async () => {
       if (isConnectedToMainNetwork !== undefined && account && refresh) {
-        console.log(account)
         const userAllTransactions = await fetchUserTransactions(
           account,
           isConnectedToMainNetwork

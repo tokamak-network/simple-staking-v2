@@ -21,7 +21,7 @@ export const fetchUserTransactions = async (
     
     const formattedAddress = formatAddress(DepositManager_ADDRESS);
     const formattedAccount = formatAddress(account)
-    console.log(account)
+    
     //gets transactions on L1
     const resTxs = await axios.post(
       `${GRAPHQL_API}`,
@@ -59,7 +59,7 @@ export const fetchUserTransactions = async (
         variables: null,
       }
     );
-    console.log(account)
+    
     //gets transactions on L2
     const withdrawTx = await axios.post(
       `${TITAN_SUBGRAPH}`,
