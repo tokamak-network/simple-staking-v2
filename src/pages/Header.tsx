@@ -18,6 +18,13 @@ const HeadMeta: NextPage = () => {
           property="og:description"
           content="Easier UI for Tokamak Staking"
         />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-E0YQDXW30R"></script>
+        <script>
+          {`window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-E0YQDXW30R');`}
+        </script>
         <link rel="icon" href="/tokamak_favicon_8tt.ico" />
       </Head>
     </div>
