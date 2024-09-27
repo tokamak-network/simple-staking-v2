@@ -70,14 +70,14 @@ export const WithdrawTableHeader: FC<WithdrawTableHeaderProps> = ({
           w={getColumnWidthWithdraw('amount')}
         >
           Amount 
-          <span 
+          {/* <span 
             style={{
               color:'#2a72e5', 
               margin: '3px'
             }}
           >
             TON
-          </span>
+          </span> */}
         </chakra.th>
         <chakra.th
           w={getColumnWidthWithdraw('status')}

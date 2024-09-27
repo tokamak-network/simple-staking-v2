@@ -85,7 +85,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
               amount: values,
               type: 'ray',
               localeString: true,
-            })} 
+            })} TON
           </Text>
           <Text color={'#646d7c'} ml={'3px'}>
             {`($ ${usdValue})`}
