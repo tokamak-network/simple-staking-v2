@@ -15,7 +15,7 @@ export const StakingCheckbox = (args: StakingCheckboxProps) => {
   return (
     <Flex w={mobile ? '100%' : ''} mt={mobile ? '24px' : ''}>
       <Checkbox 
-        bgColor={'#e9edf1'} 
+        bgColor={'#fff'} 
         borderRadius={'4px'} 
         border={'solid 1px #e7ebf2'} 
         w={'18px'}

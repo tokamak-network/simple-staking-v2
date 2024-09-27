@@ -1,4 +1,4 @@
-import { extendTheme } from '@chakra-ui/react';
+import { extendTheme, Checkbox } from '@chakra-ui/react';
 import '@fontsource/titillium-web';
 import '@fontsource/roboto';
 
@@ -293,9 +293,17 @@ const theme = extendTheme({
       },
       button: {
         backgroundColor: 'black.100',
-      },
+      }
     }),
   },
+  components: {
+    Checkbox: {
+      control: {
+        backgroundColor: '#fff',
+        border: 'solid 1px #e7ebf2'
+      }
+    }
+  }
 })
 
 export default theme
