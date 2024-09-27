@@ -24,19 +24,11 @@ import { useTONPrice } from '@/hooks/staking/useTONPrice';
 type WithdrawTableProps = {
   columns: Column[];
   data: any[];
-  getCheckboxProps: any
-  setValue: any
-  toggle: string
-  value: any
 }
 
 export const WithdrawTable: FC<WithdrawTableProps> = ({
   columns,
   data,
-  getCheckboxProps,
-  setValue,
-  toggle,
-  value
 }) => {
   const {
     getTableProps,
@@ -52,23 +44,8 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
     usePagination,
   );
   const theme = useTheme();
-  const [all, setAll] = useState<any[]>()
 
   const { tonPriceUSD } = useTONPrice()
-
-  useEffect(() => {
-    let value: any[] = []
-    let allArr: any[] = []
-    data.map((values: any) => {
-      if (toggle === 'Withdraw' && values.time === 'Withdrawable') value.push(values.requestIndex.toString())
-      allArr.push(values.requestIndex.toString())
-    })
-    allArr.push('a')
-    setAll(allArr)
-    setValue(value)
-    
-  }, [toggle])
-  // console.log(all)
 
   const [width] = useWindowDimensions();
   const mobile = width && width < 1040;
@@ -94,12 +71,7 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
           justifyContent={"start"}
           mr={mobile ? '0px' : '30px'}
         >
-          <WithdrawTableHeader 
-            props={getCheckboxProps({value: 'a'})}
-            toggle={toggle}
-            setValue={setValue}
-            all={all}
-          />
+          <WithdrawTableHeader />
           <chakra.tbody
             {...getTableBodyProps()}
             display="flex"
@@ -125,9 +97,6 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
                         key={index}
                         index={index}
                         cell={cell}
-                        props={getCheckboxProps({ value: cell.row.original.requestIndex })}
-                        value={value}
-                        toggle={toggle}
                         tonPrice={tonPriceUSD}
                       />
                     )

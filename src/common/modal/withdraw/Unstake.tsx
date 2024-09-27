@@ -3,7 +3,7 @@ import { Button, Checkbox, Flex, useTheme } from "@chakra-ui/react"
 import TON from "@/assets/images/ton.svg"
 import Image from "next/image"
 import { UnstakeBalanceInput } from "./UnstakeBalanceInput"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { convertToRay, floatParser } from "@/components/number"
 import useCallContract from "@/hooks/useCallContract"
 import { useWeb3React } from "@web3-react/core"
@@ -12,14 +12,16 @@ import { inputState } from "@/atom/global/input"
 import { txState } from "@/atom/global/transaction"
 import { StakeModalDataType } from "@/types"
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
+import WithdrawTable from "./WithdrawTable"
 
 type UnstakeProps = {
   selectedModalData: StakeModalDataType
   closeThisModal: any
+  requests: any
 }
 
 export const Unstake = (args: UnstakeProps) => {
-  const { selectedModalData, closeThisModal } = args
+  const { selectedModalData, closeThisModal, requests } = args
   const theme = useTheme();
   const { btnStyle } = theme;
   const { DepositManager_CONTRACT, SeigManager_CONTRACT } =
@@ -37,6 +39,26 @@ export const Unstake = (args: UnstakeProps) => {
   const {
     stakedAmount
   } = selectedModalData
+
+  const columns = useMemo(
+    () => [
+      {
+        accessor: 'amount',
+        Header: () => {
+          return (
+            <Flex>
+              Amount
+            </Flex>
+          )
+        },
+      },
+      {
+        accessor: 'status',
+        Header: 'Status',
+      },
+    ],
+    [],
+  )
 
   useEffect(() => {
     async function waitReceipt() {
@@ -87,7 +109,7 @@ export const Unstake = (args: UnstakeProps) => {
           {...btnStyle.btnAble()}
           w={'130px'}
           h={'38px'}
-          mt={'25px'}
+          my={'25px'}
           fontSize={'14px'}
           fontWeight={500}
           isDisabled={!isChecked}
@@ -96,6 +118,10 @@ export const Unstake = (args: UnstakeProps) => {
           Unstake
         </Button>
       </Flex>
+      <WithdrawTable 
+        columns={columns}
+        data={requests}
+      /> 
     </Flex>
   )
 }

@@ -10,9 +10,6 @@ type WithdrawTableRowProps = {
   // key: number
   index: number
   cell: any
-  props: any
-  value: any
-  toggle: string
   tonPrice: number
 }
 
@@ -20,9 +17,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
   // key,
   index,
   cell,
-  props,
-  value,
-  toggle,
+  
   tonPrice
 }) => {
   const {
@@ -31,7 +26,6 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
     time,
   } = cell.row?.original;
 
-  const { state, getCheckboxProps, getInputProps, getLabelProps, htmlProps } = useCheckbox(props)
   const values = amount ? amount : data?.amount
   
   const type = cell.column.id;

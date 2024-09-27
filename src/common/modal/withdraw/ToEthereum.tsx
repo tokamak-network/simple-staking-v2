@@ -26,6 +26,7 @@ export const ToEthereum = (args: ToEthereumProps) => {
         tab === 'unstake' ?
         <Unstake 
           selectedModalData={selectedModalData}
+          requests={requests}
           closeThisModal={closeThisModal}
         />:
         <WithdrawToEthereum 

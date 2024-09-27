@@ -53,35 +53,28 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
 
-  useEffect(() => {
-    let isMounted = true;
-    let maxIndex = 0
-    async function fetch() {
-      if (DepositManager_CONTRACT) {
-        let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(selectedModalData.layer2, account)
-        if (isMounted) {
-          if (value.includes('a')) return;
-          maxIndex = findMax(value);
-          const fillRange = range(+requestIndex.toString(), maxIndex);
-          if (!arraysEqual(fillRange, value)) {
-            setValue(fillRange);
-          }
-        }
-      }
-    }
-    fetch()
-    return () => {
-      isMounted = false;
-    };
-  }, [value])
+  // useEffect(() => {
+  //   let isMounted = true;
+  //   let maxIndex = 0
+  //   async function fetch() {
+  //     if (DepositManager_CONTRACT) {
+  //       let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(selectedModalData.layer2, account)
+  //       if (isMounted) {
+  //         if (value.includes('a')) return;
+  //         maxIndex = findMax(value);
+  //         const fillRange = range(+requestIndex.toString(), maxIndex);
+  //         if (!arraysEqual(fillRange, value)) {
+  //           setValue(fillRange);
+  //         }
+  //       }
+  //     }
+  //   }
+  //   fetch()
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, [value])
 
-  useEffect(() => {
-    value.includes('a') 
-      ? setArrLength(value.length - 1) 
-      : setArrLength(value.length)
-    if (value.includes('a') && arrLength === 1) setValue([])
-  }, [value])
-  
   const options = ['WTON', 'TON']
 
   const handleToggle = useCallback(() => {
@@ -98,24 +91,11 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   const columns = useMemo(
     () => [
       {
-        accessor: 'checkbox',
-        Header: (props: any) => {
-          return (
-            <Flex>
-              <Checkbox {...props()} />
-            </Flex>
-          )
-        },
-      },
-      {
         accessor: 'amount',
         Header: () => {
           return (
             <Flex>
               Amount
-              <Flex color={'#2a72e5'}>
-                TON
-              </Flex>
             </Flex>
           )
         },
@@ -144,11 +124,13 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx]);
 
+  console.log(selectedModalData)
+
   const reStaking = useCallback(async () => {
     try {
-      if (DepositManager_CONTRACT && account && selectedModalData && arrLength !== 0) {
-        console.log(arrLength)
-        const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, arrLength);
+      if (DepositManager_CONTRACT && account && selectedModalData) {
+        const numPendRequest = await DepositManager_CONTRACT.numPendingRequests(selectedModalData.layer2, account);
+        const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest);
         setTx(tx);
         setTxPending(true);
 
@@ -157,7 +139,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     } catch (e) {
       console.log(e);
     }
-  }, [arrLength, DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal]);
+  }, [DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal]);
 
   const withdraw = useCallback(async () => {
     try {
@@ -230,10 +212,6 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           <WithdrawTable 
             columns={columns}
             data={requests}
-            getCheckboxProps={getCheckboxProps}
-            setValue={setValue}
-            toggle={toggle}
-            value={value}
           /> : ''
         }
       </Flex>
@@ -298,7 +276,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           mt={'25px'}
           fontSize={'14px'}
           fontWeight={500}
-          isDisabled={!(isChecked && arrLength > 0)}
+          isDisabled={!(isChecked)}
           bgColor={toggle === 'Restake' ? '#36af47' : ''}
           _hover={
             toggle === 'Restake' ?
