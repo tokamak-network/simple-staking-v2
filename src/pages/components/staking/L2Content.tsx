@@ -5,8 +5,6 @@ import NEWTAB from '@/assets/images/newtab-icon.png'
 import Image from "next/image";
 import { useCallback, useState } from "react";
 import { useWeb3React } from "@web3-react/core";
-import { getContract } from "@/components/getContract";
-import CandidateAddOn from 'services/abi/CandidateAddOn.json'
 import { useRecoilState } from "recoil";
 import { txState } from "@/atom/global/transaction";
 import ETHERSCAN_LINK_Image from '@/assets/images/etherscan_link_icon.png';
@@ -20,8 +18,7 @@ type L2ContentProps = {
   type: string;
   contractAddress? : string;
   content2?: string | undefined;
-  modalButton?: any;
-  dataModal?: any;
+  isOperator?: any;
 }
 
 export function L2Content (args: L2ContentProps) {
@@ -31,8 +28,7 @@ export function L2Content (args: L2ContentProps) {
     type,
     contractAddress,
     content2,
-    modalButton,
-    dataModal
+    isOperator
   } = args
   
   const { library, account } = useWeb3React()
@@ -104,28 +100,34 @@ export function L2Content (args: L2ContentProps) {
           <Flex
             flexDir={'row'}
           >
-            <Flex
-              fontWeight={'bold'}
-            >
-              {convert}
-            </Flex>
-            <Flex 
-              fontSize={'13px'}
-              fontWeight={500}
-              ml={'4px'}
-              alignItems={'end'}
-              mb={'2px'}
-            >
-              TON
-            </Flex> 
-            <Flex 
-              color={'#C7D1D8'}
-              fontSize={'20px'}
-              mx={'6px'}
-              fontWeight={400}
-            >
-              /
-            </Flex>
+            {
+              isOperator ?
+              <Flex>
+                <Flex
+                  fontWeight={'bold'}
+                >
+                  {convert}
+                </Flex>
+                <Flex 
+                  fontSize={'13px'}
+                  fontWeight={500}
+                  ml={'4px'}
+                  alignItems={'end'}
+                  mb={'2px'}
+                >
+                  TON
+                </Flex> 
+                <Flex 
+                  color={'#C7D1D8'}
+                  fontSize={'20px'}
+                  mx={'6px'}
+                  fontWeight={400}
+                >
+                  /
+                </Flex>
+              </Flex> : ''
+            }
+            
             <Flex
               fontWeight={'bold'}
             >
