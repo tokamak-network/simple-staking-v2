@@ -51,8 +51,8 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
               localeString: true,
             })} TON
           </Text>
-          <Text color={'#646d7c'} ml={'3px'}>
-            {`($ ${usdValue})`}
+          <Text color={'#646d7c'} ml={'0px'}>
+            {`($${usdValue})`}
           </Text>
         </Flex>
       ) : ('')}
