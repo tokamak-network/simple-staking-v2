@@ -39,7 +39,7 @@ export const WithdrawTableHeader: FC<WithdrawTableHeaderProps> = ({
         color={'#808992'}
         h={'40px'}
       >
-        <chakra.th
+        {/* <chakra.th
           w={getColumnWidthWithdraw('checkbox')}
         >
           <chakra.label
@@ -65,7 +65,7 @@ export const WithdrawTableHeader: FC<WithdrawTableHeaderProps> = ({
               {state.isChecked && <Image src={TICK} alt={''} />}
             </Flex>
           </chakra.label>
-        </chakra.th>
+        </chakra.th> */}
         <chakra.th
           w={getColumnWidthWithdraw('amount')}
         >

@@ -44,43 +44,13 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
       // {...theme.STAKING_Withdraw_TABLE_STYLE.tableRow()}
       {...cell.getCellProps()}
       fontSize={'12px'}
-      justifyContent={'center'}
+      justifyContent={'space-between'}
       alignItems={"center"}
       h={'30px'}
     >
-     {
-       type === 'checkbox' ? (
-        <chakra.label
-          display='flex'
-          flexDirection='row'
-          alignItems='center'
-          pl={'10px'}
-          cursor='pointer'
-          {...htmlProps}
-        >
-          <input 
-            {...getInputProps()} 
-            disabled={toggle == 'Withdraw' || findMax(value) > Number(props.value.toString())} 
-          />
-          <Flex
-            alignItems='center'
-            justifyContent='center'
-            border='1px solid'
-            borderRadius={'4px'}
-            borderColor='#e7ebf2'
-            bgColor={'#e9edf1'}
-            w={'18px'}
-            h={'18px'}
-            {...getCheckboxProps()}
-          >
-            {state.isChecked && <Image src={TICK} alt={''} />}
-          </Flex>
-        </chakra.label>
-       ) : ('')
-     }
       { type === 'amount' ? (
         <Flex justifyContent={'center'} alignItems={'center'}>
-          <Text textAlign={'center'} color={'#000000'} >
+          <Text textAlign={'center'} color={time === 'Withdrawable' ? '#000000' : '#828d99'} >
             {convertNumber({
               amount: values,
               type: 'ray',
@@ -94,7 +64,7 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
       ) : ('')}
       {type === 'status' ? (
         <Flex 
-          color={'#828d99'}
+          color={time === 'Withdrawable' ? '#828d99' : '#000000'}
           justifyContent={'center'}
           alignItems={"center"}
         >

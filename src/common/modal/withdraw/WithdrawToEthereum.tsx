@@ -180,8 +180,6 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     }
   }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending]);
 
-  console.log(value)
-
   return (
     <Flex flexDir={'column'} w={'350px'} alignItems={'center'}>
       <Flex
