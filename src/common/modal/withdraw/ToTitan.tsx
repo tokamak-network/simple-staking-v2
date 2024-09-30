@@ -100,7 +100,7 @@ export const ToTitan = (args: ToTitanProps) => {
       />
       <Flex w={'100%'} h={'1px'} my={'25px'} bgColor={'#f4f6f8'} />
       <StakingCheckbox 
-        content={'Restaking unstaked TON earns you TON from staking. However, to withdraw, they need to be unstaked and wait for 93,046 blocks (~14 days).'}
+        content={`TON withdrawals to L2 typically take 1–5 minutes or longer. If TON isn't credited on L2, contact the L2 operator directly.`}
         handleCheckboxChange={handleCheckboxChange}
       />
       <Flex justifyContent={'center'}>
