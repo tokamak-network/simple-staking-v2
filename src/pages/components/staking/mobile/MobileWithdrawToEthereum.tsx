@@ -253,10 +253,6 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
             <WithdrawTable 
               columns={columns}
               data={requests}
-              getCheckboxProps={getCheckboxProps}
-              setValue={setValue}
-              toggle={toggle}
-              value={value}
             />
           </Flex> : ''
         }
