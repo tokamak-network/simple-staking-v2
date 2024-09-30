@@ -318,7 +318,7 @@ export const Header = () => {
           <MenuLinks account={account} walletopen={openModal} />
         </Flex>
       </Flex>
-      <WalletModal />
+      {/* <WalletModal /> */}
       {/* <WalletModalTest /> */}
     </Flex>
   );

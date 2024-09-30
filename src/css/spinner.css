@@ -1,0 +1,32 @@
+@keyframes spinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner2::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 8px solid #17181d;
+  border-top-color: blue;
+  animation: spinner 1s linear infinite;
+}
+
+.spinner-small::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 8px solid #17181d;
+  border-top-color: blue;
+  animation: spinner 1s linear infinite;
+}

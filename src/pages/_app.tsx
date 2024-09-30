@@ -15,6 +15,8 @@ import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from '../apollo';
 import TokamakGNB from './components/layout/TokamakGNB';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Modals from './Modal';
+import "@/css/spinner.css";
 // import NetworkModal from './components/global/NetworkModal';
 // import 'css/gradient.css';
 // import 'css/modalOverlay.css';
@@ -43,12 +45,6 @@ function MyApp({ Component, pageProps }: AppProps) {
                   <Entry Component={Component} {...pageProps} />
                   <MobileFooter />
                 </Flex>
-                // <Flex alignItems={'left'} justifyContent={'center'} px={'15px'} flexDir={'column'}>
-                //   <Text mb={'10px'} fontWeight={'bold'}>Notice: Service Interruption Announcement</Text>
-                //   <Text>
-                //   Simple Staking Service is currently not usable via mobile browsers. We recommend using it from a desktop instead. We are working to open the mobile version soon. We apologize for the inconvenience and hope to provide you with a better experience as soon as possible.
-                //   </Text>
-                // </Flex>
               ) : (
                 <Flex flexDir={'column'} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
                   <TokamakGNB />
@@ -74,6 +70,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                   </Flex>
                 </Flex>
               )}
+              <Modals />
             </Flex>
           </RecoilRoot>
         </QueryClientProvider>

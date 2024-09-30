@@ -315,7 +315,7 @@ function L2Information({ data }: L2InformationProps) {
           }
         </Flex>
       </Flex>
-      <ClaimModal />
+      {/* <ClaimModal /> */}
     </Flex>
   );
 }

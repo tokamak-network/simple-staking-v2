@@ -12,6 +12,33 @@ const modalData = atom({
   default: {} as any | [] as any,
 });
 
+export const transactionModalStatus = atom<
+  "confirming" | "confirmed" | "error" | null
+>({
+  key: "transactionModalStatus",
+  default: null,
+});
+
+export const claimModalStatus = atom<boolean>({
+  key: "claimModalStatus",
+  default: false,
+});
+export const transactionModalOpenStatus = atom<boolean>({
+  key: "transactionModalOpenStatus",
+  default: false,
+});
+
+export const confirmModalStatus = atom<boolean>({
+  key: "confirmModalStatus",
+  default: false,
+});
+export const confirmWithdrawData = atom<any>({
+  key: "confirmWithdrawData",
+  default: {
+    modalData: null,
+  },
+});
+
 const selectedModalState = selector({
   key: `selectedModal/${v1()}`, // unique ID (with respect to other atoms/selectors)
   get: ({ get }) => {

@@ -1,5 +1,5 @@
 export type TokenTypes = 'ETH' | 'TON' | 'WTON';
-
+export type TxSort = 'Stake' | 'Unstake' | 'Withdraw' | 'Restake' | 'Update Seigniorage' | 'Claim' | "Withdraw L2"
 export type Pages = 'Home' | 'Wallet' | 'Staking' | 'Support';
 export type PageKey = 'Staking_screen' | 'Wallet_screen';
 

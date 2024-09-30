@@ -281,10 +281,10 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           </Flex>
         }
       </Box>
-      <StakeModal />
+      {/* <StakeModal />
       <WithdrawModal />
       <WalletModal />
-      <CalculatorModal />
+      <CalculatorModal /> */}
     </Container>
   );
 };
