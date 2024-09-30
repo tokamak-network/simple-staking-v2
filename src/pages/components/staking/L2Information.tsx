@@ -2,7 +2,7 @@ import { getDate } from '@/components/getDate';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import L2Content from './L2Content';
-import { convertNumber } from '@/components/number';
+import { convertLargeNumber, convertNumber } from '@/components/number';
 import { useIsOperator } from '@/hooks/staking/useIsOperator';
 import L2InfoContent from './L2InfoContent';
 import ClaimModal from '@/common/modal/L2Info/ClaimModal';
@@ -95,7 +95,7 @@ function L2Information({ data }: L2InformationProps) {
   const converted = data?.lockedInBridge
     ? convertNumber({
         amount: data?.lockedInBridge,
-        type: 'ray',
+        type: 'wei',
         localeString: true,
       })
     : '0.00';
@@ -259,7 +259,7 @@ function L2Information({ data }: L2InformationProps) {
           Sequencer seigniorage
         </Flex>
         <Flex flexDir={'row'}>
-          <L2Content title={'TON locked in Bridge'} content={converted} content2={data?.candidateAddOn.bridge} type={'ton'} />
+          <L2Content title={'TON locked in Bridge'} content={convertLargeNumber(converted)} content2={data?.candidateAddOn.bridge} type={'ton'} />
           <L2Content
             title={'Earned seigniorage'}
             content={claimableAmount}

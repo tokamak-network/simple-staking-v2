@@ -156,6 +156,44 @@ export function convertNumber(args: ConverNumberFunc): string | undefined {
   }
 }
 
+export function convertLargeNumber(num: string | undefined) {
+  let floatParse = num ? floatParser(num) : 0
+  let convertedNumber
+
+  if (floatParse) {
+    if (floatParse / 10e15 >= 1) {
+      convertedNumber = floatParse / 10e15
+      convertedNumber = checkNumberLength(convertedNumber)
+      convertedNumber = convertedNumber + 'Qn'
+    } else if (floatParse / 10e12 >= 1) {
+      convertedNumber = floatParse / 10e12
+      convertedNumber = checkNumberLength(convertedNumber)
+      convertedNumber = convertedNumber + 'Qd'
+    } else if (floatParse / 10e9 >= 1) {
+      convertedNumber = floatParse / 10e9
+      convertedNumber = checkNumberLength(convertedNumber)
+      convertedNumber = convertedNumber + 'B'
+    } else if (floatParse / 10e6 >= 1) {
+      convertedNumber = floatParse / 10e6
+      convertedNumber = checkNumberLength(convertedNumber)
+      convertedNumber = convertedNumber + 'M'
+    }
+  }
+  
+  return convertedNumber
+}
+
+function checkNumberLength(num: number) {
+  
+  let returnValue
+  return returnValue = num >= 100 
+    ? num.toLocaleString(undefined, {maximumFractionDigits: 0})
+    : num >= 10 && num < 100
+    ? num.toLocaleString(undefined, {maximumFractionDigits: 1, minimumFractionDigits: 1})
+    : num.toLocaleString(undefined, {maximumFractionDigits: 2, minimumFractionDigits: 2})
+  
+}
+
 export function calcCountDown (sec: string) {
   if (sec === '0') return '(00 days 00 hours left)'
   
