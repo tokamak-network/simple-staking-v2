@@ -89,6 +89,7 @@ export function MobileUnstake (args: MobileUnstakeProps) {
         <StakingCheckbox 
           content={'To withdraw staked TON, it needs to be unstaked first and after 93,046 blocks (~14 days) they can be withdrawn to your account.'}
           handleCheckboxChange={handleCheckboxChange}
+          isChecked={isChecked}
         />
       </Flex>
       <Flex justifyContent={'center'}>

@@ -114,6 +114,7 @@ export function MobileToL2 (args: MobileToL2Props) {
       <StakingCheckbox 
         content={'Restaking unstaked TON earns you TON from staking. However, to withdraw, they need to be unstaked and wait for 93,046 blocks (~14 days).'}
         handleCheckboxChange={handleCheckboxChange}
+        isChecked={isChecked}
       />
       <Flex justifyContent={'center'}>
         <Button
