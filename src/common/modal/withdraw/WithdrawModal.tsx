@@ -17,20 +17,16 @@ import ETHEREUM from '@/assets/images/ethereum_symbol.svg'
 import BACK from '@/assets/images/back_icon.svg'
 import { ToEthereum } from './ToEthereum';
 import { ToTitan } from './ToTitan';
-import { StakeModalComponentType } from '@/types';
 import { useWithdrawRequests } from '@/hooks/staking/useWithdrawable';
 import { inputState } from '@/atom/global/input';
 import { useRecoilState } from 'recoil';
+import { txState } from '@/atom/global/transaction';
 
 function WithdrawModal () {
   const theme = useTheme();
-  const { btnStyle } = theme;
-
   const { selectedModalData, selectedModal, closeModal, isModalLoading } = useModal();
-  const { account, library } = useWeb3React();
   const { withdrawRequests } = useWithdrawRequests()
 
-  const [modalComponent, setModalComponent] = useState<StakeModalComponentType>()
   const [requests, setRequests] = useState()
 
   const [modalName, setModalName] = useState('Withdraw')
@@ -38,6 +34,7 @@ function WithdrawModal () {
   const [number, setNumber] = useState(1)
 
   const [input, setInput] = useRecoilState(inputState);
+  const [txPending, ] = useRecoilState(txState);
 
   const closeThisModal = useCallback(() => {
     setInput('');
@@ -66,7 +63,7 @@ function WithdrawModal () {
       }
     }
     fetch()
-  }, [selectedModalData])
+  }, [selectedModalData, txPending])
 
   useEffect(() => {
     let numberOf = 1

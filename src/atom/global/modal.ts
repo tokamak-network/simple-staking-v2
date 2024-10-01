@@ -15,32 +15,32 @@ const modalData = atom({
 export const transactionModalStatus = atom<
   "confirming" | "confirmed" | "error" | null
 >({
-  key: "transactionModalStatus",
+  key: `transactionModalStatus/${v1()}`,
   default: null,
 });
 
 export const claimModalStatus = atom<boolean>({
-  key: "claimModalStatus",
+  key: `claimModalStatus/${v1()}`,
   default: false,
 });
 export const transactionModalOpenStatus = atom<boolean>({
-  key: "transactionModalOpenStatus",
+  key: `transactionModalOpenStatus/${v1()}`,
   default: false,
 });
 
 export const confirmModalStatus = atom<boolean>({
-  key: "confirmModalStatus",
+  key: `confirmModalStatus/${v1()}`,
   default: false,
 });
 export const confirmWithdrawData = atom<any>({
-  key: "confirmWithdrawData",
+  key: `confirmWithdrawData/${v1()}`,
   default: {
     modalData: null,
   },
 });
 
 export const getModeData = atom<string>({
-  key: "getModeData",
+  key: `getModeData${v1()}`,
   default: ''
 });
 

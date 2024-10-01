@@ -31,10 +31,6 @@ export function MobileUnstake (args: MobileUnstakeProps) {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
 
-  // const {
-  //   stakeOf
-  // } = selectedOp
-
   const unStaking = useCallback(async () => {
     try {
       const amount = floatParser(input);

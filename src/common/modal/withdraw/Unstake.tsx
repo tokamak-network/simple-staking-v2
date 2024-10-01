@@ -31,10 +31,10 @@ export const Unstake = (args: UnstakeProps) => {
   const { account, library } = useWeb3React();
   const [input, setInput] = useRecoilState(inputState);
   const [, setTxPending] = useRecoilState(txState);
-  const [modalOpen, setModalOpen] = useRecoilState(transactionModalStatus);
-  const [isOpen, setIsOpen] = useRecoilState(transactionModalOpenStatus);
-  const [selectedMode, setSelectedMode] = useRecoilState(getModeData);
-  const [txHash, setTxHash] = useRecoilState(txHashStatus)
+  const [, setModalOpen] = useRecoilState(transactionModalStatus);
+  const [, setIsOpen] = useRecoilState(transactionModalOpenStatus);
+  const [, setSelectedMode] = useRecoilState(getModeData);
+  const [, setTxHash] = useRecoilState(txHashStatus)
   
   const [tx, setTx] = useState();
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -92,8 +92,8 @@ export const Unstake = (args: UnstakeProps) => {
           convertToRay(amount.toString()),
         );
         setTx(tx); 
-        setTxHash(tx.hash)
         setTxPending(true);
+        setTxHash(tx.hash)
         setSelectedMode('Unstake');
         setIsOpen(true)
         setModalOpen("confirming")
@@ -131,10 +131,13 @@ export const Unstake = (args: UnstakeProps) => {
           Unstake
         </Button>
       </Flex>
-      <WithdrawTable 
-        columns={columns}
-        data={requests}
-      /> 
+      {
+        requests ?
+        <WithdrawTable 
+          columns={columns}
+          data={requests}
+        /> : ''
+      }
     </Flex>
   )
 }

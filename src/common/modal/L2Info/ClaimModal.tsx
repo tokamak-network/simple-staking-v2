@@ -14,9 +14,10 @@ import { ModalHeader } from '../../../pages/components/staking/modal/ModalHeader
 import { inputState } from '@/atom/global/input';
 import { useRecoilState } from 'recoil';
 import trimAddress from '@/components/trimAddress';
-import { txState } from '@/atom/global/transaction';
+import { txHashStatus, txState } from '@/atom/global/transaction';
 import { getContract } from '@/components/getContract';
 import CandidateAddOn from 'services/abi/CandidateAddOn.json'
+import { getModeData, transactionModalOpenStatus, transactionModalStatus } from '@/atom/global/modal';
 
 function ClaimModal () {
   const theme = useTheme();
@@ -29,6 +30,10 @@ function ClaimModal () {
   const [type, setType] = useState('main')
   const [tx, setTx] = useState();
   const [, setTxPending] = useRecoilState(txState);
+  const [, setModalOpen] = useRecoilState(transactionModalStatus);
+  const [, setIsOpen] = useRecoilState(transactionModalOpenStatus);
+  const [, setSelectedMode] = useRecoilState(getModeData);
+  const [, setTxHash] = useRecoilState(txHashStatus)
 
   const [input, setInput] = useRecoilState(inputState);
 
@@ -52,9 +57,15 @@ function ClaimModal () {
         const tx = await CandidateAddOn_CONTRACT.updateSeigniorage(type)
         setTx(tx);
         setTxPending(true);
+        setTxHash(tx.hash)
+        setSelectedMode(modalName);
+        setIsOpen(true)
+        setModalOpen("confirming")
+
         if (tx) {
           await tx.wait().then((receipt: any) => {
             if (receipt.status) {
+              setModalOpen("confirmed")
               setTxPending(false);
               setTx(undefined);
             }

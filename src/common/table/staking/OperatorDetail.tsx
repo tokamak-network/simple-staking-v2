@@ -5,9 +5,10 @@ import Candidate from "services/abi/Candidate.json"
 import { getContract } from '../../../utils/getContract';
 import { useWeb3React } from '@web3-react/core';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { txState } from "@/atom/global/transaction";
+import { txHashStatus, txState } from "@/atom/global/transaction";
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
 import { ETHERSCAN_LINK } from "@/constants";
+import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal";
 
 type OperatorDetailProps = {
   title: string; 
@@ -31,13 +32,22 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
   const { library, account } = useWeb3React()
   const [tx, setTx] = useState();
   const [txPending, setTxPending] = useRecoilState(txState);
+  const [, setModalOpen] = useRecoilState(transactionModalStatus);
+  const [, setIsOpen] = useRecoilState(transactionModalOpenStatus);
+  const [, setSelectedMode] = useRecoilState(getModeData);
+  const [, setTxHash] = useRecoilState(txHashStatus)  
   const minimum = useRecoilValue(minimumAmountState)
+
   const updateSeig = useCallback(async () => {
     if (account && library) {
       const Candidate_CONTRACT = getContract(contractInfo, Candidate.abi, library, account)
       const tx = await Candidate_CONTRACT.updateSeigniorage()
       setTx(tx);
       setTxPending(true);
+      setTxHash(tx.hash)
+      setSelectedMode('Update Seig');
+      setIsOpen(true)
+      setModalOpen("confirming")
     }
   }, [])
 
@@ -47,6 +57,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
         //@ts-ignore
         await tx.wait().then((receipt: any) => {
           if (receipt.status) {
+            setModalOpen("confirmed")
             setTxPending(false);
             setTx(undefined);
           }

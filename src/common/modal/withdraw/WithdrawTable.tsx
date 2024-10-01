@@ -40,7 +40,7 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
     usePagination,
   );
   const theme = useTheme();
-
+  
   const { tonPriceUSD } = useTONPrice()
 
   const [width] = useWindowDimensions();

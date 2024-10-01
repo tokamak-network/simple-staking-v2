@@ -15,7 +15,7 @@ export const ToEthereum = (args: ToEthereumProps) => {
   const {selectedModalData, requests, closeThisModal} = args
 
   const [tab, setTab] = useState('unstake')
-
+  console.log(requests)
   return (
     <Flex justifyContent={'center'} flexDir={'column'} alignItems={'center'}>
       <WithdrawTypeSelector 

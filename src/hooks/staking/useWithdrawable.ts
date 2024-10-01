@@ -9,7 +9,7 @@ import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
 import { getCountdown } from '@/api';
 import { useQuery } from '@apollo/client';
 import { GET_WITHDRAWAL_AND_DEPOSITED } from '@/graphql/getWithdrawalAndDeposited';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { txState } from '@/atom/global/transaction';
 
 export function useWithdrawable (layer2: string) {
@@ -119,12 +119,7 @@ export function useWithdrawable (layer2: string) {
     fetch ()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    // DepositManager_CONTRACT, 
     layer2, 
-    // withdrawable, 
-    // old_withdrawable, 
-    blockNumber,
-    // account
   ])
   return {
     withdrawable, 
@@ -141,7 +136,8 @@ export function useWithdrawRequests () {
   const { DepositManager_CONTRACT } = useCallContract();
   const { account, library } = useWeb3React();
   const { blockNumber } = useBlockNumber()
-
+  const [txPending, ] = useRecoilState(txState);
+  
   const withdrawRequests = useCallback(
     async (layer2: string) => {
       if (account && DepositManager_CONTRACT && layer2) {
@@ -168,7 +164,7 @@ export function useWithdrawRequests () {
         }
         return pendingRequests
       }
-  }, [blockNumber])
+  }, [txPending])
   
   return {withdrawRequests}
 }
@@ -179,6 +175,7 @@ export function useWithdrawalAndDeposited () {
   const { data } = useQuery(GET_WITHDRAWAL_AND_DEPOSITED, {
     pollInterval: 10000
   });
+  
   const request = useCallback(
     async (layer2: string) => {
       if (data && account) {

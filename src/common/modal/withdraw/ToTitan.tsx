@@ -8,11 +8,12 @@ import { StakeModalDataType } from "@/types"
 import { useWeb3React } from "@web3-react/core"
 import { useRecoilState } from "recoil"
 import { inputState } from "@/atom/global/input"
-import { txState } from "@/atom/global/transaction"
+import { txHashStatus, txState } from "@/atom/global/transaction"
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
 import WithdrawL2Table from "./WithdrawL2Table"
 import { WithdrawL2Image } from "./WithdrawL2Image"
 import useGetTransaction from "@/hooks/staking/useGetTransaction"
+import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal"
 
 type ToTitanProps = {
   selectedModalData: StakeModalDataType
@@ -29,6 +30,11 @@ export const ToTitan = (args: ToTitanProps) => {
   const { account, library } = useWeb3React();
   const [input, setInput] = useRecoilState(inputState);
   const [, setTxPending] = useRecoilState(txState);
+  const [, setModalOpen] = useRecoilState(transactionModalStatus);
+  const [, setIsOpen] = useRecoilState(transactionModalOpenStatus);
+  const [, setSelectedMode] = useRecoilState(getModeData);
+  const [, setTxHash] = useRecoilState(txHashStatus)
+  
   const [tx, setTx] = useState();
   const { DepositManager_CONTRACT } = useCallContract();
   const tData = useGetTransaction();
@@ -61,6 +67,7 @@ export const ToTitan = (args: ToTitanProps) => {
         //@ts-ignore
         await tx.wait().then((receipt: any) => {
           if (receipt.status) {
+            setModalOpen("confirmed")
             setTxPending(false);
             setTx(undefined);
           }
@@ -81,9 +88,13 @@ export const ToTitan = (args: ToTitanProps) => {
         );
         setTx(tx);
         setTxPending(true);
+        setTxHash(tx.hash)
+        setSelectedMode(`Withdraw To ${selectedModalData.name}`);
+        setIsOpen(true)
+        setModalOpen("confirming")
         setInput('')
         setIsChecked(false)
-        return closeThisModal();
+        // return closeThisModal();
       }
     } catch (e) {
       console.log(e)

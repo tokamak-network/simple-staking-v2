@@ -46,14 +46,12 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   const [selectedMode, setSelectedMode] = useRecoilState(getModeData);
 
   const [tx, setTx] = useState();
-  const [arrLength, setArrLength] = useState(0);
 
   const [menuState, setMenuState] = useState(false);
   useEffect(() => {
     setMenuState(false);
   }, [])
 
-  const { state, getCheckboxProps, getInputProps, getLabelProps, htmlProps } = useCheckbox()
   const [isChecked, setIsChecked] = useState<boolean>(true);
   
 
