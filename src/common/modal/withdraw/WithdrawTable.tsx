@@ -11,10 +11,6 @@ import {
   Flex,
   Box,
   useTheme,
-  Switch,
-  Text,
-  FormControl,
-  FormLabel
 } from '@chakra-ui/react';
 import { WithdrawTableHeader } from './WithdrawTableHeader';
 import WithdrawTableRow from './WithdrawTableRow';

@@ -45,7 +45,7 @@ export function useCandidateList () {
           let oldHistory
           let expSeig
 
-          console.log(obj)
+          // console.log(obj)
 
           const oldCandidate = getOldLayerAddress(obj.candidateContract)
 

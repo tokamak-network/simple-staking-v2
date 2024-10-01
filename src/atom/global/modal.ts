@@ -39,6 +39,11 @@ export const confirmWithdrawData = atom<any>({
   },
 });
 
+export const getModeData = atom<string>({
+  key: "getModeData",
+  default: ''
+});
+
 const selectedModalState = selector({
   key: `selectedModal/${v1()}`, // unique ID (with respect to other atoms/selectors)
   get: ({ get }) => {

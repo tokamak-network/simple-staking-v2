@@ -102,6 +102,7 @@ export const ToTitan = (args: ToTitanProps) => {
       <StakingCheckbox 
         content={`TON withdrawals to L2 typically take 1–5 minutes or longer. If TON isn't credited on L2, contact the L2 operator directly.`}
         handleCheckboxChange={handleCheckboxChange}
+        isChecked={isChecked}
       />
       <Flex justifyContent={'center'}>
         <Button

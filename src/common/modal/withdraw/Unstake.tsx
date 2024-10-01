@@ -9,10 +9,11 @@ import useCallContract from "@/hooks/useCallContract"
 import { useWeb3React } from "@web3-react/core"
 import { useRecoilState } from "recoil"
 import { inputState } from "@/atom/global/input"
-import { txState } from "@/atom/global/transaction"
+import { txHashStatus, txState } from "@/atom/global/transaction"
 import { StakeModalDataType } from "@/types"
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
 import WithdrawTable from "./WithdrawTable"
+import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal"
 
 type UnstakeProps = {
   selectedModalData: StakeModalDataType
@@ -30,6 +31,11 @@ export const Unstake = (args: UnstakeProps) => {
   const { account, library } = useWeb3React();
   const [input, setInput] = useRecoilState(inputState);
   const [, setTxPending] = useRecoilState(txState);
+  const [modalOpen, setModalOpen] = useRecoilState(transactionModalStatus);
+  const [isOpen, setIsOpen] = useRecoilState(transactionModalOpenStatus);
+  const [selectedMode, setSelectedMode] = useRecoilState(getModeData);
+  const [txHash, setTxHash] = useRecoilState(txHashStatus)
+  
   const [tx, setTx] = useState();
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
@@ -66,6 +72,7 @@ export const Unstake = (args: UnstakeProps) => {
         //@ts-ignore
         await tx.wait().then((receipt: any) => {
           if (receipt.status) {
+            setModalOpen("confirmed")
             setTxPending(false);
             setTx(undefined);
           }
@@ -84,13 +91,18 @@ export const Unstake = (args: UnstakeProps) => {
           selectedModalData.layer2,
           convertToRay(amount.toString()),
         );
-        setTx(tx);
+        setTx(tx); 
+        setTxHash(tx.hash)
         setTxPending(true);
-        
-        return closeThisModal();
+        setSelectedMode('Unstake');
+        setIsOpen(true)
+        setModalOpen("confirming")
+        setInput('');
+        setIsChecked(false)
       }
     } catch (e) {
       console.log(e);
+      setModalOpen("error");
     }
   }, [DepositManager_CONTRACT, input, selectedModalData, setTx, setTxPending]);
 
@@ -103,6 +115,7 @@ export const Unstake = (args: UnstakeProps) => {
       <StakingCheckbox 
         content={'To withdraw staked TON, it needs to be unstaked first and after 93,046 blocks (~14 days) they can be withdrawn to your account.'}
         handleCheckboxChange={handleCheckboxChange}
+        isChecked={isChecked}
       />
       <Flex justifyContent={'center'}>
         <Button
@@ -125,3 +138,5 @@ export const Unstake = (args: UnstakeProps) => {
     </Flex>
   )
 }
+
+

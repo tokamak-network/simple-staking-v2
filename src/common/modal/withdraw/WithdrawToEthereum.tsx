@@ -6,7 +6,8 @@ import {
   FormLabel,
   Switch,
   useTheme,
-  useCheckboxGroup, 
+  useCheckboxGroup,
+  useCheckbox, 
 } from "@chakra-ui/react"
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import { StakeModalDataType } from '../../../types/index';
@@ -17,7 +18,8 @@ import useCallContract from "@/hooks/useCallContract";
 import { useWeb3React } from "@web3-react/core";
 import { useRecoilState } from "recoil";
 import { txState } from "@/atom/global/transaction";
-import { arraysEqual, findMax, range } from "@/components/array";
+import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal";
+import { inputState } from "@/atom/global/input";
 
 type WithdrawToEthereumProps ={
   selectedModalData: StakeModalDataType
@@ -38,6 +40,11 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
 
   const { account } = useWeb3React();
   const [, setTxPending] = useRecoilState(txState);
+  const [input, setInput] = useRecoilState(inputState);
+  const [modalOpen, setModalOpen] = useRecoilState(transactionModalStatus);
+  const [isOpen, setIsOpen] = useRecoilState(transactionModalOpenStatus);
+  const [selectedMode, setSelectedMode] = useRecoilState(getModeData);
+
   const [tx, setTx] = useState();
   const [arrLength, setArrLength] = useState(0);
 
@@ -46,34 +53,12 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     setMenuState(false);
   }, [])
 
-  const { value, setValue, getCheckboxProps, isDisabled } = useCheckboxGroup()
+  const { state, getCheckboxProps, getInputProps, getLabelProps, htmlProps } = useCheckbox()
   const [isChecked, setIsChecked] = useState<boolean>(true);
   
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
-
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   let maxIndex = 0
-  //   async function fetch() {
-  //     if (DepositManager_CONTRACT) {
-  //       let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(selectedModalData.layer2, account)
-  //       if (isMounted) {
-  //         if (value.includes('a')) return;
-  //         maxIndex = findMax(value);
-  //         const fillRange = range(+requestIndex.toString(), maxIndex);
-  //         if (!arraysEqual(fillRange, value)) {
-  //           setValue(fillRange);
-  //         }
-  //       }
-  //     }
-  //   }
-  //   fetch()
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  // }, [value])
 
   const options = ['WTON', 'TON']
 
@@ -114,6 +99,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
         //@ts-ignore
         await tx.wait().then((receipt: any) => {
           if (receipt.status) {
+            setModalOpen("confirmed")
             setTxPending(false);
             setTx(undefined);
           }
@@ -133,8 +119,12 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
         const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest);
         setTx(tx);
         setTxPending(true);
-
-        return closeThisModal();
+        setSelectedMode('Restake');
+        setIsOpen(true)
+        setModalOpen("confirming")
+        setInput('');
+        setIsChecked(false)
+        // return closeThisModal();
       }
     } catch (e) {
       console.log(e);
@@ -154,8 +144,13 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
             );
         setTx(tx);
         setTxPending(true);
+        setSelectedMode('Unstake');
+        setIsOpen(true)
+        setModalOpen("confirming")
+        setInput('');
+        setIsChecked(false)
 
-        return closeThisModal();
+        // return closeThisModal();
       }
     } catch (e) {
       console.log(e);
@@ -266,6 +261,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           <StakingCheckbox 
             content={'Restaking unstaked TON earns you TON from staking. However, to withdraw, they need to be unstaked and wait for 93,046 blocks (~14 days).'}
             handleCheckboxChange={handleCheckboxChange}
+            isChecked={isChecked}
           />
            : ''
         }

@@ -20,17 +20,6 @@ const txStatusState = selector({
 export { txState, txStatusState };
 
 export const txHashStatus = atom<string | undefined>({
-  key: "txHashStatus",
+  key: `txHashStatus/${v1()}`,
   default: undefined,
-});
-
-export const txHashLog = atom<{
-  txSort: TxSort | undefined;
-  logs: ethers.utils.Result | undefined;
-}>({
-  key: "txHashLog",
-  default: {
-    txSort: undefined,
-    logs: undefined,
-  },
 });

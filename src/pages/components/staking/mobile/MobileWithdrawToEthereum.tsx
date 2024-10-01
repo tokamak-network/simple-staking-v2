@@ -90,7 +90,6 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
     //   return request.time === 'Withdrawable'
     // })
 
-  console.log(withdrawable)
   const staked = selectedOp ?
     convertNumber({
       amount: selectedOp.stakeOf,
@@ -98,12 +97,12 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
       localeString: true
     }) : '0.00'
 
-  useEffect(() => {
-    value.includes('a') 
-      ? setArrLength(value.length - 1) 
-      : setArrLength(value.length)
-    if (value.includes('a') && arrLength === 1) setValue([])
-  }, [value])
+  // useEffect(() => {
+  //   value.includes('a') 
+  //     ? setArrLength(value.length - 1) 
+  //     : setArrLength(value.length)
+  //   if (value.includes('a') && arrLength === 1) setValue([])
+  // }, [value])
 
   const options = ['WTON', 'TON']
   const handleSetOption = useCallback((option: any) => {
@@ -144,28 +143,28 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
     [],
   )
 
-  useEffect(() => {
-    let isMounted = true;
-    let maxIndex = 0
-    async function fetch() {
-      if (DepositManager_CONTRACT) {
-        let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(selectedOp.candidateContract, account)
-        // console.log('a', requestIndex.toString())
-        if (isMounted) {
-          if (value.includes('a')) return;
-          maxIndex = findMax(value);
-          const fillRange = range(+requestIndex.toString(), maxIndex);
-          if (!arraysEqual(fillRange, value)) {
-            setValue(fillRange);
-          }
-        }
-      }
-    }
-    fetch()
-    return () => {
-      isMounted = false;
-    };
-  }, [value])
+  // useEffect(() => {
+  //   let isMounted = true;
+  //   let maxIndex = 0
+  //   async function fetch() {
+  //     if (DepositManager_CONTRACT) {
+  //       let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(selectedOp.candidateContract, account)
+  //       // console.log('a', requestIndex.toString())
+  //       if (isMounted) {
+  //         if (value.includes('a')) return;
+  //         maxIndex = findMax(value);
+  //         const fillRange = range(+requestIndex.toString(), maxIndex);
+  //         if (!arraysEqual(fillRange, value)) {
+  //           setValue(fillRange);
+  //         }
+  //       }
+  //     }
+  //   }
+  //   fetch()
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, [value])
 
   const reStaking = useCallback(async () => {
     try {
@@ -307,6 +306,7 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
           <StakingCheckbox 
             content={'Restaking unstaked TON earns you TON from staking. However, to withdraw, they need to be unstaked and wait for 93,046 blocks (~14 days).'}
             handleCheckboxChange={handleCheckboxChange}
+            isChecked={isChecked}
           />
            : ''
         }

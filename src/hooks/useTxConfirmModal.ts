@@ -11,7 +11,7 @@ import { useToast } from "@chakra-ui/react";
 export default function useTxConfirmModal() {
   const [modalOpen, setModalOpen] = useRecoilState(transactionModalStatus);
   const [isOpen, setIsOpen] = useRecoilState(transactionModalOpenStatus);
-  
+
   const [claimModalState, setClaimModalState] =
     useRecoilState(claimModalStatus);
   const [, setWithdrawData] = useRecoilState(confirmWithdrawData);

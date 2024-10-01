@@ -30,6 +30,7 @@ import { WithdrawModalBody } from './modal/WithdrawModalBody';
 import { getContract } from '@/components/getContract';
 import Candidate from 'services/abi/Candidate.json';
 import { StakeModalComponentType } from 'types'
+import { getModeData, transactionModalOpenStatus, transactionModalStatus } from '@/atom/global/modal';
 
 function StakeModal() {
   const theme = useTheme();
@@ -45,10 +46,15 @@ function StakeModal() {
 
   const [input, setInput] = useRecoilState(inputState);
   const [, setTxPending] = useRecoilState(txState);
+  const [modalOpen, setModalOpen] = useRecoilState(transactionModalStatus);
+  const [isOpen, setIsOpen] = useRecoilState(transactionModalOpenStatus);
+  const [selectedMode, setSelectedMode] = useRecoilState(getModeData);
+  
   const [tx, setTx] = useState();
   const [withdrawType, setWithdrawType] = useState('new');
   const [tokenType, setTokenType] = useState('ton');
   const [modalComponent, setModalComponent] = useState<StakeModalComponentType>()
+
   const [stakeDisabled, setStakeDisabled] = useState(true);
   const [unstakeDisabled, setUnstakeDisabled] = useState(true);
   const [reStakeDisabled, setReStakeDisabled] = useState(true);
@@ -101,40 +107,67 @@ function StakeModal() {
     )
   }, [selectedModalData])
 
+  useEffect(() => {
+    async function waitReceipt() {
+      if (tx && !tx['status']) {
+        //@ts-ignore
+        await tx.wait().then((receipt: any) => {
+          if (receipt.status) {
+            setModalOpen("confirmed")
+            setTxPending(false);
+            setTx(undefined);
+          }
+        });
+      }
+    }
+    waitReceipt();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tx]);
+
   const staking = useCallback(async () => {
     const amount = floatParser(input);
-    
-    // if (selectedModalData && Number(amount) > Number(floatParser(selectedModalData.tonBalance))) {
-    //   return alert('Please check input amount.');
-    // }
     const data = getData();
     if (TON_CONTRACT && amount) {
-      const tx = await TON_CONTRACT.approveAndCall(WTON_ADDRESS, convertToWei(amount.toString()), data);
-      setTx(tx);
-      setTxPending(true);
-      return closeThisModal();
+      // try {
+        const tx = await TON_CONTRACT.approveAndCall(WTON_ADDRESS, convertToWei(amount.toString()), data);
+        console.log('a')
+        setTx(tx);
+        setSelectedMode('Stake');
+        setModalOpen("confirming")
+        setIsOpen(true)
+
+        setTxPending(true);
+        // return closeThisModal();
+
+      // } catch (e) {
+      //   setModalOpen("error");
+      // }
+
     }
     // }
   }, [TON_CONTRACT, WTON_ADDRESS, closeThisModal, getData, input, selectedModalData, setTx, setTxPending]);
 
   const stakingWton = useCallback(async () => {
-    const amount = floatParser(input);
-    
-    
-    // if (selectedModalData && Number(amount) > Number(floatParser(selectedModalData.wtonBalance))) {
-    //   return alert('Please check input amount.');
-    // }
-    
-    const data = getDataForWton();
-    if (WTON_CONTRACT && amount) {
-      const tx = await WTON_CONTRACT.approveAndCall(
-        DepositManager_ADDRESS, 
-        convertToRay(amount.toString()), 
-        data
-      );
-      setTx(tx);
-      setTxPending(true);
-      return closeThisModal();
+    try {
+      const amount = floatParser(input);
+      const data = getDataForWton();
+      if (WTON_CONTRACT && amount) {
+        const tx = await WTON_CONTRACT.approveAndCall(
+          DepositManager_ADDRESS, 
+          convertToRay(amount.toString()), 
+          data
+        );
+        setTx(tx);
+        setSelectedMode('Stake');
+        setModalOpen("confirming")
+        setIsOpen(true)
+
+        setTxPending(true);
+        // return closeThisModal();
+      } 
+    } catch (e) {
+      console.log(e);
+      setModalOpen("error");
     }
     
   }, [WTON_ADDRESS, closeThisModal, getData, input, selectedModalData, setTx, setTxPending]);
