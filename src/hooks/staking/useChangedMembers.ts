@@ -27,7 +27,6 @@ export function useChangedMembers() {
             slot: slotOccupied[0].slotIndex
           })
         }
-        console.log(membersAddress)
       }
 
       setMemberAddresses(membersAddress)

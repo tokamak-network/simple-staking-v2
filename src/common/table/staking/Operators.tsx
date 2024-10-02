@@ -35,10 +35,8 @@ import BasicTooltip from '../../tooltip/index';
 import { MEMBER_ADDRESS_TEMP } from '@/constants';
 import { useRouter } from 'next/router';
 import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
-import LIST from '@/assets/images/list.svg'
 import ContractAddressInfo from './ContractAddressInfo';
 import { InfoTypeSelector } from '@/common/selector/InfoType';
-import { editL2Info_logo_state } from '@/atom/staking/editL2Info';
 import { useIsOperator } from '@/hooks/staking/useIsOperator';
 import { useChangedMembers } from '@/hooks/staking/useChangedMembers';
 
@@ -57,6 +55,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
   renderL2,
   isLoading,
 }) => {
+  
   const {
     getTableProps,
     getTableBodyProps,
@@ -65,12 +64,14 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
     visibleColumns,
     page,
     state: {pageIndex, pageSize},
+    setPageSize
   } = useTable(
-    {columns, data, initialState: {pageIndex: 0}},
+    {columns, data, initialState: {pageIndex: 0, pageSize: 20}},
     useSortBy,
     useExpanded,
     usePagination,
   );
+  
   const theme = useTheme();
   const focusTarget = useRef<any>([]);
 
@@ -97,14 +98,14 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
     candidateContract === undefined ? '' : candidateContract,
   );
   const [tab, setTab] = useState('staking')
-  const [members, setMembers] = useState()
+  // const [members, setMembers] = useState()
   const [toggle, setToggle] = useRecoilState(toggleState)
 
   const { memberAddresses } = useChangedMembers()
-  console.log(memberAddresses)
 
   useEffect(() => {
     if (asPath.includes('#')) {
+      
       const indexOf = asPath.indexOf('#')
       const dataIndex = page.findIndex((candidateData: any) => candidateData.original.id === asPath.slice(indexOf + 1))
       setIsOpen(asPath.slice(9));
@@ -129,7 +130,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
       });
     }, 100);
   };
- 
+  
   return (
     <Flex w={'1100px'} flexDir={'column'} id={candidateContract}>
       <Flex justifyContent={'space-between'} mb={'15px'} ml={'17px'}>
@@ -168,9 +169,11 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
             flexDirection="column"
           >
             {page && page.map((row: any, i) => {
+              
               const { candidateContract, stakedAmount, candidate, candidateAddOn } = row.original;
               const stakedId = candidateContract
-              const { userStakeds } = useUserStaked(`${account?.toLocaleLowerCase()}-${stakedId.toLocaleLowerCase()}`)
+              
+              const { userStakeds } = useUserStaked(account?.toLocaleLowerCase(), stakedId.toLocaleLowerCase())
               const expectedSeig = useExpectedSeig(candidateContract, stakedAmount, candidate)
               const lockedInBridge = useL2CandidateInfo(candidateAddOn)
 

@@ -45,7 +45,7 @@ export const WithdrawL2Table: FC<WithdrawL2TableProps> = ({
   useEffect(() => {
     setPageSize(6)
   },[])
-  // console.log(page.length)
+  
   return (
     <Flex 
       w={'320px'}
