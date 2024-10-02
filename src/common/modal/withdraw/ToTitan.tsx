@@ -82,6 +82,10 @@ export const ToTitan = (args: ToTitanProps) => {
     const amount = floatParser(input);
     try {
       if (DepositManager_CONTRACT && amount && account && selectedModalData) {
+        setSelectedMode(`Withdraw To ${selectedModalData.name}`);
+        setIsOpen(true)
+        setModalOpen("waiting")
+
         const tx = await DepositManager_CONTRACT.withdrawAndDepositL2(
           selectedModalData.layer2,
           convertToRay(amount.toString()),
@@ -89,8 +93,7 @@ export const ToTitan = (args: ToTitanProps) => {
         setTx(tx);
         setTxPending(true);
         setTxHash(tx.hash)
-        setSelectedMode(`Withdraw To ${selectedModalData.name}`);
-        setIsOpen(true)
+       
         setModalOpen("confirming")
         setInput('')
         setIsChecked(false)

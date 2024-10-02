@@ -85,6 +85,10 @@ export const Unstake = (args: UnstakeProps) => {
 
   const unStaking = useCallback(async () => {
     try {
+      setSelectedMode('Unstake');
+      setIsOpen(true)
+      setModalOpen("waiting")
+      
       const amount = floatParser(input);
       if (DepositManager_CONTRACT && SeigManager_CONTRACT && amount && account && selectedModalData) {
         const tx = await DepositManager_CONTRACT.requestWithdrawal(
@@ -94,8 +98,7 @@ export const Unstake = (args: UnstakeProps) => {
         setTx(tx); 
         setTxPending(true);
         setTxHash(tx.hash)
-        setSelectedMode('Unstake');
-        setIsOpen(true)
+        
         setModalOpen("confirming")
         setInput('');
         setIsChecked(false)

@@ -39,15 +39,24 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
   const minimum = useRecoilValue(minimumAmountState)
 
   const updateSeig = useCallback(async () => {
-    if (account && library) {
-      const Candidate_CONTRACT = getContract(contractInfo, Candidate.abi, library, account)
-      const tx = await Candidate_CONTRACT.updateSeigniorage()
-      setTx(tx);
-      setTxPending(true);
-      setTxHash(tx.hash)
-      setSelectedMode('Update Seig');
-      setIsOpen(true)
-      setModalOpen("confirming")
+    try {
+      if (account && library) {
+        setSelectedMode('Update Seigniorage');
+        setIsOpen(true)
+        setModalOpen("waiting")
+        
+        const Candidate_CONTRACT = getContract(contractInfo, Candidate.abi, library, account)
+        const tx = await Candidate_CONTRACT.updateSeigniorage()
+
+        setTx(tx);
+        setTxPending(true);
+        setTxHash(tx.hash)
+        
+        setModalOpen("confirming")
+      }
+    } catch (e) {
+      console.log(e)
+      setModalOpen("error");
     }
   }, [])
 

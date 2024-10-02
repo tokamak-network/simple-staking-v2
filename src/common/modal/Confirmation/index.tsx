@@ -32,7 +32,7 @@ export default function ConfirmationTX() {
     isConfirming,
     isError,
     isOpen,
-    isClaimWaiting,
+    isWaiting,
     closeModal,
   } = useTxConfirmModal();
   // const { mode, subMode } = useGetMode();
@@ -65,7 +65,7 @@ export default function ConfirmationTX() {
       >
         <Flex
           w={"254px"}
-          h={"350px"}
+          // h={"350px"}
           bgColor={"#fff"}
           borderRadius={"16px"}
           flexDir={"column"}
@@ -79,17 +79,21 @@ export default function ConfirmationTX() {
             onClick={closeThisModal}
           />
           </Flex>
-          <Text mt={"26px"} fontSize={18} mb={"41px"} fontWeight={700}>
-            {isConfirming
-              ? `Confirming ${selectedMode}`
-              : isConfirmed
-              ? "Transaction Confirmed!"
-              : isError
-              ? "Transaction Failed"
-              : null}
+          <Text mt={"26px"} fontSize={18} mb={"41px"} fontWeight={700} textAlign={'center'}>
+            {
+              isWaiting
+                ? `Confirming ${selectedMode}`
+                : isConfirming
+                ? 'Transaction Initiated!'
+                : isConfirmed
+                ? "Transaction Confirmed!"
+                : isError
+                ? "Transaction Failed"
+                : null
+            }
           </Text>
           <Flex pos={"relative"} w={"100%"} justifyContent={"center"}>
-            {isConfirming ? (
+            {isWaiting || isConfirming ? (
               // <Box w={"96px"} h={"96px"} className="loading2 spinner2" />
               <Spinner 
                 w={'96px'} 
@@ -120,13 +124,14 @@ export default function ConfirmationTX() {
           <Text
             w={"254px"}
             mt={"42px"}
+            mb={'30px'}
             px={isConfirming ? "29px" : ""}
             textAlign={"center"}
             fontSize={14}
             lineHeight={"26px"}
             // fontWeight={500}
           >
-            {isClaimWaiting ? (
+            {isWaiting ? (
               "Please wait a few seconds for MetaMask popup to appear."
             ) : isConfirming ? (
               "Please confirm txn. If is not updating, check your wallet."

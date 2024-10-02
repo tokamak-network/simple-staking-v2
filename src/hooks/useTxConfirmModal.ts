@@ -20,10 +20,10 @@ export default function useTxConfirmModal() {
   const isConfirming = modalOpen === "confirming";
   const isConfirmed = modalOpen === "confirmed";
   const isError = modalOpen === "error";
-  const isClaimWaiting = claimModalState === true;
+  const isWaiting =  modalOpen === "waiting";
 
   const closeModal = useCallback(() => {
-    if (!isClaimWaiting) {
+    if (!isWaiting) {
       setModalOpen(null);
       setIsOpen(false);
       setClaimModalState(false);
@@ -33,7 +33,7 @@ export default function useTxConfirmModal() {
       //close toast for transaction
       closeAll();
     }
-  }, [setModalOpen, setIsOpen, isClaimWaiting, closeAll]);
+  }, [setModalOpen, setIsOpen, isWaiting, closeAll]);
 
   return {
     isOpen,
@@ -43,6 +43,6 @@ export default function useTxConfirmModal() {
     isError,
     closeModal,
     setModalOpen,
-    isClaimWaiting,
+    isWaiting,
   };
 }

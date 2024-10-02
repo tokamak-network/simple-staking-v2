@@ -52,14 +52,17 @@ function ClaimModal () {
   const updateSeig = useCallback(async (type: number) => {
     if (account && library && selectedModalData) {
       try {
+        setSelectedMode(selectedModalData.name);
+        setIsOpen(true)
+        setModalOpen("waiting")
+
         const CandidateAddOn_CONTRACT = getContract(selectedModalData.contractAddress, CandidateAddOn, library, account)
-        
         const tx = await CandidateAddOn_CONTRACT.updateSeigniorage(type)
+
         setTx(tx);
         setTxPending(true);
         setTxHash(tx.hash)
-        setSelectedMode(modalName);
-        setIsOpen(true)
+        
         setModalOpen("confirming")
 
         if (tx) {

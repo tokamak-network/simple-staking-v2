@@ -13,7 +13,7 @@ const modalData = atom({
 });
 
 export const transactionModalStatus = atom<
-  "confirming" | "confirmed" | "error" | null
+ "waiting" | "confirming" | "confirmed" | "error" | null
 >({
   key: `transactionModalStatus/${v1()}`,
   default: null,

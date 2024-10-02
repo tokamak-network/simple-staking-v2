@@ -113,12 +113,16 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   const reStaking = useCallback(async () => {
     try {
       if (DepositManager_CONTRACT && account && selectedModalData) {
-        const numPendRequest = await DepositManager_CONTRACT.numPendingRequests(selectedModalData.layer2, account);
-        const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest);
-        setTx(tx);
-        setTxPending(true);
         setSelectedMode('Restake');
         setIsOpen(true)
+        setModalOpen("waiting")
+
+        const numPendRequest = await DepositManager_CONTRACT.numPendingRequests(selectedModalData.layer2, account);
+        const tx = await DepositManager_CONTRACT.redepositMulti(selectedModalData.layer2, numPendRequest);
+
+        setTx(tx);
+        setTxPending(true);
+        
         setModalOpen("confirming")
         setInput('');
         setIsChecked(false)
@@ -131,6 +135,10 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
 
   const withdraw = useCallback(async () => {
     try {
+      setSelectedMode('Withdraw');
+      setIsOpen(true)
+      setModalOpen("waiting")
+      
       if (selectedModalData && DepositManager_CONTRACT && selectedModalData) {
         const tx =
             selectedModalData.withdrawableLength === '0' 
@@ -142,8 +150,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
             );
         setTx(tx);
         setTxPending(true);
-        setSelectedMode('Unstake');
-        setIsOpen(true)
+        
         setModalOpen("confirming")
         setInput('');
         setIsChecked(false)
