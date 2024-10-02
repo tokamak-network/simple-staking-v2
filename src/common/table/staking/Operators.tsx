@@ -40,6 +40,7 @@ import ContractAddressInfo from './ContractAddressInfo';
 import { InfoTypeSelector } from '@/common/selector/InfoType';
 import { editL2Info_logo_state } from '@/atom/staking/editL2Info';
 import { useIsOperator } from '@/hooks/staking/useIsOperator';
+import { useChangedMembers } from '@/hooks/staking/useChangedMembers';
 
 type OpearatorTableProps = {
   columns: Column[];
@@ -96,7 +97,11 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
     candidateContract === undefined ? '' : candidateContract,
   );
   const [tab, setTab] = useState('staking')
+  const [members, setMembers] = useState()
   const [toggle, setToggle] = useRecoilState(toggleState)
+
+  const { memberAddresses } = useChangedMembers()
+  console.log(memberAddresses)
 
   useEffect(() => {
     if (asPath.includes('#')) {
@@ -220,6 +225,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                   {row.cells && row.cells.map((cell: any, index: number) => {
                     const {
                       candidateContract,
+                      candidate,
                       commissionRate,
                       name,
                       kind,
@@ -236,7 +242,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                     }) : '0.00'
               
                     const minimumAmount = Number(candidateAmount) >= 1000
-                    const isMember = MEMBER_ADDRESS_TEMP.find((address: string) => address === candidateContract)
+                    const isMember = memberAddresses?.find((address: any) => address.member === candidate)
                     
                     const type = cell.column.id;
                     const rate = convertNumber({

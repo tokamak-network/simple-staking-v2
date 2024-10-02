@@ -23,6 +23,23 @@ export async function getTONPrice() {
   return res.data[0]
 }
 
+export async function getEvent (event: string) {
+  const events = [
+    'ChangedMember',
+    'ChangedSlotMaximum',
+  ];
+  const eventsString = events.join(',');
+  const res = await candidate.get('/events', {
+    params: {
+      chainId: DEFAULT_NETWORK,
+      page: 1,
+      pagesize: 1000,
+      eventNames: eventsString,
+    },
+  });
+  return res.data.datas;
+}
+
 export async function getCountdown (blockNumber: number) {
   const res = await etherscan.get('/api', {
     params: {

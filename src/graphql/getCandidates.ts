@@ -82,3 +82,15 @@ export const GET_MY_STAKED = gql`
     }
   }
 `
+
+export const GET_CHANGED_MEMBER = gql`
+  query GetChangedMember($id: String) {    
+    changedMembers(first: 100, orderBy: timestamp, orderDirection: desc) {
+      id
+      slotIndex
+      prevMember
+      newMember
+      timestamp
+    }
+}
+`
