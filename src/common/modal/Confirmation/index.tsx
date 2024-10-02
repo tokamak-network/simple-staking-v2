@@ -72,21 +72,24 @@ export default function ConfirmationTX() {
           alignItems={"center"}
         >
           <Flex w={"100%"} justifyContent={"flex-end"} pt={"14px"} pr={"14px"}>
-          <Image
-            src={CloseIcon}
-            alt={"CloseIcon"}
-            style={{ cursor: "pointer" }}
-            onClick={closeThisModal}
-          />
+            {
+              !isWaiting ?
+              <Image
+                src={CloseIcon}
+                alt={"CloseIcon"}
+                style={{ cursor: "pointer" }}
+                onClick={closeThisModal}
+              /> : ''
+            }
           </Flex>
           <Text mt={"26px"} fontSize={18} mb={"41px"} fontWeight={700} textAlign={'center'}>
             {
               isWaiting
                 ? `Confirming ${selectedMode}`
                 : isConfirming
-                ? 'Transaction Initiated!'
+                ? 'Transaction Submitted!'
                 : isConfirmed
-                ? "Transaction Confirmed!"
+                ? "Transaction Confirmed"
                 : isError
                 ? "Transaction Failed"
                 : null
@@ -134,7 +137,7 @@ export default function ConfirmationTX() {
             {isWaiting ? (
               "Please wait a few seconds for MetaMask popup to appear."
             ) : isConfirming ? (
-              "Please confirm txn. If is not updating, check your wallet."
+              "Waiting for transaction to be confirmed."
             ) : isConfirmed ? (
               <Link
                 href={`${ETHERSCAN_LINK}/tx/${txHash}`}
