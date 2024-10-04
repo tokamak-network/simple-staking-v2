@@ -87,7 +87,7 @@ export default function ConfirmationTX() {
               isWaiting
                 ? `Confirming ${selectedMode}`
                 : isConfirming
-                ? 'Waiting for transaction to be confirmed.'
+                ? 'Transaction submitted'
                 : isConfirmed
                 ? "Transaction Confirmed"
                 : isError
