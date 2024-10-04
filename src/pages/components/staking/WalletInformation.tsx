@@ -15,6 +15,9 @@ import { getOldLayerAddress } from '@/components/getOldLayerAddress';
 import { StakeModalDataType } from "types"
 import useModal from '@/hooks/useModal';
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
+import { useUserStaked } from '@/hooks/staking/useUserStaked';
+import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
+import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -67,12 +70,16 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     }
   }, [data]);
 
+  // const { userStakeds } = useUserStaked(account?.toLocaleLowerCase(), data.candidateContract.toLocaleLowerCase())
+  // const expectedSeig = useExpectedSeig(data.candidateContract, data.stakedAmount, data.candidate)
+  // const lockedInBridge = useL2CandidateInfo(data.candidateAddOn)
+
   useEffect(() => {
     if (account) {
       setIsOperator(candidates.toLowerCase() === account.toLowerCase())
     }
   }, [account, candidates])
-  
+
   const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account);
   const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength, requests } = useWithdrawable(
     data?.candidateContract,

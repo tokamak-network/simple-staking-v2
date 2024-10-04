@@ -6,7 +6,7 @@ import { useMemo } from "react";
 
 export function useGetGraphData () {
   const { data, loading, error } = useQuery(GET_GRAPH, {
-    pollInterval: ms(`15s`),
+    pollInterval: ms(`10s`),
   });
 
   return useMemo(
@@ -20,7 +20,7 @@ export function useGetGraphData () {
 
 export function useGetFactory () {
   const { data, loading, error } = useQuery(GET_FACTORY, {
-    pollInterval: ms(`15s`),
+    pollInterval: ms(`10s`),
   });
 
   return useMemo(

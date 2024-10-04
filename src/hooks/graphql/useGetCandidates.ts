@@ -5,7 +5,7 @@ import { useMemo } from "react";
 
 export function useGetCandidates () {
   const { data, loading, error } = useQuery(GET_CANDIDATE, {
-    pollInterval: ms(`15s`),
+    pollInterval: ms(`10s`),
   });
 
   return useMemo(

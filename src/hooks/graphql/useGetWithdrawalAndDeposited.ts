@@ -5,7 +5,7 @@ import { useMemo } from "react";
 
 export function useGetWithdrawalAndDeposited () {
   const { data, loading, error } = useQuery(GET_WITHDRAWAL_AND_DEPOSITED, {
-    pollInterval: ms(`15s`),
+    pollInterval: ms(`10s`),
   });
 
   return useMemo(

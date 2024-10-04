@@ -7,11 +7,8 @@ import { BigNumber } from 'ethers';
 import { calcCountDown2, convertNumber } from '../../utils/number';
 import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
 import { getCountdown } from '@/api';
-import { useQuery } from '@apollo/client';
-import { GET_WITHDRAWAL_AND_DEPOSITED } from '@/graphql/query/getWithdrawalAndDeposited';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { txState } from '@/atom/global/transaction';
-import { useGetCandidates } from '../graphql/useGetCandidates';
 import { useGetWithdrawalAndDeposited } from '../graphql/useGetWithdrawalAndDeposited';
 
 export function useWithdrawable (layer2: string) {

@@ -19,6 +19,7 @@ import { getContract } from '@/components/getContract';
 import { txState } from '@/atom/global/transaction';
 import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
 import { floatParser } from '../../../utils/number';
+import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
 
 type L2InformationProps = {
   data: any;
@@ -58,6 +59,8 @@ function L2Information({ data }: L2InformationProps) {
     claimable
   } = useIsOperator(data?.candidateContract)
   
+  const lockedInBridge = useL2CandidateInfo(data?.candidateAddOn)
+  
   useEffect(() => {
     if (l2Infos) {
       setBridgeValue(l2Infos.bridge)
@@ -94,9 +97,9 @@ function L2Information({ data }: L2InformationProps) {
       })
     : '0.00';
 
-  const converted = data?.lockedInBridge
+  const converted = lockedInBridge
     ? convertNumber({
-        amount: data?.lockedInBridge,
+        amount: lockedInBridge,
         type: 'wei',
         localeString: true,
       })

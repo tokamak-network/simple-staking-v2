@@ -8,7 +8,7 @@ export function useGetUserHistory (account: string | null | undefined) {
     variables: {
       id: account?.toLowerCase()
     },
-    pollInterval: ms(`15s`),
+    pollInterval: ms(`10s`),
   });
 
   return useMemo(

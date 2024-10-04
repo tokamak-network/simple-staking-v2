@@ -4,6 +4,7 @@ import HistoryTable from "@/common/table/staking/HistoryTable";
 import OperatorDetailInfo from "@/common/table/staking/OperatorDetail";
 import { getCommitHistory, getTransactionHistory } from "@/components/getTransactionHistory";
 import { convertNumber } from "@/components/number";
+import { useExpectedSeig } from "@/hooks/staking/useCalculateExpectedSeig";
 import { Box, Flex } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import { FC, useEffect, useMemo, useState } from "react";
@@ -85,10 +86,11 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   }) : '0.00'
 
   const minimumAmount = Number(candidateAmount) >= 1000
-
-  const userExpectedSeig = data?.expectedSeig ? 
+  
+  const expectedSeig = useExpectedSeig(data?.candidateContract, data?.stakedAmount, data?.candidate)
+  const userExpectedSeig = expectedSeig ? 
     convertNumber({
-      amount: data?.expectedSeig,
+      amount: expectedSeig,
       type: 'ray',
       localeString: true
     }) : '-' 
@@ -104,6 +106,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
     type: 'ray',
     localeString: true
   })
+
   return (
     <Flex
       w="100%"

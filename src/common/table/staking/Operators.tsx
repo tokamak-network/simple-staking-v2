@@ -10,21 +10,13 @@ import {
   chakra,
   Text,
   Flex,
-  IconButton,
-  Tooltip,
-  Select,
   Box,
-  useColorMode,
-  Center,
   useTheme,
-  Button,
 } from '@chakra-ui/react';
-import {ChevronRightIcon, ChevronLeftIcon} from '@chakra-ui/icons';
-import Image from 'next/image';
 import { convertNumber } from '../../../utils/number';
 import { getCircle } from '@/common/table/staking/Circle';
 import { OperatorImage } from '@/common/table/staking/Oval';
-import { renderBtn } from '@/common/table/staking/RenderBTN';
+import RenderBtn from '@/common/table/staking/RenderBTN';
 import { Info } from '@/common/table/staking/OperatorInfo';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { toggleState } from '@/atom/staking/toggle';
@@ -105,9 +97,9 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
 
   useEffect(() => {
     if (asPath.includes('#')) {
-      
       const indexOf = asPath.indexOf('#')
       const dataIndex = page.findIndex((candidateData: any) => candidateData.original.id === asPath.slice(indexOf + 1))
+
       setIsOpen(asPath.slice(9));
       setToggle('All')
       setTimeout(() => {
@@ -194,6 +186,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                 lockedInBridge
               }
               prepareRow(row);
+              
               return [
                 <chakra.tr
                   boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}
@@ -332,16 +325,33 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                           </Flex>
                         ) : ('')}
                         {type === 'totalStaked' ? (
-                          Info('Total Staked', totalStaked, 'TON')
+                          <Info 
+                            title={'Total Staked'}
+                            value={totalStaked}
+                            unit={'TON'}
+                          />
                         ) : ('')}
                         {type === 'commisionRate' ? (
-                          (rate !== '-' && rate) ? Info('Commission Rate', (+rate) / 10000000, '%') : ('')
+                          (rate !== '-' && rate) ? 
+                          <Info 
+                            title={'Commission Rate'}
+                            value={+rate / 10000000}
+                            unit={'%'}
+                          /> : ('')
                         ) : ('')}
                         {type === 'yourStaked' ? (
-                          (yourStaked !== '0.00' && yourStaked) ? Info('Your Staked', yourStaked, 'TON') : ('')
+                          (yourStaked !== '0.00' && yourStaked) ?
+                          <Info 
+                            title={'Your Staked'}
+                            value={yourStaked}
+                            unit={'TON'}
+                          /> : ('')
                         ) : ('')}
                         {type === 'expander' ? (
-                          renderBtn(candidateContract, isOpen)
+                          <RenderBtn
+                            layer2={candidateContract}
+                            isOpen={isOpen}
+                          />
                         ): null}
                       </chakra.td>
                     )
