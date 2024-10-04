@@ -107,6 +107,7 @@ export function MobileToL2 (args: MobileToL2Props) {
     <Flex flexDir={'column'}>
       <WithdrawL2Image 
         l2Image={TITAN_SYMBOL}
+        l2Name={selectedOp?.name}
       />
       <UnstakeBalanceInput 
         stakedAmount={myStaked ? myStaked : '0.00'}
