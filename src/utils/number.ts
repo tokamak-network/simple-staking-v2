@@ -177,7 +177,11 @@ export function convertLargeNumber(num: string | undefined) {
       convertedNumber = floatParse / 10e6
       convertedNumber = checkNumberLength(convertedNumber)
       convertedNumber = convertedNumber + 'M'
+    } else {
+      convertedNumber = num
     }
+  } else {
+    convertedNumber = num
   }
   
   return convertedNumber

@@ -39,7 +39,7 @@ export const ToTitan = (args: ToTitanProps) => {
   
   const [tx, setTx] = useState();
   const { DepositManager_CONTRACT } = useCallContract();
-  const tData = useGetTransaction();
+  // const tData = useGetTransaction();
 
   const columns = useMemo(
     () => [
@@ -149,7 +149,8 @@ export const ToTitan = (args: ToTitanProps) => {
         selectedModalData?.name === 'Titan-sepolia' ?
         <WithdrawL2Table 
           columns={columns}
-          data={tData.depositTxs}
+          // data={tData.depositTxs}
+          data={[]}
         /> : 
         <Flex 
           fontSize={'12px'}

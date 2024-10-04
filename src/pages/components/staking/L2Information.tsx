@@ -99,7 +99,6 @@ function L2Information({ data }: L2InformationProps) {
         localeString: true,
       })
     : '0.00';
-
     
     //@ts-ignore
     const stakableAmount = floatParser(claimableAmount) + floatParser(expectedSeig) 
