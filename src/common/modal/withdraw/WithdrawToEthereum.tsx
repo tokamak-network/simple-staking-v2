@@ -279,7 +279,12 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           mt={'25px'}
           fontSize={'14px'}
           fontWeight={500}
-          isDisabled={!(isChecked)}
+          isDisabled={
+            toggle === 'Withdraw'
+            ? selectedModalData.withdrawable === '0.00'
+            ? true : false
+            : !(isChecked)
+          }
           bgColor={toggle === 'Restake' ? '#36af47' : ''}
           _hover={
             toggle === 'Restake' ?
