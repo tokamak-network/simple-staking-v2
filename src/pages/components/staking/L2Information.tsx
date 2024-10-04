@@ -249,10 +249,10 @@ function L2Information({ data }: L2InformationProps) {
           }
           <L2InfoContent title={'Bridge'} content={l2Infos?.bridge} type={'bridge'} editStat={editStat} />
           <L2InfoContent title={'Block explorer'} content={l2Infos?.explorer} type={'explorer'} editStat={editStat} />
-          {
-            isOperator ?
-            <L2InfoContent title={'L2 Logo'} content={data?.name} type={'logo'} editStat={editStat} /> : ''
-          }
+          {/* {
+            isOperator ? */}
+            <L2InfoContent title={'L2 Logo'} content={l2Infos?.logo} type={'logo'} editStat={editStat} /> 
+          {/* } */}
         </Flex>
       </Flex>
       <Flex flexDir={'column'} my={'54px'}>

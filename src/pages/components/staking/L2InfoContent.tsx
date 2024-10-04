@@ -25,8 +25,8 @@ export function L2InfoContent (args: L2ContentProps) {
     editStat
   } = args
 
-  const linkType = type === 'bridge' || type === 'explorer' ? true : false
-  const stringType = type === 'string' || type === 'logo' ? true : false
+  const linkType = type === 'bridge' || type === 'explorer' || type === 'logo' ? true : false
+  const stringType = type === 'string' ? true : false
 
   const convert = linkType ?
     trimAddress({

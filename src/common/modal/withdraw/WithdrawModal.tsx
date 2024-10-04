@@ -21,6 +21,8 @@ import { useWithdrawRequests } from '@/hooks/staking/useWithdrawable';
 import { inputState } from '@/atom/global/input';
 import { useRecoilState } from 'recoil';
 import { txState } from '@/atom/global/transaction';
+import { useIsOperator } from '@/hooks/staking/useIsOperator';
+import NoLOGO from '@/assets/images/modal/gallery.svg'
 
 function WithdrawModal () {
   const theme = useTheme();
@@ -35,6 +37,15 @@ function WithdrawModal () {
 
   const [input, setInput] = useRecoilState(inputState);
   const [txPending, ] = useRecoilState(txState);
+
+  const [logo, setLogo] = useState<string>('')
+  const { l2Infos } = useIsOperator(selectedModalData?.layer2)
+  
+  useEffect(() => {
+    if (l2Infos) {
+      setLogo(l2Infos.logo)
+    }
+  }, [l2Infos])
 
   const closeThisModal = useCallback(() => {
     setInput('');
@@ -64,6 +75,7 @@ function WithdrawModal () {
     }
     fetch()
   }, [selectedModalData, txPending])
+  
 
   useEffect(() => {
     let numberOf = 1
@@ -135,7 +147,7 @@ function WithdrawModal () {
                     <WithdrawType 
                       name={'Withdraw to Ethereum'}
                       content={'Staked TON can be unstaked and can be withdrawn after 93,046 blocks from unstaking (~14 days).'}
-                      src={ETHEREUM}
+                      src={ETHEREUM.src}
                       onClick={() => setType('ethereum')}
                     />
                     {
@@ -143,7 +155,7 @@ function WithdrawModal () {
                       <WithdrawType 
                         name={`Withdraw to ${selectedModalData.name}`}
                         content={'Instead of withdrawing to Ethereum, staked TON can be withdrawn to this layer as TON. By withdrawing to this layer, TON can be used right away without needing to wait for 14 days.'}
-                        src={TITAN}
+                        src={logo ? logo : NoLOGO}
                         onClick={() => setType('titan')}
                       /> : ''
                     }

@@ -7,7 +7,7 @@ import useCallContract from "../useCallContract";
 import { getContract } from "utils/getContract";
 import { l2InfoType } from "@/types";
 
-export function useIsOperator (layer2: string) {
+export function useIsOperator (layer2: string | undefined) {
   const { account, library } = useWeb3React()
   const CandidateAddOn_CONTRACT = useContract(layer2, CandidateAddOn);
   const [isOperator, setIsOperator] = useState<boolean>(false)
@@ -44,10 +44,16 @@ export function useIsOperator (layer2: string) {
             
             setClaimable(addedWton.toString())
             // setStakable
-
+            
+            const infoType = {
+              bridge: "",
+              explorer: "",
+              logo: ""
+            }
+            
             setOperatorManger(operatorAddress)
             setIsOperator(checkIsOperator !== undefined ? checkIsOperator : false);
-            setL2Infos(JSON.parse(l2Info))
+            setL2Infos(l2Info === '' ? infoType : JSON.parse(l2Info))
             setBridgeTypes(bridgeType._type)
             setManagers(manager)
           }

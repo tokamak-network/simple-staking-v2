@@ -72,6 +72,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
       setIsOperator(candidates.toLowerCase() === account.toLowerCase())
     }
   }, [account, candidates])
+  
   const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account);
   const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength, requests } = useWithdrawable(
     data?.candidateContract,

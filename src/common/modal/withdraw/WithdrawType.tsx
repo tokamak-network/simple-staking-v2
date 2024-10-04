@@ -1,14 +1,15 @@
 import { useWindowDimensions } from "@/hooks/useWindowDimensions"
-import { Button, Flex } from "@chakra-ui/react"
-import Image, { StaticImageData } from 'next/image'
+import { Button, Flex, Image } from "@chakra-ui/react"
+import  { StaticImageData } from 'next/image'
 import { useCallback, useEffect, useState } from "react"
 import { TokenSelector } from "@/common/menulist/TokenSelector";
+import NoLOGO from '@/assets/images/modal/gallery.svg'
 
 type WithdrawTypeProps = {
   name: string
   content: string
   onClick?: any
-  src?: StaticImageData
+  src?: string
 }
 
 export const WithdrawType = (args: WithdrawTypeProps) => {
@@ -74,8 +75,10 @@ export const WithdrawType = (args: WithdrawTypeProps) => {
           w={mobile ? '60px' : '96px'} 
           h={mobile ? '60px' : '96px'}
           mr={mobile ? '12px' : ''}
+          justifyContent={'center'}
+          alignItems={'center'}
         >
-          <Image src={src} alt={''} />
+          <Image src={src} alt={NoLOGO} />
         </Flex> : 
         name === 'Prior to Patch' ?
           <Flex flexDir={'column'} alignItems={'center'}>
