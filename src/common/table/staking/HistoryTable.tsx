@@ -117,7 +117,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                 account ?
                 <Flex>
                   <FormLabel color={'#828d99'} fontSize={'11px'} mt={'7px'}>
-                    {toggle} Tx Hash
+                    {toggle} transactions
                   </FormLabel>
                     <Switch 
                       colorScheme={'green'} 
