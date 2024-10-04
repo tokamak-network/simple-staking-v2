@@ -1,4 +1,4 @@
-import { GET_CANDIDATE } from "@/graphql/getCandidates";
+import { GET_CANDIDATE } from "@/graphql/query/getCandidates";
 import { useQuery } from "@apollo/client";
 import { useWeb3React } from "@web3-react/core";
 import { useState, useEffect } from "react";
@@ -14,15 +14,14 @@ import CONTRACT_ADDRESS from "services/addresses/contract";
 import Coinage from "services/abi/AutoRefactorCoinage.json"
 import { txState } from "@/atom/global/transaction";
 import { useRecoilState } from "recoil";
+import { useGetCandidates } from "../graphql/useGetCandidates";
 
 export function useCandidateList () {
   const [candidateList, setCandidateList] = useState<any[]>([]);
-  const { data } = useQuery(GET_CANDIDATE, {
-    pollInterval: 10000
-  });
+  const { candidates } = useGetCandidates()
 
   const { account, library, chainId } = useWeb3React();
-  const [txPending, ] = useRecoilState(txState);
+  // const [txPending, ] = useRecoilState(txState);
   const { 
     SeigManager_CONTRACT, 
     DepositManager_CONTRACT, 
@@ -35,8 +34,8 @@ export function useCandidateList () {
 
   useEffect(() => {
     async function fetch () {
-      if (data) {     
-        const candidates = await Promise.all(data.candidates.map(async (obj: any, index: number) => {
+      if (candidates) {     
+        const candidatesList = await Promise.all(candidates.map(async (obj: any, index: number) => {
           let tempObj = obj
           let stakeOf     
           let sumPending
@@ -115,11 +114,11 @@ export function useCandidateList () {
           return tempObj
         }))
         
-        setCandidateList(candidates)
+        setCandidateList(candidatesList)
       }
     }
     fetch()
-  }, [data, account, chainId, txPending])
+  }, [candidates, account, chainId])
 
   return { candidateList }
 }

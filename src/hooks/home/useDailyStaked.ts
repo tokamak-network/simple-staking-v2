@@ -2,28 +2,24 @@ import { useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { getDailyStakedTotal, getTotalSupply, getTotalStaked } from '@/api';
 import { useQuery } from '@apollo/client';
-import { GET_GRAPH, GET_FACTORY } from '../../graphql/getGraphdata';
+import { GET_GRAPH, GET_FACTORY } from '../../graphql/query/getGraphdata';
 import moment from 'moment';
 import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
+import { useGetFactory, useGetGraphData } from '../graphql/useGetGraphData';
 
 export function useDailyStaked() {
   const [dailyStaked, setDailyStaked] = useState<any[]>([]);
   const [totalStaked, setTotalStaked] = useState<number>(0);
 
-  const { data } = useQuery(GET_GRAPH, {
-    pollInterval: 10000,
-  });
-
-  const factory = useQuery(GET_FACTORY, {
-    pollInterval: 10000,
-  });
+  const { factories } = useGetFactory()
+  const { stakingDayDatas } = useGetGraphData()
 
   useEffect(() => {
     async function fetchData() {
       const dailyStakedTotal = await getDailyStakedTotal();
       // const totalStakedCurrent: number = await getTotalStaked();
       const totalSup = await getTotalSupply();
-      const stakeTotal = factory.data?.factories[0].totalStaked;
+      const stakeTotal = stakingDayDatas;
       const totalStake = parseFloat(stakeTotal) / Math.pow(10, 27);
 
       function pushToArray(date: number, stakeAmount: string) {
@@ -36,8 +32,8 @@ export function useDailyStaked() {
         };
       }
       let filledData = [];
-      if (data) {
-        const { stakingDayDatas } = data;
+      if (factories) {
+        const totalStakeds = factories[0].totalStaked
         const day = 86400;
         const now = Math.floor(new Date().getTime() / 1000);
         const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day);
@@ -101,6 +97,6 @@ export function useDailyStaked() {
       setTotalStaked(totalStake);
     }
     fetchData();
-  }, [data, factory]);
+  }, [factories, stakingDayDatas]);
   return { dailyStaked, totalStaked };
 }

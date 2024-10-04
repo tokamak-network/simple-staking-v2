@@ -3,25 +3,21 @@ import { useWeb3React } from '@web3-react/core';
 import { useEffect, useState } from 'react';
 import useCallContract from '../useCallContract';
 import { useBlockNumber } from '../useBlockNumber';
-import { GET_HISTORY } from '@/graphql/getUserHIstory';
+import { GET_HISTORY } from '@/graphql/query/getUserHIstory';
 import { useQuery } from '@apollo/client';
 import { getTransactionHistory } from '../../utils/getTransactionHistory';
+import { useGetUserHistory } from '../graphql/useGetUserHistory';
 
 export function useUserHistory () {
   const [userHistory, setUserHistory] = useState([])
   const { blockNumber } = useBlockNumber()
   const { account } = useWeb3React();
-  const {data} = useQuery(GET_HISTORY, {
-    variables: {
-      id: account?.toLowerCase()
-    },
-    pollInterval: 10000
-  });
-  const { DepositManager_CONTRACT , SeigManager_CONTRACT} = useCallContract();
+  
+  const { users } = useGetUserHistory(account)
 
   useEffect(() => {
     async function fetchList () {  
-      if (account && data) {
+      if (account && users) {
         const pastData = await getOperatorsInfo();
 
         let myHistory: any = []
@@ -33,14 +29,14 @@ export function useUserHistory () {
         myHistory = myHistory.sort(function (a: any, b: any) {
           return b.blockNumber - a.blockNumber
         })
-        if (data.users[0]) {
-          const txData = getTransactionHistory({...data.users[0], oldHistory: myHistory})
+        if (users[0]) {
+          const txData = getTransactionHistory({...users[0], oldHistory: myHistory})
           setUserHistory(txData)
         }
       }
     }
     fetchList()
-  }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account, data])
+  }, [account, users])
 
   return { userHistory }
 }

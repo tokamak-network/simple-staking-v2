@@ -66,7 +66,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
     state: {pageIndex, pageSize},
     setPageSize
   } = useTable(
-    {columns, data, initialState: {pageIndex: 0, pageSize: 20}},
+    {columns, data, initialState: {pageIndex: 0, pageSize: 30}},
     useSortBy,
     useExpanded,
     usePagination,

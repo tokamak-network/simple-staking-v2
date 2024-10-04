@@ -1,4 +1,4 @@
-import { GET_MY_STAKED } from "@/graphql/getCandidates";
+import { GET_MY_STAKED } from "@/graphql/query/getCandidates";
 import { useQuery } from "@apollo/client";
 import { useCallback } from "react";
 

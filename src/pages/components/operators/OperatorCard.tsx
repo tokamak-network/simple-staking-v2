@@ -125,12 +125,6 @@ function OperatorCard(props: { operator: any }) {
       title: 'Sequencer seigniorage', value: 'title',
     },
     {
-      title: 'L2 registry registered date', value: getDate(operator?.candidateAddOn?.registeredTime),
-    },
-    {
-      title: 'L2 open date', value: getDate(operator?.candidateAddOn?.registeredTime),
-    },
-    {
       title: 'TON locked in Bridge', value: lockedInBridges,
     },
     {

@@ -41,7 +41,7 @@ function L2Information({ data }: L2InformationProps) {
   const [, setTxPending] = useRecoilState(txState);
   const [tx, setTx] = useState();
 
-  console.log(data);
+  // console.log(data);
 
   const [bridgeValue, setBridgeValue] = useRecoilState(editL2Info_bridge_input);
   const [explorerValue, setExplorerValue] = useRecoilState(editL2Info_explorer_input);
@@ -65,6 +65,8 @@ function L2Information({ data }: L2InformationProps) {
       setLogoValue(l2Infos.logo)
     }
   }, [l2Infos])
+
+  console.log(data)
 
   useEffect(() => {
     if (data) {

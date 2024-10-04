@@ -1,4 +1,4 @@
-import { GET_CANDIDATE } from "@/graphql/getCandidates";
+import { GET_CANDIDATE } from "@/graphql/query/getCandidates";
 import { useQuery } from "@apollo/client";
 import { useWeb3React } from "@web3-react/core";
 import { useState, useEffect } from "react";
@@ -7,7 +7,6 @@ import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
 import { getEventByLayer2, getOperatorUserHistory } from "@/api";
 import { useWindowDimensions } from "../useWindowDimensions";
 import { BigNumber } from 'ethers';
-import { GET_HISTORY } from '../../graphql/getUserHIstory';
 
 
 export function useTopCardInfo () {

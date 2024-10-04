@@ -1,7 +1,7 @@
 import { getEvent } from "@/api";
 import { useEffect, useState } from 'react';
 import { useQuery } from "@apollo/client";
-import { GET_CHANGED_MEMBER } from "@/graphql/getCandidates";
+import { GET_CHANGED_MEMBER } from "@/graphql/query/getCandidates";
 
 export function useChangedMembers() {
   const [memberAddresses, setMemberAddresses] = useState<any[]>();

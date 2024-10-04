@@ -11,7 +11,6 @@ export const GET_CANDIDATE = gql`
       commissionRate
       candidateAddOn {
         id
-        registeredTime
         rollupConfig
         operator
         memo
@@ -88,7 +87,6 @@ export const GET_CHANGED_MEMBER = gql`
     changedMembers(first: 100, orderBy: timestamp, orderDirection: desc) {
       id
       slotIndex
-      prevMember
       newMember
       timestamp
     }
