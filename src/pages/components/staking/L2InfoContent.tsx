@@ -1,14 +1,7 @@
 
 import { Button, Flex, Link } from "@chakra-ui/react"
 import trimAddress from '../../../utils/trimAddress';
-import NEWTAB from '@/assets/images/newtab-icon.png'
-import Image from "next/image";
-import { useCallback, useState } from "react";
-import { useWeb3React } from "@web3-react/core";
-import { getContract } from "@/components/getContract";
-import CandidateAddOn from 'services/abi/CandidateAddOn.json'
-import { useRecoilState } from "recoil";
-import { txState } from "@/atom/global/transaction";
+import Image from "next/image";;
 import ETHERSCAN_LINK from '@/assets/images/etherscan_link_icon.png'
 import { UrlInput } from "@/common/input/CustomInput";
 import OperatorImage from "@/common/table/staking/Oval";
@@ -31,7 +24,6 @@ export function L2InfoContent (args: L2ContentProps) {
     contractAddress,    
     editStat
   } = args
-
 
   const linkType = type === 'bridge' || type === 'explorer' ? true : false
   const stringType = type === 'string' || type === 'logo' ? true : false
@@ -98,7 +90,7 @@ export function L2InfoContent (args: L2ContentProps) {
             justifyContent={'center'} 
             alignItems={'center'}
             ml={'6px'}
-            href={content}
+            href={content.substring(0, 8) !== 'https://' ? `https://${content}` : content}
             isExternal
           >
             <Image src={ETHERSCAN_LINK} alt={'alt'} />
