@@ -76,7 +76,6 @@ function WithdrawModal () {
     fetch()
   }, [selectedModalData, txPending])
   
-
   useEffect(() => {
     let numberOf = 1
     if (selectedModalData) {
@@ -155,7 +154,7 @@ function WithdrawModal () {
                       <WithdrawType 
                         name={`Withdraw to ${selectedModalData.name}`}
                         content={'Instead of withdrawing to Ethereum, staked TON can be withdrawn to this layer as TON. By withdrawing to this layer, TON can be used right away without needing to wait for 14 days.'}
-                        src={logo ? logo : NoLOGO}
+                        src={logo ? logo : NoLOGO.src}
                         onClick={() => setType('titan')}
                       /> : ''
                     }

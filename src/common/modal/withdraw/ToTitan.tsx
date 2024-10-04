@@ -14,6 +14,8 @@ import WithdrawL2Table from "./WithdrawL2Table"
 import { WithdrawL2Image } from "./WithdrawL2Image"
 import useGetTransaction from "@/hooks/staking/useGetTransaction"
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal"
+import NoLOGO from '@/assets/images/modal/gallery.svg'
+import { useIsOperator } from "@/hooks/staking/useIsOperator"
 
 type ToTitanProps = {
   selectedModalData: StakeModalDataType
@@ -60,6 +62,15 @@ export const ToTitan = (args: ToTitanProps) => {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(e.target.checked);
   }
+
+  const [logo, setLogo] = useState<string>('')
+  const { l2Infos } = useIsOperator(selectedModalData?.layer2)
+  
+  useEffect(() => {
+    if (l2Infos) {
+      setLogo(l2Infos.logo)
+    }
+  }, [l2Infos])
 
   useEffect(() => {
     async function waitReceipt() {
@@ -108,7 +119,8 @@ export const ToTitan = (args: ToTitanProps) => {
   return (
     <Flex flexDir={'column'}>
       <WithdrawL2Image 
-        l2Image={TITAN_SYMBOL}
+        l2Image={logo ? logo : NoLOGO.src}
+        l2Name={selectedModalData?.name}
       />
       <UnstakeBalanceInput 
         stakedAmount={stakedAmount}

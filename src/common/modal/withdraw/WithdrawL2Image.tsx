@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react"
+import { Flex, Image as ChakraImage } from "@chakra-ui/react"
 import Image from 'next/image'
 import ETH_SYMBOL from "@/assets/images/ETH-symbol.svg"
 import TITAN_SYMBOL from '@/assets/images/symbol.svg'
@@ -6,20 +6,22 @@ import Arrow from '@/assets/images/right_arrow.svg'
 
 type WithdrawL2ImageProps = {
   l2Image: any
+  l2Name: string
 }
 
 export const WithdrawL2Image = (args: WithdrawL2ImageProps) => {
-  const { l2Image } = args
-
+  const { l2Image, l2Name } = args
+  
   return (
     <Flex
       h={'112px'}
       flexDir={'row'}
       justifyContent={'center'} 
-      alignItems={'center'}
+      alignItems={'start'}
       fontSize={'12px'}
       fontWeight={'normal'}
       color={'#07070c'}
+      mt={'30px'}
     >
       <Flex flexDir={'column'} alignItems={'center'}>
         <Flex 
@@ -36,7 +38,7 @@ export const WithdrawL2Image = (args: WithdrawL2ImageProps) => {
           Ethereum
         </Flex>
       </Flex>
-      <Flex mx={'15px'} mb={'25px'}>
+      <Flex mx={'15px'} mt={'10px'}>
         <Image src={Arrow} alt={''} />
       </Flex>
       <Flex flexDir={'column'} alignItems={'center'}>
@@ -48,10 +50,10 @@ export const WithdrawL2Image = (args: WithdrawL2ImageProps) => {
           justifyContent={'center'} 
           alignItems={'center'}
         >
-          <Image src={l2Image} alt={''} />
+          <ChakraImage src={l2Image} alt={''} />
         </Flex>
-        <Flex mt={'6px'}>
-          TITAN
+        <Flex mt={'6px'} w={'50px'} textAlign={'center'}>
+          {l2Name}
         </Flex>
       </Flex>
     </Flex>

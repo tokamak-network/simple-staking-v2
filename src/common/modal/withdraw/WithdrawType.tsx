@@ -1,6 +1,5 @@
 import { useWindowDimensions } from "@/hooks/useWindowDimensions"
 import { Button, Flex, Image } from "@chakra-ui/react"
-import  { StaticImageData } from 'next/image'
 import { useCallback, useEffect, useState } from "react"
 import { TokenSelector } from "@/common/menulist/TokenSelector";
 import NoLOGO from '@/assets/images/modal/gallery.svg'
@@ -78,7 +77,7 @@ export const WithdrawType = (args: WithdrawTypeProps) => {
           justifyContent={'center'}
           alignItems={'center'}
         >
-          <Image src={src} alt={NoLOGO} />
+          <Image src={src} alt={''} />
         </Flex> : 
         name === 'Prior to Patch' ?
           <Flex flexDir={'column'} alignItems={'center'}>

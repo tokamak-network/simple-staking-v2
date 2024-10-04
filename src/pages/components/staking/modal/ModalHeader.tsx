@@ -28,7 +28,7 @@ export const ModalHeader = (args: { main: string; sub: string; closeThisModal: a
       >
         <Image src={CLOSE_ICON} alt={'CLOSE_ICON'}></Image>
       </Flex>
-      <Text color={'#3d495d'} fontSize={'20px'} fontWeight={'bold'} h={'31px'} mt={'6px'}>
+      <Text color={'#3d495d'} fontSize={'20px'} fontWeight={'bold'}  mt={'6px'}>
         {main}
       </Text>
       <Text color={'#86929d'} fontSize={'12px'} fontWeight={'normal'} mb={'20px'} maxW={'290px'} textAlign={'center'}>
