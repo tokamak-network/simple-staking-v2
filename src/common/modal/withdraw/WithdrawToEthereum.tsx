@@ -164,8 +164,6 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     }
   }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending]);
 
-  console.log(!isChecked || selectedModalData.pendingUnstaked === '0.00')
-
   return (
     <Flex flexDir={'column'} w={'350px'} alignItems={'center'}>
       <Flex
