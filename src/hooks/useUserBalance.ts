@@ -66,7 +66,7 @@ const useUserBalance = (account: string | null | undefined) => {
     TON_CONTRACT,
     WTON_CONTRACT,
     library,
-    blockNumber,
+    // blockNumber,
   ]);
 
   return {

@@ -38,6 +38,7 @@ export const Unstake = (args: UnstakeProps) => {
   
   const [tx, setTx] = useState();
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  // const [disable, setDisable] = useState<boolean>(true);
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
@@ -88,7 +89,7 @@ export const Unstake = (args: UnstakeProps) => {
       setSelectedMode('Unstake');
       setIsOpen(true)
       setModalOpen("waiting")
-      
+
       const amount = floatParser(input);
       if (DepositManager_CONTRACT && SeigManager_CONTRACT && amount && account && selectedModalData) {
         const tx = await DepositManager_CONTRACT.requestWithdrawal(
@@ -128,7 +129,8 @@ export const Unstake = (args: UnstakeProps) => {
           my={'25px'}
           fontSize={'14px'}
           fontWeight={500}
-          isDisabled={!isChecked}
+          
+          isDisabled={!isChecked || !floatParser(input)}
           onClick={() => unStaking()}
         >
           Unstake
