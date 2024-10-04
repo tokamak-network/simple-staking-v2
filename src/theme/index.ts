@@ -302,8 +302,15 @@ const theme = extendTheme({
         backgroundColor: '#fff',
         border: 'solid 1px #e7ebf2'
       }
+    },
+    Menu: {
+      baseStyle: {
+        item: {
+          maxW: '100px'
+        }
+      }
     }
-  }
+  },
 })
 
 export default theme

@@ -32,7 +32,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   const theme = useTheme();
   const { btnStyle } = theme;
   const [toggle, setToggle] = useState('Withdraw')
-  const [option, setOption] = useState('WTON')
+  const [option, setOption] = useState('TON')
 
   const { 
     DepositManager_CONTRACT, 
@@ -58,7 +58,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
 
-  const options = ['WTON', 'TON']
+  const options = ['TON', 'WTON']
 
   const handleToggle = useCallback(() => {
     setIsChecked(false)

@@ -28,7 +28,7 @@ export const TokenSelector = (args: TokenSelectorProps) => {
         placeholder="WTON"
       // onChange={onChangeSelectBox}
       >
-        <Flex alignItems={'center'} justifyContent={'space-between'}>
+        <Flex alignItems={'center'} justifyContent={'space-between'} >
           <Text>{option}</Text>
           <Flex
             marginLeft={"4px"}
@@ -43,11 +43,14 @@ export const TokenSelector = (args: TokenSelectorProps) => {
         // onClick={() => setMenuState(false)}
         color={'#3e495c'}
         bgColor={'#fff'}
-        // maxW={'62px'}
-        width={'62px'}
+        maxW={'100px'}
+        width={'100px'}
         boxShadow={'0 2px 4px 0 rgba(96, 97, 112, 0.14)'}
         fontSize={'12px'}
         p={'7px 0px 7px 4px'}
+        style={{
+          minWidth: "62px"
+        }}
         
       >
         {options.map((option: any, index: number) => {
@@ -55,7 +58,7 @@ export const TokenSelector = (args: TokenSelectorProps) => {
             <MenuItem
               mb={'6px'}
               mt={'4px'}
-              maxW={'62px'}
+              w={'62px'}
               cursor={'pointer'}
               bg={'none'}
               _hover={{bg:"none"}}

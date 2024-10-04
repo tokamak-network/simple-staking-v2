@@ -239,9 +239,9 @@ function L2Information({ data }: L2InformationProps) {
               title={'L2 Rollup Type'} 
               content={
                 bridgeTypes === 1 
-                ? 'Titan Tokamak'
+                ? 'Tokamak Titan'
                 : bridgeTypes === 2
-                ? 'Thanos Tokamak'
+                ? 'Tokamak Thanos'
                 : 'Unknown'
               } 
               type={'string'} 
