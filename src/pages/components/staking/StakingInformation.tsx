@@ -1,4 +1,4 @@
-import { selectedToggleState } from "@/atom/staking/toggle";
+import { selectedToggleState, toggleState } from "@/atom/staking/toggle";
 import { selectedTypeState, typeFilterState } from "@/atom/staking/txTypeFilter";
 import HistoryTable from "@/common/table/staking/HistoryTable";
 import OperatorDetailInfo from "@/common/table/staking/OperatorDetail";
@@ -23,7 +23,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   const commitHistory = getCommitHistory(data)
 
   const txTypeValue = useRecoilValue(selectedTypeState)
-  const toggleType = useRecoilValue(selectedToggleState);
+  const [toggle, setToggle] = useRecoilState(toggleState)
   const [typeFilter, setTypeFilter] = useRecoilState(typeFilterState);
   const [filteredTxHistory, setFilteredTxHistory] = useState(txHistory);
 
@@ -56,6 +56,10 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   useEffect(() => {
     setTypeFilter('All')
   }, [])
+
+  useEffect(() => {
+    account ? setToggle('My') : setToggle('All')
+  }, [account])
   
   useEffect(() => {
     if (txHistory) {
@@ -64,7 +68,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
         : txHistory.filter((history: any) => {
           return history.eventName === txTypeValue
         })
-      const toggleFilter = toggleType === 'All' 
+      const toggleFilter = toggle === 'All' 
         ? filtered
         : filtered.filter((history: any) => {
           return history.sender.toLowerCase() === account?.toLowerCase()
@@ -73,7 +77,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
       setFilteredTxHistory(toggleFilter)
     }
 
-  }, [txTypeValue, toggleType, data?.candidateContract])
+  }, [txTypeValue, toggle, data?.candidateContract])
 
   const candidateAmount = data?.stakeOfCandidate ? convertNumber({
     amount: data?.stakeOfCandidate,

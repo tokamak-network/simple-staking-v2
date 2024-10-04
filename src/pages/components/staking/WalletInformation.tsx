@@ -3,26 +3,18 @@ import React, { FC, useState, useCallback } from 'react';
 // import {LoadingComponent} from 'components/Loading';
 
 import { useEffect } from 'react';
-
-import { LoadingDots } from 'common/Loader/LoadingDots';
 import useUserBalance from '@/hooks/useUserBalance';
 import { useWeb3React } from '@web3-react/core';
 import { usePendingUnstaked } from '@/hooks/staking/usePendingUnstaked';
-import StakeModal from './StakeModal';
 import { ModalType } from '@/types/modal';
 import { modalData, modalState } from '@/atom/global/modal';
 import { useRecoilState } from 'recoil';
-import CalculatorModal from './CalculatorModal';
-import { useUserHistory } from '@/hooks/wallet/useUserHIstory';
 import { useWithdrawable } from '../../../hooks/staking/useWithdrawable';
 import { convertNumber } from '@/components/number';
 import { getOldLayerAddress } from '@/components/getOldLayerAddress';
 import { StakeModalDataType } from "types"
-import WalletModal from '@/common/modal/Wallet';
 import useModal from '@/hooks/useModal';
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
-import WithdrawModal from '../../../common/modal/withdraw/WithdrawModal';
-import ClaimModal from '@/common/modal/L2Info/ClaimModal';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -281,10 +273,6 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           </Flex>
         }
       </Box>
-      {/* <StakeModal />
-      <WithdrawModal />
-      <WalletModal />
-      <CalculatorModal /> */}
     </Container>
   );
 };

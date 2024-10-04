@@ -22,6 +22,7 @@ import { Pagination } from '@/common/table/Pagination';
 import { useRecoilState } from 'recoil';
 import { toggleState } from '@/atom/staking/toggle';
 import HistoryTableRow from '@/common/table/staking/HIstoryTableRow';
+import { useWeb3React } from '@web3-react/core';
 
 type HistoryTableProps = {
   columns: Column[];
@@ -48,7 +49,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
     nextPage,
     state: {pageIndex, pageSize},
   } = useTable(
-    {columns, data, initialState: {pageIndex: 0}},
+    {columns, data, initialState: {pageIndex: 0, pageSize: 3}},
     useSortBy,
     useExpanded,
     usePagination,
@@ -56,21 +57,21 @@ export const HistoryTable: FC<HistoryTableProps> = ({
   const [currentPage, setCurrentPage] = useState(0)
   const [buttonClick, setButtonClick] = useState(Boolean)
   const [toggle, setToggle] = useRecoilState(toggleState)
+
+  const { account } = useWeb3React()
   
   const theme = useTheme();
 
   useEffect(() => {
-    setPageSize(3)
-  },[setPageSize])
+    if (account) {
+      setToggle('My')
+    }
+  }, [])
 
   useEffect(() => {
     if (pageIndex % 4 === 0 && buttonClick) setCurrentPage(pageIndex)
     if (pageIndex % 4 === 3 && !buttonClick) setCurrentPage(pageIndex - 3)
   }, [buttonClick, pageIndex])
-
-  useEffect(() => {
-
-  }, [])
 
   const goPrevPage = () => {
     previousPage();
@@ -112,18 +113,23 @@ export const HistoryTable: FC<HistoryTableProps> = ({
               Commit count: {data.length}
             </Text> : 
             <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
-            <FormLabel color={'#828d99'} fontSize={'11px'} mt={'7px'}>
-              {toggle} Tx Hash
-            </FormLabel>
-            <Switch 
-              colorScheme={'green'} 
-              onChange={() =>
-                toggle === 'All'
-                  ? setToggle('My')
-                  : setToggle('All')
+              {
+                account ?
+                <Flex>
+                  <FormLabel color={'#828d99'} fontSize={'11px'} mt={'7px'}>
+                    {toggle} Tx Hash
+                  </FormLabel>
+                    <Switch 
+                      colorScheme={'green'} 
+                      onChange={() =>
+                        toggle === 'All'
+                          ? setToggle('My')
+                          : setToggle('All')
+                      }
+                    /> 
+                </Flex> : ""
               }
-            /> 
-          </FormControl>  
+            </FormControl>  
           }
         </Flex>
       
