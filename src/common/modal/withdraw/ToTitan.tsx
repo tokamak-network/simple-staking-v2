@@ -101,6 +101,7 @@ export const ToTitan = (args: ToTitanProps) => {
       }
     } catch (e) {
       console.log(e)
+      setModalOpen("error")
     }
   }, [DepositManager_CONTRACT, input, selectedModalData, setTx, setTxPending])
   

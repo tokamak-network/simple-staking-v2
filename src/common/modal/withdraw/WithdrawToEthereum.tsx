@@ -130,6 +130,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
       }
     } catch (e) {
       console.log(e);
+      setModalOpen("error")
     }
   }, [DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal]);
 
@@ -138,7 +139,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
       setSelectedMode('Withdraw');
       setIsOpen(true)
       setModalOpen("waiting")
-      
+
       if (selectedModalData && DepositManager_CONTRACT && selectedModalData) {
         const tx =
             selectedModalData.withdrawableLength === '0' 
@@ -159,6 +160,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
       }
     } catch (e) {
       console.log(e);
+      setModalOpen("error")
     }
   }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending]);
 

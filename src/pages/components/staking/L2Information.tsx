@@ -159,6 +159,7 @@ function L2Information({ data }: L2InformationProps) {
 
       } catch (e) {
         console.log(e)
+        // setModalOpen("error")
       }
     }
   }, [bridgeValue, explorerValue, logoValue])

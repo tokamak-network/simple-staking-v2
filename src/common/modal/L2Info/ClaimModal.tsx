@@ -76,6 +76,7 @@ function ClaimModal () {
         }
       } catch (e) {
         console.log(e)
+        setModalOpen("error")
         setTxPending(false);
         setTx(undefined);
       }
