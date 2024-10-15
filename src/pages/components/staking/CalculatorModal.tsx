@@ -15,6 +15,8 @@ import axios from 'axios';
 import { getTotalSupply } from '@/api';
 import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
 import { useDailyStaked } from '@/hooks/home/useDailyStaked';
+import { useKrwPrice } from '../../../hooks/staking/useKRWPrice';
+import { useTONPrice } from '@/hooks/staking/useTONPrice';
 
 function CalculatorModal() {
   const theme = useTheme();
@@ -33,9 +35,10 @@ function CalculatorModal() {
   const [rewardKRW, setRewardKRW] = useState('0.00');
   const [rewardUSD, setRewardUSD] = useState('0.00');
 
-  const { totalStaked, userTotalStaked } = useOperatorList();
   const { userTonBalance } = useUserBalance(account);
   const { dailyStaked } = useDailyStaked();
+  const {} = useKrwPrice()
+  const {tonPriceKRW, tonPriceUSD} = useTONPrice()
 
   const Staked = dailyStaked[0]
     ? convertNumber({
@@ -57,15 +60,15 @@ function CalculatorModal() {
     const inputBalance = Number(input.replace(/,/g, ''));
     const maxCompensate = 26027.39726;
     const pSeigDeduction = 40;
-    const KRW = await axios('https://api.upbit.com/v1/ticker?markets=KRW-TON').then((response: any) => {
-      return JSON.parse(JSON.stringify(response.data).replace(/]|[[]/g, '')).trade_price;
-    });
-    const usdRates = await axios('https://api.frankfurter.app/latest?from=KRW').then((response): any => {
-      //@ts-ignore
-      return response.data.rates.USD;
-    });
+    // const KRW = await axios('https://api.upbit.com/v1/ticker?markets=KRW-TON').then((response: any) => {
+    //   return JSON.parse(JSON.stringify(response.data).replace(/]|[[]/g, '')).trade_price;
+    // });
+    // const usdRates = await axios('https://api.frankfurter.app/latest?from=KRW').then((response): any => {
+    //   //@ts-ignore
+    //   return response.data.rates.USD;
+    // });
     const totalSup = await getTotalSupply();
-    const USD = KRW * usdRates;
+    // const USD = KRW * usdRates;
     if (Staked) {
       const total = Number(Staked.replace(/,/g, '')) + inputBalance;
 
@@ -80,8 +83,11 @@ function CalculatorModal() {
 
       // const roi = returnRate.toLocaleString(undefined, { maximumFractionDigits: 2 });
       const rewardTON = expectedSeig.toLocaleString(undefined, { maximumFractionDigits: 2 });
-      const rewardUSD = (expectedSeig * USD).toLocaleString(undefined, { maximumFractionDigits: 2 });
-      const rewardKRW = (expectedSeig * KRW).toLocaleString(undefined, { maximumFractionDigits: 0 });
+      const rewardUSD = (expectedSeig * tonPriceUSD).toLocaleString(undefined, { maximumFractionDigits: 2 });
+      const rewardKRW = (expectedSeig * tonPriceKRW).toLocaleString(undefined, { maximumFractionDigits: 0 });
+
+      // const rewardUSD = (expectedSeig * USD).toLocaleString(undefined, { maximumFractionDigits: 2 });
+      // const rewardKRW = (expectedSeig * KRW).toLocaleString(undefined, { maximumFractionDigits: 0 });
 
       setRewardKRW(rewardKRW);
       setRewardUSD(rewardUSD);
