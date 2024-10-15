@@ -25,7 +25,6 @@ function CalculatorModal() {
   const { closeModal, isModalLoading, selectedModalData } = useModal();
 
   const [duration, setDuration] = useRecoilState(durationState);
-  // const duration = useRecoilValue(selectedDurationState)
   const input = useRecoilValue(inputBalanceState);
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
 
@@ -37,7 +36,6 @@ function CalculatorModal() {
 
   const { userTonBalance } = useUserBalance(account);
   const { dailyStaked } = useDailyStaked();
-  const {} = useKrwPrice()
   const {tonPriceKRW, tonPriceUSD} = useTONPrice()
 
   const Staked = dailyStaked[0]
@@ -54,7 +52,7 @@ function CalculatorModal() {
     setType('calculate');
     setDuration('1-year');
     closeModal();
-  }, [closeModal, setDuration]);
+  }, [closeModal]);
 
   const calButton = useCallback(async () => {
     const inputBalance = Number(input.replace(/,/g, ''));
@@ -86,14 +84,13 @@ function CalculatorModal() {
 
   const recalcButton = useCallback(() => {
     setType('calculate');
-    setDuration('1-year');
-  }, [setDuration]);
+  }, []);
 
   const toStakeButton = useCallback(async () => {
     setSelectedModal('staking');
     setType('calculate');
     setDuration('1-year');
-  }, [setDuration, setSelectedModal]);
+  }, [setSelectedModal]);
 
   const totalStakedAmount = useMemo(() => {
     //@ts-ignore
