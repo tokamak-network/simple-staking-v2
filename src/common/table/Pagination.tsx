@@ -1,10 +1,6 @@
-import { FC, useState, useEffect } from 'react';
+import { FC } from 'react';
 import {
   Column,
-  useExpanded,
-  usePagination,
-  useTable,
-  useSortBy,
 } from 'react-table';
 import {
   chakra,
