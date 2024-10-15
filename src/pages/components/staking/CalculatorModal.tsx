@@ -58,36 +58,18 @@ function CalculatorModal() {
 
   const calButton = useCallback(async () => {
     const inputBalance = Number(input.replace(/,/g, ''));
-    const maxCompensate = 26027.39726;
-    const pSeigDeduction = 40;
-    // const KRW = await axios('https://api.upbit.com/v1/ticker?markets=KRW-TON').then((response: any) => {
-    //   return JSON.parse(JSON.stringify(response.data).replace(/]|[[]/g, '')).trade_price;
-    // });
-    // const usdRates = await axios('https://api.frankfurter.app/latest?from=KRW').then((response): any => {
-    //   //@ts-ignore
-    //   return response.data.rates.USD;
-    // });
     const totalSup = await getTotalSupply();
-    // const USD = KRW * usdRates;
+    
     if (Staked) {
       const total = Number(Staked.replace(/,/g, '')) + inputBalance;
 
-      const unit = duration === '1-year' ? 365 : duration === '6-month' ? 30 : 7;
-
       const returnRate = calculateRoiBasedonCompound({ totalStakedAmount: total, totalSupply: totalSup, duration });
-
-      const stakedRatio = total / totalSup;
-      const compensatePeraDay = stakedRatio * maxCompensate;
-      const dailyNotMintedSeig = maxCompensate - maxCompensate * stakedRatio;
       const expectedSeig = inputBalance * (returnRate / 100);
 
       // const roi = returnRate.toLocaleString(undefined, { maximumFractionDigits: 2 });
       const rewardTON = expectedSeig.toLocaleString(undefined, { maximumFractionDigits: 2 });
       const rewardUSD = (expectedSeig * tonPriceUSD).toLocaleString(undefined, { maximumFractionDigits: 2 });
       const rewardKRW = (expectedSeig * tonPriceKRW).toLocaleString(undefined, { maximumFractionDigits: 0 });
-
-      // const rewardUSD = (expectedSeig * USD).toLocaleString(undefined, { maximumFractionDigits: 2 });
-      // const rewardKRW = (expectedSeig * KRW).toLocaleString(undefined, { maximumFractionDigits: 0 });
 
       setRewardKRW(rewardKRW);
       setRewardUSD(rewardUSD);
