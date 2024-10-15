@@ -239,7 +239,7 @@ export const Header = () => {
               fontSize={'18px'}
               cursor={"pointer"}
               onMouseEnter={handleMenuButtonhover}
-              // onMouseLeave={()=> setHoverOn(false)}
+              onMouseLeave={()=> setMenuState(false)}
               onMouseDown={handleMenuButtonClick}
               borderBottom={menuState ? "none" : ""}
               onClick={handleMenuButtonClick}
@@ -260,8 +260,9 @@ export const Header = () => {
             </MenuButton>
             <MenuList
               onMouseLeave={() => setMenuState(false)}
+              onMouseEnter={() => setMenuState(true)}
               bg="#fff"
-              mt={"17px"}
+              mt={"-5px"}
               border={"none"}
               fontSize={'13px'}
               fontWeight={'normal'}
