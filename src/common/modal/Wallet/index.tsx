@@ -34,6 +34,7 @@ import Image from 'next/image';
 import copy from "copy-to-clipboard";
 import ACCOUNT_COPY from '@/assets/images/account_copy_icon.png'
 import ETHERSCAN_LINK from '@/assets/images/etherscan_link_icon.png'
+import { REACT_APP_MODE, DEFAULT_NETWORK } from '@/constants/index';
 
 const WALLET_VIEWS = {
   OPTIONS: 'options',
@@ -43,7 +44,7 @@ const WALLET_VIEWS = {
 };
 
 function WalletModal() {
-  const { account, connector, activate, error, active, deactivate } = useWeb3React();
+  const { account, connector, activate, error, active, deactivate, chainId } = useWeb3React();
   const { onCopy } = useClipboard(account as string);
   // @ts-ignore
   const selectedModal = useRecoilValue(selectedModalState);
@@ -115,11 +116,14 @@ function WalletModal() {
     setPendingWallet(connector); // set wallet for pending view
     setWalletView(WALLET_VIEWS.PENDING);
     setAccountValue({ signIn: true });
-
+    
     try {
       connector &&
         activate(connector, undefined, true).catch((error) => {
-          if (error instanceof UnsupportedChainIdError) {
+          if (
+            // error instanceof UnsupportedChainIdError
+            Number(DEFAULT_NETWORK) === chainId
+          ) {
             try {
               activate(connector); // a little janky...can't use setError because the connector isn't set
             } catch {
@@ -131,6 +135,7 @@ function WalletModal() {
         });
     } catch {}
   };
+  // console.log(chainId, DEFAULT_NETWORK)
 
   function formatConnectorName() {
     // @ts-ignore
@@ -305,7 +310,7 @@ function WalletModal() {
             </Flex>
           </ModalBody>
         </ModalContent>
-      ) : error ? (
+      ) : error || Number(DEFAULT_NETWORK) !== chainId ? (
         <ModalContent
           w={'280px'}
           px={'0px'}
@@ -313,11 +318,11 @@ function WalletModal() {
           right={'45px'}
         >
           <ModalHeader>
-            {error instanceof UnsupportedChainIdError ? (
+            {Number(DEFAULT_NETWORK) !== chainId ? (
               <Text>
                 Network not supported.
                 <br />
-                Please change to Mainnet.
+                {`Please change to ${REACT_APP_MODE === 'DEV' ? 'Sepolia' : 'Mainnet'}`}.
               </Text>
             ) : (
               <Text>Error connecting</Text>
