@@ -41,6 +41,7 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
     previousPage,
     nextPage,
     page,
+    gotoPage,
     state: {pageIndex, pageSize},
   } = useTable(
     {columns, data, initialState: {pageIndex: 0}},
@@ -145,6 +146,7 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
               canNextPage={canNextPage}
               pageOptions={pageOptions}
               pageIndex={pageIndex}
+              gotoPage={gotoPage}
             />
           </chakra.tbody>
         </chakra.table>
