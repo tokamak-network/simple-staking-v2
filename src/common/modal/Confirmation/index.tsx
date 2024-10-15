@@ -51,23 +51,25 @@ export default function ConfirmationTX() {
   ]);
 
   return (
-    <Modal isOpen={isOpen} onClose={closeThisModal} closeOnOverlayClick={false}>
+    <Modal isOpen={isOpen} onClose={closeThisModal} closeOnOverlayClick={false} isCentered>
       <ModalOverlay />
       <ModalContent
-        h={"100%"}
+        // h={"100%"}
         bg={"transparent"}
         justifyContent={"center"}
         alignItems={"center"}
-        m={0}
+        w={"254px"}
+        bgColor={"#fff"}
+        borderRadius={"16px"}
         containerProps={{
           zIndex: '2000',
         }}
       >
         <Flex
-          w={"254px"}
+          // w={"254px"}
           // h={"350px"}
-          bgColor={"#fff"}
-          borderRadius={"16px"}
+          
+          
           flexDir={"column"}
           alignItems={"center"}
         >
