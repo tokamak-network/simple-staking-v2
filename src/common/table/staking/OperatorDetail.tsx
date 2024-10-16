@@ -40,7 +40,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
 
   const updateSeig = useCallback(async () => {
     try {
-      if (account && library) {
+      if (account && library && value !== '-') {
         setSelectedMode('Update Seigniorage');
         setIsOpen(true)
         setModalOpen("waiting")
@@ -143,7 +143,8 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
           </Text>
           )
         : title === 'Unclaimed Staking Reward' && 
-          value !== '0.00' && 
+          value !== '0.00' &&
+          value !== '-' &&
           account ?
           <Flex
             fontSize={'11px'}
