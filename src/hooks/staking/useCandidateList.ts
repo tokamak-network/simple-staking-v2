@@ -52,6 +52,9 @@ export function useCandidateList () {
             oldHistory = await getOperatorUserHistory(oldCandidate)
             oldCommitHistory = await getEventByLayer2(oldCandidate, 'Comitted', 1, 300)
           }
+          const candidateStaked = obj.stakedUserList.find((user: any) => user.user.id === obj.candidate);
+          if (candidateStaked) stakeOfCandidate = candidateStaked.stakedAmount
+
           if (
             SeigManager_CONTRACT && 
             DepositManager_CONTRACT && 
@@ -87,7 +90,7 @@ export function useCandidateList () {
                   );
                 }
               }
-              stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate)
+              
               const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract)
               if (oldCandidate) {
                 const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(oldCandidate)

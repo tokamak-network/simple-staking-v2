@@ -28,6 +28,9 @@ export const GET_CANDIDATE = gql`
       stakedUserList: stakedUserList(first:1000, orderBy:stakedAmount, orderDirection: desc) {
         id
         stakedAmount
+        user {
+          id
+        }
       }
       staked: staked(first:1000) {
         id

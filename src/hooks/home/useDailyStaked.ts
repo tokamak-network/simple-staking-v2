@@ -32,7 +32,7 @@ export function useDailyStaked() {
         };
       }
       let filledData = [];
-      if (factories) {
+      if (factories && stakingDayDatas) {
         const totalStakeds = factories[0].totalStaked
         const day = 86400;
         const now = Math.floor(new Date().getTime() / 1000);

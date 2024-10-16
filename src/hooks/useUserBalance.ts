@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { convertNumber } from "utils/number";
 import useCallContract from "hooks/useCallContract";
 import { useBlockNumber } from "./useBlockNumber";
+import { useRecoilState } from "recoil";
+import { txState } from "@/atom/global/transaction";
 
 const useUserBalance = (account: string | null | undefined) => {
   const { library } = useWeb3React();
@@ -11,6 +13,7 @@ const useUserBalance = (account: string | null | undefined) => {
     WTON_CONTRACT,
   } = useCallContract();
   const { blockNumber } = useBlockNumber();
+  const [txPending, setTxPending] = useRecoilState(txState);
 
   const [userTonBalance, setUserTonBalance] = useState<string | undefined>(
     undefined
@@ -66,6 +69,7 @@ const useUserBalance = (account: string | null | undefined) => {
     TON_CONTRACT,
     WTON_CONTRACT,
     library,
+    txPending
     // blockNumber,
   ]);
 
