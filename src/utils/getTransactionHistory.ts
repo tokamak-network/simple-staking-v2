@@ -3,9 +3,9 @@ import { concat } from "@apollo/client";
 
 export function getTransactionHistory (data: any) {
   if (data) {
-    const {staked, unstaked, withdrawal, oldHistory} = data
-    if (staked && unstaked && withdrawal) {
-      let concatData = staked.concat(unstaked).concat(withdrawal)
+    const {staked, unstaked, withdrawal, oldHistory, withdrawL2} = data
+    if (staked && unstaked && withdrawal && withdrawL2) {
+      let concatData = staked.concat(unstaked).concat(withdrawal).concat(withdrawL2)
       if (oldHistory) concatData = concatData.concat(oldHistory)
       const txData = concatData.sort(function (a: any, b: any) {
         return b.timestamp - a.timestamp;

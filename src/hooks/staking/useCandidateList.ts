@@ -18,7 +18,7 @@ import { useGetCandidates } from "../graphql/useGetCandidates";
 
 export function useCandidateList () {
   const [candidateList, setCandidateList] = useState<any[]>([]);
-  const { candidates } = useGetCandidates()
+  const { candidates, loading, error } = useGetCandidates()
 
   const { account, library, chainId } = useWeb3React();
   // const [txPending, ] = useRecoilState(txState);
@@ -31,7 +31,7 @@ export function useCandidateList () {
 
   const [width] = useWindowDimensions();
   const mobile = width && width < 1040;
-
+  // console.log(loading, error)
   useEffect(() => {
     async function fetch () {
       if (candidates) {     

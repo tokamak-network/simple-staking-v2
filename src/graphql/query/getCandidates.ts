@@ -62,6 +62,19 @@ export const GET_CANDIDATE = gql`
           id
         }
       }
+      withdrawL2: withdrawalAndDeposited(first:1000) {
+        id
+        amount
+        timestamp
+        eventName
+        sender
+        transaction {
+          id
+        }
+        candidate {
+          id
+        }
+      }
       asCommit: addedSeig (orderBy: timestamp, orderDirection: desc){
         id
         seigs

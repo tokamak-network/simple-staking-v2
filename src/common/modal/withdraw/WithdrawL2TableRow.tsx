@@ -20,41 +20,44 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
   tonPrice
 }) => {
   const {
-    _amount,
-    l1timeStamp,
-    l2txHash
+    amount,
+    timeStamp,
+    l2txHash,
+    id
   } = cell.row?.original;
   const [duration, setDuration] = useState("0");
 
-  const values = _amount
+  const values = amount
+  console.log(cell.row?.original)
   
   const type = cell.column.id;
-  const usdValue =  ((tonPrice * +values) / Math.pow(10, 18)).toLocaleString(undefined, {maximumFractionDigits: 3})
+  const usdValue =  ((tonPrice * +values) / Math.pow(10, 27)).toLocaleString(undefined, {maximumFractionDigits: 3})
 
   useEffect(() => {
-    if (l2txHash) {
-      setDuration('Withdrawn')
-    } else if (l1timeStamp) {
-      const getDuration = setInterval(() => {
-        const startDate = new Date(Number(l1timeStamp) * 1000);
-        const currentTime = new Date(Date.now());
-        const elapsedTimeInSeconds = differenceInSeconds(
-          currentTime,
-          startDate
-        );
+    setDuration('Withdrawn')
+    // if (l2txHash) {
+    //   setDuration('Withdrawn')
+    // } else if (timeStamp) {
+    //   const getDuration = setInterval(() => {
+    //     const startDate = new Date(Number(timeStamp) * 1000);
+    //     const currentTime = new Date(Date.now());
+    //     const elapsedTimeInSeconds = differenceInSeconds(
+    //       currentTime,
+    //       startDate
+    //     );
         
-        if (elapsedTimeInSeconds > 1000) {
-          setDuration('Failed')
-        } else {
-          const formattedTime = format(
-            new Date(elapsedTimeInSeconds * 1000),
-            "mm:ss"
-          );
-          setDuration(formattedTime);
-        }
-      }, 1000);
-      return () => clearInterval(getDuration);
-    }
+    //     if (elapsedTimeInSeconds > 1000) {
+    //       setDuration('Failed')
+    //     } else {
+    //       const formattedTime = format(
+    //         new Date(elapsedTimeInSeconds * 1000),
+    //         "mm:ss"
+    //       );
+    //       setDuration(formattedTime);
+    //     }
+    //   }, 1000);
+    //   return () => clearInterval(getDuration);
+    // }
   }, []);
 
   // console.log(duration)
@@ -74,7 +77,7 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
           <Text textAlign={'center'} color={'#000000'} >
             {convertNumber({
               amount: values,
-              type: 'wei',
+              type: 'ray',
               localeString: true,
             })} 
           </Text>
@@ -111,7 +114,7 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
             duration === 'Withdrawn' ?
             (
               <Link
-                href={`${TITAN_EXPLORER_LINK}/tx/${l2txHash}`}
+                href={`${ETHERSCAN_LINK}/tx/${id}`}
                 isExternal
                 cursor={'pointer'}
                 _hover={{

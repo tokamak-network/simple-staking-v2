@@ -16,6 +16,7 @@ import useGetTransaction from "@/hooks/staking/useGetTransaction"
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal"
 import NoLOGO from '@/assets/images/modal/gallery.svg'
 import { useIsOperator } from "@/hooks/staking/useIsOperator"
+import { useWithdrawalAndDeposited } from "@/hooks/staking/useWithdrawable"
 
 type ToTitanProps = {
   selectedModalData: StakeModalDataType
@@ -29,6 +30,7 @@ export const ToTitan = (args: ToTitanProps) => {
   const { selectedModalData, closeThisModal } = args
   
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [withdrawTx, setWithdrawTx] = useState<any[]>([]);
   const { account, library } = useWeb3React();
   const [input, setInput] = useRecoilState(inputState);
   const [, setTxPending] = useRecoilState(txState);
@@ -40,6 +42,7 @@ export const ToTitan = (args: ToTitanProps) => {
   const [tx, setTx] = useState();
   const { DepositManager_CONTRACT } = useCallContract();
   // const tData = useGetTransaction();
+  const { request } = useWithdrawalAndDeposited();
 
   const columns = useMemo(
     () => [
@@ -89,6 +92,16 @@ export const ToTitan = (args: ToTitanProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx]);
 
+  useEffect(() => {
+    async function fetch() {
+      if (selectedModalData) {
+        const queryData = await request(selectedModalData.layer2)
+        setWithdrawTx(queryData)
+      }
+    }
+    fetch()
+  }, [])
+
   const withdrawL2 = useCallback(async () => {
     const amount = floatParser(input);
     try {
@@ -115,6 +128,8 @@ export const ToTitan = (args: ToTitanProps) => {
       setModalOpen("error")
     }
   }, [DepositManager_CONTRACT, input, selectedModalData, setTx, setTxPending])
+
+  console.log(withdrawTx)
   
   return (
     <Flex flexDir={'column'}>
@@ -146,11 +161,11 @@ export const ToTitan = (args: ToTitanProps) => {
         </Button>
       </Flex>
       {
-        selectedModalData?.name === 'Titan-sepolia' ?
+        withdrawTx && withdrawTx.length > 0 ?
         <WithdrawL2Table 
           columns={columns}
           // data={tData.depositTxs}
-          data={[]}
+          data={withdrawTx}
         /> : 
         <Flex 
           fontSize={'12px'}
