@@ -104,6 +104,8 @@ const BasicTooltip: React.FC<tooltipProps> = (props) => {
       boxShadow={'0px 4px 4px 0px rgba(0, 0, 0, 0.25)'}
       hasArrow
       isOpen={isLabelOpen}
+      onMouseLeave={() => setIsLabelOpen(false)}
+        onMouseEnter={() =>  setIsLabelOpen(true)}
       border={'0px'}
     >
       <QuestionOutlineIcon
@@ -111,8 +113,8 @@ const BasicTooltip: React.FC<tooltipProps> = (props) => {
         h={"12px"}
         w={"12px"}
         color={'#333'}
-        // onMouseLeave={() => setIsLabelOpen(false)}
-        // onMouseEnter={() =>  setIsLabelOpen(true)}
+        onMouseLeave={() => setIsLabelOpen(false)}
+        onMouseEnter={() =>  setIsLabelOpen(true)}
         onClick={() => tooltipControl()}
       />
     </Tooltip>

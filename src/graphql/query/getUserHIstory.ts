@@ -47,6 +47,19 @@ export const GET_HISTORY = gql`
           blockNumber
         }
       }
+      withdrawL2: withdrawalAndDeposited(orderBy: timestamp, orderDirection: desc) {
+        id
+        amount
+        timestamp
+        eventName
+        sender
+        transaction {
+          id
+        }
+        candidate {
+          id
+        }
+      }
     }
   }
 `;

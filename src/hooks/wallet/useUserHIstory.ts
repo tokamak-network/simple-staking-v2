@@ -26,9 +26,11 @@ export function useUserHistory () {
           myHistory = [...myHistory, ...history]
           return await myHistory
         }))
+
         myHistory = myHistory.sort(function (a: any, b: any) {
           return b.blockNumber - a.blockNumber
         })
+
         if (users[0]) {
           const txData = getTransactionHistory({...users[0], oldHistory: myHistory})
           setUserHistory(txData)

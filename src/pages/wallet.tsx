@@ -14,7 +14,7 @@ function Wallet () {
   const { userHistory } = useUserHistory();
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const { userTotalStaked, userPendingWithdrawal } = useTopCardInfo()
-
+  
   const myTotalStaked = userTotalStaked ? convertNumber({
     amount: userTotalStaked,
     type: 'ray',
@@ -68,11 +68,14 @@ function Wallet () {
           accumulatedReward={''}
         />
         {/* <GraphContainer /> */}
-        <MyHistoryTable 
-          columns={historyColumns}
-          data={userHistory}
-          isLoading={tableLoading}
-        />
+        {
+          userHistory ?
+          <MyHistoryTable 
+            columns={historyColumns}
+            data={userHistory}
+            isLoading={tableLoading}
+          /> : ''
+        }
       </Box>
     </Flex>
   );
