@@ -56,7 +56,7 @@ export function useStakingInformation () {
           title: "Average APY",
           tooltip: "tooltip",
           tooltip2: "",
-          value: `~${dailyStaked[0].roi}`,
+          value: `~${dailyStaked[0].roi * 100}`,
           // dollor: (Total staked + Average APY) * tonPriceUSD,
           unit: '%'
         },

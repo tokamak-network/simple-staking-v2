@@ -116,7 +116,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
               flexDir={'column'}
               w={'210px'}
               borderLeft={'1px solid #f4f6f8'}
-              borderRight={tab === 'l2' ? '1px solid #f4f6f8' : ''}
+              borderRight={label ? '1px solid #f4f6f8' : ''}
             >
               <Flex
                 alignItems={'center'}
@@ -160,7 +160,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
             </Flex>
           }
           {
-            tab === 'l2' ?
+            label ?
             <Flex
               flexDir={'column'}
             >
@@ -209,8 +209,8 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
       fontSize="16px"
       // h={'210px'}
       // maxW={'210px'}
-      minW={tab === 'l2' ? '630px' : '420px'}
-      mr={tab === 'l2' ? '600px' : '390px'}
+      minW={label ? '630px' : '420px'}
+      mr={label ? '500px' : '390px'}
       px={'0px'}
       bgColor={'#fff'}
       boxShadow={'0 2px 6px 0 rgba(61, 73, 93, 0.1)'}
