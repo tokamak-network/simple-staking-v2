@@ -252,33 +252,41 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
             borderBottomRadius="10px"
           >
             <Flex flexDir={'column'}>
-              <Flex flexDir={'row'} minW={'1000px'} justifyContent={'space-between'}>
-                {
-                  candidateAddOn !== null ?
-                  (
-                    <InfoTypeSelector 
-                      tab={tab}
-                      setTab={setTab}
-                    />
-                  ) : ''
-                }
-                {
-                    tab == 'l2' && candidateAddOn !== null ?
-                    <Flex 
-                      justifyContent={'center'}
-                      alignItems={'center'}
-                      fontSize={'13px'}
-                      fontWeight={500}
-                      color={'#304156'}
-                    >
-                      <Flex mr={'6px'}>
-                        L1 Contract address
-                      </Flex>
-                      <ContractAddressInfo 
-                        label={candidateAddOn}
+              <Flex 
+                flexDir={'row'} 
+                minW={'1100px'} 
+                justifyContent={'space-between'}
+                mt={'25px'}
+                // mr={tab === 'staking' ? '50px' : '0px'}
+                pr={'50px'}
+              >
+                <Flex>
+                  {
+                    candidateAddOn !== null ?
+                    (
+                      <InfoTypeSelector 
+                        tab={tab}
+                        setTab={setTab}
                       />
-                    </Flex> : ''
+                    ) : ''
                   }
+                </Flex>
+                <Flex 
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  fontSize={'13px'}
+                  fontWeight={500}
+                  color={'#304156'}
+                >
+                  <Flex mr={'6px'}>
+                    L1 Contract address
+                  </Flex>
+                  <ContractAddressInfo 
+                    label={candidateAddOn}
+                    tab={tab}
+                  />
+                </Flex>
+                
               </Flex>
               {
                 tab === 'l2' && candidateAddOn !== null ? 

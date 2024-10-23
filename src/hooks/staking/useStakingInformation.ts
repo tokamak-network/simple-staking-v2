@@ -38,7 +38,6 @@ export function useStakingInformation () {
   ])
   const { dailyStaked, totalStaked } = useDailyStaked();
 
-
   useEffect(() => {
     async function fetch() {      
       setStakingInfo([
