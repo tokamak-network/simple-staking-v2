@@ -78,7 +78,7 @@ function MobileHeader() {
     },
     {
       name: "Get Help",
-      link: "https://docs.google.com/forms/d/16H_To1WJjIVvdS5h6Ng9rTi2EXZhwgz5Oz4IGOdfdwc/edit"
+      link: "https://docs.google.com/forms/d/e/1FAIpQLSc6pHHABsnIZ2MvcEa57VCtSNTRXHAaFjBLQYf1LbiMB_81OA/viewform"
     }
   ]
 
