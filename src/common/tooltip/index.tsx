@@ -14,11 +14,12 @@ type tooltipProps = {
   placement?: PlacementWithLogical;
   label2?: string | undefined
   types?: string | undefined
+  size?: string
 };
 
 const BasicTooltip: React.FC<tooltipProps> = (props) => {
   const { colorMode } = useColorMode();
-  const { label, label2, placement, types } = props;
+  const { label, label2, placement, types, size } = props;
   // const dropMenuRef = useRef<HTMLDivElement | null>();
   const [isLabelOpen, setIsLabelOpen] = useState(false)
 
@@ -168,8 +169,8 @@ const BasicTooltip: React.FC<tooltipProps> = (props) => {
     >
       <QuestionOutlineIcon
         display={label?.length === 0 ? "none" : ""}
-        h={"12px"}
-        w={"12px"}
+        h={size ? size : "12px"}
+        w={size ? size : "12px"}
         color={'#333'}
         onMouseLeave={() => setIsLabelOpen(false)}
         onMouseEnter={() =>  setIsLabelOpen(true)}

@@ -9,6 +9,7 @@ import { txHashStatus, txState } from "@/atom/global/transaction";
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
 import { ETHERSCAN_LINK } from "@/constants";
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal";
+import BasicTooltip from "@/common/tooltip";
 
 type OperatorDetailProps = {
   title: string; 
@@ -153,7 +154,12 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
             mt={'3px'}
             onClick={()=> updateSeig()}
           >
-            Add to Your Staked
+            <Flex>
+              Update seigniorage
+            </Flex>
+            <Flex ml={'3px'} mt={'3px'}>
+              <BasicTooltip label={'Update the staked balance by for all users staked to this DAO candidate.'} size={'11px'}/>
+            </Flex>
           </Flex> : 
           ''
       }
