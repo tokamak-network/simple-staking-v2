@@ -81,6 +81,62 @@ const BasicTooltip: React.FC<tooltipProps> = (props) => {
       </Text>
     )
   }
+
+  const seigRatioInfo = [
+    {
+      title: 'Staker',
+      ratio: '30%',
+      formular: 'S/T+0.5*(T-S)',
+    },
+    {
+      title: 'DAO',
+      ratio: '20%',
+      formular: '0.1*(T-S)',
+    },
+    {
+      title: 'sTOS holder',
+      ratio: '50%',
+      formular: '0.4*(T-S)',
+    },
+  ]
+
+  const seigPerDay = () => {
+    return (
+      <Flex flexDir={'row'} w={'223px'} justifyContent={'space-between'} p={'3px'}>
+        {
+          seigRatioInfo.map((props: any, index: number) => {
+            return (
+              <Flex
+                key={index}
+                fontWeight={500}
+                fontSize={'12px'}
+                color={'#fff'}
+                lineHeight={'16px'}
+                flexDir={'column'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                maxWidth={'72px'}
+              >
+                <Flex>
+                  {props.title}
+                </Flex>
+                <Flex>
+                  {props.ratio}
+                </Flex>
+                <Flex
+                  fontSize={'10px'}
+                  fontWeight={400}
+                  color={'#ccc'}
+                >
+                  {props.formular}
+                </Flex>
+              </Flex>
+            )
+          })
+        }
+      </Flex>
+    )
+  }
   
   return (
     <Tooltip
@@ -92,7 +148,9 @@ const BasicTooltip: React.FC<tooltipProps> = (props) => {
           ? members()
           : label === 'candidate'
           ? candidate()
-          : plasma() 
+          : label === 'seigPerDay'
+          ? seigPerDay()
+          : label
       }
       borderRadius={"3px"}
       color={'#fff'}

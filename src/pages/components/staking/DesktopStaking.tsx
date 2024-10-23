@@ -12,45 +12,14 @@ import L2Information from "./L2Information";
 import getCircle from "@/common/table/staking/Circle";
 import BasicTooltip from "@/common/tooltip/index";
 import OpearatorInfo from "@/common/Operators";
+import { useStakingInformation } from "@/hooks/staking/useStakingInformation";
+import { StakingInformationTooltip } from "@/common/tooltip/StakingInformationTooltip";
 
 function DesktopStaking () {
 
     const theme = useTheme();
 
-    const columns = useMemo(
-      () => [
-        {
-          Header: 'name',
-          accessor: 'name',
-        },
-        {
-          Header: 'total staked',
-          accessor: 'totalStaked',
-        },
-        {
-          Header: 'commision rate',
-          accessor: 'commisionRate',
-        },
-        {
-          Header: 'your staked',
-          accessor: 'yourStaked',
-        },
-        {
-          // Make an expander cell
-          Header: () => null, // No header
-          id: 'expander', // It needs an ID
-          Cell: ({row}: {row: any}) => (
-            // Use Cell to render an expander for each row.
-            // We can use the getToggleRowExpandedProps prop-getter
-            // to build the expander.
-            <span {...row.getToggleRowExpandedProps()}>
-              {row.isExpanded ? <IconClose /> : <IconOpen />}
-            </span>
-          ),
-        },
-      ],
-      [],
-    );
+   
     const historyColumns = useMemo(
       () => [
         {
@@ -76,6 +45,7 @@ function DesktopStaking () {
       ],
       [],
     );
+    const { stakingInfo } = useStakingInformation();
 
     const [tableLoading, setTableLoading] = useState<boolean>(true);
     const { candidateList } = useCandidateList()
@@ -132,28 +102,51 @@ function DesktopStaking () {
       <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
         <PageHeader title={'DAO Candidates'} subtitle={'Choose a DAO candidate to stake, restake, unstake, or withdraw TON (or WTON).'}/>
         <Box fontFamily={theme.fonts.roboto} overflowX={'hidden'}>
-        <Flex justifyContent={'space-between'} mb={'15px'} ml={'17px'}>
-          <Flex fontSize={'11px'} flexDir={'row'} alignItems={'center'} justifyContent={'start'} w={'1100px'}>
-            {getCircle('member')}
-            <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
-              <Flex mr={'3px'}>
-                DAO Committee Member
-              </Flex>
-              <BasicTooltip 
-                label={'member'} 
-              />
-            </Flex>
-            {getCircle('candidate')}
-            <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
-            <Flex mr={'3px'}>
-                DAO Candidate
-              </Flex>
-              <BasicTooltip 
-                label={'candidate'} 
-              />
+          <Flex justifyContent={'center'}>
+            <Flex w={'538px'} justifyContent={'space-between'} mb={'60px'}>
+              {
+                stakingInfo.map((info: any) => {
+                  const {
+                    title,
+                    tooltip,
+                    value,
+                    unit
+                  } = info
+                  return (
+                    <StakingInformationTooltip 
+                      title={title}
+                      tooltip={tooltip}
+                      value={value}
+                      unit={unit}
+                    />
+                  )
+                })
+              }
+
             </Flex>
           </Flex>
-        </Flex>
+          <Flex justifyContent={'space-between'} mb={'15px'} ml={'17px'}>
+            <Flex fontSize={'11px'} flexDir={'row'} alignItems={'center'} justifyContent={'start'} w={'1100px'}>
+              {getCircle('member')}
+              <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
+                <Flex mr={'3px'}>
+                  DAO Committee Member
+                </Flex>
+                <BasicTooltip 
+                  label={'member'} 
+                />
+              </Flex>
+              {getCircle('candidate')}
+              <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
+              <Flex mr={'3px'}>
+                  DAO Candidate
+                </Flex>
+                <BasicTooltip 
+                  label={'candidate'} 
+                />
+              </Flex>
+            </Flex>
+          </Flex>
           {candidateList.length === 0 ? 
             <Flex justifyContent="center" alignItems={"center"} h='200px'>
               <Spinner size="md" emptyColor="gray.200" color="#2775ff" />

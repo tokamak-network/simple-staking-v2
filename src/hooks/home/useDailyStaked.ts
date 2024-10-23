@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { getDailyStakedTotal, getTotalSupply, getTotalStaked } from '@/api';
-import { useQuery } from '@apollo/client';
-import { GET_GRAPH, GET_FACTORY } from '../../graphql/query/getGraphdata';
 import moment from 'moment';
 import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
 import { useGetFactory, useGetGraphData } from '../graphql/useGetGraphData';
@@ -19,9 +17,9 @@ export function useDailyStaked() {
       const dailyStakedTotal = await getDailyStakedTotal();
       // const totalStakedCurrent: number = await getTotalStaked();
       const totalSup = await getTotalSupply();
-      const stakeTotal = stakingDayDatas;
+      const stakeTotal = factories;
       const totalStake = parseFloat(stakeTotal) / Math.pow(10, 27);
-
+      
       function pushToArray(date: number, stakeAmount: string) {
         const day = new Date(date * 1000);
         const fetchDay = moment(day).utc().format('YYYYMMDD');
@@ -33,7 +31,6 @@ export function useDailyStaked() {
       }
       let filledData = [];
       if (factories && stakingDayDatas) {
-        const totalStakeds = factories[0].totalStaked
         const day = 86400;
         const now = Math.floor(new Date().getTime() / 1000);
         const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day);
