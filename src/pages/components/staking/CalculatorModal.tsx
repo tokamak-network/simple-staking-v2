@@ -72,6 +72,7 @@ function CalculatorModal() {
       const unit = duration === '1-year' ? 365 : duration === '6-month' ? 30 : 7;
 
       const returnRate = calculateRoiBasedonCompound({ totalStakedAmount: total, totalSupply: totalSup, duration });
+      console.log(returnRate)
 
       const stakedRatio = total / totalSup;
       const compensatePeraDay = stakedRatio * maxCompensate;

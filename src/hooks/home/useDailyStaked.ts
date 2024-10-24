@@ -65,6 +65,7 @@ export function useDailyStaked() {
 
       const filteredData = dailyStakedTotal.filter((item: any) => item.fetchDateUTC < 20231024);
       const concatData = setData?.concat(filteredData);
+      
       const graphdata = concatData?.map((item: any, index) => {
         const totalStaked = parseFloat(item.totalSupply) / Math.pow(10, 27);
         let my = Number(1000);
@@ -82,7 +83,8 @@ export function useDailyStaked() {
         const test = calculateRoiBasedonCompound({
           totalStakedAmount: totalStaked, 
           totalSupply: totalSup,
-          duration: '1-year'
+          duration: '1-year',
+          fetchDateUTC: item.fetchDateUTC
         });
 
         let roi = (test/100).toLocaleString(undefined, {
@@ -101,6 +103,6 @@ export function useDailyStaked() {
       setTotalStaked(totalStake);
     }
     fetchData();
-  }, [data, factory]);
+  }, []);
   return { dailyStaked, totalStaked };
 }

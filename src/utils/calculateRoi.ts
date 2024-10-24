@@ -21,12 +21,13 @@ function convertDurationToSec(duration: Duration) {
  * @param totalStakedAmount is total amount being staked for now
  * @param totalSupply is total supply amount of TON
  **/
-export function calculateRoi(totalStakedAmount: number, totalSupply: number) {
+export function calculateRoi(totalStakedAmount: number, totalSupply: number, fetchDateUTC?: number) {
   const seigPerBlock = 3.92;
   const blockNumsPerYear = 2628000;
   const stakedRatio = totalStakedAmount / totalSupply;
-
-  const roi = (seigPerBlock * blockNumsPerYear * (stakedRatio + 0.4 * (1 - stakedRatio))) / totalStakedAmount;
+  
+  const getStakerRatio = fetchDateUTC ? fetchDateUTC > 20241016 ? 0.5 : 0.4 : 0.5
+  const roi = (seigPerBlock * blockNumsPerYear * (stakedRatio + getStakerRatio * (1 - stakedRatio))) / totalStakedAmount;
 
   return roi;
 }
@@ -35,12 +36,13 @@ export function calculateRoiBasedonCompound(params: {
   totalStakedAmount: number;
   totalSupply: number;
   duration: Duration;
+  fetchDateUTC?: number
 }) {
-  const { totalStakedAmount, totalSupply, duration } = params;
+  const { totalStakedAmount, totalSupply, duration, fetchDateUTC } = params;
   //# of compounds per 30 days in a year
   //31536000/60/60/24/30
   const compoundsPerMonth = 12.16666667;
-  const annualAPY = calculateRoi(totalStakedAmount, totalSupply);
+  const annualAPY = calculateRoi(totalStakedAmount, totalSupply, fetchDateUTC);
   const adjustedAPY = annualAPY / compoundsPerMonth;
   const stakeDuration = convertDurationToSec(duration);
 
