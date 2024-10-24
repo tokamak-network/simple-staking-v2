@@ -103,6 +103,6 @@ export function useDailyStaked() {
       setTotalStaked(totalStake);
     }
     fetchData();
-  }, []);
+  }, [data, factory]);
   return { dailyStaked, totalStaked };
 }
