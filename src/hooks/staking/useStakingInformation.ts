@@ -37,7 +37,7 @@ export function useStakingInformation () {
     },
   ])
   const { dailyStaked, totalStaked } = useDailyStaked();
-
+  console.log(dailyStaked[0])
   useEffect(() => {
     async function fetch() {      
       setStakingInfo([
@@ -56,7 +56,7 @@ export function useStakingInformation () {
           title: "Average APY",
           tooltip: "tooltip",
           tooltip2: "",
-          value: `~${dailyStaked[0].roi * 100}`,
+          value: `~${dailyStaked[0] ? dailyStaked[0].roi : 0.00}`,
           // dollor: (Total staked + Average APY) * tonPriceUSD,
           unit: '%'
         },
@@ -71,7 +71,7 @@ export function useStakingInformation () {
       ])
     }
     fetch()
-  }, [totalStaked])
+  }, [totalStaked, dailyStaked])
   
   return { 
     stakingInfo

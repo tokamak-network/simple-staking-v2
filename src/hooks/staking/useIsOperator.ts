@@ -25,11 +25,13 @@ export function useIsOperator (layer2: string | undefined) {
       if (CandidateAddOn_CONTRACT && account && layer2) {
         try {
           const operatorAddress = await CandidateAddOn_CONTRACT.operator()
+          console.log(operatorAddress)
           const OperatorManager_CONTRACT = await getContract(operatorAddress, OperatorManager, library, account)
           if (OperatorManager_CONTRACT && WTON_CONTRACT && SeigManager_CONTRACT) {
             const manager = await OperatorManager_CONTRACT.manager()
             const checkIsOperator = manager.toLowerCase() === account.toLowerCase()
-            const l2Info = await OperatorManager_CONTRACT.l2Info()
+            console.log(OperatorManager_CONTRACT)
+            
             const bridgeType = await OperatorManager_CONTRACT.checkL1Bridge()
             
             const blockNumber = await library.getBlockNumber();
@@ -50,10 +52,10 @@ export function useIsOperator (layer2: string | undefined) {
               explorer: "",
               logo: ""
             }
-            
+            console.log(manager)
             setOperatorManger(operatorAddress)
             setIsOperator(checkIsOperator !== undefined ? checkIsOperator : false);
-            setL2Infos(l2Info === '' ? infoType : JSON.parse(l2Info))
+            // setL2Infos(l2Info === '' ? infoType : JSON.parse(l2Info))
             setBridgeTypes(bridgeType._type)
             setManagers(manager)
           }
@@ -65,5 +67,5 @@ export function useIsOperator (layer2: string | undefined) {
     fetch()
     
   }, [CandidateAddOn_CONTRACT, account])
-  return { isOperator, l2Infos, bridgeTypes, operatorManager, managers, claimable }
+  return { isOperator, bridgeTypes, operatorManager, managers, claimable }
 }

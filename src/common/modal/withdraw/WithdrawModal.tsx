@@ -39,13 +39,13 @@ function WithdrawModal () {
   const [txPending, ] = useRecoilState(txState);
 
   const [logo, setLogo] = useState<string>('')
-  const { l2Infos } = useIsOperator(selectedModalData?.layer2)
+  // const { l2Infos } = useIsOperator(selectedModalData?.layer2)
   
-  useEffect(() => {
-    if (l2Infos) {
-      setLogo(l2Infos.logo)
-    }
-  }, [l2Infos])
+  // useEffect(() => {
+  //   if (l2Infos) {
+  //     setLogo(l2Infos.logo)
+  //   }
+  // }, [l2Infos])
 
   const closeThisModal = useCallback(() => {
     setInput('');
@@ -62,8 +62,8 @@ function WithdrawModal () {
     type === 'main' 
     ? setModalName('Withdraw')
     : type === 'ethereum'
-    ? setModalName('Withdraw to Ethereum')
-    : setModalName(`Withdraw to ${selectedModalData?.name}`)
+    ? setModalName('Ethereum')
+    : setModalName(`${selectedModalData?.name}`)
   }, [type])
 
   useEffect(() => {
@@ -126,9 +126,10 @@ function WithdrawModal () {
                   }
                   <ModalHeader
                     main={modalName}
-                    sub={''}
+                    sub={'DAO Candidates:'}
                     closeThisModal={closeThisModal}
                     type={number}
+                    sub2={selectedModalData.name}
                   />
                 </Flex>
                 <Flex bgColor={'#f4f6f8'} h={'1px'}  w={'100%'} />
@@ -144,7 +145,7 @@ function WithdrawModal () {
                       /> : ''
                     }
                     <WithdrawType 
-                      name={'Withdraw to Ethereum'}
+                      name={'Ethereum'}
                       content={'Staked TON can be unstaked and can be withdrawn after 93,046 blocks from unstaking (~14 days).'}
                       src={ETHEREUM.src}
                       onClick={() => setType('ethereum')}
@@ -152,7 +153,7 @@ function WithdrawModal () {
                     {
                       selectedModalData.isL2 ?
                       <WithdrawType 
-                        name={`Withdraw to ${selectedModalData.name}`}
+                        name={'L2'}
                         content={'Instead of withdrawing to Ethereum, staked TON can be withdrawn to this layer as TON. By withdrawing to this layer, TON can be used right away without needing to wait for 14 days.'}
                         src={logo ? logo : NoLOGO.src}
                         onClick={() => setType('titan')}

@@ -179,7 +179,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           color={'#3e495c'}
           // w={'110px'}
         >
-          Withdraw history
+          Pending Withdrawal
         </Flex>
         <FormControl
           display={'flex'}
@@ -224,7 +224,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           color={'#808992'}
           mb={'5px'}
         >
-          Total amount of {
+          Total amount to {
             toggle === 'Withdraw' ?
             <Flex color={'#2a72e5'} mx={'3px'}>
               Withdraw

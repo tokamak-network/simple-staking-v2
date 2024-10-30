@@ -20,6 +20,7 @@ import { txState } from '@/atom/global/transaction';
 import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
 import { floatParser } from '../../../utils/number';
 import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
+import BasicTooltip from '@/common/tooltip';
 
 type L2InformationProps = {
   data: any;
@@ -52,22 +53,22 @@ function L2Information({ data }: L2InformationProps) {
   
   const { 
     isOperator, 
-    l2Infos, 
+    
     bridgeTypes, 
     operatorManager,
     managers,
     claimable
   } = useIsOperator(data?.candidateContract)
-  
+
   const lockedInBridge = useL2CandidateInfo(data?.candidateAddOn)
   
   useEffect(() => {
-    if (l2Infos) {
-      setBridgeValue(l2Infos.bridge)
-      setExplorerValue(l2Infos.explorer)
-      setLogoValue(l2Infos.logo)
-    }
-  }, [l2Infos])
+    // if (l2Infos) {
+      setBridgeValue('')
+      setExplorerValue('')
+      setLogoValue('')
+    // }
+  }, [])
 
   console.log(data)
 
@@ -181,8 +182,15 @@ function L2Information({ data }: L2InformationProps) {
     >
       <Flex flexDir={'column'} mt={'36px'}>
         <Flex fontSize={'18px'} fontWeight={500} color={'#2a72e5'} flexDir={'row'} mb={'18px'}>
-          <Flex>
-            L2 Info
+          <Flex flexDir={'row'}>
+            <Flex>
+              Information
+            </Flex>
+            <Flex mt={'8px'} ml={'3px'}>
+              <BasicTooltip 
+                label={'This data is provided by the L2 operator and may not be accurate. Please conduct your own research.'}
+              />
+            </Flex>
           </Flex>
           <Flex
             ml={'12px'}
@@ -251,11 +259,11 @@ function L2Information({ data }: L2InformationProps) {
               type={'string'} 
             />
           }
-          <L2InfoContent title={'Bridge'} content={l2Infos?.bridge} type={'bridge'} editStat={editStat} />
-          <L2InfoContent title={'Block explorer'} content={l2Infos?.explorer} type={'explorer'} editStat={editStat} />
+          <L2InfoContent title={'Bridge'} content={''} type={'bridge'} editStat={editStat} />
+          <L2InfoContent title={'Block explorer'} content={''} type={'explorer'} editStat={editStat} />
           {
             isOperator ?
-            <L2InfoContent title={'L2 Logo'} content={l2Infos?.logo} type={'logo'} editStat={editStat} /> 
+            <L2InfoContent title={'L2 Logo'} content={''} type={'logo'} editStat={editStat} /> 
             : ''
           }
         </Flex>

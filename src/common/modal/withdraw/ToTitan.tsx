@@ -67,13 +67,13 @@ export const ToTitan = (args: ToTitanProps) => {
   }
 
   const [logo, setLogo] = useState<string>('')
-  const { l2Infos } = useIsOperator(selectedModalData?.layer2)
+  // const { l2Infos } = useIsOperator(selectedModalData?.layer2)
   
-  useEffect(() => {
-    if (l2Infos) {
-      setLogo(l2Infos.logo)
-    }
-  }, [l2Infos])
+  // useEffect(() => {
+  //   if (l2Infos) {
+  //     setLogo(l2Infos.logo)
+  //   }
+  // }, [l2Infos])
 
   useEffect(() => {
     async function waitReceipt() {

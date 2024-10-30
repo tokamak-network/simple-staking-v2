@@ -83,13 +83,13 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
   const stakedId = candidateContract
 
   const [logo, setLogo] = useState<string>('')
-  const { l2Infos } = useIsOperator(candidateAddOn?.id)
+  // const { l2Infos } = useIsOperator(candidateAddOn?.id)
   
-  useEffect(() => {
-    if (l2Infos) {
-      setLogo(l2Infos.logo)
-    }
-  }, [l2Infos])
+  // useEffect(() => {
+  //   if (l2Infos) {
+  //     setLogo(l2Infos.logo)
+  //   }
+  // }, [l2Infos])
 
   const clickOpen = (candidateContract: string, index: number) => {
     setIsOpen(candidateContract);

@@ -262,7 +262,7 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
             color={'#808992'}
             mb={'5px'}
           >
-            Total amount of {
+            Total amount to {
               toggle === 'Withdraw' ?
               <Flex color={'#2a72e5'} mx={'3px'}>
                 Withdraw

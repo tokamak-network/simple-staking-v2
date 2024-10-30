@@ -35,7 +35,7 @@ export const WithdrawTableHeader: FC<WithdrawTableHeaderProps> = ({
         <chakra.th
           w={getColumnWidthWithdraw('status')}
         >
-          Status
+          Withdrawn
         </chakra.th>
       </chakra.tr>
     </chakra.thead>

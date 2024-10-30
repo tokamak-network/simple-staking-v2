@@ -37,7 +37,7 @@ export const WithdrawTypeSelector = (args: WithdrawTypeSelectorProps) => {
         onClick={() => setTab('unstake')}
         cursor={'pointer'}
       >
-        Unstake
+        Step 1: Unstake
       </Flex>
       <Flex
         w={mobile ? '50%' :'102px'}
@@ -51,7 +51,7 @@ export const WithdrawTypeSelector = (args: WithdrawTypeSelectorProps) => {
         onClick={() => setTab('withdraw')}
         cursor={'pointer'}
       >
-        Withdraw
+        Step 2: Withdraw
       </Flex>
     </Flex>
   )

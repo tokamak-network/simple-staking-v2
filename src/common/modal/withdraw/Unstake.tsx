@@ -121,7 +121,7 @@ export const Unstake = (args: UnstakeProps) => {
         handleCheckboxChange={handleCheckboxChange}
         isChecked={isChecked}
       />
-      <Flex justifyContent={'center'}>
+      <Flex justifyContent={'center'} flexDir={'column'}>
         <Button
           {...btnStyle.btnAble()}
           w={'130px'}
@@ -135,6 +135,15 @@ export const Unstake = (args: UnstakeProps) => {
         >
           Unstake
         </Button>
+        <Flex
+          fontSize={'14px'}
+          fontWeight={500}
+          color={'#3e495c'}
+          // w={'110px'}
+          mb={'12px'}
+        >
+          Pending Withdrawal
+        </Flex>
       </Flex>
       {
         requests ?
