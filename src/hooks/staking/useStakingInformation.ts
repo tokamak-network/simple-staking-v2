@@ -1,3 +1,6 @@
+import { getTotalSupply } from '@/api';
+import { calculateRoiBasedonCompound } from '@/components/calculateRoi';
+import { duration } from 'moment';
 import { useState, useEffect } from 'react';
 import { useDailyStaked } from '../home/useDailyStaked';
 
@@ -13,6 +16,7 @@ type SupplyValueProps = {
 }
 
 export function useStakingInformation () {
+
   const [stakingInfo, setStakingInfo] = useState<SupplyValueProps[]>([
     {
       title: "Total staked",
@@ -36,10 +40,16 @@ export function useStakingInformation () {
       unit: 'TON per day'
     },
   ])
-  const { dailyStaked, totalStaked } = useDailyStaked();
-  console.log(dailyStaked[0])
+  const {totalStaked } = useDailyStaked();
+  
   useEffect(() => {
-    async function fetch() {      
+    async function fetch() {  
+      const totalSup = await getTotalSupply();  
+      const roi = calculateRoiBasedonCompound({
+        totalStakedAmount: totalStaked,
+        totalSupply: totalSup,
+        duration: '1-year'
+      })
       setStakingInfo([
         {
           title: "Total staked",
@@ -56,7 +66,7 @@ export function useStakingInformation () {
           title: "Average APY",
           tooltip: "tooltip",
           tooltip2: "",
-          value: `~${dailyStaked[0] ? dailyStaked[0].roi : 0.00}`,
+          value: `~${roi ? roi.toLocaleString(undefined, {maximumFractionDigits: 2, minimumFractionDigits: 2}) : 0.00}`,
           // dollor: (Total staked + Average APY) * tonPriceUSD,
           unit: '%'
         },
@@ -71,7 +81,7 @@ export function useStakingInformation () {
       ])
     }
     fetch()
-  }, [totalStaked, dailyStaked])
+  }, [totalStaked])
   
   return { 
     stakingInfo
