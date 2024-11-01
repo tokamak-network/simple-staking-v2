@@ -31,6 +31,7 @@ import { getContract } from '@/components/getContract';
 import Candidate from 'services/abi/Candidate.json';
 import { StakeModalComponentType } from 'types'
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from '@/atom/global/modal';
+import { TokenTypeSelector } from '@/common/selector/TokenType';
 
 function StakeModal() {
   const theme = useTheme();
@@ -367,70 +368,19 @@ function StakeModal() {
                   <Flex
                     w={'350px'}
                     borderY={'1px'}
-                    py={'14px'}
+                    pb={'14px'}
                     borderColor={'#f4f6f8'}
                     flexDir={'column'}
                     alignItems={'center'}
                   >
-                    {
-                      selectedModal === 'staking' ?
                       <Flex
                         flexDir={'column'}
                       >
-                        <Flex
-                          fontSize={'12px'}
-                          fontWeight={500}
-                          color={'#808992'}
-                          justifyContent={'center'}
-                        >
-                          Select token to stake
-                        </Flex>
-                        <RadioGroup 
-                          onChange={(value: 'ton' | 'wton') => setTokenType(value)} 
-                          value={tokenType}
-                        >
-                          <Flex alignItems={'row'} my={'11px'} justifyContent={'center'}>
-                            <Radio
-                              value="ton"
-                              h={'20px'}
-                              mr={'6px'}
-                              bgColor={'#fff'}
-                              border={'solid 2px #c6cbd9'}
-                              isChecked={true}
-                            >
-                              <Flex
-                                fontSize={'16px'}
-                                fontWeight={500}
-                                color={'#3d495d'}
-                                flexDir={'row'}
-                                alignItems={'center'}
-                              >
-                                TON 
-                              </Flex>
-                            </Radio>
-                            <Radio
-                              value="wton"
-                              h={'20px'}
-                              mr={'6px'}
-                              bgColor={'#fff'}
-                              border={'solid 2px #c6cbd9'}
-                              isChecked={false}
-                            >
-                              <Flex
-                                fontSize={'16px'}
-                                fontWeight={500}
-                                color={'#3d495d'}
-                                flexDir={'row'}
-                                alignItems={'center'}
-                              >
-                                WTON 
-                              </Flex>
-                            </Radio>
-                          </Flex>
-                        </RadioGroup>
-                      </Flex> :
-                      ''
-                    }
+                        <TokenTypeSelector 
+                          setTab={setTokenType}
+                          tab={tokenType}
+                        />
+                      </Flex>
                     <Flex 
                       h={selectedModal === 'withdraw' || selectedModal === 'restaking' ? '' : '84px'} 
                       alignItems={'center'} 
@@ -463,126 +413,6 @@ function StakeModal() {
                           />
                       )}
                     </Flex>
-                    {selectedModal === 'withdraw' ? (
-                      <Flex w={'100%'} flexDir={'column'} alignItems={'center'} mb={'10px'} mt={'30px'}>
-                        {/* <WithdrawModalBody 
-                          title={modalComponent.balanceInfo1} 
-                          value={modalComponent.balance1} 
-                        /> */}
-                        {/* <WithdrawModalBody title={modalComponent.balanceInfo2} value={modalComponent.balance2} /> */}
-                        <Flex flexDir={'column'} alignItems={'center'}>
-                          <Flex fontSize={'13px'} fontWeight={500} color={'#808992'}>
-                            {modalComponent.balanceInfo2}
-                          </Flex>
-                          {
-                            modalComponent.balance2 === '0.00' ? (
-                            <Flex mt={'15px'}>
-                              <Text fontSize={'16px'} fontWeight={500} color={'#3d495d'}>
-                                {`${modalComponent.balance3} ${tokenType === 'ton' ? `TON` : `WTON`}`}
-                              </Text>
-                            </Flex>
-                            ) : (
-                            <RadioGroup 
-                              onChange={(value: 'old' | 'new') => withdrawSetting(value)} 
-                              value={withdrawType}
-                            >
-                              <Flex alignItems={'center'} justifyContent={'center'} mt={'11px'}>
-                                <Radio 
-                                  value="new" 
-                                  h={'20px'} 
-                                  mr={'6px'} 
-                                  bgColor={'#fff'} 
-                                  border={'solid 2px #c6cbd9'} 
-                                  isChecked={true}
-                                >
-                                  <Text fontSize={'16px'} fontWeight={500} color={'#3d495d'}>
-                                    {`${modalComponent.balance3} ${tokenType === 'ton' ? `TON` : `WTON`}`}
-                                  </Text>
-                                </Radio>
-                              </Flex>
-                              <Flex alignItems={'center'} mt={'11px'} justifyContent={'center'}>
-                                <Radio
-                                  value="old"
-                                  h={'20px'}
-                                  mr={'6px'}
-                                  bgColor={'#fff'}
-                                  border={'solid 2px #c6cbd9'}
-                                >
-                                  <Flex
-                                    fontSize={'16px'}
-                                    fontWeight={500}
-                                    color={'#3d495d'}
-                                    flexDir={'row'}
-                                    alignItems={'center'}
-                                  >
-                                    <Text mr={'3px'}>{`${modalComponent.balance2} ${tokenType === 'ton' ? `TON` : `WTON`}`}</Text>
-                                    <Text fontSize={'12px'} color={'#2a72e5'}>
-                                      (prior to patch)
-                                    </Text>
-                                  </Flex>
-                                </Radio>
-                              </Flex>
-                            </RadioGroup>
-                          )}
-                        </Flex>
-                        <Flex
-                          flexDir={'column'}
-                          alignItems={'center'}
-                          mt={'30px'}
-                        >
-                          <Flex
-                            fontSize={'12px'}
-                            fontWeight={500}
-                            color={'#808992'}
-                          >
-                            Withdraw as
-                          </Flex>
-                          <RadioGroup 
-                            onChange={(value: 'ton' | 'wton') => setTokenType(value)} 
-                            value={tokenType}
-                          >
-                            <Flex alignItems={'row'} my={'11px'} justifyContent={'center'}>
-                              <Radio
-                                value="ton"
-                                h={'20px'}
-                                mr={'6px'}
-                                bgColor={'#fff'}
-                                border={'solid 2px #c6cbd9'}
-                                isChecked={true}
-                              >
-                                <Flex
-                                  fontSize={'16px'}
-                                  fontWeight={500}
-                                  color={'#3d495d'}
-                                  flexDir={'row'}
-                                  alignItems={'center'}
-                                >
-                                  TON 
-                                </Flex>
-                              </Radio>
-                              <Radio
-                                value="wton"
-                                h={'20px'}
-                                mr={'6px'}
-                                bgColor={'#fff'}
-                                border={'solid 2px #c6cbd9'}
-                                isChecked={false}
-                              >
-                                <Flex
-                                  fontSize={'16px'}
-                                  fontWeight={500}
-                                  color={'#3d495d'}
-                                  flexDir={'row'}
-                                  alignItems={'center'}
-                                >
-                                  WTON 
-                                </Flex>
-                              </Radio>
-                            </Flex>
-                          </RadioGroup>
-                        </Flex>
-                      </Flex>
-                    ) : (
                       <Flex 
                         w={'100%'} 
                         flexDir={'column'} 
@@ -595,18 +425,6 @@ function StakeModal() {
                             modalComponent.balanceInfo
                           }
                         </Text>
-                        {
-                          selectedModal === 'unstaking' &&
-                          
-                          account?.toLowerCase() === selectedModalData.candidate.toLowerCase() ? 
-                          (
-                            <Text fontSize={'11px'} fontWeight={'normal'} color={'#86929d'}>
-                              (Operator's Minimum Staked Balance)
-                            </Text>
-                          ) : (
-                            ''
-                          )
-                        }
                         <Text mt={'5px'}>
                           {
                             selectedModal === 'staking' && tokenType === 'wton' ? 
@@ -614,18 +432,7 @@ function StakeModal() {
                             `${modalComponent.balance} TON`
                           } 
                         </Text>
-                        {
-                          
-                          selectedModal === 'unstaking' && account.toLowerCase() === selectedModalData.candidate ? (
-                            <Text fontSize={'13px'} color={'#808992'} fontWeight={500}>
-                              (1,000.1 TON)
-                            </Text>
-                          ) : (
-                            ''
-                          )
-                        }
                       </Flex>
-                    )}
                   </Flex>
                 ) : (
                   ''
