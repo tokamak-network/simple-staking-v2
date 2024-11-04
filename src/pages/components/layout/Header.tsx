@@ -16,7 +16,7 @@ import Image from 'next/image';
 // import {NavLink, RouteMatch} from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import trimAddress from '@/utils/trimAddress';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useModal from '@/hooks/useModal';
 import WalletModal from '@/common/modal/Wallet/index';
 import { useRouter } from "next/router";
@@ -27,6 +27,7 @@ import TOKAMAK_ICON from '@/assets/images/tnss_bi.png';
 import { useRecoilValue } from 'recoil';
 import { txStatusState } from '@/atom/global/transaction';
 import arrow from "assets/images/smallArrow.svg";
+import { DEFAULT_NETWORK } from '../../../constants/index';
 
 type MenuLinksProps = {
   walletopen: () => void;
@@ -102,7 +103,15 @@ const NavItem = () => {
 const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
   const theme = useTheme();
   const txPending = useRecoilValue(txStatusState);
+  const { chainId, deactivate } = useWeb3React()
 
+  useEffect(() => {
+    if (Number(DEFAULT_NETWORK) !== chainId) {
+      deactivate()
+    } 
+    console.log(account)
+  }, [chainId])
+  
   return (
     <Box display={{ base:'none', md: 'block' }} flexBasis={{ base: '100%', md: 'auto' }}>
       <Stack
@@ -143,7 +152,7 @@ const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
           zIndex={100}
           _hover={{}}
         >
-          {account ? (
+          {account && Number(DEFAULT_NETWORK) === chainId ? (
             txPending === true ? (
               <Text fontFamily={theme.fonts.roboto} fontWeight={100} fontSize={'14px'} ml={'18px'} pt={'1px'}>
                 Tx PENDING

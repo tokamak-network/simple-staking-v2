@@ -120,10 +120,16 @@ function ClaimModal () {
                   <Flex
                     fontWeight={500}
                     color={'#808992'}
+                    fontSize={'12px'}
                   >
-                    Operator Manager Address
+                    Sequencer seigniorage 
+                    {
+                      selectedModalData.name === 'Claim' ?
+                      ''
+                      : ' + Unclaimed Staking Reward'
+                    }
                   </Flex>
-                  <Flex
+                  {/* <Flex
                     color={'#2a72e5'}
                     fontWeight={500}
                     mb={'9px'}
@@ -137,17 +143,18 @@ function ClaimModal () {
                         dots:' ...'
                       }) : ''
                     }
-                  </Flex>
+                  </Flex> */}
                   <Flex
                     fontWeight={500}
-                    fontSize={'21px'}
                     color={'#3e495c'}
+                    fontSize={'13px'}
                   >
+                    {selectedModalData.claimable} TON 
                     {
                       selectedModalData.name === 'Claim' 
-                      ? selectedModalData.claimable 
-                      : selectedModalData.expectedSeig
-                    } TON
+                      ? '' 
+                      : ` + ${selectedModalData.expectedSeig} TON`
+                    } 
                   </Flex>
                   <Flex 
                     mt={'39px'}
@@ -158,7 +165,7 @@ function ClaimModal () {
                     {
                       selectedModalData.name === 'Claim'
                       ? <Flex>
-                        Will transfer 
+                        Claim
                         <span 
                           style={{
                             marginLeft:'3px',
@@ -171,7 +178,7 @@ function ClaimModal () {
                       </Flex>
                       : 
                       <Flex>
-                        Will stake 
+                        Stake 
                         <span 
                           style={{
                             marginLeft:'3px',
@@ -191,10 +198,12 @@ function ClaimModal () {
                     color={'#808992'}
                     fontWeight={500}
                   >
-                    {'to'} 
+                    {selectedModalData.name === 'Claim'
+                      ? 'to' : 'using the'} 
                     <span 
                       style={{
                         marginLeft:'3px',
+                        marginRight:'3px',
                         color: '#3E495C',
                         fontWeight: 600
                       }}
@@ -209,6 +218,7 @@ function ClaimModal () {
                           }) : ''
                       }
                     </span>
+                    account
                   </Flex>
                 </Flex>
                 <Flex bgColor={'#f4f6f8'} h={'1px'}  w={'100%'} />

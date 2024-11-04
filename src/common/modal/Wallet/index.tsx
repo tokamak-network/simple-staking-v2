@@ -125,7 +125,7 @@ function WalletModal() {
             Number(DEFAULT_NETWORK) === chainId
           ) {
             try {
-              activate(connector); // a little janky...can't use setError because the connector isn't set
+              // activate(connector); // a little janky...can't use setError because the connector isn't set
             } catch {
               // activate(trazorConnector);
             }
@@ -238,7 +238,7 @@ function WalletModal() {
       );
     });
   };
-
+  
   return (
     <Modal isOpen={selectedModal === 'wallet'} onClose={closeModal}>
       {walletView === WALLET_VIEWS.ACCOUNT && account ? (
@@ -303,6 +303,7 @@ function WalletModal() {
                 onClick={() => {
                   deactivate();
                   closeModal();
+                  setAccountValue({ signIn: false })
                 }}
               >
                 Logout
@@ -310,7 +311,7 @@ function WalletModal() {
             </Flex>
           </ModalBody>
         </ModalContent>
-      ) : error || Number(DEFAULT_NETWORK) !== chainId ? (
+      ) : error || (chainId && Number(DEFAULT_NETWORK) !== chainId) ? (
         <ModalContent
           w={'280px'}
           px={'0px'}

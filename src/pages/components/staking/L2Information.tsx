@@ -274,14 +274,18 @@ function L2Information({ data }: L2InformationProps) {
         </Flex>
         <Flex flexDir={'row'}>
           <L2Content title={'TON locked in Bridge'} content={convertLargeNumber(converted)} content2={data?.candidateAddOn.bridge} type={'ton'} />
-          <L2Content
-            title={'Earned seigniorage'}
-            content={claimableAmount}
-            content2={stakable}
-            type={'seig'}
-            contractAddress={data?.candidateContract}
-            isOperator={isOperator}
-          />
+          {
+            isOperator ?
+            <L2Content
+              title={'Earned seigniorage'}
+              content={claimableAmount}
+              content2={stakable}
+              type={'seig'}
+              contractAddress={data?.candidateContract}
+              isOperator={isOperator}
+            />
+            : ''
+          }
           {
             isOperator ?
             <Flex 
@@ -325,7 +329,8 @@ function L2Information({ data }: L2InformationProps) {
               >
                 Stake
               </Button>
-            </Flex> : ''
+            </Flex> 
+           : ''
           }
         </Flex>
       </Flex>
