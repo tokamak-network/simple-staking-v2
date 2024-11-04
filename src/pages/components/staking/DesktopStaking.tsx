@@ -11,7 +11,7 @@ import { StakingInformation } from "./StakingInformation";
 import L2Information from "./L2Information";
 import getCircle from "@/common/table/staking/Circle";
 import BasicTooltip from "@/common/tooltip/index";
-import OpearatorInfo from "@/common/Operators";
+import OpearatorInfos from "@/common/Operators";
 import { useStakingInformation } from "@/hooks/staking/useStakingInformation";
 import { StakingInformationTooltip } from "@/common/tooltip/StakingInformationTooltip";
 
@@ -156,7 +156,7 @@ function DesktopStaking () {
                 {
                   candidateList.map((candidate: any, index: number) => {
                     return [
-                      <OpearatorInfo 
+                      <OpearatorInfos
                         key={index}
                         renderDetail={renderStakingComponent}
                         renderL2={renderL2Component}

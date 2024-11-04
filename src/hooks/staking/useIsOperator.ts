@@ -12,7 +12,6 @@ export function useIsOperator (layer2: string | undefined) {
   const CandidateAddOn_CONTRACT = useContract(layer2, CandidateAddOn);
   const [isOperator, setIsOperator] = useState<boolean>(false)
   const [operatorManager, setOperatorManger] = useState<string>('');
-  const [l2Infos, setL2Infos] = useState<l2InfoType>({})
   const [bridgeTypes, setBridgeTypes]= useState<number>(0);
   const [managers, setManagers] = useState<string>('')
   const [claimable, setClaimable] = useState<string>('')
@@ -25,12 +24,11 @@ export function useIsOperator (layer2: string | undefined) {
       if (CandidateAddOn_CONTRACT && account && layer2) {
         try {
           const operatorAddress = await CandidateAddOn_CONTRACT.operator()
-          console.log(operatorAddress)
+          
           const OperatorManager_CONTRACT = await getContract(operatorAddress, OperatorManager, library, account)
           if (OperatorManager_CONTRACT && WTON_CONTRACT && SeigManager_CONTRACT) {
             const manager = await OperatorManager_CONTRACT.manager()
             const checkIsOperator = manager.toLowerCase() === account.toLowerCase()
-            console.log(OperatorManager_CONTRACT)
             
             const bridgeType = await OperatorManager_CONTRACT.checkL1Bridge()
             
@@ -52,7 +50,7 @@ export function useIsOperator (layer2: string | undefined) {
               explorer: "",
               logo: ""
             }
-            console.log(manager)
+            
             setOperatorManger(operatorAddress)
             setIsOperator(checkIsOperator !== undefined ? checkIsOperator : false);
             // setL2Infos(l2Info === '' ? infoType : JSON.parse(l2Info))

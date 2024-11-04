@@ -52,7 +52,7 @@ function L2Information({ data }: L2InformationProps) {
   const CandidateAddOn_CONTRACT = useContract(data?.candidateContract, CandidateAddOn);
   
   const { 
-    isOperator, 
+    // isOperator, 
     
     bridgeTypes, 
     operatorManager,
@@ -61,6 +61,7 @@ function L2Information({ data }: L2InformationProps) {
   } = useIsOperator(data?.candidateContract)
 
   const lockedInBridge = useL2CandidateInfo(data?.candidateAddOn)
+  const isOperator = true
   
   useEffect(() => {
     // if (l2Infos) {
@@ -196,7 +197,7 @@ function L2Information({ data }: L2InformationProps) {
             ml={'12px'}
             mt={'2px'}
           >
-            {
+            {/* {
               isOperator && !editStat ?
               <Button 
                 w={'59px'}
@@ -241,7 +242,7 @@ function L2Information({ data }: L2InformationProps) {
                   Cancel
                 </Button>
               </Flex> : ''
-            }
+            } */}
           </Flex>
         </Flex>
         <Flex flexDir={'row'}>
@@ -273,11 +274,17 @@ function L2Information({ data }: L2InformationProps) {
           Sequencer seigniorage
         </Flex>
         <Flex flexDir={'row'}>
-          <L2Content title={'TON locked in Bridge'} content={convertLargeNumber(converted)} content2={data?.candidateAddOn.bridge} type={'ton'} />
+          <L2Content 
+            title={'TON bridged to L2'} 
+            content={convertLargeNumber(converted)} 
+            content2={data?.candidateAddOn.bridge} 
+            type={'ton'} 
+            isOperator={isOperator}
+          />
           {
             isOperator ?
             <L2Content
-              title={'Earned seigniorage'}
+              title={'Claimable seigniorage'}
               content={claimableAmount}
               content2={stakable}
               type={'seig'}

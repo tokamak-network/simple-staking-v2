@@ -10,6 +10,8 @@ import { txState } from "@/atom/global/transaction";
 import ETHERSCAN_LINK_Image from '@/assets/images/etherscan_link_icon.png';
 import { ETHERSCAN_LINK } from "@/constants";
 import CONTRACT_ADDRESS from "@/services/addresses/contract";
+import BasicTooltip from "@/common/tooltip";
+import RIGHT_ARROW from "@/assets/images/right-arrow.png"
 
 
 type L2ContentProps = {
@@ -61,17 +63,25 @@ export function L2Content (args: L2ContentProps) {
         </Flex>
         {
           type === 'ton' ?
-          <Link 
-            w={'20px'} 
-            height={'20px'} 
-            justifyContent={'center'} 
-            alignItems={'center'}
-            ml={'6px'}
-            href={`${ETHERSCAN_LINK}/token/${CONTRACT_ADDRESS.TON_ADDRESS}?a=${content2}`}
-            isExternal
-          >
-            <Image src={ETHERSCAN_LINK_Image} alt={'alt'} />
-          </Link> : ''
+          <Flex>
+            <Flex marginTop={'4px'} marginLeft={'3px'}>
+              <BasicTooltip 
+                label={'a'}
+              />
+            </Flex>
+            <Link 
+              w={'20px'} 
+              height={'20px'} 
+              justifyContent={'center'} 
+              alignItems={'center'}
+              ml={'3 px'}
+              href={`${ETHERSCAN_LINK}/token/${CONTRACT_ADDRESS.TON_ADDRESS}?a=${content2}`}
+              isExternal
+            >
+              <Image src={ETHERSCAN_LINK_Image} alt={'alt'} />
+            </Link> 
+          </Flex>
+          : ''
         }
       </Flex>
       <Flex
@@ -81,6 +91,27 @@ export function L2Content (args: L2ContentProps) {
         {
           type === 'ton' ?
           <Flex>
+            {
+              isOperator ?
+              <Flex>
+                <Flex fontWeight={'bold'}>
+                  100.00
+                  <Flex 
+                    fontSize={'13px'}
+                    fontWeight={500}
+                    ml={'4px'}
+                    alignItems={'end'}
+                    mb={'2px'}
+                  >
+                    TON
+                  </Flex> 
+                </Flex>
+                <Flex w={'20px'} h={'20px'} mx={'5px'} mt={'5px'}>
+                  <Image src={RIGHT_ARROW} alt={''} />
+                </Flex>
+              </Flex>
+              : ''
+            }
             <Flex
               fontWeight={'bold'}
             >
@@ -117,31 +148,9 @@ export function L2Content (args: L2ContentProps) {
                 >
                   TON
                 </Flex> 
-                <Flex 
-                  color={'#C7D1D8'}
-                  fontSize={'20px'}
-                  mx={'6px'}
-                  fontWeight={400}
-                >
-                  /
-                </Flex>
+                
               </Flex> : ''
             }
-            
-            <Flex
-              fontWeight={'bold'}
-            >
-              {content2}
-            </Flex>
-            <Flex 
-              fontSize={'13px'}
-              fontWeight={500}
-              ml={'4px'}
-              alignItems={'end'}
-              mb={'2px'}
-            >
-              TON
-            </Flex> 
           </Flex> : '' 
         }
        
