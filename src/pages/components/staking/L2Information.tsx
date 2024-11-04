@@ -21,6 +21,7 @@ import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
 import { floatParser } from '../../../utils/number';
 import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
 import BasicTooltip from '@/common/tooltip';
+import L2Info from '../../../../l2_info.json'
 
 type L2InformationProps = {
   data: any;
@@ -64,12 +65,15 @@ function L2Information({ data }: L2InformationProps) {
   const isOperator = true
   
   useEffect(() => {
-    // if (l2Infos) {
-      setBridgeValue('')
-      setExplorerValue('')
-      setLogoValue('')
-    // }
-  }, [])
+    const infos = L2Info.find((info: any) => info.name === data.name)
+    
+    
+    if (infos) {
+      setBridgeValue(infos.bridge)
+      setExplorerValue(infos.explorer)
+      setLogoValue(infos.logo)
+    }
+  }, [L2Info])
 
   console.log(data)
 
@@ -91,7 +95,7 @@ function L2Information({ data }: L2InformationProps) {
       })
     : '0.00';
   
-    const expectedSeig = data?.expectedSeig
+  const expectedSeig = data?.expectedSeig
     ? convertNumber({
         amount: data?.expectedSeig,
         type: 'ray',
@@ -107,68 +111,29 @@ function L2Information({ data }: L2InformationProps) {
       })
     : '0.00';
     
-    //@ts-ignore
-    const stakableAmount = floatParser(claimableAmount) + floatParser(expectedSeig) 
-    const stakable = stakableAmount.toLocaleString(undefined,{maximumFractionDigits: 2})
-    
+  //@ts-ignore
+  const stakableAmount = floatParser(claimableAmount) + floatParser(expectedSeig) 
+  const stakable = stakableAmount.toLocaleString(undefined,{maximumFractionDigits: 2})
 
-    const dataModal: ClaimModalDataType = {
-      amount: amount,
-      target: target,
-      address: address,
-      name: '',
-      contractAddress: contractAddress,
-      claimable: claimableAmount ? claimableAmount : '0.00',
-      expectedSeig: stakable,
-      layerName: layerName
-    }
-  
-    const modalButton = useCallback(async (modalType: ModalType, name: string, data: any) => {
-      // setName(name)
-      setSelectedModal(modalType);
-      setSelectedModalData({
-        ...data,
-        name: name,
-      });
-    }, [dataModal]);
-  
-  const setL2Info = useCallback(async () => {
-    if (data) {
-      try{
-        if (CandidateAddOn_CONTRACT && account) {
-          const operatorAddress = await CandidateAddOn_CONTRACT.operator()
-          const OperatorManager_CONTRACT = await getContract(operatorAddress, OperatorManager, library, account)
-          const data = {
-            bridge: bridgeValue,
-            explorer: explorerValue,
-            logo: logoValue
-          }
-          const stringifyData = JSON.stringify(data)
-          const tx = await OperatorManager_CONTRACT.setL2Info(stringifyData)
-  
-          setTx(tx);
-          setTxPending(true);
-          setEditStat(false)
-          setBridgeValue('')
-          setExplorerValue('')
-          setLogoValue('')
+  const dataModal: ClaimModalDataType = {
+    amount: amount,
+    target: target,
+    address: address,
+    name: '',
+    contractAddress: contractAddress,
+    claimable: claimableAmount ? claimableAmount : '0.00',
+    expectedSeig: stakable,
+    layerName: layerName
+  }
 
-          if (tx) {
-            await tx.wait().then((receipt: any) => {
-              if (receipt.status) {
-                setTxPending(false);
-                setTx(undefined);
-              }
-            });
-          }
-        }
-
-      } catch (e) {
-        console.log(e)
-        // setModalOpen("error")
-      }
-    }
-  }, [bridgeValue, explorerValue, logoValue])
+  const modalButton = useCallback(async (modalType: ModalType, name: string, data: any) => {
+    // setName(name)
+    setSelectedModal(modalType);
+    setSelectedModalData({
+      ...data,
+      name: name,
+    });
+  }, [dataModal]);
 
   return (
     <Flex
@@ -193,57 +158,6 @@ function L2Information({ data }: L2InformationProps) {
               />
             </Flex>
           </Flex>
-          <Flex
-            ml={'12px'}
-            mt={'2px'}
-          >
-            {/* {
-              isOperator && !editStat ?
-              <Button 
-                w={'59px'}
-                h={'21px'}
-                borderRadius={'4px'}
-                border={'1px solid #dfe4ee'}
-                bgColor={'#fff'}
-                color={'#86929d'}
-                fontSize={'12px'}
-                fontWeight={400}
-                onClick={() => setEditStat(true)}
-              >
-                Edit
-              </Button> :
-              isOperator && editStat ?
-              <Flex>
-                <Button 
-                  w={'59px'}
-                  h={'21px'}
-                  borderRadius={'4px'}
-                  border={'1px solid #2a72e5'}
-                  bgColor={'#fff'}
-                  color={'#2a72e5'}
-                  fontSize={'12px'}
-                  fontWeight={400}
-                  onClick={() => setL2Info()}
-                >
-                  Confirm
-                </Button>
-                <Button 
-                  w={'59px'}
-                  h={'21px'}
-                  ml={'6px'}
-                  borderRadius={'4px'}
-                  border={'1px solid #dfe4ee'}
-                  bgColor={'#fff'}
-                  color={'#86929d'}
-                  fontSize={'12px'}
-                  fontWeight={400}
-                  onClick={() => setEditStat(false)}
-                >
-                  Cancel
-                </Button>
-              </Flex> : ''
-            } */}
-          </Flex>
         </Flex>
         <Flex flexDir={'row'}>
           {
@@ -260,11 +174,11 @@ function L2Information({ data }: L2InformationProps) {
               type={'string'} 
             />
           }
-          <L2InfoContent title={'Bridge'} content={''} type={'bridge'} editStat={editStat} />
-          <L2InfoContent title={'Block explorer'} content={''} type={'explorer'} editStat={editStat} />
+          <L2InfoContent title={'Bridge'} content={bridgeValue} type={'bridge'} editStat={editStat} />
+          <L2InfoContent title={'Block explorer'} content={explorerValue} type={'explorer'} editStat={editStat} />
           {
             isOperator ?
-            <L2InfoContent title={'L2 Logo'} content={''} type={'logo'} editStat={editStat} /> 
+            <L2InfoContent title={'L2 Logo'} content={logoValue} type={'logo'} editStat={editStat} /> 
             : ''
           }
         </Flex>
