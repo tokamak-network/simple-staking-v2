@@ -14,6 +14,7 @@ import { StakeModalDataType } from "@/types"
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
 import WithdrawTable from "./WithdrawTable"
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal"
+import { LoadingDots } from "@/common/Loader/LoadingDots"
 
 type UnstakeProps = {
   selectedModalData: StakeModalDataType
@@ -150,7 +151,8 @@ export const Unstake = (args: UnstakeProps) => {
         <WithdrawTable 
           columns={columns}
           data={requests}
-        /> : ''
+        /> : 
+        <LoadingDots />
       }
     </Flex>
   )

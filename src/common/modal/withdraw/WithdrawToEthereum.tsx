@@ -20,6 +20,7 @@ import { useRecoilState } from "recoil";
 import { txState } from "@/atom/global/transaction";
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal";
 import { inputState } from "@/atom/global/input";
+import { LoadingDots } from "@/common/Loader/LoadingDots";
 
 type WithdrawToEthereumProps ={
   selectedModalData: StakeModalDataType
@@ -214,7 +215,8 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           <WithdrawTable 
             columns={columns}
             data={requests}
-          /> : ''
+          /> : 
+          <LoadingDots />
         }
       </Flex>
       <Flex my={'21px'} h={'75px'} flexDir={'column'} justifyContent={'center'} alignItems={'center'}>
