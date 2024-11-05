@@ -17,6 +17,7 @@ import { getModeData, transactionModalOpenStatus, transactionModalStatus } from 
 import NoLOGO from '@/assets/images/modal/gallery.svg'
 import { useIsOperator } from "@/hooks/staking/useIsOperator"
 import { useWithdrawalAndDeposited } from "@/hooks/staking/useWithdrawable"
+import { LoadingDots } from "@/common/Loader/LoadingDots"
 
 type ToTitanProps = {
   selectedModalData: StakeModalDataType
@@ -169,11 +170,11 @@ export const ToTitan = (args: ToTitanProps) => {
         /> : 
         <Flex 
           fontSize={'12px'}
-          textAlign={'center'}
+          justifyContent={'center'}
           mt={'25px'}
           fontWeight={400}
         >
-          Withdraw history is not supported for this L2. Please check Etherscan and relevant L2 block explorer.
+          <LoadingDots />
         </Flex>
       }
     </Flex>

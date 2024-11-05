@@ -53,16 +53,15 @@ function L2Information({ data }: L2InformationProps) {
   const CandidateAddOn_CONTRACT = useContract(data?.candidateContract, CandidateAddOn);
   
   const { 
-    // isOperator, 
-    
+    isOperator, 
     bridgeTypes, 
     operatorManager,
     managers,
     claimable
   } = useIsOperator(data?.candidateContract)
+  // const isOperator = true
 
   const lockedInBridge = useL2CandidateInfo(data?.candidateAddOn)
-  const isOperator = true
   
   useEffect(() => {
     const infos = L2Info.find((info: any) => info.name === data.name)
@@ -185,7 +184,14 @@ function L2Information({ data }: L2InformationProps) {
       </Flex>
       <Flex flexDir={'column'} my={'54px'}>
         <Flex fontSize={'18px'} fontWeight={500} color={'#2a72e5'} mb={'18px'}>
-          Sequencer seigniorage
+          <Flex>
+            Sequencer seigniorage
+          </Flex>
+          <Flex mt={'9px'} ml={'5px'}>
+            <BasicTooltip 
+              label={'a'}
+            />
+          </Flex>
         </Flex>
         <Flex flexDir={'row'}>
           <L2Content 
@@ -195,6 +201,28 @@ function L2Information({ data }: L2InformationProps) {
             type={'ton'} 
             isOperator={isOperator}
           />
+          {
+            isOperator ?
+            <Flex alignItems={'end'} mr={'30px'}>
+              <Button 
+                w={'80px'}
+                h={'25px'}
+                borderRadius={'4px'}
+                border={'solid 1px #2a72e5'}
+                bgColor={'#fff'}
+                color={'#2a72e5'}
+                fontSize={'12px'}
+                fontWeight={'normal'}
+                _hover={{
+                  borderColor: '#2a72e5',
+                  color: '#2a72e5'
+                }}
+              >
+                Update
+              </Button>
+            </Flex>
+            : ''
+          }
           {
             isOperator ?
             <L2Content

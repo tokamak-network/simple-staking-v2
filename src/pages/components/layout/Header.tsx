@@ -109,7 +109,6 @@ const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
     if (Number(DEFAULT_NETWORK) !== chainId) {
       deactivate()
     } 
-    console.log(account)
   }, [chainId])
   
   return (

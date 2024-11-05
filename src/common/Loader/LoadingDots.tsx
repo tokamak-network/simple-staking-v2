@@ -1,10 +1,11 @@
 //@ts-ignore
-import {Dot} from 'react-animated-dots';
-import {Flex} from '@chakra-ui/react';
+import { Dot } from './dot';
+import { Flex } from '@chakra-ui/react';
 
 export const LoadingDots = () => {
   return (
-    <Flex>
+    <Flex >
+      <Dot>·</Dot>
       <Dot>·</Dot>
       <Dot>·</Dot>
       <Dot>·</Dot>
