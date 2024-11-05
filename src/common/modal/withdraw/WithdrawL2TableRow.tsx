@@ -21,46 +21,30 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
 }) => {
   const {
     amount,
-    timeStamp,
+    timestamp,
     l2txHash,
     id
   } = cell.row?.original;
   const [duration, setDuration] = useState("0");
 
   const values = amount
-  console.log(cell.row?.original)
   
   const type = cell.column.id;
   const usdValue =  ((tonPrice * +values) / Math.pow(10, 27)).toLocaleString(undefined, {maximumFractionDigits: 3})
 
   useEffect(() => {
-    setDuration('Withdrawn')
-    // if (l2txHash) {
-    //   setDuration('Withdrawn')
-    // } else if (timeStamp) {
-    //   const getDuration = setInterval(() => {
-    //     const startDate = new Date(Number(timeStamp) * 1000);
-    //     const currentTime = new Date(Date.now());
-    //     const elapsedTimeInSeconds = differenceInSeconds(
-    //       currentTime,
-    //       startDate
-    //     );
-        
-    //     if (elapsedTimeInSeconds > 1000) {
-    //       setDuration('Failed')
-    //     } else {
-    //       const formattedTime = format(
-    //         new Date(elapsedTimeInSeconds * 1000),
-    //         "mm:ss"
-    //       );
-    //       setDuration(formattedTime);
-    //     }
-    //   }, 1000);
-    //   return () => clearInterval(getDuration);
-    // }
+    let date = new Date(+(timestamp * 1000))
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate() + 1;
+    const hour = date.getHours() 
+    const minute = date.getMinutes()
+    const timezone = date.getTimezoneOffset();
+    const difference = -1 * timezone / 60
+    
+    setDuration(`${year}.${month}.${day}.${hour}:${minute} (GMT+${difference})`)
+    
   }, []);
-
-  // console.log(duration)
   
   return  (
     <chakra.td
@@ -79,7 +63,7 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
               amount: values,
               type: 'ray',
               localeString: true,
-            })} 
+            })} TON
           </Text>
           <Text color={'#646d7c'} ml={'3px'}>
             {`($ ${usdValue})`}
@@ -98,7 +82,7 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
           justifyContent={'center'}
           alignItems={"center"}
         >
-          {duration !== 'Withdrawn' ? duration : ''}
+          {/* {duration !== 'Withdrawn' ? duration : ''} */}
           {
             duration === 'Failed' ?
             (
@@ -111,7 +95,6 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
                 <Image src={HELP} alt={''} />
               </Link>
             ) : 
-            duration === 'Withdrawn' ?
             (
               <Link
                 href={`${ETHERSCAN_LINK}/tx/${id}`}
@@ -121,10 +104,12 @@ export const WithdrawL2TableRow: FC<WithdrawL2TableRowProps> = ({
                   textDecor:'underline'
                 }}
                 mr={'5px'}
+                color={'#2a72e5'}
+                textDecor={'underline'}
               >
                 {duration}
               </Link>
-            ) : ''
+            ) 
           }
         </Flex>
       ) : ('')}

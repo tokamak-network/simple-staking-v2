@@ -39,7 +39,7 @@ export const WithdrawL2TableHeader: FC<WithdrawL2TableHeaderProps> = ({
           w={'160px'}
         >
           <Flex flexDir={'row'} justifyContent={'center'} ml={'10px'}>
-            Status
+            Withdrawn
             <Flex
               cursor={'pointer'}
               ml={'3px'}
