@@ -73,8 +73,6 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [, setSelectedModalData] = useRecoilState(modalData);
 
-  // console.log(checkDelay)
-
   const yourStaked = stakeOfUser
     ? convertNumber({
         //@ts-ignore
