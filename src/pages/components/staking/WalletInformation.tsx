@@ -18,6 +18,10 @@ import { minimumAmountState } from '@/atom/staking/minimumAmount';
 import { useUserStaked } from '@/hooks/staking/useUserStaked';
 import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
 import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
+import Image from 'next/image';
+import TON_LOGO from '@/assets/images/ton_symbol.svg'
+import WTON_LOGO from '@/assets/images/wton.svg'
+import BasicTooltip from '@/common/tooltip';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -183,21 +187,96 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const { btnStyle } = theme;
 
   return (
-    <Container maxW={'sm'} shadow={'md'} borderRadius={'lg'} border={'solid 1px #f4f6f8'} h={'253px'}>
-      <Box w={'100%'} p={0} textAlign={'center'} pb={'30px'} px={5}>
-        <Flex
-          mt={'20px'}
-          fontSize={'11px'}
-          color={'#2a72e5'}
-          w={'100%'}
-          justifyContent={'end'}
-          cursor={'pointer'}
-          h={'13px'}
-          onClick={() => modalButton('calculator', dataModal)}
-        >
-          Simulator
+    <Container maxW={'330px'} shadow={'md'} borderRadius={'lg'} border={'solid 1px #f4f6f8'} h={'137px'}>
+      <Box w={'100%'} p={0} textAlign={'center'} px={2}>
+        <Flex flexDir={'row'} py={'15px'} alignItems={'center'} mt={'10px'}>
+          <Flex flexDir={'column'} h={'76px'}>
+            <Flex flexDir={'column'} >
+              <Flex>
+                <Flex
+                  border={'1px solid #f4f6f8'}
+                  w={'32px'} 
+                  h={'32px'} 
+                  justifyContent={'center'} 
+                  alignItems={'center'} 
+                  borderRadius={'100px'}
+                  mr={'6px'}
+                >
+                  <Image src={TON_LOGO} alt={''} />
+                </Flex>
+                <Flex 
+                  bgColor={'#007aff'} 
+                  w={'32px'} 
+                  h={'32px'} 
+                  justifyContent={'center'} 
+                  alignItems={'center'} 
+                  borderRadius={'100px'}
+                >
+                  <Image src={WTON_LOGO} alt={''} />
+                </Flex>
+              </Flex>
+              <Flex fontSize={'11px'} color={'#304156'} fontWeight={700} mt={'9px'}>
+                <Flex>
+                  TON
+                </Flex>
+                <Flex color={'#c7d1d8'} mx={'3px'}>
+                  /   
+                </Flex>
+                <Flex>
+                  WTON
+                </Flex>
+              </Flex>
+            </Flex>
+            <Flex
+              mt={'9px'}
+              fontSize={'11px'}
+              color={'#2a72e5'}
+              w={'100%'}
+              justifyContent={'center'}
+              cursor={'pointer'}
+              h={'13px'}
+              onClick={() => modalButton('calculator', dataModal)}
+            >
+              Simulator
+            </Flex>
+          </Flex>
+          <Flex w={'1px'} h={'60px'} bgColor={'#f4f6f8'} mx={'15px'} />
+          <Flex flexDir={'column'}>
+            <Flex color={'#808992'} fontSize={'12px'} fontWeight={'normal'}>
+              <Flex>
+                Expected APY
+              </Flex>
+              <Flex mt={'3px'} ml={'3px'}>
+                <BasicTooltip label={'label'} />
+              </Flex>
+            </Flex>
+            <Flex flexDir={'row'} alignItems={'center'}>
+              <Flex color={'#304156'} fontSize={'25px'} fontWeight={700} mr={'9px'}>
+                34.56%
+              </Flex>
+              <Button
+                {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+                isDisabled={minimumAmountForButton || isOperator ? false : true}
+                fontSize={'14px'}
+                w={'70px'}
+                h={'29px'}
+                opacity={loading === true ? 0.5 : 1}
+                onClick={() => modalButton('staking', dataModal)}
+              >
+                Stake
+              </Button>
+            </Flex>
+            <Flex color={'#808992'} fontSize={'11px'} fontWeight={400} flexDir={'column'}>
+              <Flex>
+                Seigniorage is updated
+              </Flex>
+              <Flex>
+                2 days ago.
+              </Flex>
+            </Flex>
+          </Flex>
         </Flex>
-        <Heading
+        {/* <Heading
           color={'#2a72e5'}
           display="flex"
           alignItems="center"
@@ -205,8 +284,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           fontWeight={500}
           // fontSize={'42px'}
           h={'55px'}
-        >
-          {
+        > */}
+          {/* {
             // userTonBalance === undefined 
             // ? <LoadingDots /> 
             // : (
@@ -228,20 +307,18 @@ export const WalletInformation: FC<WalletInformationProps> = ({
                 </Flex>
               </Flex>
             // )
-            }
-        </Heading>
-        <Box pt={'35px'} pb={'20px'}>
-          <Text fontSize={'15px'} color={'#808992'}>
-            Available in wallet
-          </Text>
-        </Box>
-        {
+            } */}
+        {/* </Heading> */}
+
+        {/* {
           account ?
           <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
             <Button
               {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
               isDisabled={minimumAmountForButton || isOperator ? false : true}
               fontSize={'14px'}
+              w={'70px'}
+              h={'29px'}
               opacity={loading === true ? 0.5 : 1}
               onClick={() => modalButton('staking', dataModal)}
             >
@@ -258,11 +335,6 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Withdraw
             </Button>
 
-            {loading === true ? (
-              <Flex pos="absolute" zIndex={100} w="100%" h="100%" alignItems="cneter" justifyContent="center">
-                <Center>{/* <LoadingComponent></LoadingComponent> */}</Center>
-              </Flex>
-            ) : null}
           </Grid>
           :
           <Flex
@@ -279,7 +351,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               Connect wallet
             </Button>
           </Flex>
-        }
+        } */}
       </Box>
     </Container>
   );

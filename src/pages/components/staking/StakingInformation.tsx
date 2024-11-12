@@ -118,6 +118,11 @@ export const StakingInformation: FC<StakingInformationProps> = ({
       flexDir={'column'}
     >
       <Flex>
+      <Box p={0} w={'390px'} borderRadius={'10px'} alignSelf={'flex-start'}>
+          <WalletInformation 
+            data={data}
+          />
+        </Box>
         <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
           <Flex flexDir={'column'} alignItems={'space-between'}>
             <OperatorDetailInfo 
@@ -134,11 +139,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
             />
           </Flex>
         </Flex>
-        <Box p={0} w={'390px'} borderRadius={'10px'} alignSelf={'flex-start'}>
-          <WalletInformation 
-            data={data}
-          />
-        </Box>
+        
 
         <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
           <Flex flexDir={'column'} alignItems={'space-between'}>
