@@ -109,65 +109,73 @@ export const StakingInformation: FC<StakingInformationProps> = ({
 
   return (
     <Flex
-      w="100%"
+      w="960px"
       m={0}
-      justifyContent={'space-between'}
-      alignItems="start"
+      justifyContent={'center'}
+      alignItems="center"
       // pt="70px"
       border={'none'}
       flexDir={'column'}
+      ml={'70px'}
     >
-      <Flex>
-      <Box p={0} w={'390px'} borderRadius={'10px'} alignSelf={'flex-start'}>
+      <Flex alignItems={'center'} justifyContent={'center'} w={'960px'} >
+        <Box p={0}  borderRadius={'10px'} alignSelf={'flex-start'}>
           <WalletInformation 
             data={data}
           />
         </Box>
-        <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
-          <Flex flexDir={'column'} alignItems={'space-between'}>
-            <OperatorDetailInfo 
-              title={'Total Stakers'}
-              value={data?.stakedUserList.length}
-            />
-          </Flex>
-          <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
-            <OperatorDetailInfo 
-              title={'Pending Withdrawal'}
-              value={pendingUnstaked}
-              unit={'TON'}
-              type={''}
-            />
-          </Flex>
-        </Flex>
         
-
-        <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
-          <Flex flexDir={'column'} alignItems={'space-between'}>
+          <Flex flexDir={'row'} alignItems={'space-between'} mt={'30px'} ml={'45px'} w={'585px'}>
             <OperatorDetailInfo 
-              title={'Your Staked'}
+              title={'Staked'}
               value={yourStake}
+              totalValue={userExpectedSeig}
               unit={'TON'}
               type={''}
             />
-          </Flex>
-          <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
-            <OperatorDetailInfo 
+             <OperatorDetailInfo 
               title={'Unclaimed Staking Reward'}
               value={userExpectedSeig}
+              totalValue={userExpectedSeig}
               unit={'TON'}
               type={''}
               contractInfo={data?.candidateContract}
               candidate={data?.candidate}
               minimumAmount={minimumAmount}
             />
+            <OperatorDetailInfo 
+              title={'Pending Withdrawal'}
+              value={pendingUnstaked}
+              totalValue={userExpectedSeig}
+              unit={'TON'}
+              type={''}
+            />
           </Flex>
+        
+      
+      </Flex>
+      <Flex flexDir={'row'} h={'30px'} justifyContent={'center'} alignItems={'center'} mt={'30px'}>
+        <Flex w={'150px'} h={'1px'} background={'linear-gradient(90deg, rgba(231, 235, 242, 0.00) 0%, #E7EBF2 100%)'}/>
+        <Flex 
+          borderRadius={'14px'}
+          border={'1px solid #e7ebf2'}
+          w={'100px'}
+          h={'25px'}
+          fontSize={'12px'}
+          fontWeight={500}
+          color={'#304156'}
+          justifyContent={'center'}
+          alignItems={'center'}
+        >
+          Transactions
         </Flex>
+        <Flex w={'150px'} h={'1px'} background={'linear-gradient(90deg, #E7EBF2 0%, rgba(231, 235, 242, 0.00) 100%)'}/>
       </Flex>
       {/* table area */}
       <Flex 
         flexDir={'row'} 
         mt={'60px'} 
-        ml={'70px'} 
+        
         justifyContent={'center'} 
         alignItems={'center'}
       >

@@ -14,6 +14,7 @@ import BasicTooltip from "@/common/tooltip";
 type OperatorDetailProps = {
   title: string; 
   value: string | number | undefined; 
+  totalValue: string | number | undefined; 
   unit?: string; 
   type?: string;
   contractInfo?: any;
@@ -25,6 +26,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
   title,
   value,
   unit,
+  totalValue,
   type,
   contractInfo,
   minimumAmount,
@@ -81,34 +83,46 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
   return (
     <Flex
       flexDir={'column'}
+      minW={'175px'}
+      mr={'30px'}
     >
       <Text 
         color={'#808992'}
-        fontSize={'15px'} 
-        mb={'12px'}
+        fontSize={'12px'} 
+        mb={'9px'}
       >
         {title}
       </Text>
-      <Flex flexDir={'row'} alignItems={type === 'date' ? 'start' : 'end'} h={'37px'}>
-        <Text 
-          fontSize={type === 'date' ? '16px' : '28px'}
-          fontWeight={type === 'date' ? 500 : 'bold'}
-          color={'#304156'}
-        >
-          {title === 'Unclaimed Staking Reward' && !minimumAmount ? '-' : value}
-        </Text>
-        {
-          unit ? 
+      <Flex flexDir={'column'} alignItems={'start'} h={'37px'}>
+        <Flex flexDir={'row'}>
           <Text 
-            fontSize={'13px'} 
-            fontWeight={500} 
-            ml={'6px'} 
-            mb={'5px'}
+            fontSize={type === 'date' ? '16px' : '18px'}
+            fontWeight={type === 'date' ? 500 : 700}
+            color={'#304156'}
           >
-            {unit}
-          </Text> :
-          ''
-        }
+            {title === 'Unclaimed Staking Reward' && !minimumAmount ? '-' : value}
+          </Text>
+          {
+            unit ? 
+            <Text 
+              fontSize={'13px'} 
+              fontWeight={500} 
+              ml={'6px'} 
+              mt={'5px'}
+            >
+              {unit}
+            </Text> :
+            ''
+          }
+        </Flex>
+        <Flex h={'13px'} fontSize={'11px'} fontWeight={400}>
+          <Flex color={'#808992'}>
+            out of
+          </Flex>
+          <Flex>
+            {totalValue} TON
+          </Flex>
+        </Flex>
       </Flex>
       {
         title === 'Unclaimed Staking Reward' && !minimum && account ?
@@ -116,7 +130,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
             <Text
               fontSize={'11px'}
               color={'#ff2d78'}
-              mt={'3px'}
+              mt={'6px'}
               w={'215px'}
               textAlign={'left'}
               // w={'250px'}
@@ -151,17 +165,37 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
             fontSize={'11px'}
             color={'#2a72e5'}
             cursor={'pointer'}
-            mt={'3px'}
+            mt={'6px'}
             onClick={()=> updateSeig()}
           >
             <Flex>
               Update seigniorage
             </Flex>
-            <Flex ml={'3px'} mt={'3px'}>
-              <BasicTooltip label={'Update the staked balance by for all users staked to this DAO candidate.'} size={'11px'}/>
-            </Flex>
-          </Flex> : 
-          ''
+            
+          </Flex> 
+        : title === 'Staked' &&
+          account ?
+          <Flex
+            fontSize={'11px'}
+            color={'#2a72e5'}
+            cursor={'pointer'}
+            mt={'6px'}
+            onClick={()=> updateSeig()}
+          >
+            Withdraw
+          </Flex> 
+        : title === 'Pending Withdrawal' &&
+          account ?
+          <Flex
+            fontSize={'11px'}
+            color={'#2a72e5'}
+            cursor={'pointer'}
+            mt={'6px'}
+            onClick={()=> updateSeig()}
+          >
+            Restake
+          </Flex>
+        :  ''
       }
     </Flex>
   )
