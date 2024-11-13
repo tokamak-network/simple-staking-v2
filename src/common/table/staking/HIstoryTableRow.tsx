@@ -8,18 +8,19 @@ import { getColumnWidthStaking } from '@/utils/getColumnWidth';
 import { useTheme } from '@chakra-ui/react';
 
 type HistoryTableRowProps = {
-  // key: number
-  index: number
+  key: number
+  
   cell: any
   tableType: string
+  currentPage: any
 }
 
 export const HistoryTableRow: FC<HistoryTableRowProps> = ({
-  // key,
-  index,
+  key,
+  
   cell,
   tableType,
-  
+  currentPage
 }) => {
   const {
     id,
@@ -46,12 +47,12 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   
   return  (
     <chakra.td
-      key={index}
+      key={key}
       w={ getColumnWidthStaking(tableType, type) }
       {...theme.STAKING_HISTORY_TABLE_STYLE.tableRow()}
       {...cell.getCellProps()}
     >
-      {tableType === 'Staking' && type === 'account' ? (
+      {tableType === 'Transactions' && type === 'account' ? (
         <Link
           isExternal
           href={`https://etherscan.io/address/${txSender}`}
@@ -65,27 +66,31 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
           })}
         </Link>
       ) : ('')}
-      {type === 'txHash' ? (
+      {tableType === 'Update Seigniorage' && type === 'txHash' ? (
         <Link
           isExternal
           href={`https://etherscan.io/tx/${txId}`}
           color={'#2a72e5'}
         >
-          {trimAddress({
-            address: txId,
-            firstChar: 6,
-            lastChar: 4,
-            dots: '...'
-          })}
+          {(key + 1)}
         </Link>
       ) : ('')}
-      {tableType === 'Staking' && type === 'txType' ? (
+      {type === 'Update #' ? (
         //@ts-ignore
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
-          {typeName}
+          {(key + 1)}
         </Text>
       ) : ('')}
-      {tableType === 'Staking' && type === 'amount' ? (
+      {tableType === 'Transactions' && type === 'txType' ? (
+        <Link
+          isExternal
+          href={`https://etherscan.io/tx/${txId}`}
+          color={'#2a72e5'}
+        >
+          {typeName}
+        </Link>
+      ) : ('')}
+      {tableType === 'Transactions' && type === 'amount' ? (
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
           {convertNumber({
             amount: values,

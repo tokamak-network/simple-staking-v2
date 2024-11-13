@@ -86,7 +86,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
 
   return (
     <Flex 
-      w={tableType === 'Staking' ? '625px' : '285px'}
+      w={tableType === 'Transactions' ? '625px' : '285px'}
       flexDir={'column'}
       mr={'30px'}
       fontFamily={theme.fonts.Roboto}
@@ -99,13 +99,13 @@ export const HistoryTable: FC<HistoryTableProps> = ({
           flexDir={'row'}
           justifyContent={'space-between'}
           h={'31px'}
-          mt={tableType === 'Commit' ? '0px' : ''}
+          mt={tableType === 'Update Seigniorage' ? '0px' : ''}
         >
           <Text>
             {tableType}
           </Text>
           {
-            tableType === 'Commit' ?
+            tableType === 'Update Seigniorage' ?
             <Text
               fontSize={'13px'}
               fontWeight={'normal'}
@@ -168,12 +168,13 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                   {...row.getRowProps()}
                 >
                   {row.cells ? row.cells.map((cell: any, index: number) => {
+                    
                     return (         
                       <HistoryTableRow 
                         key={index}
-                        index={index}
                         cell={cell}
                         tableType={tableType}
+                        currentPage={currentPage}
                       />
                     )
                   }) : ''}

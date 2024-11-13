@@ -37,7 +37,7 @@ export const HistoryTableHeader: FC<HistoryTableHeaderProps> = ({
         h={'40px'}
       >
         { HeaderColumn(tableType, 'Account') }
-        { HeaderColumn(tableType, 'TX Hash') }
+        { HeaderColumn(tableType, 'Update #') }
         { HeaderColumn(tableType, 'Type') }
         { HeaderColumn(tableType, 'Amount') }
         { HeaderColumn(tableType, 'Time') }
@@ -56,10 +56,10 @@ const HeaderColumn = (tableType: string, columnName: string) => {
     >
       <Flex flexDir={'row'} justifyContent={'center'}>
         {
-          tableType === 'Staking' && columnName === 'Account' ? 'Account' :
-          columnName === 'TX Hash' ? 'TX Hash' :
-          tableType === 'Staking' && columnName === 'Type' ? <TypeItem /> :
-          tableType === 'Staking' && columnName === 'Amount' ? 'Amount' :
+          tableType === 'Transactions' && columnName === 'Account' ? 'Account' :
+          tableType === 'Update Seigniorage' && columnName === 'Update #' ? 'Update #' :
+          tableType === 'Transactions' && columnName === 'Type' ? <TypeItem /> :
+          tableType === 'Transactions' && columnName === 'Amount' ? 'Amount' :
           columnName === 'Time' ? 'Time' : ''
         }
       </Flex>

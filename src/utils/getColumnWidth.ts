@@ -1,10 +1,10 @@
 export function getColumnWidthStaking(tableType: string, columnName: string) {
 
-  return tableType === 'Staking' && (columnName === 'Account' || columnName === 'account') ? '110px' :
-    columnName === 'TX Hash' || columnName === 'txHash' ? '110px' :
-      tableType === 'Staking' && (columnName === 'Type' || columnName === 'txType') ? '80px' :
-        tableType === 'Staking' && (columnName === 'Amount' || columnName === 'amount') ? '150px' :
-          columnName === 'Time' || columnName === 'date' ? '175px' : ''
+  return tableType === 'Transactions' && (columnName === 'Account' || columnName === 'account') ? '110px' :
+    columnName === 'Update #' || columnName === 'txHash' ? '110px' :
+      tableType === 'Transactions' && (columnName === 'Type' || columnName === 'txType') ? '80px' :
+        tableType === 'Transactions' && (columnName === 'Amount' || columnName === 'amount') ? '150px' :
+          columnName === 'Time' || columnName === 'date' || columnName === 'Last Updated' ? '175px' : ''
 }
 
 export function getColumnWidthWallet(columnName: string) {

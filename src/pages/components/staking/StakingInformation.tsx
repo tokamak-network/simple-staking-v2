@@ -27,6 +27,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   const [toggle, setToggle] = useRecoilState(toggleState)
   const [typeFilter, setTypeFilter] = useRecoilState(typeFilterState);
   const [filteredTxHistory, setFilteredTxHistory] = useState(txHistory);
+  const [transactionTab, setTransactionTab] = useState(false);
 
   const historyColumns = useMemo(
     () => [
@@ -154,7 +155,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
         
       
       </Flex>
-      <Flex flexDir={'row'} h={'30px'} justifyContent={'center'} alignItems={'center'} mt={'30px'}>
+      <Flex flexDir={'row'} h={'30px'} justifyContent={'center'} alignItems={'center'} my={'30px'}>
         <Flex w={'150px'} h={'1px'} background={'linear-gradient(90deg, rgba(231, 235, 242, 0.00) 0%, #E7EBF2 100%)'}/>
         <Flex 
           borderRadius={'14px'}
@@ -166,36 +167,39 @@ export const StakingInformation: FC<StakingInformationProps> = ({
           color={'#304156'}
           justifyContent={'center'}
           alignItems={'center'}
+          onClick={()=> setTransactionTab(transactionTab ? false : true)}
+          cursor={'pointer'}
         >
-          Transactions
+          {transactionTab ? 'Close' : 'Transactions'}
         </Flex>
         <Flex w={'150px'} h={'1px'} background={'linear-gradient(90deg, #E7EBF2 0%, rgba(231, 235, 242, 0.00) 100%)'}/>
       </Flex>
       {/* table area */}
-      <Flex 
-        flexDir={'row'} 
-        mt={'60px'} 
-        
-        justifyContent={'center'} 
-        alignItems={'center'}
-      >
-        {
-          filteredTxHistory &&
-          <HistoryTable 
-            columns={historyColumns}
-            data={filteredTxHistory}
-            tableType={'Staking'}
-          />
-        }
-        {
-          commitHistory &&
-          <HistoryTable 
-            columns={historyColumns}
-            data={commitHistory}
-            tableType={'Commit'}
-          />
-        }
-      </Flex>
+      {
+        transactionTab ?
+        <Flex 
+          flexDir={'row'} 
+          justifyContent={'center'} 
+          alignItems={'center'}
+        >
+          {
+            commitHistory &&
+            <HistoryTable 
+              columns={historyColumns}
+              data={commitHistory}
+              tableType={'Update Seigniorage'}
+            />
+          }
+          {
+            filteredTxHistory &&
+            <HistoryTable 
+              columns={historyColumns}
+              data={filteredTxHistory}
+              tableType={'Transactions'}
+            />
+          }
+        </Flex> : ''
+      }
     </Flex>
   )
 } 
