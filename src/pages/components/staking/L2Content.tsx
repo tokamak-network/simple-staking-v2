@@ -54,7 +54,7 @@ export function L2Content (args: L2ContentProps) {
       w={type === 'seig' ? '' : '250px'}
     >
       <Flex
-        fontSize={'13px'}
+        fontSize={'12px'}
         color={'#808992'}
         mb={'8px'}
       >
@@ -74,7 +74,7 @@ export function L2Content (args: L2ContentProps) {
               height={'20px'} 
               justifyContent={'center'} 
               alignItems={'center'}
-              ml={'3 px'}
+              ml={'3px'}
               href={`${ETHERSCAN_LINK}/token/${CONTRACT_ADDRESS.TON_ADDRESS}?a=${content2}`}
               isExternal
             >

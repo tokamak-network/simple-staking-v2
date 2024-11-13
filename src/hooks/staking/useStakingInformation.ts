@@ -26,7 +26,7 @@ export function useStakingInformation () {
       unit: 'TON'
     },
     {
-      title: "Average APY",
+      title: "Average APR",
       tooltip: "",
       value: 0,
       dollor: 0,
@@ -63,7 +63,7 @@ export function useStakingInformation () {
           unit: 'TON'
         },
         {
-          title: "Average APY",
+          title: "Average APR",
           tooltip: "tooltip",
           tooltip2: "",
           value: `~${roi ? roi.toLocaleString(undefined, {maximumFractionDigits: 2, minimumFractionDigits: 2}) : 0.00}`,

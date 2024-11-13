@@ -47,7 +47,7 @@ export function L2InfoContent (args: L2ContentProps) {
       minW={stringType ? '120px' : '250px'}
     >
       <Flex
-        fontSize={'13px'}
+        fontSize={'12px'}
         color={'#808992'}
         mb={'8px'}
       >
