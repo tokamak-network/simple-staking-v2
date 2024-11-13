@@ -46,7 +46,7 @@ export const InfoTypeSelector = (args: InfoTypeSelectorProps) => {
         alignItems={'center'}
         onClick={() => setTab('l2')}
       >
-        L2
+        L2 Info
       </Flex>
     </Flex>
   )
