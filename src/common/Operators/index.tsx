@@ -210,18 +210,15 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
             }
           </Flex>
           <Info 
+            title={'Expected APY'}
+            value={'34.56'}
+            unit={'%'}
+          />
+          <Info 
             title={'Total Staked'}
             value={totalStaked}
             unit={'TON'}
           />
-          {
-            rate ?
-            <Info 
-              title={'Commission Rate'}
-              value={+rate / 10000000}
-              unit={'%'}
-            /> : ''
-          }
           {
             (yourStaked !== '0.00' && yourStaked) ?
             <Info 

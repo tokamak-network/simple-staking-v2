@@ -14,8 +14,8 @@ export const Info = (args: InfoType) => {
       w={
         title === 'Total Staked'
         ? '235px'
-        : title === 'Commission Rate'
-        ? '160px'
+        : title === 'Expected APY'
+        ? '195px'
         : title === 'Your Staked'
         ? '220px'
         : '10px'
