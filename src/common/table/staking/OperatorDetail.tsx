@@ -8,8 +8,9 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { txHashStatus, txState } from "@/atom/global/transaction";
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
 import { ETHERSCAN_LINK } from "@/constants";
-import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal";
+import { getModeData, modalData, modalState, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal";
 import BasicTooltip from "@/common/tooltip";
+import { ModalType } from "@/types/modal";
 
 type OperatorDetailProps = {
   title: string; 
@@ -20,6 +21,7 @@ type OperatorDetailProps = {
   contractInfo?: any;
   minimumAmount?: boolean;
   candidate?: string
+  dataModal?: any
 }
 
 export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
@@ -30,7 +32,8 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
   type,
   contractInfo,
   minimumAmount,
-  candidate
+  candidate,
+  dataModal
 }) => {
   const { library, account } = useWeb3React()
   const [tx, setTx] = useState();
@@ -40,6 +43,9 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
   const [, setSelectedMode] = useRecoilState(getModeData);
   const [, setTxHash] = useRecoilState(txHashStatus)  
   const minimum = useRecoilValue(minimumAmountState)
+
+  const [selectedModal, setSelectedModal] = useRecoilState(modalState);
+  const [, setSelectedModalData] = useRecoilState(modalData);
 
   const updateSeig = useCallback(async () => {
     try {
@@ -79,6 +85,8 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
     waitReceipt();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx]);
+
+  
 
   return (
     <Flex
@@ -180,7 +188,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
             color={'#2a72e5'}
             cursor={'pointer'}
             mt={'6px'}
-            onClick={()=> updateSeig()}
+            onClick={dataModal}
           >
             Withdraw
           </Flex> 
@@ -191,7 +199,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
             color={'#2a72e5'}
             cursor={'pointer'}
             mt={'6px'}
-            onClick={()=> updateSeig()}
+            onClick={dataModal}
           >
             Restake
           </Flex>

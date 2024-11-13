@@ -129,8 +129,6 @@ export const ToTitan = (args: ToTitanProps) => {
       setModalOpen("error")
     }
   }, [DepositManager_CONTRACT, input, selectedModalData, setTx, setTxPending])
-
-  console.log(withdrawTx)
   
   return (
     <Flex flexDir={'column'}>

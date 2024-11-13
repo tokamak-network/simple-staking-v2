@@ -33,6 +33,7 @@ export const ToEthereum = (args: ToEthereumProps) => {
           selectedModalData={selectedModalData}
           requests={requests}
           closeThisModal={closeThisModal}
+          type={'Withdraw'}
         />
       }
     </Flex>

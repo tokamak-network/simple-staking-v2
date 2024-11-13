@@ -9,5 +9,6 @@ export type StakeModalType =
   | 'layer2'
   | 'wallet'
   | 'claim'
+  | 'restake'
 
 export type ModalType = StakeModalType;

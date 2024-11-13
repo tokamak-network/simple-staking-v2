@@ -49,7 +49,7 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
   useEffect(() => {
     setPageSize(data.length)
   },[setPageSize])
-
+  
   return (
     <Flex 
       w={mobile ? '100%' : '320px'}
@@ -73,7 +73,7 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
             display="flex"
             flexDirection="column"
           >
-            {page ? page.map((row: any, i) => {
+            {page && page.length > 0 ? page.map((row: any, i) => {
               prepareRow(row);
               return [
                 <chakra.tr
@@ -96,7 +96,7 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
                         tonPrice={tonPriceUSD}
                       />
                     )
-                  }) : ''}
+                  }) : 'No transaction history'}
                 </chakra.tr>
               ]
             }) : ''}

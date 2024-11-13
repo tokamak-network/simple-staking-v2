@@ -1,15 +1,24 @@
+import { modalData, modalState } from "@/atom/global/modal";
+import { minimumAmountState } from "@/atom/staking/minimumAmount";
 import { selectedToggleState, toggleState } from "@/atom/staking/toggle";
 import { selectedTypeState, typeFilterState } from "@/atom/staking/txTypeFilter";
 import HistoryTable from "@/common/table/staking/HistoryTable";
 import OperatorDetailInfo from "@/common/table/staking/OperatorDetail";
+import { getOldLayerAddress } from "@/components/getOldLayerAddress";
 import { getCommitHistory, getTransactionHistory } from "@/components/getTransactionHistory";
 import { convertNumber } from "@/components/number";
 import { useExpectedSeig } from "@/hooks/staking/useCalculateExpectedSeig";
+import { usePendingUnstaked } from "@/hooks/staking/usePendingUnstaked";
+import { useWithdrawable } from "@/hooks/staking/useWithdrawable";
+import useUserBalance from "@/hooks/useUserBalance";
+import { StakeModalDataType } from "@/types";
+import { ModalType } from "@/types/modal";
 import { Box, Flex } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import WalletInformation from "./WalletInformation";
+
 
 type StakingInformationProps = {
   // dispatch: AppDispatch;
@@ -28,6 +37,20 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   const [typeFilter, setTypeFilter] = useRecoilState(typeFilterState);
   const [filteredTxHistory, setFilteredTxHistory] = useState(txHistory);
   const [transactionTab, setTransactionTab] = useState(false);
+
+  const [candidateContracts, setCandidateContracts] = useState('');
+  const [candidates, setCandidates] = useState('');
+  const [stakeOfUser, setStakeOfUser] = useState('');
+  const [expSeig, setExpSeig] = useState('');
+  const [name, setName] = useState('');
+  const [stakeCandidate, setStakeCandidate] = useState('');
+  // const [minimumAmount, setMinimumAmount] = useRecoilState(minimumAmountState)
+  const [isOperator, setIsOperator] = useState<boolean>(false);
+  const [isL2, setIsL2] = useState<boolean>(false);
+
+  const [selectedModal, setSelectedModal] = useRecoilState(modalState);
+  const [, setSelectedModalData] = useRecoilState(modalData);
+  
 
   const historyColumns = useMemo(
     () => [
@@ -62,6 +85,24 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   useEffect(() => {
     account ? setToggle('My') : setToggle('All')
   }, [account])
+
+  const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account);
+  const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength, requests } = useWithdrawable(
+    data?.candidateContract,
+  );
+  const { userTonBalance, userWTonBalance } = useUserBalance(account);
+
+  useEffect(() => {
+    if (data) {
+      setCandidateContracts(data.candidateContract);
+      setCandidates(data.candidate);
+      setStakeOfUser(data.stakeOf);
+      setExpSeig(data.expectedSeig);
+      setStakeCandidate(data.stakeOfCandidate);
+      setIsL2(data.candidateAddOn !== null)
+      setName(data.name)
+    }
+  }, [data]);
   
   useEffect(() => {
     if (txHistory) {
@@ -102,11 +143,60 @@ export const StakingInformation: FC<StakingInformationProps> = ({
     localeString: true
   })
 
-  const pendingUnstaked = convertNumber({
+  const pendingUnstakeds = convertNumber({
     amount: data?.pending,
     type: 'ray',
     localeString: true
   })
+
+  const candidateAmounts = stakeCandidate 
+    ? convertNumber({
+      amount: stakeCandidate,
+      type: 'ray',
+    })
+  : '1000.1';
+
+  const expectedSeigs = expSeig
+    ? convertNumber({
+        amount: expSeig,
+        type: 'ray',
+        localeString: true,
+      })
+    : '0.00';
+
+  const yourStaked = stakeOfUser
+    ? convertNumber({
+        //@ts-ignore
+        amount: stakeOfUser,
+        type: 'ray',
+        localeString: true,
+      })
+    : '-';
+
+  const dataModal: StakeModalDataType = {
+    tonBalance: userTonBalance ? userTonBalance : '0.00',
+    wtonBalance: userWTonBalance ? userWTonBalance : '0.00',
+    stakedAmount: yourStaked ? yourStaked : '0.00',
+    layer2: candidateContracts,
+    withdrawableLength: withdrawableLength,
+    seig: expectedSeigs ? expectedSeigs : '0.00',
+    candidate: candidates,
+    minimumAmount: minimumAmount,
+    pendingUnstaked: pendingUnstaked,
+    withdrawable: withdrawable,
+    // old_withdrawableLength: old_withdrawableLength,
+    old_withdrawableLength: '1',
+    old_withdrawable: old_withdrawable,
+    old_layer2: getOldLayerAddress(candidateContracts) ? getOldLayerAddress(candidateContracts) : '',
+    requests: requests,
+    isL2: isL2,
+    name: name
+  };
+
+  const modalButton = useCallback(async (modalType: ModalType, data: any) => {
+    setSelectedModal(modalType);
+    setSelectedModalData(data);
+  }, [dataModal]);
 
   return (
     <Flex
@@ -125,7 +215,6 @@ export const StakingInformation: FC<StakingInformationProps> = ({
             data={data}
           />
         </Box>
-        
           <Flex flexDir={'row'} alignItems={'space-between'} mt={'30px'} ml={'45px'} w={'585px'}>
             <OperatorDetailInfo 
               title={'Staked'}
@@ -133,6 +222,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
               totalValue={userExpectedSeig}
               unit={'TON'}
               type={''}
+              dataModal={()=> modalButton('withdraw', dataModal)}
             />
              <OperatorDetailInfo 
               title={'Unclaimed Staking Reward'}
@@ -147,9 +237,10 @@ export const StakingInformation: FC<StakingInformationProps> = ({
             <OperatorDetailInfo 
               title={'Pending Withdrawal'}
               value={pendingUnstaked}
-              totalValue={userExpectedSeig}
+              totalValue={pendingUnstakeds}
               unit={'TON'}
               type={''}
+              dataModal={()=>modalButton('restake', dataModal)}
             />
           </Flex>
         

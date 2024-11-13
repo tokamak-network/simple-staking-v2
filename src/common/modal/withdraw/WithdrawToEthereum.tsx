@@ -26,10 +26,11 @@ type WithdrawToEthereumProps ={
   selectedModalData: StakeModalDataType
   requests: any
   closeThisModal: any
+  type: string
 }
 
 export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
-  const {selectedModalData, requests, closeThisModal} = args
+  const {selectedModalData, requests, closeThisModal, type} = args
   const theme = useTheme();
   const { btnStyle } = theme;
   const [toggle, setToggle] = useState('Withdraw')
@@ -53,7 +54,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     setMenuState(false);
   }, [])
 
-  const [isChecked, setIsChecked] = useState<boolean>(true);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
   
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -61,10 +62,14 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
 
   const options = ['TON', 'WTON']
 
-  const handleToggle = useCallback(() => {
-    setIsChecked(false)
-    setToggle('Restake')
-  },[]) 
+  // const handleToggle = useCallback(() => {
+  //   setIsChecked(false)
+  //   setToggle('Restake')
+  // },[]) 
+
+  useEffect(() => {
+    setToggle(type)
+  }, [])
 
   
   const handleSetOption = useCallback((option: any) => {
@@ -165,14 +170,16 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     }
   }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending]);
 
+
   return (
     <Flex flexDir={'column'} w={'350px'} alignItems={'center'}>
       <Flex
        flexDir={'row'} 
-       justifyContent={'space-between'}
+       justifyContent={'center'}
        alignItems={'center'}
        w={'320px'}
        mb={'12px'}
+       mt={'21px'}
       >
         <Flex
           fontSize={'14px'}
@@ -182,32 +189,6 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
         >
           Pending Withdrawal
         </Flex>
-        <FormControl
-          display={'flex'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          w={'100px'}
-        >
-          <FormLabel
-            fontSize={'11px'}
-            fontWeight={'normal'}
-            color={'#828d99'}
-            mt={'5px'}
-          >
-            Restake
-          </FormLabel>
-          <Switch 
-            bgColor={'#e7ebf2'}
-            borderRadius={'100px'}
-            p={'1px'}
-            colorScheme='green' 
-            onChange={() =>
-              toggle === 'Withdraw'
-                ? handleToggle()
-                : setToggle('Withdraw')
-            }
-          />
-        </FormControl>
       </Flex>
       <Flex>
         {

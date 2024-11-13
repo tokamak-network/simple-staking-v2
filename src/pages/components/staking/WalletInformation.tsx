@@ -52,15 +52,6 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [isL2, setIsL2] = useState<boolean>(false);
 
   const { userTonBalance, userWTonBalance } = useUserBalance(account);
-  const { openModal } = useModal('wallet');
-  // const {
-  //   candidateContract,
-  //   stakeOf,
-  //   candidate,
-  //   expectedSeig,
-  //   stakeOfCandidate
-  // } = data
-  
 
   useEffect(() => {
     if (data) {
@@ -73,10 +64,6 @@ export const WalletInformation: FC<WalletInformationProps> = ({
       setName(data.name)
     }
   }, [data]);
-
-  // const { userStakeds } = useUserStaked(account?.toLocaleLowerCase(), data.candidateContract.toLocaleLowerCase())
-  // const expectedSeig = useExpectedSeig(data.candidateContract, data.stakedAmount, data.candidate)
-  // const lockedInBridge = useL2CandidateInfo(data.candidateAddOn)
 
   useEffect(() => {
     if (account) {
@@ -137,12 +124,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     /*eslint-disable*/
   }, [account, pendingUnstaked, userTonBalance, withdrawable, old_withdrawable]);
 
-  const candidateAmount = stakeCandidate 
-    ? convertNumber({
-      amount: stakeCandidate,
-      type: 'ray',
-    })
-  : '1000.1';
+  
   
   const candidateAmountForButton = stakeCandidate
   ? convertNumber({
@@ -150,6 +132,14 @@ export const WalletInformation: FC<WalletInformationProps> = ({
       type: 'ray',
     })
   : '0.00';
+
+  const candidateAmount = stakeCandidate 
+    ? convertNumber({
+      amount: stakeCandidate,
+      type: 'ray',
+    })
+  : '1000.1';
+
 
   useEffect(() => {
     // console.log(Number(candidateAmount), Number(candidateAmount) > 1000)
