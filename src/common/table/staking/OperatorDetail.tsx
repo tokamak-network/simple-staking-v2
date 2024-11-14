@@ -8,9 +8,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { txHashStatus, txState } from "@/atom/global/transaction";
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
 import { ETHERSCAN_LINK } from "@/constants";
-import { getModeData, modalData, modalState, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal";
+import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal";
 import BasicTooltip from "@/common/tooltip";
-import { ModalType } from "@/types/modal";
 
 type OperatorDetailProps = {
   title: string; 
@@ -43,9 +42,6 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
   const [, setSelectedMode] = useRecoilState(getModeData);
   const [, setTxHash] = useRecoilState(txHashStatus)  
   const minimum = useRecoilValue(minimumAmountState)
-
-  const [selectedModal, setSelectedModal] = useRecoilState(modalState);
-  const [, setSelectedModalData] = useRecoilState(modalData);
 
   const updateSeig = useCallback(async () => {
     try {

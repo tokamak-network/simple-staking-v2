@@ -23,6 +23,7 @@ import { useRecoilState } from 'recoil';
 import { toggleState } from '@/atom/staking/toggle';
 import HistoryTableRow from '@/common/table/staking/HIstoryTableRow';
 import { useWeb3React } from '@web3-react/core';
+import { SimplePagination } from '../SimplePagination';
 
 type HistoryTableProps = {
   columns: Column[];
@@ -92,6 +93,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
       fontFamily={theme.fonts.Roboto}
       justifyContent={'start'}
       h={'100%'}
+      mb={'15px'}
     >
       <Flex fontSize={'15px'} fontWeight={'bold'} mb={'5px'} flexDir={'row'} w={'100%'} justifyContent={'space-between'}>
         <Flex 
@@ -101,23 +103,29 @@ export const HistoryTable: FC<HistoryTableProps> = ({
           h={'31px'}
           mt={tableType === 'Update Seigniorage' ? '0px' : ''}
         >
-          <Text>
-            {tableType}
-          </Text>
+          <Flex>
+            <Text mt={'5px'}>
+              {tableType}
+            </Text>
+            <Flex ml={'10px'} mb={'15px'}>
+              <SimplePagination
+                prevPage={goPrevPage}
+                nextPage={goNextPage}
+                visibleColumns={visibleColumns}
+                canPreviousPage={canPreviousPage}
+                canNextPage={canNextPage}
+              />
+            </Flex>
+
+          </Flex>
           {
             tableType === 'Update Seigniorage' ?
-            <Text
-              fontSize={'13px'}
-              fontWeight={'normal'}
-              color={'#808992'}
-            >
-              Commit count: {data.length}
-            </Text> : 
+            '' : 
             <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
               {
                 account ?
                 <Flex>
-                  <FormLabel color={'#828d99'} fontSize={'11px'} mt={'7px'}>
+                  <FormLabel color={'#828d99'} fontSize={'11px'} mt={'2px'}>
                     {toggle} transactions
                   </FormLabel>
                     <Switch 
@@ -181,19 +189,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                 </chakra.tr>
               ]
             }) : ''}
-            <Pagination 
-              columns={columns}
-              data={data}
-              currentPage={currentPage}
-              prevPage={goPrevPage}
-              nextPage={goNextPage}
-              visibleColumns={visibleColumns}
-              canPreviousPage={canPreviousPage}
-              canNextPage={canNextPage}
-              pageOptions={pageOptions}
-              pageIndex={pageIndex}
-              gotoPage={gotoPage}
-            />
+            
           </chakra.tbody>
         </chakra.table>
       </Box>

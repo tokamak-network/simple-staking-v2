@@ -25,6 +25,16 @@ export function getCommitHistory (data: any) {
         return b.timestamp - a.timestamp;
       })
     }
-    return concatData
+    
+    let datas = []
+    for (let i = 0; i < concatData.length ; i++) {
+      const indexedData = {
+        ...concatData[i],
+        index: concatData.length - i - 1
+      }
+      datas.push(indexedData)
+    }
+    
+    return datas
   }
 }

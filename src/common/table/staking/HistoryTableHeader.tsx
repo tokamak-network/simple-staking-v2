@@ -37,7 +37,7 @@ export const HistoryTableHeader: FC<HistoryTableHeaderProps> = ({
         h={'40px'}
       >
         { HeaderColumn(tableType, 'Account') }
-        { HeaderColumn(tableType, 'Update #') }
+        { HeaderColumn(tableType, 'txHash') }
         { HeaderColumn(tableType, 'Type') }
         { HeaderColumn(tableType, 'Amount') }
         { HeaderColumn(tableType, 'Time') }
@@ -52,15 +52,21 @@ const HeaderColumn = (tableType: string, columnName: string) => {
   return (
     <chakra.th
       w={ getColumnWidthStaking(tableType, columnName) }
-      textAlign={columnName === 'Account' || columnName === 'TX Hash'? 'left' : 'center'}
+      textAlign={
+        (columnName === 'Account' || columnName === 'TX Hash') && 
+        (tableType === 'Transactions' && columnName === 'Account') ? 
+        'left' : 
+        'center'
+      }
     >
-      <Flex flexDir={'row'} justifyContent={'center'}>
+      <Flex flexDir={'row'} justifyContent={tableType === 'Update Seigniorage' && columnName === 'Time' ? 'start' : 'center'}>
         {
           tableType === 'Transactions' && columnName === 'Account' ? 'Account' :
-          tableType === 'Update Seigniorage' && columnName === 'Update #' ? 'Update #' :
+          tableType === 'Update Seigniorage' && columnName === 'txHash' ? 'Update #' :
           tableType === 'Transactions' && columnName === 'Type' ? <TypeItem /> :
           tableType === 'Transactions' && columnName === 'Amount' ? 'Amount' :
-          columnName === 'Time' ? 'Time' : ''
+          tableType === 'Update Seigniorage' && columnName === 'Time' ? 'Last update' : 
+          tableType === 'Transactions' && columnName === 'Time' ? 'Status' : ''
         }
       </Flex>
     </chakra.th>
