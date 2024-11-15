@@ -1,6 +1,3 @@
-import { concat } from "@apollo/client";
-
-
 export function getTransactionHistory (data: any) {
   if (data) {
     const {staked, unstaked, withdrawal, oldHistory, withdrawL2} = data

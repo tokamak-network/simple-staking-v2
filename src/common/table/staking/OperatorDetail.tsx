@@ -82,8 +82,6 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx]);
 
-  
-
   return (
     <Flex
       flexDir={'column'}
@@ -120,7 +118,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
           }
         </Flex>
         <Flex h={'13px'} fontSize={'11px'} fontWeight={400}>
-          <Flex color={'#808992'}>
+          <Flex color={'#808992'} mr={'3px'}>
             out of
           </Flex>
           <Flex>

@@ -171,8 +171,6 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
 
               const [logo, setLogo] = useState<string>('')
               
-            
-              
               row.original = {
                 ...row.original,
                 userStakeds,

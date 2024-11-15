@@ -29,7 +29,7 @@ function WithdrawModal () {
   const { selectedModalData, selectedModal, closeModal, isModalLoading } = useModal();
   const { withdrawRequests } = useWithdrawRequests()
 
-  const [requests, setRequests] = useState()
+  const [requests, setRequests] = useState([])
 
   const [modalName, setModalName] = useState('Withdraw')
   const [type, setType] = useState('main')
@@ -69,8 +69,10 @@ function WithdrawModal () {
   useEffect(() => {
     const fetch = async () => {
       if (selectedModalData) {
-        const withdrawRequest = await withdrawRequests(selectedModalData.layer2)
-        setRequests(withdrawRequest)
+        //@ts-ignore
+        const { pendingRequests } = await withdrawRequests(selectedModalData.layer2)
+        
+        setRequests(pendingRequests)
       }
     }
     fetch()

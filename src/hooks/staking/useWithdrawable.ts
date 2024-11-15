@@ -144,7 +144,7 @@ export function useWithdrawRequests () {
         const numPendingRequests = await DepositManager_CONTRACT.numPendingRequests(layer2, account)
         let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(layer2, account)
         const currentBlock = await library.getBlock('latest')
-        
+        const requestIdx = requestIndex.toString()
         for (const _ of range(numPendingRequests)) {
           const request = await DepositManager_CONTRACT.withdrawalRequest(layer2, account, requestIndex)
           
@@ -154,14 +154,15 @@ export function useWithdrawRequests () {
           const data = {
             amount: request.amount,
             time: withdrawableTime === 'Withdrawable' ? 'Withdrawable' : calcCountDown2(withdrawableTime.EstimateTimeInSec),
-            requestIndex: requestIndex
+            requestIndex: requestIndex,
+            withdrawableBlock: withdrawableBlock
             // process: request.process
           }
 
           pendingRequests.push(data);
           requestIndex++;
         }
-        return pendingRequests
+        return { pendingRequests, requestIdx }
       }
   }, [txPending])
   

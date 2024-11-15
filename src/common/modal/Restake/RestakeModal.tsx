@@ -59,8 +59,9 @@ function WithdrawModal () {
   useEffect(() => {
     const fetch = async () => {
       if (selectedModalData) {
-        const withdrawRequest = await withdrawRequests(selectedModalData.layer2)
-        setRequests(withdrawRequest)
+        //@ts-ignore
+        const { pendingRequests } = await withdrawRequests(selectedModalData.layer2)
+        setRequests(pendingRequests)
       }
     }
     fetch()

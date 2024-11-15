@@ -10,6 +10,7 @@ import { getCountdown } from '@/api';
 import { useWeb3React } from '@web3-react/core';
 import { calcCountDown } from '../../../utils/number';
 import useCallContract from 'hooks/useCallContract';
+import { ETHERSCAN_LINK } from '@/constants';
 
 type TableRowProps = {
   index: number
@@ -83,7 +84,7 @@ export const TableRow: FC<TableRowProps> = ({
         </Flex>
         <Link
           isExternal
-          href={`https://etherscan.io/block/countdown/${withdrawableBlock}`}
+          href={`${ETHERSCAN_LINK}/block/countdown/${withdrawableBlock}`}
           color={'#2a72e5'}
         >
           {withdrawableBlock}

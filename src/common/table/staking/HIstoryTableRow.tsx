@@ -1,13 +1,15 @@
 import { getEventName } from "@/components/getEventName";
-import { convertNumber } from "@/components/number";
+import { calcCountDown, convertNumber } from "@/components/number";
 import trimAddress from "@/components/trimAddress";
-import { chakra, Flex, Link, Text } from "@chakra-ui/react";
+import { Button, chakra, Flex, Link, Text } from "@chakra-ui/react";
 import moment from "moment";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { getColumnWidthStaking } from '@/utils/getColumnWidth';
 import { useTheme } from '@chakra-ui/react';
 import { ETHERSCAN_API, ETHERSCAN_LINK } from "@/constants";
 import { fromNow } from "@/components/getDate";
+import { getCountdown } from "@/api";
+import { useWeb3React } from "@web3-react/core";
 
 type HistoryTableRowProps = {
   key: number
@@ -37,7 +39,9 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
     transactionHash,
     blockTimestamp,
     from,
-    index
+    index,
+    withdrawable,
+    withdrawn
   } = cell.row?.original;
 
   const txSender = sender ? sender : from
@@ -48,7 +52,82 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   const type = cell.column.id;
   
   const typeName = getEventName(eventName)
+  const { library, account } = useWeb3React()
 
+  const [ remainTime, setRemainTime ] = useState('')
+  const [ block, setBlock ] = useState(0)
+  const delay = 93046
+  const blockNo = transaction.blockNumber
+  // console.log(withdrawn)
+
+  useEffect(() => {
+    async function fetch () {
+      if (typeName === 'Unstake' && delay) {
+
+        const withdrawableBlock = Number(blockNo) + delay
+        const currentBlock = await library.getBlockNumber()
+
+        setBlock(currentBlock)
+
+        if (currentBlock > withdrawableBlock) {
+          setRemainTime('0')
+        } else {
+          const apiValue = await getCountdown(withdrawableBlock)
+          setRemainTime(apiValue.EstimateTimeInSec)
+        }
+      }
+    }
+    fetch()
+  }, [])
+
+  const withdrawableTime = (blockNumber: number) => {
+    const withdrawableBlock = Number(blockNumber) + 93046
+    // const withdrawable = block > withdrawableBlock
+    console.log(withdrawable)
+    return (
+      <Flex>
+        {
+          withdrawable ? (
+            <Flex>
+              <Button 
+                w={'80px'}
+                h={'25px'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                borderRadius={'4px'}
+                border={'1px solid #2a72e5'}
+                bgColor={'#fff'}
+                color={'#2a72e5'}
+                fontSize={'12px'}
+                fontWeight={400}
+              > 
+                Withdraw 
+              </Button>
+            </Flex>
+          ) : (
+            <Flex justifyContent={'center'} flexDir={'column'}>
+              <Flex flexDir={'row'}>
+                <Flex mr={'3px'} color={'#304156'}>
+                  Withdrawable at block
+                </Flex>
+                <Link
+                  isExternal
+                  href={`${ETHERSCAN_LINK}/block/countdown/${withdrawableBlock}`}
+                  color={'#2a72e5'}
+                >
+                  {withdrawableBlock}
+                </Link>
+              </Flex>
+              <Flex ml={'3px'} color={'#828d99'}>
+                {calcCountDown(remainTime)}
+              </Flex>
+            </Flex>
+          )
+        }
+      </Flex>
+    )
+  }
+  
   return  (
     <chakra.td
       key={key}
@@ -110,7 +189,12 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
       ) : ''}
       {type === 'date' && tableType === 'Transactions' ? (
         <Flex color={'#828d99'}>
-          {moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')}
+          {
+            typeName === 'Unstake' 
+            && account?.toLowerCase() === sender.toLowerCase() 
+              ? withdrawn ? moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)') : withdrawableTime(blockNo) 
+                : moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')
+          }
         </Flex>
       ) : ('')}
     </chakra.td>

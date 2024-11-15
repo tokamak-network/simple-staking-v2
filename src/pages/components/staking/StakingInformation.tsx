@@ -18,6 +18,7 @@ import { useWeb3React } from "@web3-react/core";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import WalletInformation from "./WalletInformation";
+import { useWithdrawRequests } from '../../../hooks/staking/useWithdrawable';
 
 
 type StakingInformationProps = {
@@ -50,6 +51,8 @@ export const StakingInformation: FC<StakingInformationProps> = ({
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [, setSelectedModalData] = useRecoilState(modalData);
+
+  const { withdrawRequests } = useWithdrawRequests()
   
 
   const historyColumns = useMemo(
@@ -105,20 +108,45 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   }, [data]);
   
   useEffect(() => {
-    if (txHistory) {
-      const filtered = txTypeValue === 'All' 
-        ? txHistory 
-        : txHistory.filter((history: any) => {
-          return history.eventName === txTypeValue
-        })
-      const toggleFilter = toggle === 'All' 
-        ? filtered
-        : filtered.filter((history: any) => {
-          return history.sender.toLowerCase() === account?.toLowerCase()
-        })
+    async function fetch () {
+      if (txHistory) {
+        const filtered = txTypeValue === 'All' 
+          ? txHistory 
+          : txHistory.filter((history: any) => {
+            return history.eventName === txTypeValue
+          })
+        const toggleFilter = toggle === 'All' 
+          ? filtered
+          : filtered.filter((history: any) => {
+            return history.sender.toLowerCase() === account?.toLowerCase()
+          })
+        //@ts-ignore
+        const { pendingRequests } = await withdrawRequests(data.candidateContract)
+        // console.log(withdrawRequest)
+        let toggleWithdrawble: any[] = [];
+        for (let i = 0; toggleFilter.length > i; i ++) {
+          if (toggleFilter[i].eventName === 'Unstake') {
+            const withdrawable = pendingRequests.find((request: any) => {
+              return Number(request.withdrawableBlock) === Number(toggleFilter[i].transaction.blockNumber) + 93046
+                    || Number(request.withdrawableBlock) === Number(toggleFilter[i].transaction.blockNumber) + 930460
+            })
+            console.log(withdrawable)
+            const data = { 
+              ...toggleFilter[i], 
+              withdrawable: withdrawable ? true : false, 
+              withdrawn: i + 1 > pendingRequests.length
+              // withdrawableBlock: request.withdrawableBlock 
+            } 
+            toggleWithdrawble.push(data);
+          } else {
+            toggleWithdrawble.push(toggleFilter[i]);
+          }
+        }
         
-      setFilteredTxHistory(toggleFilter)
+        setFilteredTxHistory(toggleWithdrawble)
+      }
     }
+    fetch()
 
   }, [txTypeValue, toggle, data?.candidateContract])
 
@@ -215,7 +243,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
             data={data}
           />
         </Box>
-          <Flex flexDir={'row'} alignItems={'space-between'} mt={'30px'} ml={'45px'} w={'585px'}>
+          <Flex flexDir={'row'} alignItems={'space-between'} ml={'45px'} w={'585px'}>
             <OperatorDetailInfo 
               title={'Staked'}
               value={yourStake}

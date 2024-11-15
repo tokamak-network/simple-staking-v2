@@ -40,6 +40,7 @@ export const GET_CANDIDATE = gql`
         sender
         transaction {
           id
+          blockNumber
         }
       }
       unstaked: unstaked (first:1000) {
@@ -50,6 +51,7 @@ export const GET_CANDIDATE = gql`
         sender
         transaction {
           id
+          blockNumber
         }
       }
       withdrawal: withdrawal (first:1000) {
@@ -60,6 +62,7 @@ export const GET_CANDIDATE = gql`
         sender
         transaction {
           id
+          blockNumber
         }
       }
       withdrawL2: withdrawalAndDeposited(first:1000) {
@@ -70,6 +73,7 @@ export const GET_CANDIDATE = gql`
         sender
         transaction {
           id
+          blockNumber
         }
         candidate {
           id
@@ -83,6 +87,7 @@ export const GET_CANDIDATE = gql`
         timestamp
         transaction {
           id
+          blockNumber
         }
       }
     }
