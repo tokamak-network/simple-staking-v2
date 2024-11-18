@@ -25,7 +25,7 @@ export const ModalHeader = (args: {
           : type === 4
           ? '-180px'
           : main === 'Stake'
-          ? '-80px'
+          ? '-110px'
           : '-110px'
         }
         top={'-60px'}

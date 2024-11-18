@@ -185,9 +185,9 @@ function StakeModal() {
         || input === "0.00"
         || input === ''
         //@ts-ignore
-        || (tonBalance && tokenType === 'ton' && floatParser(input) > floatParser(tonBalance) ? true : false)
+        || (tonBalance && tokenType === 'TON' && floatParser(input) > floatParser(tonBalance) ? true : false)
         //@ts-ignore
-        || (wtonBalance && tokenType === 'wton' && floatParser(input) > floatParser(wtonBalance) ? true : false)
+        || (wtonBalance && tokenType === 'WTON' && floatParser(input) > floatParser(wtonBalance) ? true : false)
       )
       setStakeDisabled(disable)
     }
@@ -341,9 +341,9 @@ function StakeModal() {
                       : ''
                     }
                     onClick={
-                      selectedModal === 'staking' && tokenType === 'ton'
+                      selectedModal === 'staking' && tokenType === 'TON'
                         ? staking
-                        : selectedModal === 'staking' && tokenType === 'wton'
+                        : selectedModal === 'staking' && tokenType === 'WTON'
                         ? stakingWton
                         : ''
                     }
