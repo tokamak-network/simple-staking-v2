@@ -60,7 +60,7 @@ function WithdrawModal () {
     const fetch = async () => {
       if (selectedModalData) {
         //@ts-ignore
-        const { pendingRequests } = await withdrawRequests(selectedModalData.layer2)
+        const pendingRequests = await withdrawRequests(selectedModalData.layer2)
         setRequests(pendingRequests)
       }
     }

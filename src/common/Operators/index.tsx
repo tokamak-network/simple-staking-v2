@@ -23,6 +23,7 @@ import { useL2CandidateInfo } from "@/hooks/staking/useL2CandidateInfo";
 import { useIsOperator } from "@/hooks/staking/useIsOperator";
 import { InfoTypeSelector } from "../selector/InfoType";
 import ContractAddressInfo from "../table/staking/ContractAddressInfo";
+import { openInfonState } from "@/atom/staking/openInfo";
 
 
 type OpearatorInfoProps = {
@@ -30,7 +31,7 @@ type OpearatorInfoProps = {
   renderDetail: Function;
   renderL2: Function;
   isLoading: boolean;
-  key: number
+  index: number
 };
 
 export const OpearatorInfos: FC<OpearatorInfoProps> = ({
@@ -38,7 +39,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
   renderDetail,
   renderL2,
   isLoading,
-  key
+  index
 }) => {
   const focusTarget = useRef<any>([]);
   const router = useRouter();
@@ -57,7 +58,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
   } = data;
   const { account } = useWeb3React();
 
-  const [isOpen, setIsOpen] = useState('');
+  const [isOpen, setIsOpen] = useRecoilState(openInfonState);
   const [tab, setTab] = useState('staking')
   // const [members, setMembers] = useState()
   const [toggle, setToggle] = useRecoilState(toggleState)
@@ -136,14 +137,14 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
     >
       <Flex 
         overflowX={'auto'} 
-        ref={(el) => (focusTarget.current[key] = el)}
+        ref={(el) => (focusTarget.current[index] = el)}
         h={'74px'}
-        key={key}
+        key={index}
         onClick={() => {
           if (isOpen === candidateContract) {
             setIsOpen('');
           } else {
-            clickOpen(candidateContract, key);
+            clickOpen(candidateContract, index);
           }
         }}
         cursor={'pointer'}
@@ -238,7 +239,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
           <Flex
             boxShadow="0 1px 1px 0 rgba(96, 97, 112, 0.16)"
             // h={'650px'}
-            key={key}
+            // key={index}
             m={0}
             mb={'14px'}
             mt={-5}

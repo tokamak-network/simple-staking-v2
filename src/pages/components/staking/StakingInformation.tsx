@@ -121,7 +121,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
             return history.sender.toLowerCase() === account?.toLowerCase()
           })
         //@ts-ignore
-        const { pendingRequests } = await withdrawRequests(data.candidateContract)
+        const pendingRequests = await withdrawRequests(data.candidateContract)
         // console.log(withdrawRequest)
         let toggleWithdrawble: any[] = [];
         for (let i = 0; toggleFilter.length > i; i ++) {
@@ -130,7 +130,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
               return Number(request.withdrawableBlock) === Number(toggleFilter[i].transaction.blockNumber) + 93046
                     || Number(request.withdrawableBlock) === Number(toggleFilter[i].transaction.blockNumber) + 930460
             })
-            console.log(withdrawable)
+            // console.log(withdrawable)
             const data = { 
               ...toggleFilter[i], 
               withdrawable: withdrawable ? true : false, 
@@ -221,10 +221,21 @@ export const StakingInformation: FC<StakingInformationProps> = ({
     name: name
   };
 
+  useEffect(() => {
+    console.log('a')
+    setSelectedModalData({
+      stakedAmount: yourStaked,
+      layer2: candidateContracts,
+      withdrawableLength: withdrawableLength,
+      name: name
+    })
+    
+  }, [data?.candidateContract, data])
+  
   const modalButton = useCallback(async (modalType: ModalType, data: any) => {
     setSelectedModal(modalType);
     setSelectedModalData(data);
-  }, [dataModal]);
+  }, [candidateContracts]);
 
   return (
     <Flex

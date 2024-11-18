@@ -162,7 +162,7 @@ export function useWithdrawRequests () {
           pendingRequests.push(data);
           requestIndex++;
         }
-        return { pendingRequests, requestIdx }
+        return pendingRequests
       }
   }, [txPending])
   

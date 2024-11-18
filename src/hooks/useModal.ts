@@ -7,12 +7,12 @@ import { ClaimModalDataType, StakeModalDataType } from "types"
 
 function useModal<T>(
   modalType?: ModalType,
-  modalDataObj?: StakeModalDataType  | undefined,
+  modalDataObj?: StakeModalDataType | undefined,
   setInitialValue?: React.Dispatch<SetStateAction<any>>
 ) {
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [selectedModalData, setSelectedModalData] = useRecoilState<
-    StakeModalDataType  | undefined
+    StakeModalDataType | undefined
   >(modalData);
   const [value, setValue] = useRecoilState(inputState);
   const [isModalLoading, setIsModalLoading] = useRecoilState(modalLoadingState);

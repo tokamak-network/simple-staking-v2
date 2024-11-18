@@ -10,6 +10,8 @@ import { ETHERSCAN_API, ETHERSCAN_LINK } from "@/constants";
 import { fromNow } from "@/components/getDate";
 import { getCountdown } from "@/api";
 import { useWeb3React } from "@web3-react/core";
+import { useRecoilState } from "recoil";
+import { modalData, modalState } from "@/atom/global/modal";
 
 type HistoryTableRowProps = {
   key: number
@@ -55,11 +57,19 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   const { library, account } = useWeb3React()
 
   const [ remainTime, setRemainTime ] = useState('')
+  const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
+  const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [ block, setBlock ] = useState(0)
   const delay = 93046
   const blockNo = transaction.blockNumber
-  // console.log(withdrawn)
+  // console.log(cell.row.original)
+  // layer2, name , withdrawableLength, withdrawable
 
+  // const dataModal = {
+  //   layer2: layer2,
+
+  // }
+  console.log(selectedModalData)
   useEffect(() => {
     async function fetch () {
       if (typeName === 'Unstake' && delay) {
@@ -83,7 +93,7 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   const withdrawableTime = (blockNumber: number) => {
     const withdrawableBlock = Number(blockNumber) + 93046
     // const withdrawable = block > withdrawableBlock
-    console.log(withdrawable)
+    
     return (
       <Flex>
         {
@@ -100,6 +110,7 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
                 color={'#2a72e5'}
                 fontSize={'12px'}
                 fontWeight={400}
+                onClick={()=>setSelectedModal('withdraw')}
               > 
                 Withdraw 
               </Button>
