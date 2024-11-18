@@ -2,14 +2,16 @@ import { BalanceInput } from "@/common/input/CustomInput"
 import { Flex } from "@chakra-ui/react"
 import Image from "next/image"
 import TON from "@/assets/images/ton.svg"
+import WTON from "@/assets/images/wton.svg"
 import { UnstakableBalance } from "@/common/balance/UnstakableBalance"
 
 type UnstakeBalanceInputProps = {
   stakedAmount: string | undefined
+  tokenType?: string
 }
 
 export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
-  const {stakedAmount} = args
+  const { stakedAmount, tokenType } = args
   
   return (
     <Flex
@@ -29,8 +31,10 @@ export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
             justifyContent={'center'} 
             alignItems={'center'}
             mr={'9px'}
+            backgroundColor={tokenType ? tokenType === 'WTON' ? '#007aff' : '' : ''}
+            p={tokenType ? tokenType === 'WTON' ? '#007aff' : '' : ''}
           >
-            <Image src={TON} alt={''} />
+            <Image src={tokenType ? tokenType === 'WTON' ? WTON : TON : TON} alt={''} />
           </Flex>
           <Flex
             fontSize={'18px'}
@@ -39,12 +43,12 @@ export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
             h={'24px'}
             alignItems={'center'}
           >
-            TON
+            {tokenType ? tokenType : 'TON'}
           </Flex>
         </Flex>
         <Flex>
           <BalanceInput
-            w={'100px'}
+            w={tokenType ? tokenType === 'WTON' ? '82.5px' : '100px' : '100px'}
             h={'24px'}
             placeHolder={'0.00'}
             type={'unstaking'}
@@ -54,6 +58,7 @@ export const UnstakeBalanceInput = (args: UnstakeBalanceInputProps) => {
       </Flex>
       <UnstakableBalance 
         stakedAmount={stakedAmount}
+        tokenType={tokenType}
         justify={'end'}
       />
     </Flex>

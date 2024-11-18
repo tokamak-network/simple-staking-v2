@@ -15,12 +15,12 @@ import { getOldLayerAddress } from '@/components/getOldLayerAddress';
 import { StakeModalDataType } from "types"
 import useModal from '@/hooks/useModal';
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
-import { useUserStaked } from '@/hooks/staking/useUserStaked';
-import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
-import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
+// import { useUserStaked } from '@/hooks/staking/useUserStaked';
+// import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
+// import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
 import Image from 'next/image';
 import TON_LOGO from '@/assets/images/ton_symbol.svg'
-import WTON_LOGO from '@/assets/images/wton.svg'
+import WTON_LOGO from '@/assets/images/wton_large.svg'
 import BasicTooltip from '@/common/tooltip';
 
 type WalletInformationProps = {

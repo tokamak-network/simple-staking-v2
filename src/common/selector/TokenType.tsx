@@ -30,11 +30,11 @@ export const TokenTypeSelector = (args: TokenTypeSelectorProps) => {
         textAlign={'center'}
         h={mobile ? '30px' : '24px'}
         borderRadius={'5px'}
-        color={tab === 'ton' ? '#fff' : ''}
-        bg={tab==="ton" ? '#2a72e5' : '#fff'}
+        color={tab === 'TON' ? '#fff' : ''}
+        bg={tab==="TON" ? '#2a72e5' : '#fff'}
         justifyContent={'center'}
         alignItems={'center'}
-        onClick={() => setTab('ton')}
+        onClick={() => setTab('TON')}
         cursor={'pointer'}
       >
         TON
@@ -44,11 +44,11 @@ export const TokenTypeSelector = (args: TokenTypeSelectorProps) => {
         textAlign={'center'}
         h={mobile ? '30px' : '24px'}
         borderRadius={'5px'}
-        color={tab === 'wton' ? '#fff' : ''}
-        bg={tab === "wton" ? '#2a72e5' : '#fff'}
+        color={tab === 'WTON' ? '#fff' : ''}
+        bg={tab === "WTON" ? '#2a72e5' : '#fff'}
         justifyContent={'center'}
         alignItems={'center'}
-        onClick={() => setTab('wton')}
+        onClick={() => setTab('WTON')}
         cursor={'pointer'}
       >
         WTON

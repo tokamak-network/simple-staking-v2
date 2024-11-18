@@ -4,12 +4,14 @@ import { Flex } from "@chakra-ui/react"
 type UnstakableBalanceProps = {
   stakedAmount: string | undefined
   justify: string
+  tokenType?: string
 }
 
 export const UnstakableBalance = (args: UnstakableBalanceProps) => {
-  const { stakedAmount, justify } = args
+  const { stakedAmount, justify, tokenType } = args
   const {tonPriceUSD} = useTONPrice()
   const dollor = stakedAmount ? parseFloat(stakedAmount.replaceAll(',', '')) * tonPriceUSD : '0.00'
+
   return (
     <Flex 
       flexDir={'row'} 
@@ -21,7 +23,7 @@ export const UnstakableBalance = (args: UnstakableBalanceProps) => {
       mr={'20px'}
     >
       <Flex>
-        Balance: {stakedAmount} TON 
+        Balance: {stakedAmount} {tokenType ? tokenType : 'TON'} 
       </Flex>
       <Flex mx={'3px'}>
         /

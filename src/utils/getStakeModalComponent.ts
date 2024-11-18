@@ -2,7 +2,7 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
   const modalComponent = {
     staking: {
       header: 'Stake',
-      subHeader: 'Stake TON (or WTON) to earn staking rewards.',
+      subHeader: '',
       balanceInfo: 'Balance',
       balance: data.tonBalance,
       balance2: data.wtonBalance,
