@@ -217,7 +217,7 @@ function StakeModal() {
     return reducedValue?.toLocaleString();
   };
 
-  const seigChecker = (value: string) => {
+  const seigChecker = (value: string | undefined) => {
     
     if (value) {
       //@ts-ignore

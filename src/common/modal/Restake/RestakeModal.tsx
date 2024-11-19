@@ -111,7 +111,7 @@ function WithdrawModal () {
                   }
                   <ModalHeader
                     main={'Restake'}
-                    sub={'DAO Candidates:'}
+                    sub={'DAO Candidate:'}
                     closeThisModal={closeThisModal}
                     type={number}
                     sub2={selectedModalData.name}

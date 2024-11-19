@@ -29,12 +29,14 @@ type HistoryTableProps = {
   columns: Column[];
   data: any[];
   tableType: string;
+  dataModal: any;
 }
 
 export const HistoryTable: FC<HistoryTableProps> = ({
   columns,
   data,
   tableType,
+  dataModal
 }) => {
   const {
     getTableProps,
@@ -59,6 +61,8 @@ export const HistoryTable: FC<HistoryTableProps> = ({
   const [currentPage, setCurrentPage] = useState(0)
   const [buttonClick, setButtonClick] = useState(Boolean)
   const [toggle, setToggle] = useRecoilState(toggleState)
+  
+  
 
   const { account } = useWeb3React()
   
@@ -84,7 +88,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
     nextPage();
     setButtonClick(true)
   };
-
+  
   return (
     <Flex 
       w={tableType === 'Transactions' ? '625px' : '285px'}
@@ -141,7 +145,6 @@ export const HistoryTable: FC<HistoryTableProps> = ({
             </FormControl>  
           }
         </Flex>
-      
       </Flex>
       <Box overflowX={'auto'}>
         <chakra.table
@@ -183,6 +186,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                         cell={cell}
                         tableType={tableType}
                         currentPage={currentPage}
+                        selectedModalData={dataModal}
                       />
                     )
                   }) : ''}

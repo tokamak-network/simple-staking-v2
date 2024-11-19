@@ -200,7 +200,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
         localeString: true,
       })
     : '-';
-
+  
   const dataModal: StakeModalDataType = {
     tonBalance: userTonBalance ? userTonBalance : '0.00',
     wtonBalance: userWTonBalance ? userWTonBalance : '0.00',
@@ -220,17 +220,6 @@ export const StakingInformation: FC<StakingInformationProps> = ({
     isL2: isL2,
     name: name
   };
-
-  useEffect(() => {
-    console.log('a')
-    setSelectedModalData({
-      stakedAmount: yourStaked,
-      layer2: candidateContracts,
-      withdrawableLength: withdrawableLength,
-      name: name
-    })
-    
-  }, [data?.candidateContract, data])
   
   const modalButton = useCallback(async (modalType: ModalType, data: any) => {
     setSelectedModal(modalType);
@@ -318,6 +307,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
               columns={historyColumns}
               data={commitHistory}
               tableType={'Update Seigniorage'}
+              dataModal={dataModal}
             />
           }
           {
@@ -326,6 +316,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
               columns={historyColumns}
               data={filteredTxHistory}
               tableType={'Transactions'}
+              dataModal={dataModal}
             />
           }
         </Flex> : ''

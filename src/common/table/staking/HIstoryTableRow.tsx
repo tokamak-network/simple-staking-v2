@@ -3,7 +3,7 @@ import { calcCountDown, convertNumber } from "@/components/number";
 import trimAddress from "@/components/trimAddress";
 import { Button, chakra, Flex, Link, Text } from "@chakra-ui/react";
 import moment from "moment";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { getColumnWidthStaking } from '@/utils/getColumnWidth';
 import { useTheme } from '@chakra-ui/react';
 import { ETHERSCAN_API, ETHERSCAN_LINK } from "@/constants";
@@ -12,6 +12,7 @@ import { getCountdown } from "@/api";
 import { useWeb3React } from "@web3-react/core";
 import { useRecoilState } from "recoil";
 import { modalData, modalState } from "@/atom/global/modal";
+import { ModalType } from "@/types/modal";
 
 type HistoryTableRowProps = {
   key: number
@@ -19,6 +20,7 @@ type HistoryTableRowProps = {
   cell: any
   tableType: string
   currentPage: any
+  selectedModalData: any
 }
 
 export const HistoryTableRow: FC<HistoryTableRowProps> = ({
@@ -26,7 +28,8 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   
   cell,
   tableType,
-  currentPage
+  currentPage,
+  selectedModalData
 }) => {
   const {
     id,
@@ -57,19 +60,19 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   const { library, account } = useWeb3React()
 
   const [ remainTime, setRemainTime ] = useState('')
-  const [selectedModalData, setSelectedModalData] = useRecoilState(modalData);
+  const [, setSelectedModalData] = useRecoilState(modalData);
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [ block, setBlock ] = useState(0)
+
   const delay = 93046
   const blockNo = transaction.blockNumber
-  // console.log(cell.row.original)
-  // layer2, name , withdrawableLength, withdrawable
 
-  // const dataModal = {
-  //   layer2: layer2,
-
-  // }
-  console.log(selectedModalData)
+  const modalButton = useCallback(async (modalType: ModalType, data: any) => {
+    setSelectedModal(modalType);
+    setSelectedModalData(data);
+  }, []);
+  
+  
   useEffect(() => {
     async function fetch () {
       if (typeName === 'Unstake' && delay) {
@@ -92,7 +95,6 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
 
   const withdrawableTime = (blockNumber: number) => {
     const withdrawableBlock = Number(blockNumber) + 93046
-    // const withdrawable = block > withdrawableBlock
     
     return (
       <Flex>
@@ -110,7 +112,7 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
                 color={'#2a72e5'}
                 fontSize={'12px'}
                 fontWeight={400}
-                onClick={()=>setSelectedModal('withdraw')}
+                onClick={()=>modalButton('withdraw', selectedModalData)}
               > 
                 Withdraw 
               </Button>

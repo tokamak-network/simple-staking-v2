@@ -86,6 +86,8 @@ function WithdrawModal () {
     }
     setNumber(numberOf)
   }, [selectedModalData])
+
+  console.log(selectedModalData)
   
   return (
     <Modal
@@ -128,7 +130,7 @@ function WithdrawModal () {
                   }
                   <ModalHeader
                     main={modalName}
-                    sub={'DAO Candidates:'}
+                    sub={'DAO Candidate:'}
                     closeThisModal={closeThisModal}
                     type={number}
                     sub2={selectedModalData.name}
