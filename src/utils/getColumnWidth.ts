@@ -9,8 +9,9 @@ export function getColumnWidthStaking(tableType: string, columnName: string) {
 
 export function getColumnWidthWallet(columnName: string) {
   return columnName === 'index' ? '70px' :
-    columnName === 'txHash' || columnName === 'contractAddress' ? '140px' :
-      columnName === 'txType' || columnName === 'amount' ? '130px' :
+    columnName === 'txHash' || columnName === 'contractAddress' ? '160px' :
+      columnName === 'txType' ? '170px' :
+       columnName === 'amount' ? '190px' :
         columnName === 'blockNumber' ? '360px' : ''
 }
 

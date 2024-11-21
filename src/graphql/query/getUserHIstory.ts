@@ -53,6 +53,10 @@ export const GET_HISTORY = gql`
         timestamp
         eventName
         sender
+        candidate {
+          id
+          name
+        }
         transaction {
           id
         }

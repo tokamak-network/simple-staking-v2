@@ -77,7 +77,7 @@ const typeItemList = [
   'All', 'Stake', 'Unstake', 'Withdraw'
 ]
 
-const TypeItem = () => {
+export const TypeItem = () => {
   const [menuState, setMenuState] = useState(false);
   const [hover, setHover] = useState(false);
   const handleMenuButtonClick = (event: any) => {
