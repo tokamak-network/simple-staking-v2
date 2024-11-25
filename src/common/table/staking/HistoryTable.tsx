@@ -62,8 +62,6 @@ export const HistoryTable: FC<HistoryTableProps> = ({
   const [buttonClick, setButtonClick] = useState(Boolean)
   const [toggle, setToggle] = useRecoilState(toggleState)
   
-  
-
   const { account } = useWeb3React()
   
   const theme = useTheme();

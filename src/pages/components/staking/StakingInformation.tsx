@@ -225,6 +225,8 @@ export const StakingInformation: FC<StakingInformationProps> = ({
     setSelectedModal(modalType);
     setSelectedModalData(data);
   }, [candidateContracts]);
+  
+  console.log(commitHistory)
 
   return (
     <Flex

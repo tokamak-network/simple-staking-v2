@@ -10,7 +10,7 @@ import { getCountdown } from '@/api';
 import { useWeb3React } from '@web3-react/core';
 import { calcCountDown } from '../../../utils/number';
 import useCallContract from 'hooks/useCallContract';
-import { ETHERSCAN_API, ETHERSCAN_LINK } from '@/constants';
+import { DEFAULT_NETWORK, ETHERSCAN_API, ETHERSCAN_LINK } from '@/constants';
 
 type TableRowProps = {
   index: number
@@ -144,20 +144,16 @@ export const TableRow: FC<TableRowProps> = ({
         </Text>
       ) : ('')}
       {txId && type === 'txHash' ? (
+        
         <Link
           isExternal
-          href={`https://etherscan.io/tx/${txId}`}
+          href={`https://${DEFAULT_NETWORK === '1' ? 'simple' : 'sepolia'}.staking.tokamak.network/staking#${candidate.id}`}
           textAlign={'center'}
           w={'100%'}
           color={'#2a72e5'}
         >
           {candidate.name}
-          {/* {trimAddress({
-            address: txId,
-            firstChar: 6,
-            lastChar: 4,
-            dots: '...'
-          })} */}
+          
         </Link>
       ) : ('')}
       {/* {type === 'contractAddress' ? (

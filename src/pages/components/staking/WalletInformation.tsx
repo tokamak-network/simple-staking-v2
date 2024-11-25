@@ -15,13 +15,12 @@ import { getOldLayerAddress } from '@/components/getOldLayerAddress';
 import { StakeModalDataType } from "types"
 import useModal from '@/hooks/useModal';
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
-// import { useUserStaked } from '@/hooks/staking/useUserStaked';
-// import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
-// import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
+
 import Image from 'next/image';
 import TON_LOGO from '@/assets/images/ton_symbol.svg'
 import WTON_LOGO from '@/assets/images/wton_large.svg'
 import BasicTooltip from '@/common/tooltip';
+import { useCalculateAPR } from '@/hooks/staking/useCalculateAPR';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -34,12 +33,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const { account, library } = useWeb3React();
-
-  //Buttons
-  const [stakeDisabled, setStakeDisabled] = useState(true);
-  const [unstakeDisabled, setUnstakeDisabled] = useState(true);
-  const [reStakeDisabled, setReStakeDisabled] = useState(true);
-  const [withdrawDisabled, setwithdrawDisabled] = useState(true);
+  
   const [candidateContracts, setCandidateContracts] = useState('');
   const [candidates, setCandidates] = useState('');
   const [stakeOfUser, setStakeOfUser] = useState('');
@@ -52,6 +46,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
   const [isL2, setIsL2] = useState<boolean>(false);
 
   const { userTonBalance, userWTonBalance } = useUserBalance(account);
+
+  const compounds = useCalculateAPR(data)
 
   useEffect(() => {
     if (data) {
@@ -95,36 +91,6 @@ export const WalletInformation: FC<WalletInformationProps> = ({
         localeString: true,
       })
     : '0.00';
-  
-  const btnDisabledStake = () => {
-    return account && (userTonBalance !== '0.00' || userWTonBalance !== '0.00') ? setStakeDisabled(false) : setStakeDisabled(true);
-  };
-
-  const btnDisabledReStake = () => {
-    return account === undefined || pendingUnstaked === '0.00' ? setReStakeDisabled(true) : setReStakeDisabled(false);
-  };
-
-  const btnDisabledUnStake = () => {
-    return account === undefined || yourStaked === '0.00' || yourStaked === '-'
-      ? setUnstakeDisabled(true)
-      : setUnstakeDisabled(false);
-  };
-
-  const btnDisabledWithdraw = () => {
-    return account === undefined || (withdrawable === '0.00' && old_withdrawable === '0.00')
-      ? setwithdrawDisabled(true)
-      : setwithdrawDisabled(false);
-  };
-
-  useEffect(() => {
-    btnDisabledStake();
-    btnDisabledUnStake();
-    btnDisabledReStake();
-    btnDisabledWithdraw();
-    /*eslint-disable*/
-  }, [account, pendingUnstaked, userTonBalance, withdrawable, old_withdrawable]);
-
-  
   
   const candidateAmountForButton = stakeCandidate
   ? convertNumber({
@@ -242,7 +208,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
             </Flex>
             <Flex flexDir={'row'} alignItems={'center'}>
               <Flex color={'#304156'} fontSize={'25px'} fontWeight={700} mr={'9px'}>
-                34.56%
+                {compounds} %
               </Flex>
               <Button
                 {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
