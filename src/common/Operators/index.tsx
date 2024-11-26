@@ -24,6 +24,7 @@ import { useIsOperator } from "@/hooks/staking/useIsOperator";
 import { InfoTypeSelector } from "../selector/InfoType";
 import ContractAddressInfo from "../table/staking/ContractAddressInfo";
 import { openInfonState } from "@/atom/staking/openInfo";
+import { useCalculateAPR } from "@/hooks/staking/useCalculateAPR";
 
 
 type OpearatorInfoProps = {
@@ -80,6 +81,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
     // }, 100);
     }
   }, [])
+  const compounds = useCalculateAPR(data)
 
   const stakedId = candidateContract
 
@@ -212,7 +214,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
           </Flex>
           <Info 
             title={'Expected APY'}
-            value={'34.56'}
+            value={compounds}
             unit={'%'}
           />
           <Info 

@@ -16,6 +16,7 @@ const REFACTOR_BOUNDARY = BigNumber.from("1"+"0".repeat(28));
 export function useExpectedSeig (candidateContract: string, stakedAmount: string, candidate: string) {
   const { account, library } = useWeb3React()
   const [expectedSeig, setExpectedSeig] = useState('')
+  const [seigOfLayer, setSeigOfLayer] = useState('')
 
 
   const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT, SeigManager_CONTRACT } = useCallContract();
@@ -82,6 +83,8 @@ export function useExpectedSeig (candidateContract: string, stakedAmount: string
           } else {
             seig = stakedAmount === '0' ? 0 : seigOfLayer.mul(BigNumber.from(userStaked)).div(BigNumber.from(stakedAmount))
           }
+          // console.log(seigOfLayer)
+          setSeigOfLayer(seigOfLayer.toString())
           setExpectedSeig(seig.toString())
         } catch (e) {
           console.log(e)
@@ -90,7 +93,7 @@ export function useExpectedSeig (candidateContract: string, stakedAmount: string
     }
     fetch ()
   }, [account, candidateContract])
-  return expectedSeig
+  return { expectedSeig, seigOfLayer }
 }
 
 const calcMaxSeigs = async  (lastSeigBlock: any, seigPerBlock: any, blockNumber: number) => {

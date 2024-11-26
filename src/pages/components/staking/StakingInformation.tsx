@@ -157,7 +157,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
 
   const minimumAmount = Number(candidateAmount) >= 1000
   
-  const expectedSeig = useExpectedSeig(data?.candidateContract, data?.stakedAmount, data?.candidate)
+  const { expectedSeig, seigOfLayer } = useExpectedSeig(data?.candidateContract, data?.stakedAmount, data?.candidate)
   const userExpectedSeig = expectedSeig ? 
     convertNumber({
       amount: expectedSeig,
@@ -225,8 +225,6 @@ export const StakingInformation: FC<StakingInformationProps> = ({
     setSelectedModal(modalType);
     setSelectedModalData(data);
   }, [candidateContracts]);
-  
-  console.log(commitHistory)
 
   return (
     <Flex
@@ -249,7 +247,11 @@ export const StakingInformation: FC<StakingInformationProps> = ({
             <OperatorDetailInfo 
               title={'Staked'}
               value={yourStake}
-              totalValue={userExpectedSeig}
+              totalValue={convertNumber({
+                amount: data.stakedAmount, 
+                type: 'ray',
+                localeString: true
+              })}
               unit={'TON'}
               type={''}
               dataModal={()=> modalButton('withdraw', dataModal)}
@@ -257,7 +259,12 @@ export const StakingInformation: FC<StakingInformationProps> = ({
              <OperatorDetailInfo 
               title={'Unclaimed Staking Reward'}
               value={userExpectedSeig}
-              totalValue={userExpectedSeig}
+              totalValue={seigOfLayer ? 
+                convertNumber({
+                  amount: seigOfLayer,
+                  type: 'ray',
+                  localeString: true
+                }) : '-' }
               unit={'TON'}
               type={''}
               contractInfo={data?.candidateContract}
