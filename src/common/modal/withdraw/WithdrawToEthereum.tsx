@@ -7,7 +7,8 @@ import {
   Switch,
   useTheme,
   useCheckboxGroup,
-  useCheckbox, 
+  useCheckbox,
+  useDisclosure, 
 } from "@chakra-ui/react"
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import { StakeModalDataType } from '../../../types/index';
@@ -44,7 +45,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   const [, setTxPending] = useRecoilState(txState);
   const [input, setInput] = useRecoilState(inputState);
   const [modalOpen, setModalOpen] = useRecoilState(transactionModalStatus);
-  const [isOpen, setIsOpen] = useRecoilState(transactionModalOpenStatus);
+  const [, setIsOpen] = useRecoilState(transactionModalOpenStatus);
   const [selectedMode, setSelectedMode] = useRecoilState(getModeData);
 
   const [tx, setTx] = useState();

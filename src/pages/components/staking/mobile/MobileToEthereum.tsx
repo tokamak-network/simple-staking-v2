@@ -42,6 +42,7 @@ export function MobileToEthereum (args: MobileToEthereumProps) {
           selectedOp={selectedOp}
           requests={requests}
           onClose={onClose}
+          toggle={'Withdraw'}
         />
       }
     </Flex>

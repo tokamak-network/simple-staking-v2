@@ -35,6 +35,7 @@ import { WarningMessage } from "./WarningMessage";
 import { SelectOperator } from "./components/SelectOperators";
 import { BalanceDisplay } from "./components/BalanceDisplay";
 import { selectedModalData } from "@/atom/global/modal";
+import RestakeDrawer from "./MobileRestakeModal";
 
 function  MobileStakingComponent(props: { 
   operatorList: any 
@@ -59,6 +60,12 @@ function  MobileStakingComponent(props: {
   const [tx, setTx] = useState();
   const { withdrawable, withdrawableLength } = useWithdrawable(selectedOp?.candidateContract)
   const { pendingUnstaked } = usePendingUnstaked(selectedOp?.candidateContract, account);
+  const [type, setType] = useState('')
+
+  const openDrawer = (type: string) => {
+    onOpen()
+    setType(type)
+  }
 
   const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT } = useCallContract();
 
@@ -281,21 +288,21 @@ function  MobileStakingComponent(props: {
           </Flex>
         }
       {
-        account && title === 'Stake' ?
+        account ?
         <Flex flexDir={'column'}>
           <MobileInfo 
             title={'Your Staked'}
-            value={stakedAmount}
+            value={stakedAmount ? stakedAmount : '0.00'}
           /> 
           <MobileInfo 
             title={'Unclaimed Staking Reward'}
-            value={userExpectedSeig ? userExpectedSeig : '0.00'}
+            value={userExpectedSeig ? userExpectedSeig : '-'}
           />
         </Flex>
           : '' 
       }
       { 
-        userExpectedSeig && userExpectedSeig !== '0.00' && account && title === 'Stake' ?
+        userExpectedSeig && userExpectedSeig !== '0.00' && account  ?
         <Flex
           fontSize={'11px'}
           color={'#2a72e5'}
@@ -309,21 +316,21 @@ function  MobileStakingComponent(props: {
         ''
       }
       {
-        account && title === 'Stake' ?
+        account?
         <MobileInfo 
           title={'Pending Withdrawal'}
-          value={pendingUnstaked}
+          value={pendingUnstaked ? pendingUnstaked : '-'}
         /> : ''
       }
       { 
-        pendingUnstaked && pendingUnstaked !== '0.00' && account && title === 'Stake' ?
+        pendingUnstaked && pendingUnstaked !== '0.00' && account ?
         <Flex
           fontSize={'11px'}
           color={'#2a72e5'}
           cursor={'pointer'}
           justifyContent={'end'}
           mt={'12px'}
-          onClick={()=> restake()}
+          onClick={()=> openDrawer('Restake')}
         >
           Restake
         </Flex> :
@@ -334,6 +341,12 @@ function  MobileStakingComponent(props: {
         onClose={onClose}
         isOpen={isOpen}
         setSelectedOp={setSelectedOp}
+      />
+      <RestakeDrawer 
+        onClose={onClose}
+        isOpen={isOpen}
+        type={type}
+        selectedOp={selectedOp}
       />
     </Flex>
   );

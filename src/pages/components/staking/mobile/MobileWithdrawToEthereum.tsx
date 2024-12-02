@@ -32,13 +32,13 @@ type MobileWithdrawToEthereumProps ={
   selectedOp: any 
   requests: any
   onClose: any
+  toggle: string
 }
 
 export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
-  const {selectedOp, requests, onClose} = args
+  const {selectedOp, requests, onClose, toggle} = args
   const theme = useTheme();
   const { btnStyle } = theme;
-  const [toggle, setToggle] = useState('Withdraw')
   const [option, setOption] = useState('WTON')
   const [menuState, setMenuState] = useState(false);
 
@@ -206,7 +206,7 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
       <Flex flexDir={'column'} justifyContent={'space-between'} h={'100%'} w={'100%'}>
         <Flex
           flexDir={'row'} 
-          justifyContent={'space-between'}
+          justifyContent={'center'}
           alignItems={'center'}
           w={'100%'}
           mb={'12px'}
@@ -217,9 +217,9 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
             color={'#3e495c'}
             // w={'110px'}
           >
-            Withdraw history
+            Pending Withdrawal
           </Flex>
-          <FormControl
+          {/* <FormControl
             display={'flex'}
             justifyContent={'center'}
             alignItems={'center'}
@@ -244,7 +244,7 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
                   : setToggle('Withdraw')
               }
             />
-          </FormControl>
+          </FormControl> */}
         </Flex>
         {
           requests ?
