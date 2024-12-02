@@ -24,6 +24,7 @@ export function SelectOperator (args: SelectOperatorProps) {
       justifyContent={"space-between"}
       alignItems="center"
       px="10px"
+      onClick={onOpen}
     >
       <Text fontSize={"12px"}>Select an operator</Text>
       <Flex alignItems={"center"}>
@@ -39,7 +40,7 @@ export function SelectOperator (args: SelectOperatorProps) {
             Select one...
           </Flex>
         }
-        <Flex height={"9px"} width={"8px"} ml="10px" onClick={onOpen}>
+        <Flex height={"9px"} width={"8px"} ml="10px" >
           <Image
             src={select1_arrow_inactive}
             alt={"select1_arrow_inactive"}

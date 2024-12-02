@@ -34,6 +34,7 @@ import { MobileWithdraw } from "./MobileWithdraw";
 import { WarningMessage } from "./WarningMessage";
 import { SelectOperator } from "./components/SelectOperators";
 import { BalanceDisplay } from "./components/BalanceDisplay";
+import { selectedModalData } from "@/atom/global/modal";
 
 function  MobileStakingComponent(props: { 
   operatorList: any 
@@ -77,10 +78,15 @@ function  MobileStakingComponent(props: {
   }, [candidateAmount])
 
   const userExpectedSeig = expectedSeig? convertNumber({
-    amount: expectedSeig,
+    amount: expectedSeig.expectedSeig,
     type: 'ray',
     localeString: true
   }) : '0.00'
+
+  const stakedAmount = selectedOp?.stakeOf ? convertNumber({
+    amount: selectedOp?.stakeOf,
+    type:'ray'
+  }) : ''
 
   useEffect(() => {
     setSelectedOp(index? operatorList[index] : operatorList[0])
@@ -96,6 +102,21 @@ function  MobileStakingComponent(props: {
           account
         )
         const tx = await Candidate_CONTRACT.updateSeigniorage()
+        setTx(tx);
+        setTxPending(true);
+      } catch (e) {
+        console.log(e)
+        setTxPending(false);
+        setTx(undefined);
+      }
+    }
+  }, [library, selectedOp])
+
+  const restake = useCallback(async () => {
+    if (account && library && DepositManager_CONTRACT) {
+      try {
+        const numPendRequest = await DepositManager_CONTRACT.numPendingRequests(selectedOp?.candidateContract, account);
+        const tx = await DepositManager_CONTRACT.redepositMulti(selectedOp?.candidateContract, numPendRequest);
         setTx(tx);
         setTxPending(true);
       } catch (e) {
@@ -143,6 +164,8 @@ function  MobileStakingComponent(props: {
       localeString: true
     }) : '0.00'
 
+  console.log(pendingUnstaked)
+  
   return (
     <Flex w="100%" px="20px" flexDir={'column'}>
       {
@@ -262,11 +285,11 @@ function  MobileStakingComponent(props: {
         <Flex flexDir={'column'}>
           <MobileInfo 
             title={'Your Staked'}
-            value={selectedOp?.stakeOf}
+            value={stakedAmount}
           /> 
           <MobileInfo 
             title={'Unclaimed Staking Reward'}
-            value={minimumAmount ? expectedSeig : '-'}
+            value={userExpectedSeig ? userExpectedSeig : '0.00'}
           />
         </Flex>
           : '' 
@@ -281,7 +304,28 @@ function  MobileStakingComponent(props: {
           mt={'12px'}
           onClick={()=> updateSeig()}
         >
-          Add to Your Staked
+          Update seigniorage
+        </Flex> :
+        ''
+      }
+      {
+        account && title === 'Stake' ?
+        <MobileInfo 
+          title={'Pending Withdrawal'}
+          value={pendingUnstaked}
+        /> : ''
+      }
+      { 
+        pendingUnstaked && pendingUnstaked !== '0.00' && account && title === 'Stake' ?
+        <Flex
+          fontSize={'11px'}
+          color={'#2a72e5'}
+          cursor={'pointer'}
+          justifyContent={'end'}
+          mt={'12px'}
+          onClick={()=> restake()}
+        >
+          Restake
         </Flex> :
         ''
       }

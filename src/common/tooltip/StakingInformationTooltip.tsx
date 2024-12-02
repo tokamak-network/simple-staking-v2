@@ -1,3 +1,4 @@
+import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 import {
   Tooltip,
   useColorMode,
@@ -23,10 +24,13 @@ export const StakingInformationTooltip = (args: StakingInformationTooltipProps) 
     unit
   } = args
 
+  const [ width ] = useWindowDimensions();
+  const mobile = width && width < 1040;
+
   return (
     <Flex 
-      flexDir={'column'}
-      justifyContent={'center'}
+      flexDir={mobile ? 'row' : 'column'}
+      justifyContent={mobile ? 'space-between' : 'center'}
       alignItems={'center'}
     >
       <Flex h={'12px'}>
@@ -44,10 +48,10 @@ export const StakingInformationTooltip = (args: StakingInformationTooltipProps) 
       </Flex>
       <Flex
         h={'27px'}
-        fontWeight={700}
-        fontSize={'18px'}
+        fontWeight={mobile ? 400 : 700}
+        fontSize={mobile ? '13px' : '18px'}
         color={'#3d495c'}
-        alignItems={'end'}
+        alignItems={mobile ? 'center' : 'end'}
       >
         <Flex>
           {value}
@@ -55,7 +59,7 @@ export const StakingInformationTooltip = (args: StakingInformationTooltipProps) 
         <Flex
           ml={'3px'}
           fontSize={'13px'}
-          mb={'2px'}
+          mb={mobile ? '' : '2px'}
         >
           {unit}
         </Flex>

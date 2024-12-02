@@ -190,14 +190,6 @@ function DesktopStaking () {
                 })
               }
             </Flex>
-            {/* <OpearatorTable 
-              renderDetail={renderStakingComponent}
-              renderL2={renderL2Component}
-              columns={columns}
-              // @ts-ignore
-              data={candidateList}
-              isLoading={tableLoading}
-            /> */}
           </Flex>
         }
         

@@ -6,14 +6,6 @@ export default function MobileInfo(props: {
   value: string
 }) {
   const { title, value } = props
-  
-  const convertedValue = 
-    !value || value === '-' ?  
-    '-' :
-    convertNumber({
-      amount: value,
-      type:'ray'
-    })
 
   return (
     <Flex
@@ -32,6 +24,7 @@ export default function MobileInfo(props: {
         fontSize={'15px'}
         fontWeight={'normal'}
         color={'#86929d'}
+        maxW={'140px'}
       >
         {title}
       </Flex>
@@ -44,7 +37,7 @@ export default function MobileInfo(props: {
           fontWeight={'bold'}
           color={'#131315'}
         >
-          {convertedValue}
+          {value}
         </Flex>
         <Flex
           fontSize={'10px'}

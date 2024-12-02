@@ -2,10 +2,13 @@ import { Box, Flex, Text, useTheme, Button, Spinner } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import OperatorCard from "./components/operators/OperatorCard";
 import { useCandidateList } from '../hooks/staking/useCandidateList';
+import { useStakingInformation } from "@/hooks/staking/useStakingInformation";
+import { StakingInformationTooltip } from "@/common/tooltip/StakingInformationTooltip";
 
 function Operators() {
   const theme = useTheme();
   const { candidateList } = useCandidateList();
+  const { stakingInfo } = useStakingInformation();
 
   return (
     <Flex
@@ -34,6 +37,30 @@ function Operators() {
       >
         Choose a DAO candidate to stake, restake, unstake, or withdraw TON (or WTON).
       </Text>
+      <Flex justifyContent={'center'}>
+          <Flex flexDir={'column'} minW={'290px'} justifyContent={'space-between'} mb={'60px'}>
+            {
+              stakingInfo.map((info: any, index: number) => {
+                const {
+                  title,
+                  tooltip,
+                  value,
+                  unit
+                } = info
+                return (
+                  <StakingInformationTooltip
+                    key={index}
+                    title={title}
+                    tooltip={tooltip}
+                    value={value}
+                    unit={unit}
+                  />
+                )
+              })
+            }
+
+          </Flex>
+        </Flex>
       <Flex w="100%" px="20px" flexDir={"column"}>
         {candidateList.length !== 0 ? (
           candidateList.map((operator: any, index: number) => {

@@ -1,15 +1,19 @@
 import { Text, Flex, Link } from "@chakra-ui/react";
 import {SetStateAction} from 'react'
-function OperatorInfoSub(props: { title: string; value: any ; setClicked: React.Dispatch<SetStateAction<any>>}) {
-  const { title, value,setClicked } = props;
+function OperatorInfoSub(props: { 
+  title: string; 
+  value: any; 
+  setClicked: React.Dispatch<SetStateAction<any>>;
+  tooltip?: any;
+  type?: string;
+}) {
+  const { title, value, setClicked, tooltip, type } = props;
   return (
     <>
       {
         title === "Operator Address" || 
         title === "Operator Contract" ||
-        title === "Calldata" ||
-        title === "State root" ||
-        title === "Bridge" ? (
+        type === "address" ? (
         <Flex flexDir={"column"} mb="25px">
           <Text fontSize={"13px"} color={"gray.700"}>
             {title}
@@ -26,9 +30,18 @@ function OperatorInfoSub(props: { title: string; value: any ; setClicked: React.
             {value}
           </Link>
         </Flex>
-      ) : value === 'title' || value === 'address' ? (
+      ) : value === 'main'  ? (
         <Flex 
           fontSize={'15px'}
+          fontWeight={500}
+          color={'#131315'}
+          mb={'25px'}
+        >
+          {title}
+        </Flex>
+      ) : value === 'title' || value === 'address' ? (
+        <Flex 
+          fontSize={value === 'title' ? '15px' : '13px'}
           fontWeight={500}
           color={value === 'title' ? '#2a72e5' : '#131315'}
           mb={'25px'}
