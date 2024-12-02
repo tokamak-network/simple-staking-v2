@@ -241,6 +241,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
         <Box p={0}  borderRadius={'10px'} alignSelf={'flex-start'}>
           <WalletInformation 
             data={data}
+            commitHistory={commitHistory}
           />
         </Box>
           <Flex flexDir={'row'} alignItems={'space-between'} ml={'45px'} w={'585px'}>
@@ -259,12 +260,14 @@ export const StakingInformation: FC<StakingInformationProps> = ({
              <OperatorDetailInfo 
               title={'Unclaimed Staking Reward'}
               value={userExpectedSeig}
-              totalValue={seigOfLayer ? 
-                convertNumber({
-                  amount: seigOfLayer,
-                  type: 'ray',
-                  localeString: true
-                }) : '-' }
+              totalValue={
+                seigOfLayer ? 
+                  convertNumber({
+                    amount: seigOfLayer,
+                    type: 'ray',
+                    localeString: true
+                  }) : '-' 
+              }
               unit={'TON'}
               type={''}
               contractInfo={data?.candidateContract}

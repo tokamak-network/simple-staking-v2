@@ -1,7 +1,7 @@
 import { IconClose } from "@/common/Icons/IconClose";
 import { IconOpen } from "@/common/Icons/IconOpen";
 import { Box, Flex, Spinner, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback, useState, useRef } from 'react';
 import PageHeader from "../layout/PageHeader";
 import OpearatorTable from "@/common/table/staking/Operators";
 import { useEffect } from 'react';
@@ -14,11 +14,16 @@ import BasicTooltip from "@/common/tooltip/index";
 import OpearatorInfos from "@/common/Operators";
 import { useStakingInformation } from "@/hooks/staking/useStakingInformation";
 import { StakingInformationTooltip } from "@/common/tooltip/StakingInformationTooltip";
+import { useRecoilState } from "recoil";
+import { openInfonState } from "@/atom/staking/openInfo";
+import { useRouter } from "next/router";
 
 function DesktopStaking () {
   const theme = useTheme();
+  const router = useRouter();
+  const { asPath } = router;
 
-  
+  const focusTarget = useRef<any>([]);
   const historyColumns = useMemo(
     () => [
       {
@@ -50,9 +55,26 @@ function DesktopStaking () {
   const { candidateList } = useCandidateList()
   const { account } = useWeb3React();
 
+  const [isOpen, setIsOpen] = useRecoilState(openInfonState);
+
   useEffect(() => {
     candidateList ? setTableLoading(false) : setTableLoading(true)
   }, [candidateList])
+
+  useEffect(() => {
+    if (asPath.includes('#')) {
+      const indexOf = asPath.indexOf('#')
+      const dataIndex = candidateList.findIndex((candidateData: any) => candidateData.candidateContract === asPath.slice(indexOf + 1))
+      
+      setIsOpen(asPath.slice(9));
+      setTimeout(() => {
+      focusTarget?.current[dataIndex]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 100);
+    }
+  }, [])
 
   const renderL2Component = 
     useCallback(({data}: any) => {
@@ -104,7 +126,7 @@ function DesktopStaking () {
         <Flex justifyContent={'center'}>
           <Flex w={'538px'} justifyContent={'space-between'} mb={'60px'}>
             {
-              stakingInfo.map((info: any) => {
+              stakingInfo.map((info: any, index: number) => {
                 const {
                   title,
                   tooltip,
@@ -112,7 +134,8 @@ function DesktopStaking () {
                   unit
                 } = info
                 return (
-                  <StakingInformationTooltip 
+                  <StakingInformationTooltip
+                    key={index}
                     title={title}
                     tooltip={tooltip}
                     value={value}

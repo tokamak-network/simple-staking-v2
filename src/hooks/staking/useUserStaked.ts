@@ -10,7 +10,8 @@ export function useUserStaked (account: string | undefined, stakeId: string) {
       variables: {
         id: id
       },
-      pollInterval: 10000,
+      pollInterval: 13000,
+      fetchPolicy: 'cache-and-network',
     });
     
     const userStakeds = useCallback(async () => {

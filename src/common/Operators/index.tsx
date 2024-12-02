@@ -66,21 +66,22 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
 
   const { memberAddresses } = useChangedMembers()
 
-  useEffect(() => {
-    if (asPath.includes('#')) {
-      const indexOf = asPath.indexOf('#')
-    //   const dataIndex = page.findIndex((candidateData: any) => candidateData.original.id === asPath.slice(indexOf + 1))
-
-    //   setIsOpen(asPath.slice(9));
-    //   setToggle('All')
-    //   setTimeout(() => {
-    //   focusTarget?.current[dataIndex]?.scrollIntoView({
-    //     behavior: 'smooth',
-    //     block: 'start',
-    //   });
-    // }, 100);
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (asPath.includes('#')) {
+  //     const indexOf = asPath.indexOf('#')
+  //     // const dataIndex = page.findIndex((candidateData: any) => candidateData.original.id === asPath.slice(indexOf + 1))
+  //     console.log(data)
+  //     setIsOpen(asPath.slice(9));
+  //     setToggle('All')
+  //     setTimeout(() => {
+  //     focusTarget?.current[index]?.scrollIntoView({
+  //       behavior: 'smooth',
+  //       block: 'start',
+  //     });
+  //   }, 100);
+  //   }
+  // }, [])
+  
   const compounds = useCalculateAPR(data)
 
   const stakedId = candidateContract

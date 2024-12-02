@@ -14,17 +14,10 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 type PaginationProps = {
-  // columns: Column[];
-  // data: any[];
-  // currentPage: any
   prevPage: any
   nextPage: any
-  visibleColumns: any
   canPreviousPage: any
   canNextPage: any
-  // pageOptions: any
-  // pageIndex: any
-  // gotoPage: any
 }
 
 export const SimplePagination: FC<PaginationProps> = ({
@@ -33,7 +26,6 @@ export const SimplePagination: FC<PaginationProps> = ({
   // currentPage,
   prevPage,
   nextPage,
-  visibleColumns,
   canPreviousPage,
   canNextPage,
   // pageOptions,

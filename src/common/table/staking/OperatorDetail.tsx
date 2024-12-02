@@ -63,7 +63,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
       console.log(e)
       setModalOpen("error");
     }
-  }, [])
+  }, [account, library, value])
 
   useEffect(() => {
     async function waitReceipt() {

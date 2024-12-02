@@ -73,6 +73,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
   }, [])
 
   useEffect(() => {
+    console.log(pageIndex)
     if (pageIndex % 4 === 0 && buttonClick) setCurrentPage(pageIndex)
     if (pageIndex % 4 === 3 && !buttonClick) setCurrentPage(pageIndex - 3)
   }, [buttonClick, pageIndex])
@@ -113,7 +114,6 @@ export const HistoryTable: FC<HistoryTableProps> = ({
               <SimplePagination
                 prevPage={goPrevPage}
                 nextPage={goNextPage}
-                visibleColumns={visibleColumns}
                 canPreviousPage={canPreviousPage}
                 canNextPage={canNextPage}
               />

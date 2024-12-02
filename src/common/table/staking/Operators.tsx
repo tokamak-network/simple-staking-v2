@@ -24,12 +24,10 @@ import { useUserStaked } from '../../../hooks/staking/useUserStaked';
 import { useWeb3React } from '@web3-react/core';
 import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
 import BasicTooltip from '../../tooltip/index';
-import { MEMBER_ADDRESS_TEMP } from '@/constants';
 import { useRouter } from 'next/router';
 import { useL2CandidateInfo } from '@/hooks/staking/useL2CandidateInfo';
 import ContractAddressInfo from './ContractAddressInfo';
 import { InfoTypeSelector } from '@/common/selector/InfoType';
-import { useIsOperator } from '@/hooks/staking/useIsOperator';
 import { useChangedMembers } from '@/hooks/staking/useChangedMembers';
 
 type OpearatorTableProps = {

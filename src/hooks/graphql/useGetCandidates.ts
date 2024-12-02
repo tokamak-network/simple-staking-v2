@@ -6,6 +6,7 @@ import { useMemo } from "react";
 export function useGetCandidates () {
   const { data, loading, error } = useQuery(GET_CANDIDATE, {
     pollInterval: ms(`10s`),
+    // fetchPolicy: 'cache-and-network',
   });
 
   return useMemo(

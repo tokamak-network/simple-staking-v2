@@ -21,15 +21,18 @@ import TON_LOGO from '@/assets/images/ton_symbol.svg'
 import WTON_LOGO from '@/assets/images/wton_large.svg'
 import BasicTooltip from '@/common/tooltip';
 import { useCalculateAPR } from '@/hooks/staking/useCalculateAPR';
+import { fromNow } from '@/components/getDate';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
   data: any;
+  commitHistory: any;
 };
 
 export const WalletInformation: FC<WalletInformationProps> = ({
   data,
   // dispatch,
+  commitHistory
 }) => {
   const [loading, setLoading] = useState(false);
   const { account, library } = useWeb3React();
@@ -227,7 +230,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
                 Seigniorage is updated
               </Flex>
               <Flex>
-                2 days ago.
+                {commitHistory ? fromNow(commitHistory[0].timestamp) : ''}.
               </Flex>
             </Flex>
           </Flex>
