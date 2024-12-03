@@ -400,7 +400,7 @@ function OperatorCard(props: { operator: any }) {
                 {candidate?.name}
               </Text>
               {
-              operator.candidateAddOn !== null ?
+              operator?.candidateAddOn !== null ?
               <Flex
                 w={'34px'}
                 h={'18px'}

@@ -81,45 +81,23 @@ export const TableRow: FC<TableRowProps> = ({
     const withdrawableBlock = Number(blockNumber) + 93046
     return (
       <Flex justifyContent={'center'}>
-        {
-          withdrawable ? (
-            <Flex>
-              <Button 
-                w={'80px'}
-                h={'25px'}
-                justifyContent={'center'}
-                alignItems={'center'}
-                borderRadius={'4px'}
-                border={'1px solid #2a72e5'}
-                bgColor={'#fff'}
-                color={'#2a72e5'}
-                fontSize={'12px'}
-                fontWeight={400}
-                // onClick={()=>modalButton('withdraw', selectedModalData)}
-              > 
-                Withdraw 
-              </Button>
+        <Flex justifyContent={'center'} flexDir={'column'}>
+          <Flex flexDir={'row'}>
+            <Flex mr={'3px'} color={'#304156'}>
+              Withdrawable at block
             </Flex>
-          ) : (
-            <Flex justifyContent={'center'} flexDir={'column'}>
-              <Flex flexDir={'row'}>
-                <Flex mr={'3px'} color={'#304156'}>
-                  Withdrawable at block
-                </Flex>
-                <Link
-                  isExternal
-                  href={`${ETHERSCAN_LINK}/block/countdown/${withdrawableBlock}`}
-                  color={'#2a72e5'}
-                >
-                  {withdrawableBlock}
-                </Link>
-              </Flex>
-              <Flex ml={'3px'} color={'#828d99'}>
-                {calcCountDown(remainTime)}
-              </Flex>
-            </Flex>
-          )
-        }
+            <Link
+              isExternal
+              href={`${ETHERSCAN_LINK}/block/countdown/${withdrawableBlock}`}
+              color={'#2a72e5'}
+            >
+              {withdrawableBlock}
+            </Link>
+          </Flex>
+          <Flex ml={'3px'} color={'#828d99'}>
+            {calcCountDown(remainTime)}
+          </Flex>
+        </Flex>
       </Flex>
     )
   }
@@ -191,7 +169,10 @@ export const TableRow: FC<TableRowProps> = ({
       {type === 'blockNumber' ? (
         //@ts-ignore
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
-          {typeName === 'Unstake' ? withdrawableTime(blockNo) : moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')}
+          {typeName === 'Unstake' ? 
+            withdrawn ? moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)') 
+              : withdrawableTime(blockNo) 
+            : moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')}
         </Text>
       ) : ('')}
       {type === 'status' ? (

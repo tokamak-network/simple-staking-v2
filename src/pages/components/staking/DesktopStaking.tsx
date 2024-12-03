@@ -3,7 +3,6 @@ import { IconOpen } from "@/common/Icons/IconOpen";
 import { Box, Flex, Spinner, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
 import { useMemo, useCallback, useState, useRef } from 'react';
 import PageHeader from "../layout/PageHeader";
-import OpearatorTable from "@/common/table/staking/Operators";
 import { useEffect } from 'react';
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
 import { useWeb3React } from "@web3-react/core";

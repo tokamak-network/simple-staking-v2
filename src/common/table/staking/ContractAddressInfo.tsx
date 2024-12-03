@@ -7,18 +7,29 @@ import LIST from '@/assets/images/list.svg'
 import Image from 'next/image';
 import { L1ContractInfo } from "./L1ContractInfo";
 import CLOSE from '@/assets/images/popup_close_s_icon.svg'
+import CONTRACT_ADDRESS from "@/services/addresses/contract";
 
 type tooltipProps = {
   label: any;
   tab?: any;
+  data: any
 };
 
 const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
-  const { label, tab } = props;
+  const { label, tab, data } = props;
   const [isLabelOpen, setIsLabelOpen] = useState(false)
   const tooltipControl = () => {
     !isLabelOpen ? setIsLabelOpen(true) : setIsLabelOpen(false)
   }
+  const { 
+    DepositManager_ADDRESS, 
+    SeigManager_ADDRESS, 
+    DAO_Committiee_ADDRESS,
+    L2Registry_ADDRESS,
+    SequencerSeig_ADDRESS,
+    RollupConfig_ADDRESS,
+    L1Bridge_ADDRESS
+  } = CONTRACT_ADDRESS
   useEffect(() => {
     setIsLabelOpen(false)
   }, [tab])
@@ -26,22 +37,22 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
   const core = [
     {
       title: 'DAO',
-      content: '',
+      content: DAO_Committiee_ADDRESS,
     },
     {
       title: 'Seigniorage',
-      content: '',
+      content: SeigManager_ADDRESS,
     },
     {
       title: 'Staking',
-      content: '',
+      content: DepositManager_ADDRESS,
     },
   ]
 
   const candidate = [
     {
       title: 'DAO candidate',
-      content: '',
+      content: data.candidateContract,
     },
     {
       title: 'DAO candidate manager',
@@ -52,19 +63,19 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
   const l2Info = [
     {
       title: 'L2 registry',
-      content: '',
+      content: L2Registry_ADDRESS,
     },
     {
       title: 'Sequencer signiorage manager',
-      content: '',
+      content: SequencerSeig_ADDRESS,
     },
     {
       title: 'Rollup config',
-      content: '',
+      content: RollupConfig_ADDRESS,
     },
     {
       title: 'L1 TON bridge',
-      content: '',
+      content: L1Bridge_ADDRESS,
     },
   ]
   

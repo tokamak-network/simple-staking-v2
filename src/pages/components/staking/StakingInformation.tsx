@@ -53,6 +53,8 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   const [, setSelectedModalData] = useRecoilState(modalData);
 
   const { withdrawRequests } = useWithdrawRequests()
+
+  console.log(data)
   
 
   const historyColumns = useMemo(
@@ -224,7 +226,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
             <OperatorDetailInfo 
               title={'Staked'}
               value={data?.stakeOf}
-              totalValue={data.stakedAmount}
+              totalValue={data?.stakedAmount}
               unit={'TON'}
               type={''}
               dataModal={()=> modalButton('withdraw', dataModal)}

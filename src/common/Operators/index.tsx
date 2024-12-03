@@ -268,6 +268,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
                   <ContractAddressInfo 
                     label={candidateAddOn}
                     tab={tab}
+                    data={data}
                   />
                 </Flex>
                 
