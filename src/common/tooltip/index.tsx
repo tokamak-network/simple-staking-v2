@@ -62,27 +62,6 @@ const BasicTooltip: React.FC<tooltipProps> = (props) => {
     )
   }
 
-  const tokamakOp = () => {
-    
-  }
-
-  const plasma = () => {
-    return (
-      <Text>
-        An operator running the Tokamak Network's implementation of 
-        <Link
-          href={'https://docs.tokamak.network/docs/en/learn/advanced/plasma-evm-architecture'}
-          rel="noopener noreferrer" 
-          target="_blank"
-          textDecor={'underline'}
-          mx={'3px'}
-        >
-          Plasma EVM. 
-        </Link>
-      </Text>
-    )
-  }
-
   const seigRatioInfo = [
     {
       title: 'Staker',

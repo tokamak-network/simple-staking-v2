@@ -11,12 +11,8 @@ export function usePendingUnstaked (layer2: string, account: string | null | und
     async function fetchList () {  
       if (account && DepositManager_CONTRACT && layer2) {
         const pendingUnstakedAmount = await DepositManager_CONTRACT.pendingUnstaked(layer2, account)
-        const pendingAmount = convertNumber({
-          amount: pendingUnstakedAmount,
-          type: 'ray',
-          localeString: true
-        })
-        if (pendingAmount) setPendingUnstaked(pendingAmount)
+        
+        if (pendingUnstakedAmount) setPendingUnstaked(pendingUnstakedAmount)
       } 
     }
     fetchList()

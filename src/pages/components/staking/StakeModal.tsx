@@ -277,6 +277,7 @@ function StakeModal() {
                 ) : (
                   ''
                 )}
+                
                 {/* modal footer */}
                 <Flex flexDir={'column'} alignItems={'center'} w={'100%'} justifyContent={'center'}>
                   {selectedModal === 'withdraw' ? (

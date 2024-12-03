@@ -325,7 +325,7 @@ export const OpearatorTable: FC<OpearatorTableProps> = ({
                           (rate !== '-' && rate) ? 
                           <Info 
                             title={'Commission Rate'}
-                            value={+rate / 10000000}
+                            value={(+rate / 10000000).toString()}
                             unit={'%'}
                           /> : ('')
                         ) : ('')}

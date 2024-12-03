@@ -13,14 +13,9 @@ import RenderBtn from '@/common/table/staking/RenderBTN';
 import { Info } from '@/common/table/staking/OperatorInfo';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { toggleState } from '@/atom/staking/toggle';
-import { useUserStaked } from '@/hooks/staking/useUserStaked';
 import { useWeb3React } from '@web3-react/core';
-import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
-import BasicTooltip from '@/common/tooltip/index';
 import { useRouter } from "next/router";
 import { useChangedMembers } from "@/hooks/staking/useChangedMembers";
-import { useL2CandidateInfo } from "@/hooks/staking/useL2CandidateInfo";
-import { useIsOperator } from "@/hooks/staking/useIsOperator";
 import { InfoTypeSelector } from "../selector/InfoType";
 import ContractAddressInfo from "../table/staking/ContractAddressInfo";
 import { openInfonState } from "@/atom/staking/openInfo";
@@ -114,18 +109,6 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
 
   const minimumAmount = Number(candidateAmount) >= 1000
   const isMember = memberAddresses?.find((address: any) => address.member === candidate)
-  
-  const rate = commissionRate ? convertNumber({
-    amount: commissionRate,
-    type: 'wei',
-    // localeString: true
-  }) : '0.00'
-
-  const totalStaked = convertNumber({
-    amount: stakedAmount, 
-    type: 'ray',
-    localeString: true
-  })
 
   const yourStaked = stakeOf ? convertNumber({
     //@ts-ignore
@@ -220,14 +203,14 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
           />
           <Info 
             title={'Total Staked'}
-            value={totalStaked}
+            value={stakedAmount}
             unit={'TON'}
           />
           {
             (yourStaked !== '0.00' && yourStaked) ?
             <Info 
               title={'Your Staked'}
-              value={yourStaked}
+              value={stakeOf}
               unit={'TON'}
             /> : ''
           }

@@ -10,11 +10,12 @@ import { minimumAmountState } from '@/atom/staking/minimumAmount';
 import { ETHERSCAN_LINK } from "@/constants";
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal";
 import BasicTooltip from "@/common/tooltip";
+import { BalanceTooltip } from "@/common/tooltip/BalanceTooltip";
 
 type OperatorDetailProps = {
   title: string; 
-  value: string | number | undefined; 
-  totalValue: string | number | undefined; 
+  value: string; 
+  totalValue: string; 
   unit?: string; 
   type?: string;
   contractInfo?: any;
@@ -102,7 +103,14 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
             fontWeight={type === 'date' ? 500 : 700}
             color={'#304156'}
           >
-            {title === 'Unclaimed Staking Reward' && !minimumAmount ? '-' : value}
+            {
+              title === 'Unclaimed Staking Reward' && !minimumAmount 
+              ? '-' 
+              : <BalanceTooltip 
+                label={value}
+                types={'ray'}
+              />
+            }
           </Text>
           {
             unit ? 
@@ -122,7 +130,13 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
             out of
           </Flex>
           <Flex>
-            {totalValue} TON
+            <BalanceTooltip 
+              label={totalValue}
+              types={'ray'}
+            />
+            <Flex ml={'3px'}>
+              TON
+            </Flex>
           </Flex>
         </Flex>
       </Flex>

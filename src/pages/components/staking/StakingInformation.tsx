@@ -158,31 +158,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   const minimumAmount = Number(candidateAmount) >= 1000
   
   const { expectedSeig, seigOfLayer } = useExpectedSeig(data?.candidateContract, data?.stakedAmount, data?.candidate)
-  const userExpectedSeig = expectedSeig ? 
-    convertNumber({
-      amount: expectedSeig,
-      type: 'ray',
-      localeString: true
-    }) : '-' 
   
-  const yourStake = convertNumber({
-    amount: data?.stakeOf, 
-    type: 'ray',
-    localeString: true
-  })
-
-  const pendingUnstakeds = convertNumber({
-    amount: data?.pending,
-    type: 'ray',
-    localeString: true
-  })
-
-  const candidateAmounts = stakeCandidate 
-    ? convertNumber({
-      amount: stakeCandidate,
-      type: 'ray',
-    })
-  : '1000.1';
 
   const expectedSeigs = expSeig
     ? convertNumber({
@@ -247,27 +223,16 @@ export const StakingInformation: FC<StakingInformationProps> = ({
           <Flex flexDir={'row'} alignItems={'space-between'} ml={'45px'} w={'585px'}>
             <OperatorDetailInfo 
               title={'Staked'}
-              value={yourStake}
-              totalValue={convertNumber({
-                amount: data.stakedAmount, 
-                type: 'ray',
-                localeString: true
-              })}
+              value={data?.stakeOf}
+              totalValue={data.stakedAmount}
               unit={'TON'}
               type={''}
               dataModal={()=> modalButton('withdraw', dataModal)}
             />
-             <OperatorDetailInfo 
+            <OperatorDetailInfo 
               title={'Unclaimed Staking Reward'}
-              value={userExpectedSeig}
-              totalValue={
-                seigOfLayer ? 
-                  convertNumber({
-                    amount: seigOfLayer,
-                    type: 'ray',
-                    localeString: true
-                  }) : '-' 
-              }
+              value={expectedSeig}
+              totalValue={seigOfLayer}
               unit={'TON'}
               type={''}
               contractInfo={data?.candidateContract}
@@ -277,7 +242,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
             <OperatorDetailInfo 
               title={'Pending Withdrawal'}
               value={pendingUnstaked}
-              totalValue={pendingUnstakeds}
+              totalValue={data?.pending}
               unit={'TON'}
               type={''}
               dataModal={()=>modalButton('restake', dataModal)}
