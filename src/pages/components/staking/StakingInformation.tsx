@@ -229,7 +229,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
               totalValue={data?.stakedAmount}
               unit={'TON'}
               type={''}
-              dataModal={()=> modalButton('withdraw', dataModal)}
+              dataModal={() => modalButton('withdraw', dataModal)}
             />
             <OperatorDetailInfo 
               title={'Unclaimed Staking Reward'}
@@ -247,7 +247,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
               totalValue={data?.pending}
               unit={'TON'}
               type={''}
-              dataModal={()=>modalButton('restake', dataModal)}
+              dataModal={() => modalButton('restake', dataModal)}
             />
           </Flex>
         

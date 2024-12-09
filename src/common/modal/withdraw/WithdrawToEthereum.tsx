@@ -22,6 +22,7 @@ import { txState } from "@/atom/global/transaction";
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal";
 import { inputState } from "@/atom/global/input";
 import { LoadingDots } from "@/common/Loader/LoadingDots";
+import { BalanceTooltip } from "@/common/tooltip/BalanceTooltip";
 
 type WithdrawToEthereumProps ={
   selectedModalData: StakeModalDataType
@@ -171,6 +172,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     }
   }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending]);
 
+  console.log(selectedModalData.pendingUnstaked)
 
   return (
     <Flex flexDir={'column'} w={'350px'} alignItems={'center'}>
@@ -223,11 +225,17 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           fontWeight={500}
           color={'#3d495d'}
         >
+          {/* 이쪽에 문제있음 */}
           <Flex mr={'9px'}>
             {
               toggle === 'Withdraw'
                 ? selectedModalData.withdrawable
-                : selectedModalData.pendingUnstaked
+                : 
+                <BalanceTooltip 
+                  label={selectedModalData.pendingUnstaked.toString()}
+                  types={'ray'}
+                />
+                
             }
           </Flex>
           {
@@ -236,7 +244,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
               TON
             </Flex> :
             <TokenSelector 
-              option={option}
+              option={option} 
               setOption={handleSetOption}
               menuState={menuState}
               setMenuState={setMenuState}

@@ -84,6 +84,12 @@ function  MobileStakingComponent(props: {
 
   }, [candidateAmount])
 
+  const pending = pendingUnstaked? convertNumber({
+    amount: pendingUnstaked,
+    type: 'ray',
+    localeString: true
+  }) : '0.00'
+
   const userExpectedSeig = expectedSeig? convertNumber({
     amount: expectedSeig.expectedSeig,
     type: 'ray',
@@ -156,7 +162,7 @@ function  MobileStakingComponent(props: {
           Number.isNaN(amount) || 
           amount === undefined
       } else if (title === 'Restake') {
-        disable = pendingUnstaked === "0.00"
+        disable = pending === "0.00"
       } else {
         disable = withdrawable === '0.00' || selectedOp === undefined
       }
@@ -170,8 +176,6 @@ function  MobileStakingComponent(props: {
       type: 'ray',
       localeString: true
     }) : '0.00'
-
-  console.log(pendingUnstaked)
   
   return (
     <Flex w="100%" px="20px" flexDir={'column'}>
@@ -196,7 +200,7 @@ function  MobileStakingComponent(props: {
                   userTonBalance :
                   title === 'Unstake' ?
                   staked :
-                  pendingUnstaked
+                  pending
               }
               wtonBalance={userWTonBalance}
             />
@@ -319,11 +323,11 @@ function  MobileStakingComponent(props: {
         account?
         <MobileInfo 
           title={'Pending Withdrawal'}
-          value={pendingUnstaked ? pendingUnstaked : '-'}
+          value={pending ? pending : '-'}
         /> : ''
       }
       { 
-        pendingUnstaked && pendingUnstaked !== '0.00' && account ?
+        pending && pending !== '0.00' && account ?
         <Flex
           fontSize={'11px'}
           color={'#2a72e5'}

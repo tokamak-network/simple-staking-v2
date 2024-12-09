@@ -75,7 +75,7 @@ function WithdrawModal () {
     }
     setNumber(numberOf)
   }, [selectedModalData])
-  
+  console.log(selectedModalData, requests)
   return (
     <Modal
       isOpen={
