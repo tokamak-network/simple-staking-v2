@@ -7,12 +7,11 @@ import { WithdrawTypeSelector } from "@/common/selector/WithdrawType"
 
 type ToEthereumProps = { 
   selectedModalData: StakeModalDataType
-  requests: any
   closeThisModal: any
 }
 
 export const ToEthereum = (args: ToEthereumProps) => {
-  const {selectedModalData, requests, closeThisModal} = args
+  const {selectedModalData, closeThisModal} = args
 
   const [tab, setTab] = useState('unstake')
 
@@ -26,12 +25,10 @@ export const ToEthereum = (args: ToEthereumProps) => {
         tab === 'unstake' ?
         <Unstake 
           selectedModalData={selectedModalData}
-          requests={requests}
           closeThisModal={closeThisModal}
         />:
         <WithdrawToEthereum 
           selectedModalData={selectedModalData}
-          requests={requests}
           closeThisModal={closeThisModal}
           type={'Withdraw'}
         />

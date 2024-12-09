@@ -23,16 +23,16 @@ import { getModeData, transactionModalOpenStatus, transactionModalStatus } from 
 import { inputState } from "@/atom/global/input";
 import { LoadingDots } from "@/common/Loader/LoadingDots";
 import { BalanceTooltip } from "@/common/tooltip/BalanceTooltip";
+import { useWithdrawable, useWithdrawRequests } from "@/hooks/staking/useWithdrawable";
 
 type WithdrawToEthereumProps ={
   selectedModalData: StakeModalDataType
-  requests: any
   closeThisModal: any
   type: string
 }
 
 export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
-  const {selectedModalData, requests, closeThisModal, type} = args
+  const {selectedModalData, closeThisModal, type} = args
   const theme = useTheme();
   const { btnStyle } = theme;
   const [toggle, setToggle] = useState('Withdraw')
@@ -48,6 +48,8 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   const [modalOpen, setModalOpen] = useRecoilState(transactionModalStatus);
   const [, setIsOpen] = useRecoilState(transactionModalOpenStatus);
   const [selectedMode, setSelectedMode] = useRecoilState(getModeData);
+
+  const { withdrawRequests } = useWithdrawRequests()
 
   const [tx, setTx] = useState();
 
@@ -116,7 +118,22 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx]);
 
-  console.log(selectedModalData)
+  const [requests, setRequests] = useState([])
+  const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength } = useWithdrawable(
+    selectedModalData?.layer2,
+  );
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (selectedModalData) {
+        //@ts-ignore
+        const pendingRequests = await withdrawRequests(selectedModalData.layer2)
+        
+        setRequests(pendingRequests)
+      }
+    }
+    fetch()
+  }, [selectedModalData])
 
   const reStaking = useCallback(async () => {
     try {
@@ -150,11 +167,11 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
 
       if (selectedModalData && DepositManager_CONTRACT && selectedModalData) {
         const tx =
-            selectedModalData.withdrawableLength === '0' 
+            withdrawableLength === '0' 
             ? '' 
             : await DepositManager_CONTRACT.processRequests( 
               selectedModalData.layer2,
-              selectedModalData.withdrawableLength,
+              withdrawableLength,
               option === 'TON' ? true : false,
             );
         setTx(tx);
@@ -171,8 +188,6 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
       setModalOpen("error")
     }
   }, [DepositManager_CONTRACT, closeThisModal, selectedModalData, setTxPending]);
-
-  console.log(selectedModalData.pendingUnstaked)
 
   return (
     <Flex flexDir={'column'} w={'350px'} alignItems={'center'}>
@@ -195,7 +210,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
       </Flex>
       <Flex>
         {
-          requests ?
+          requests && requests.length !== 0 ?
           <WithdrawTable 
             columns={columns}
             data={requests}
@@ -229,7 +244,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           <Flex mr={'9px'}>
             {
               toggle === 'Withdraw'
-                ? selectedModalData.withdrawable
+                ? withdrawable
                 : 
                 <BalanceTooltip 
                   label={selectedModalData.pendingUnstaked.toString()}
@@ -273,7 +288,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           fontWeight={500}
           isDisabled={
             toggle === 'Withdraw'
-            ? (selectedModalData.withdrawable === '0.00' ? true : false)
+            ? (withdrawable === '0.00' ? true : false)
             : (!isChecked || selectedModalData.pendingUnstaked === '0.00') 
           }
           bgColor={toggle === 'Restake' ? '#36af47' : ''}

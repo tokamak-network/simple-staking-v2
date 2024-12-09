@@ -23,13 +23,7 @@ import NoLOGO from '@/assets/images/modal/gallery.svg'
 import { WithdrawToEthereum } from '../withdraw/WithdrawToEthereum';
 
 function WithdrawModal () {
-  const theme = useTheme();
   const { selectedModalData, selectedModal, closeModal, isModalLoading } = useModal();
-  const { withdrawRequests } = useWithdrawRequests()
-
-  const [requests, setRequests] = useState()
-
-  const [modalName, setModalName] = useState('Restake')
   const [type, setType] = useState('main')
   const [number, setNumber] = useState(1)
 
@@ -55,17 +49,6 @@ function WithdrawModal () {
     setType('main')
     setInput('')
   }, [])
-
-  useEffect(() => {
-    const fetch = async () => {
-      if (selectedModalData) {
-        //@ts-ignore
-        const pendingRequests = await withdrawRequests(selectedModalData.layer2)
-        setRequests(pendingRequests)
-      }
-    }
-    fetch()
-  }, [selectedModalData, txPending])
   
   useEffect(() => {
     let numberOf = 1
@@ -75,7 +58,7 @@ function WithdrawModal () {
     }
     setNumber(numberOf)
   }, [selectedModalData])
-  console.log(selectedModalData, requests)
+
   return (
     <Modal
       isOpen={
@@ -120,7 +103,6 @@ function WithdrawModal () {
                 <Flex bgColor={'#f4f6f8'} h={'1px'}  w={'100%'} />
                 <WithdrawToEthereum 
                   selectedModalData={selectedModalData}
-                  requests={requests}
                   closeThisModal={closeThisModal}
                   type={'Restake'}
                 />

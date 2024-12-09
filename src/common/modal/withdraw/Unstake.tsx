@@ -15,15 +15,15 @@ import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
 import WithdrawTable from "./WithdrawTable"
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal"
 import { LoadingDots } from "@/common/Loader/LoadingDots"
+import { useWithdrawRequests } from "@/hooks/staking/useWithdrawable"
 
 type UnstakeProps = {
   selectedModalData: StakeModalDataType
   closeThisModal: any
-  requests: any
 }
 
 export const Unstake = (args: UnstakeProps) => {
-  const { selectedModalData, closeThisModal, requests } = args
+  const { selectedModalData, closeThisModal } = args
   const theme = useTheme();
   const { btnStyle } = theme;
   const { DepositManager_CONTRACT, SeigManager_CONTRACT } =
@@ -39,7 +39,9 @@ export const Unstake = (args: UnstakeProps) => {
   
   const [tx, setTx] = useState();
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [requests, setRequests] = useState([])
   // const [disable, setDisable] = useState<boolean>(true);
+  const { withdrawRequests } = useWithdrawRequests()
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
@@ -67,6 +69,19 @@ export const Unstake = (args: UnstakeProps) => {
     ],
     [],
   )
+
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (selectedModalData) {
+        //@ts-ignore
+        const pendingRequests = await withdrawRequests(selectedModalData.layer2)
+        
+        setRequests(pendingRequests)
+      }
+    }
+    fetch()
+  }, [selectedModalData])
 
   useEffect(() => {
     async function waitReceipt() {
@@ -147,7 +162,7 @@ export const Unstake = (args: UnstakeProps) => {
         </Flex>
       </Flex>
       {
-        requests ?
+        requests && requests.length !== 0 ?
         <WithdrawTable 
           columns={columns}
           data={requests}

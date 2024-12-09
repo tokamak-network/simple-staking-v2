@@ -116,6 +116,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
                     <L1ContractInfo 
                       title={info.title}
                       content={info.content}
+                      key={index}
                     />
                   )
                 })
@@ -164,6 +165,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
                     <L1ContractInfo 
                       title={info.title}
                       content={info.content}
+                      key={index}
                     />
                   )
                 })
@@ -206,6 +208,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
                     <L1ContractInfo 
                       title={info.title}
                       content={info.content}
+                      key={index}
                     />
                   )
                 })

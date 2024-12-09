@@ -11,7 +11,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { txState } from '@/atom/global/transaction';
 import { useGetWithdrawalAndDeposited } from '../graphql/useGetWithdrawalAndDeposited';
 
-export function useWithdrawable (layer2: string) {
+export function useWithdrawable (layer2: string | undefined) {
   const { blockNumber } = useBlockNumber()
   const { DepositManager_CONTRACT, Old_DepositManager_CONTRACT } = useCallContract();
   const { account } = useWeb3React();
@@ -58,6 +58,7 @@ export function useWithdrawable (layer2: string) {
           const reducer = (amount:any, request: any) => amount.add(request.amount)
           const withdrawableAmount = withdrawbleList.reduce(reducer, initial)
           const notWithdrawableAmount = notWithdrawableList.reduce(reducer, initial)
+
           const convert = convertNumber({
             amount: withdrawableAmount.toString(),
             type: 'ray',
@@ -115,11 +116,18 @@ export function useWithdrawable (layer2: string) {
         console.log(e)
       }
     }
-    fetch ()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setTimeout(() => {
+      fetch()
+    }, 2500)
+    
   }, [
     layer2, 
+    DepositManager_CONTRACT,
+    withdrawable,
+    requests,
+    account
   ])
+  
   return {
     withdrawable, 
     withdrawableLength, 

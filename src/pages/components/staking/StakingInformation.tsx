@@ -54,8 +54,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
 
   const { withdrawRequests } = useWithdrawRequests()
 
-  console.log(data)
-  
+  // console.log(data)
 
   const historyColumns = useMemo(
     () => [

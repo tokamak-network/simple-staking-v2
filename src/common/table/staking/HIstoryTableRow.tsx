@@ -24,8 +24,6 @@ type HistoryTableRowProps = {
 }
 
 export const HistoryTableRow: FC<HistoryTableRowProps> = ({
-  key,
-  
   cell,
   tableType,
   currentPage,
@@ -143,7 +141,6 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   
   return  (
     <chakra.td
-      key={key}
       w={ getColumnWidthStaking(tableType, type) }
       {...theme.STAKING_HISTORY_TABLE_STYLE.tableRow()}
       {...cell.getCellProps()}

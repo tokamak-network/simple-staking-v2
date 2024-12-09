@@ -17,7 +17,7 @@ import ETHEREUM from '@/assets/images/ethereum_symbol.svg'
 import BACK from '@/assets/images/back_icon.svg'
 import { ToEthereum } from './ToEthereum';
 import { ToTitan } from './ToTitan';
-import { useWithdrawRequests } from '@/hooks/staking/useWithdrawable';
+import { useWithdrawable, useWithdrawRequests } from '@/hooks/staking/useWithdrawable';
 import { inputState } from '@/atom/global/input';
 import { useRecoilState } from 'recoil';
 import { txState } from '@/atom/global/transaction';
@@ -65,30 +65,15 @@ function WithdrawModal () {
     ? setModalName('Ethereum')
     : setModalName(`${selectedModalData?.name}`)
   }, [type])
-
-  useEffect(() => {
-    const fetch = async () => {
-      if (selectedModalData) {
-        //@ts-ignore
-        const pendingRequests = await withdrawRequests(selectedModalData.layer2)
-        
-        setRequests(pendingRequests)
-      }
-    }
-    fetch()
-  }, [selectedModalData, txPending])
   
   useEffect(() => {
     let numberOf = 1
     if (selectedModalData) {
       numberOf = selectedModalData.isL2 ?  numberOf + 1 : numberOf
-      
       numberOf = selectedModalData.old_withdrawable !== '0.00' ? numberOf + 1 : numberOf
     }
     setNumber(numberOf)
   }, [selectedModalData])
-
-  console.log(selectedModalData)
   
   return (
     <Modal
@@ -168,7 +153,6 @@ function WithdrawModal () {
                   type === 'ethereum' ?
                   <ToEthereum 
                     selectedModalData={selectedModalData}
-                    requests={requests}
                     closeThisModal={closeThisModal}
                   /> :
                   type === 'titan' ?
