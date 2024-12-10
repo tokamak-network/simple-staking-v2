@@ -20,11 +20,13 @@ import { useTONPrice } from '@/hooks/staking/useTONPrice';
 type WithdrawTableProps = {
   columns: Column[];
   data: any[];
+  toggle: string;
 }
 
 export const WithdrawTable: FC<WithdrawTableProps> = ({
   columns,
   data,
+  toggle
 }) => {
   const {
     getTableProps,
@@ -94,6 +96,7 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
                         index={index}
                         cell={cell}
                         tonPrice={tonPriceUSD}
+                        toggle={toggle}
                       />
                     )
                   }) : 'No transaction history'}

@@ -110,7 +110,7 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
                 color={'#2a72e5'}
                 fontSize={'12px'}
                 fontWeight={400}
-                onClick={()=>modalButton('withdraw', selectedModalData)}
+                onClick={() => modalButton('withdraw', selectedModalData)}
               > 
                 Withdraw 
               </Button>

@@ -74,7 +74,6 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   useEffect(() => {
     setToggle(type)
   }, [])
-
   
   const handleSetOption = useCallback((option: any) => {
     setOption(option)
@@ -214,6 +213,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           <WithdrawTable 
             columns={columns}
             data={requests}
+            toggle={toggle}
           /> : 
           <LoadingDots />
         }

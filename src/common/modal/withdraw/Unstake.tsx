@@ -34,7 +34,7 @@ export const Unstake = (args: UnstakeProps) => {
   const [, setTxPending] = useRecoilState(txState);
   const [, setModalOpen] = useRecoilState(transactionModalStatus);
   const [, setIsOpen] = useRecoilState(transactionModalOpenStatus);
-  const [, setSelectedMode] = useRecoilState(getModeData);
+  const [selectedMode, setSelectedMode] = useRecoilState(getModeData);
   const [, setTxHash] = useRecoilState(txHashStatus)
   
   const [tx, setTx] = useState();
@@ -166,6 +166,7 @@ export const Unstake = (args: UnstakeProps) => {
         <WithdrawTable 
           columns={columns}
           data={requests}
+          toggle={selectedMode}
         /> : 
         <LoadingDots />
       }

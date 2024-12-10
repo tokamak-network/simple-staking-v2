@@ -11,13 +11,14 @@ type WithdrawTableRowProps = {
   index: number
   cell: any
   tonPrice: number
+  toggle: string
 }
 
 export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
   // key,
   index,
   cell,
-  
+  toggle,
   tonPrice
 }) => {
   const {
@@ -44,7 +45,13 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
     >
       { type === 'amount' ? (
         <Flex justifyContent={'center'} alignItems={'center'}>
-          <Text textAlign={'center'} color={time === 'Withdrawable' ? '#000000' : '#828d99'} >
+          <Text 
+            textAlign={'center'} 
+            color={
+              toggle === 'Restake' ? '#00000' : 
+              time === 'Withdrawable' ? '#000000' : '#828d99'
+            } 
+            >
             {convertNumber({
               amount: values,
               type: 'ray',
@@ -58,11 +65,14 @@ export const WithdrawTableRow: FC<WithdrawTableRowProps> = ({
       ) : ('')}
       {type === 'status' ? (
         <Flex 
-          color={time === 'Withdrawable' ? '#828d99' : '#000000'}
+          color={
+            toggle === 'Restake' ? '#828d99' :
+            time === 'Withdrawable' ? '#828d99' : '#000000'
+          }
           justifyContent={'center'}
           alignItems={"center"}
         >
-          {time}
+          {toggle === 'Restake' ? 'Restakable' : time}
         </Flex>
       ) : ('')}
     </chakra.td>

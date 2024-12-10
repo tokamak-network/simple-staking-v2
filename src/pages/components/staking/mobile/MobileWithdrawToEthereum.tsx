@@ -252,6 +252,7 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
             <WithdrawTable 
               columns={columns}
               data={requests}
+              toggle={toggle}
             />
           </Flex> : ''
         }
