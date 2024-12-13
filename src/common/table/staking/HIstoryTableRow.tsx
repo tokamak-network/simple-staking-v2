@@ -26,7 +26,6 @@ type HistoryTableRowProps = {
 export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   cell,
   tableType,
-  currentPage,
   selectedModalData
 }) => {
   const {

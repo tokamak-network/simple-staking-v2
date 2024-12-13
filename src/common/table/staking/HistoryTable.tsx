@@ -18,7 +18,6 @@ import {
 } from '@chakra-ui/react';
 import { HistoryTableHeader } from '@/common/table/staking/HistoryTableHeader';
 // import { HistoryTableRow } from './table/HistoryTableRow';
-import { Pagination } from '@/common/table/Pagination';
 import { useRecoilState } from 'recoil';
 import { toggleState } from '@/atom/staking/toggle';
 import HistoryTableRow from '@/common/table/staking/HIstoryTableRow';
@@ -38,6 +37,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
   tableType,
   dataModal
 }) => {
+  const [currentPageIndex, setCurrentPageIndex] = useState(0)
   const {
     getTableProps,
     getTableBodyProps,
@@ -47,13 +47,20 @@ export const HistoryTable: FC<HistoryTableProps> = ({
     canNextPage,
     pageOptions,
     page,
-    setPageSize,
-    gotoPage,
     previousPage,
     nextPage,
+    gotoPage,
     state: {pageIndex, pageSize},
   } = useTable(
-    {columns, data, initialState: {pageIndex: 0, pageSize: 3}},
+    {
+      columns, 
+      data, 
+      initialState: { 
+        pageSize: 3,
+        pageIndex: currentPageIndex,
+      }, 
+      autoResetPage: false
+    },
     useSortBy,
     useExpanded,
     usePagination,
@@ -71,13 +78,26 @@ export const HistoryTable: FC<HistoryTableProps> = ({
       setToggle('My')
     }
   }, [])
+  // const tableStateUpdateRef = useRef(false);
 
+  // useEffect(() => {
+  //   if (!tableStateUpdateRef.current) {
+  //     gotoPage(0);
+  //   }
+  // }, [data, gotoPage]);
+
+  // // clear our ref when the data is loaded, after we perform any side effects
+  // useEffect(() => {
+  //   tableStateUpdateRef.current = false;
+  // }, [data]);
+  
+  
   useEffect(() => {
-    console.log(pageIndex)
     if (pageIndex % 4 === 0 && buttonClick) setCurrentPage(pageIndex)
     if (pageIndex % 4 === 3 && !buttonClick) setCurrentPage(pageIndex - 3)
-  }, [buttonClick, pageIndex])
-
+    setCurrentPageIndex(pageIndex)
+  }, [pageIndex])
+  
   const goPrevPage = () => {
     previousPage();
     setButtonClick(false)

@@ -55,8 +55,6 @@ export const TableRow: FC<TableRowProps> = ({
 
   const { library } = useWeb3React()
   const [ remainTime, setRemainTime ] = useState('')
-
-  const {DepositManager_CONTRACT} = useCallContract()
   
   useEffect(() => {
     async function fetch () {
@@ -125,12 +123,12 @@ export const TableRow: FC<TableRowProps> = ({
         
         <Link
           isExternal
-          href={`https://${DEFAULT_NETWORK === '1' ? 'simple' : 'sepolia'}.staking.tokamak.network/staking#${candidate.id}`}
+          href={`https://${DEFAULT_NETWORK === '1' ? 'simple' : 'sepolia'}.staking.tokamak.network/staking#${candidate ? candidate.id : layer2}`}
           textAlign={'center'}
           w={'100%'}
           color={'#2a72e5'}
         >
-          {candidate.name}
+          {candidate ? candidate.name : 'Unknown'}
           
         </Link>
       ) : ('')}

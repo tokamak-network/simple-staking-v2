@@ -138,9 +138,10 @@ export const TypeItem = () => {
         }}
       >
         {
-          typeItemList.map((item: string) => {   
+          typeItemList.map((item: string, key: number) => {   
             return [
               <MenuItem
+                key={key}
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
                 h={'26px'}

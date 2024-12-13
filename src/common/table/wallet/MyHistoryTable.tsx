@@ -28,6 +28,8 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
   data,
   isLoading
 }) => {
+  const [currentPageIndex, setCurrentPageIndex] = useState(0)
+  
   const {
     getTableProps,
     getTableBodyProps,
@@ -44,7 +46,15 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
     gotoPage,
     state: {pageIndex, pageSize},
   } = useTable(
-    {columns, data, initialState: {pageIndex: 0}},
+    {
+      columns, 
+      data, 
+      initialState: { 
+        pageSize: 3,
+        pageIndex: currentPageIndex,
+      }, 
+      autoResetPage: false
+    },
     useSortBy,
     useExpanded,
     usePagination,

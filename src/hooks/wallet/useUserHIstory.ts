@@ -28,23 +28,24 @@ export function useUserHistory () {
           const history = await getOperatorUserHistory(obj.layer2.toLowerCase(), account.toLowerCase());
           const pendingRequests = await withdrawRequests(obj.layer2.toLowerCase());
           const unstakeHistoryPerLayer = users[0].unstaked.filter((unstake: any) => unstake.candidate.id === obj.layer2.toLowerCase())
-          console.log(pendingRequests)
-          let fixWithdrawble: any[] = [];
-          for (let i = 0; unstakeHistoryPerLayer.length > i; i ++) {           
-            
-              const withdrawable = pendingRequests.find((request: any) => {
-                return Number(request.withdrawableBlock) === Number(unstakeHistoryPerLayer[i].transaction.blockNumber) + 93046
-                      || Number(request.withdrawableBlock) === Number(unstakeHistoryPerLayer[i].transaction.blockNumber) + 930460
-              })
-              console.log(withdrawable)
-              const data = { 
-                ...unstakeHistoryPerLayer[i], 
-                withdrawable: withdrawable ? true : false, 
-                withdrawn: i + 1 > pendingRequests.length
-                // withdrawableBlock: request.withdrawableBlock 
-              } 
-              fixWithdrawble.push(data);
           
+          let fixWithdrawble: any[] = [];
+
+          if (pendingRequests) {
+            for (let i = 0; unstakeHistoryPerLayer.length > i; i ++) {           
+                const withdrawable = pendingRequests.find((request: any) => {
+                  return Number(request.withdrawableBlock) === Number(unstakeHistoryPerLayer[i].transaction.blockNumber) + 93046
+                        || Number(request.withdrawableBlock) === Number(unstakeHistoryPerLayer[i].transaction.blockNumber) + 930460
+                })
+                
+                const data = { 
+                  ...unstakeHistoryPerLayer[i], 
+                  withdrawable: withdrawable ? true : false, 
+                  withdrawn: i + 1 > pendingRequests.length
+                  // withdrawableBlock: request.withdrawableBlock 
+                } 
+                fixWithdrawble.push(data);   
+            }
           }
 
           fixedUnstaked = [...fixedUnstaked, ...fixWithdrawble]
