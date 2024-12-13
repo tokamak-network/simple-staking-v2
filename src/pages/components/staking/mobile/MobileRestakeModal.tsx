@@ -42,9 +42,20 @@ export function RestakeDrawer (args: RestakeDrawerProps) {
         <DrawerHeader >
           {" "}
           <Flex w={'100%'} justifyContent={'space-between'}>
-            <Text color={"#131315"} fontSize="16px" fontWeight={500}>
-              Ethereum
-            </Text>
+            <Flex flexDir={'column'} fontFamily={'TitilliumWeb'}>
+              <Text color={"#131315"} fontSize="17px" fontWeight={500}>
+                Ethereum
+              </Text>
+              <Flex fontSize={'12px'} fontWeight={600}>
+                DAO Candidates:
+                <span style={{
+                  marginLeft: '3px',
+                  color: '#257eee'
+                }}>
+                  {selectedOp.name}
+                </span>
+              </Flex>
+            </Flex>
             <Flex h="24px" w="24px" onClick={onClose} ml={"15px"}>
               <Image src={icon_close} alt="icon_close" />
             </Flex>
