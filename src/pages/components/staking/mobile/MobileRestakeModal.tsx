@@ -52,7 +52,7 @@ export function RestakeDrawer (args: RestakeDrawerProps) {
                   marginLeft: '3px',
                   color: '#257eee'
                 }}>
-                  {selectedOp.name}
+                  {selectedOp?.name}
                 </span>
               </Flex>
             </Flex>
