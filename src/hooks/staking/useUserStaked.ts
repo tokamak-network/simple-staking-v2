@@ -1,18 +1,19 @@
-import { GET_MY_STAKED } from "@/graphql/getCandidates";
-import { useQuery } from "@apollo/client";
-import { useState, useEffect } from "react";
+import { GET_MY_STAKED } from '@/graphql/getCandidates';
+import { useQuery } from '@apollo/client';
+import { useState, useEffect } from 'react';
 
-export function useUserStaked (id: string) {
-  const [userStakeds, setUserStakeds] = useState()
+export function useUserStaked(id: string) {
+  const [userStakeds, setUserStakeds] = useState();
   const { data } = useQuery(GET_MY_STAKED, {
     variables: {
-      id: id
+      id: id,
     },
-    pollInterval: 10000,
+    pollInterval: 13000,
+    fetchPolicy: 'cache-and-network',
   });
   useEffect(() => {
-    setUserStakeds(data?.userStakeds[0])
-  }, [data, userStakeds])
-  
-  return { userStakeds }
+    setUserStakeds(data?.userStakeds[0]);
+  }, [data, userStakeds]);
+
+  return { userStakeds };
 }
