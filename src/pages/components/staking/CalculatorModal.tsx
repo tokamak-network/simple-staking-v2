@@ -57,7 +57,7 @@ function CalculatorModal() {
     const inputBalance = Number(input.replace(/,/g, ''));
     const maxCompensate = 26027.39726;
     const pSeigDeduction = 40;
-    const KRW = await axios('https://api.upbit.com/v1/ticker?markets=KRW-TON').then((response: any) => {
+    const KRW = await axios('https://api.upbit.com/v1/ticker?markets=KRW-tokamak').then((response: any) => {
       return JSON.parse(JSON.stringify(response.data).replace(/]|[[]/g, '')).trade_price;
     });
     const usdRates = await axios('https://api.frankfurter.app/latest?from=KRW').then((response): any => {
