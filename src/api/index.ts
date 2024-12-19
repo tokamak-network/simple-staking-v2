@@ -19,7 +19,7 @@ const candidate = createInstatnceCandidate();
 const etherscan = createInstanceEtherscan();
 
 export async function getTONPrice() {
-  const res = await axios.get('https://api.upbit.com/v1/ticker?markets=KRW-TON')
+  const res = await axios.get('https://api.upbit.com/v1/ticker?markets=KRW-tokamak')
   return res.data[0]
 }
 
