@@ -5,7 +5,7 @@ import { useStakingInformation } from "./useStakingInformation";
 export function useCalculateAPR (data: any) {
   const commitHistory = getCommitHistory(data)
   const { stakingInfo } = useStakingInformation()
-  const [compound, setCompound] = useState('0.00')
+  const [compound, setCompound] = useState('00.00')
   const month = 2629743;
   const now = Date.now()
   
@@ -24,9 +24,8 @@ export function useCalculateAPR (data: any) {
       
       //@ts-ignore
       const convertedAPR = apr === 0 ? 0.35 : Number(apr.slice(1)) / 100
-      
       const numOfCompounds = compounds.length === 0 ? 1 : compounds.length
-      const expectedAPR = (1+convertedAPR/numOfCompounds)**numOfCompounds - 1
+      const expectedAPR = (1 + convertedAPR / numOfCompounds) ** numOfCompounds - 1
       
       setCompound((expectedAPR * 100).toLocaleString(undefined, {maximumFractionDigits: 2, minimumFractionDigits: 2}))
     }

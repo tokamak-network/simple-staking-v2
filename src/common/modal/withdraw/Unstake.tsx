@@ -31,7 +31,7 @@ export const Unstake = (args: UnstakeProps) => {
   
   const { account, library } = useWeb3React();
   const [input, setInput] = useRecoilState(inputState);
-  const [, setTxPending] = useRecoilState(txState);
+  const [txPending, setTxPending] = useRecoilState(txState);
   const [, setModalOpen] = useRecoilState(transactionModalStatus);
   const [, setIsOpen] = useRecoilState(transactionModalOpenStatus);
   const [selectedMode, setSelectedMode] = useRecoilState(getModeData);
@@ -81,7 +81,7 @@ export const Unstake = (args: UnstakeProps) => {
       }
     }
     fetch()
-  }, [selectedModalData])
+  }, [selectedModalData, txPending])
 
   useEffect(() => {
     async function waitReceipt() {
@@ -162,7 +162,9 @@ export const Unstake = (args: UnstakeProps) => {
         </Flex>
       </Flex>
       {
-        requests && requests.length !== 0 ?
+        requests && requests.length == 0 ?
+        'No history'
+        : requests && requests.length !== 0 ?
         <WithdrawTable 
           columns={columns}
           data={requests}

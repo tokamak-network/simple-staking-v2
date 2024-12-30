@@ -21,7 +21,7 @@ export function useCandidateList () {
   const { candidates, loading, error } = useGetCandidates()
 
   const { account, library, chainId } = useWeb3React();
-  // const [txPending, ] = useRecoilState(txState);
+  const [txPending, ] = useRecoilState(txState);
   const { 
     SeigManager_CONTRACT, 
     DepositManager_CONTRACT, 
@@ -121,7 +121,7 @@ export function useCandidateList () {
       }
     }
     fetch()
-  }, [candidates, account, chainId])
+  }, [candidates, account, chainId, txPending])
 
   return { candidateList }
 }

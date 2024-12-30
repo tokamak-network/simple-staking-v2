@@ -24,6 +24,7 @@ import { inputState } from "@/atom/global/input";
 import { LoadingDots } from "@/common/Loader/LoadingDots";
 import { BalanceTooltip } from "@/common/tooltip/BalanceTooltip";
 import { useWithdrawable, useWithdrawRequests } from "@/hooks/staking/useWithdrawable";
+import { usePendingUnstaked } from "@/hooks/staking/usePendingUnstaked";
 
 type WithdrawToEthereumProps ={
   selectedModalData: StakeModalDataType
@@ -43,13 +44,14 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   } = useCallContract();
 
   const { account } = useWeb3React();
-  const [, setTxPending] = useRecoilState(txState);
+  const [txPending, setTxPending] = useRecoilState(txState);
   const [input, setInput] = useRecoilState(inputState);
   const [modalOpen, setModalOpen] = useRecoilState(transactionModalStatus);
   const [, setIsOpen] = useRecoilState(transactionModalOpenStatus);
   const [selectedMode, setSelectedMode] = useRecoilState(getModeData);
 
   const { withdrawRequests } = useWithdrawRequests()
+  const { pendingUnstaked } = usePendingUnstaked(selectedModalData?.layer2, account);
 
   const [tx, setTx] = useState();
 
@@ -118,6 +120,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   }, [tx]);
 
   const [requests, setRequests] = useState([])
+  
   const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength } = useWithdrawable(
     selectedModalData?.layer2,
   );
@@ -132,7 +135,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
       }
     }
     fetch()
-  }, [selectedModalData])
+  }, [selectedModalData, txPending])
 
   const reStaking = useCallback(async () => {
     try {
@@ -158,13 +161,14 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
     }
   }, [DepositManager_CONTRACT, account, selectedModalData, setTxPending, closeThisModal]);
 
+  
   const withdraw = useCallback(async () => {
     try {
       setSelectedMode('Withdraw');
       setIsOpen(true)
       setModalOpen("waiting")
 
-      if (selectedModalData && DepositManager_CONTRACT && selectedModalData) {
+      if (selectedModalData && DepositManager_CONTRACT && selectedModalData && withdrawableLength !== '0.00') {
         const tx =
             withdrawableLength === '0' 
             ? '' 
@@ -209,7 +213,9 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
       </Flex>
       <Flex>
         {
-          requests && requests.length !== 0 ?
+          requests && requests.length == 0 ?
+          'No history'
+          : requests && requests.length !== 0 ?
           <WithdrawTable 
             columns={columns}
             data={requests}
@@ -240,14 +246,13 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           fontWeight={500}
           color={'#3d495d'}
         >
-          {/* 이쪽에 문제있음 */}
           <Flex mr={'9px'}>
             {
               toggle === 'Withdraw'
                 ? withdrawable
                 : 
                 <BalanceTooltip 
-                  label={selectedModalData.pendingUnstaked.toString()}
+                  label={requests.length === 0 ? '0' : pendingUnstaked.toString()}
                   types={'ray'}
                 />
                 
@@ -289,7 +294,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
           isDisabled={
             toggle === 'Withdraw'
             ? (withdrawable === '0.00' ? true : false)
-            : (!isChecked || selectedModalData.pendingUnstaked === '0.00') 
+            : ((!isChecked) || requests.length == 0) 
           }
           bgColor={toggle === 'Restake' ? '#36af47' : ''}
           _hover={

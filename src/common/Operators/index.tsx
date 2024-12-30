@@ -198,7 +198,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
           </Flex>
           <Info 
             title={'Expected APY'}
-            value={compounds}
+            value={compounds === 'NaN' ? '00.00' : compounds}
             unit={'%'}
           />
           <Info 

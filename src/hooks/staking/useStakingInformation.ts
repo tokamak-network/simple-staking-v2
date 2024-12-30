@@ -51,6 +51,7 @@ export function useStakingInformation () {
         totalSupply: totalSup,
         duration: '1-year'
       })
+      
       setStakingInfo([
         {
           title: "Staking APY",
@@ -65,7 +66,7 @@ export function useStakingInformation () {
           title: "Total staked",
           tooltip: "",
           tooltip2: "",
-          value: totalStaked.toLocaleString(undefined, {
+          value: totalStaked.toString() === 'NaN' ? '0.00' : totalStaked.toLocaleString(undefined, {
               maximumFractionDigits: 0,
               minimumFractionDigits: 0,
             }),
