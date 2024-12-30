@@ -14,11 +14,13 @@ export function useCalculateAPR (data: any) {
     const a = commitHistory?.find((history: any) => {   
       return history.timestamp < (now / 1000) - month * i && history.timestamp > (now / 1000) - (i+1) * month
     })
+    
     a ? compounds.push(a) : a
   }
   useEffect(() => {
     if (stakingInfo) {
-      const apr = stakingInfo[1].value
+      // value which title is 'Average APR' in stakingInfo
+      const apr = stakingInfo[0].value
       
       //@ts-ignore
       const convertedAPR = apr === 0 ? 0.35 : Number(apr.slice(1)) / 100

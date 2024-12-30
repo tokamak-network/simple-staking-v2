@@ -206,7 +206,10 @@ export const WalletInformation: FC<WalletInformationProps> = ({
                 Expected APY
               </Flex>
               <Flex mt={'3px'} ml={'3px'}>
-                <BasicTooltip label={'label'} />
+                <BasicTooltip 
+                  label={'360-day historical staking APY calculated from seigniorage update frequency, with a 10% commission fee to the DAO candidate'} 
+                  width={'430px'}
+                />
               </Flex>
             </Flex>
             <Flex flexDir={'row'} alignItems={'center'}>

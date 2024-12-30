@@ -56,7 +56,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
     },
     {
       title: 'DAO candidate manager',
-      content: '',
+      content: '0x757DE9c340c556b56f62eFaE859Da5e08BAAE7A2',
     },
   ]
 

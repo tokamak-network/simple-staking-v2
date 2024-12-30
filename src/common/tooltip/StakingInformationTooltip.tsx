@@ -14,6 +14,7 @@ type StakingInformationTooltipProps = {
   tooltip: string
   value: string | number
   unit: string
+  widths?: string
 }
 
 export const StakingInformationTooltip = (args: StakingInformationTooltipProps) => {
@@ -21,7 +22,8 @@ export const StakingInformationTooltip = (args: StakingInformationTooltipProps) 
     title,
     tooltip,
     value,
-    unit
+    unit,
+    widths
   } = args
 
   const [ width ] = useWindowDimensions();
@@ -43,7 +45,7 @@ export const StakingInformationTooltip = (args: StakingInformationTooltipProps) 
           {title}
         </Flex>
         <Flex ml={'2px'}>
-          <BasicTooltip label={tooltip} />
+          <BasicTooltip label={tooltip} width={widths}/>
         </Flex>
       </Flex>
       <Flex

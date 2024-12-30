@@ -77,11 +77,10 @@ const PAGE_STYLE = {
     fontWeight: 'normal',
     fontStretch: 'normal',
     fontStyle: 'normal',
-    lineHeight: 3.75,
     letterSpacing: '0.4px',
     textAlign: 'center',
     color: '#808992',
-    mt: '15px',
+    mt: '21px',
     mb: '60px',
   }),
 }

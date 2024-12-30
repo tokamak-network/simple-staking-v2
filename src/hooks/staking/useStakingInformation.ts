@@ -13,24 +13,25 @@ type SupplyValueProps = {
   unit: string
   value: string | number;
   dollor?: number | string
+  width?: string;
 }
 
 export function useStakingInformation () {
 
   const [stakingInfo, setStakingInfo] = useState<SupplyValueProps[]>([
     {
+      title: "Staking APY",
+      tooltip: "Staking APY varies among DAO candidates. The rate depends on how frequently stakers update seigniorage for their chosen DAO candidate, since staking rewards compound with each update.",
+      value: 0,
+      dollor: 0,
+      unit: '%'
+    },
+    {
       title: "Total staked",
       tooltip: "",
       value: 0,
       dollor: 0,
       unit: 'TON'
-    },
-    {
-      title: "Average APR",
-      tooltip: "",
-      value: 0,
-      dollor: 0,
-      unit: '%'
     },
     {
       title: "Seigniorage emission",
@@ -52,6 +53,15 @@ export function useStakingInformation () {
       })
       setStakingInfo([
         {
+          title: "Staking APY",
+          tooltip: "Staking APY varies among DAO candidates. The rate depends on how frequently stakers update seigniorage for their chosen DAO candidate, since staking rewards compound with each update.",
+          tooltip2: "",
+          value: `~${roi ? roi.toLocaleString(undefined, {maximumFractionDigits: 2, minimumFractionDigits: 2}) : 0.00}`,
+          // dollor: (Total staked + Average APY) * tonPriceUSD,
+          unit: '%',
+          width: '325px'
+        },
+        {
           title: "Total staked",
           tooltip: "",
           tooltip2: "",
@@ -63,20 +73,13 @@ export function useStakingInformation () {
           unit: 'TON'
         },
         {
-          title: "Average APR",
-          tooltip: "tooltip",
-          tooltip2: "",
-          value: `~${roi ? roi.toLocaleString(undefined, {maximumFractionDigits: 2, minimumFractionDigits: 2}) : 0.00}`,
-          // dollor: (Total staked + Average APY) * tonPriceUSD,
-          unit: '%'
-        },
-        {
           title: "Seigniorage emission",
-          tooltip: "seigPerDay",
+          tooltip: "3.92 TON is minted with each Ethereum block and distributed as follows: TON stakers (74%), DAO (20%), PowerTON holders (0%), and L2 operators (6%).",
           tooltip2: "",
           value: `~28,224`,
           // dollor: (circulation.totalCirculationSupply) * tonPriceUSD,
-          unit: 'TON per day'
+          unit: 'TON per day',
+          width: '470px'
         },
       ])
     }

@@ -120,7 +120,7 @@ function DesktopStaking () {
   
   return (
     <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
-      <PageHeader title={'DAO Candidates'} subtitle={'Choose a DAO candidate to stake, restake, unstake, or withdraw TON (or WTON).'}/>
+      <PageHeader title={'DAO Candidates'} subtitle={'Stake your TON with a DAO candidate to earn seigniorage rewards while delegating your voting power to help shape Tokamak Network\'s governance.'}/>
       <Box fontFamily={theme.fonts.roboto} overflowX={'hidden'}>
         <Flex justifyContent={'center'}>
           <Flex w={'538px'} justifyContent={'space-between'} mb={'60px'}>
@@ -130,7 +130,8 @@ function DesktopStaking () {
                   title,
                   tooltip,
                   value,
-                  unit
+                  unit,
+                  width
                 } = info
                 return (
                   <StakingInformationTooltip
@@ -139,6 +140,7 @@ function DesktopStaking () {
                     tooltip={tooltip}
                     value={value}
                     unit={unit}
+                    widths={width}
                   />
                 )
               })

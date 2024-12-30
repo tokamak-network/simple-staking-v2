@@ -35,7 +35,7 @@ function Operators() {
         w="250px"
         color={"gray.300"}
       >
-        Choose a DAO candidate to stake, restake, unstake, or withdraw TON (or WTON).
+        Stake your TON with a DAO candidate to earn seigniorage rewards while delegating your voting power to help shape Tokamak Network's governance.
       </Text>
       <Flex justifyContent={'center'}>
           <Flex flexDir={'column'} minW={'290px'} justifyContent={'space-between'} mb={'60px'}>
