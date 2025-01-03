@@ -47,12 +47,10 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
     candidate, 
     candidateAddOn, 
     stakeOfCandidate, 
-    commissionRate, 
     stakeOf,
     kind,
     name
   } = data;
-  const { account } = useWeb3React();
 
   const [isOpen, setIsOpen] = useRecoilState(openInfonState);
   const [tab, setTab] = useState('staking')
@@ -79,16 +77,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
   
   const compounds = useCalculateAPR(data)
 
-  const stakedId = candidateContract
-
   const [logo, setLogo] = useState<string>('')
-  // const { l2Infos } = useIsOperator(candidateAddOn?.id)
-  
-  // useEffect(() => {
-  //   if (l2Infos) {
-  //     setLogo(l2Infos.logo)
-  //   }
-  // }, [l2Infos])
 
   const clickOpen = (candidateContract: string, index: number) => {
     setIsOpen(candidateContract);

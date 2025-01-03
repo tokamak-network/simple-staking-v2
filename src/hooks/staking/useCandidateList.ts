@@ -43,6 +43,7 @@ export function useCandidateList () {
           let oldCommitHistory
           let oldHistory
           let expSeig
+          let myPending
 
           // console.log(obj)
 
@@ -64,6 +65,7 @@ export function useCandidateList () {
             try{
               if (account) {
                 stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account)
+                myPending = await DepositManager_CONTRACT.pendingUnstaked(obj.candidateContract, account)
                 if (mobile && stakeOf !== '0' && TON_CONTRACT) {
                   const blockNumber = library && await library.getBlockNumber();
                   const Tot = getContract(await SeigManager_CONTRACT.tot(), Coinage, library, account)
@@ -80,6 +82,7 @@ export function useCandidateList () {
                       .add(toBN(totTotalSupply))
                       .sub(toBN(tonBalanceOfWTON));
                   const fromBlockNumber = await SeigManager_CONTRACT.lastCommitBlock(obj.candidateContract)
+                  
                   expSeig = calculateExpectedSeig(
                       new BN(fromBlockNumber.toString()),
                       new BN(blockNumber),
@@ -112,6 +115,7 @@ export function useCandidateList () {
             stakeOfCandidate: stakeOfCandidate && stakeOfCandidate.toString(),
             oldHistory: oldHistory,
             oldCommitHistory: oldCommitHistory,
+            myPending: myPending,
             index: index
           }
           return tempObj

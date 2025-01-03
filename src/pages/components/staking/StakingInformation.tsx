@@ -197,7 +197,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
     isL2: isL2,
     name: name
   };
-  
+
   const modalButton = useCallback(async (modalType: ModalType, data: any) => {
     setSelectedModal(modalType);
     setSelectedModalData(data);
@@ -242,7 +242,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
             />
             <OperatorDetailInfo 
               title={'Pending Withdrawal'}
-              value={pendingUnstaked}
+              value={data?.myPending}
               totalValue={data?.pending}
               unit={'TON'}
               type={''}
