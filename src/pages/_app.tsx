@@ -49,7 +49,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               // </Flex>
             ) : (
               <Flex flexDir={'column'} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
-                <TokamakGNB />
+                {/* <TokamakGNB /> */}
                 <Header
                 // walletopen={() => handleWalletModalOpen("wallet")}
                 />
