@@ -71,7 +71,7 @@ export function useStakingInformation (candidateList?: any) {
             title: "Staking APY",
             tooltip: "Staking APY varies among DAO candidates. The rate depends on how frequently stakers update seigniorage for their chosen DAO candidate, since staking rewards compound with each update.",
             tooltip2: "",
-            value: `${minApr} - ${maxApr}`,
+            value: minApr === Infinity ? '0.00' : `${minApr} - ${maxApr}`,
             // dollor: (Total staked + Average APY) * tonPriceUSD,
             unit: '%',
             width: '325px'
