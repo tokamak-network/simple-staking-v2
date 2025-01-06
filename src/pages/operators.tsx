@@ -8,7 +8,7 @@ import { StakingInformationTooltip } from "@/common/tooltip/StakingInformationTo
 function Operators() {
   const theme = useTheme();
   const { candidateList } = useCandidateList();
-  const { stakingInfo } = useStakingInformation();
+  const { stakingInfo } = useStakingInformation(candidateList);
 
   return (
     <Flex

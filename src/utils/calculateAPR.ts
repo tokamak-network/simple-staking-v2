@@ -5,20 +5,19 @@ import { calculateRoiBasedonCompound } from "./calculateRoi";
 export function calculateAPR (roi: any, data: any) {
   const commitHistory = getCommitHistory(data)
   
-  
   const month = 2629743;
   const now = Date.now()
   
   let compounds = []
   for (let i = 0; i < 12; i ++) {
-    const a = commitHistory?.find((history: any) => {   
+    const compound = commitHistory?.find((history: any) => {   
       return history.timestamp < (now / 1000) - month * i && history.timestamp > (now / 1000) - (i+1) * month
     })
     
-    a ? compounds.push(a) : a
+    compound ? compounds.push(compound) : compound
   }
   
-  if (roi) {
+  if (roi !== Infinity && roi !== 0 && roi !== -Infinity) {
     // value which title is 'Average APR' in stakingInfo
     const apr = roi
 
