@@ -1,4 +1,4 @@
-import { Container, Center, Box, Text, Heading, Button, Grid, Flex, useColorMode, useTheme } from '@chakra-ui/react';
+import { Container, Center, Box, Text, Heading, Button, Grid, Flex, useColorMode, useTheme, Link } from '@chakra-ui/react';
 import React, { FC, useState, useCallback } from 'react';
 // import {LoadingComponent} from 'components/Loading';
 
@@ -22,6 +22,8 @@ import WTON_LOGO from '@/assets/images/wton_large.svg'
 import BasicTooltip from '@/common/tooltip';
 import { useCalculateAPR } from '@/hooks/staking/useCalculateAPR';
 import { fromNow } from '@/components/getDate';
+import { ETHERSCAN_LINK } from '@/constants';
+import CONTRACT_ADDRESS from '@/services/addresses/contract';
 
 type WalletInformationProps = {
   // dispatch: AppDispatch;
@@ -36,6 +38,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const { account, library } = useWeb3React();
+  const { WTON_ADDRESS, TON_ADDRESS } = CONTRACT_ADDRESS;
   
   const [candidateContracts, setCandidateContracts] = useState('');
   const [candidates, setCandidates] = useState('');
@@ -152,7 +155,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           <Flex flexDir={'column'} h={'76px'}>
             <Flex flexDir={'column'} >
               <Flex>
-                <Flex
+                <Link
+                  href={`${ETHERSCAN_LINK}/address/${TON_ADDRESS}`}
+                  isExternal={true}
                   border={'1px solid #f4f6f8'}
                   w={'32px'} 
                   h={'32px'} 
@@ -161,29 +166,58 @@ export const WalletInformation: FC<WalletInformationProps> = ({
                   borderRadius={'100px'}
                   mr={'6px'}
                 >
-                  <Image src={TON_LOGO} alt={''} />
-                </Flex>
-                <Flex 
-                  bgColor={'#007aff'} 
+                  <Flex
+                    justifyContent={'center'} 
+                    alignItems={'center'} 
+                    w={'32px'} 
+                    h={'32px'}   
+                  >
+                    <Image src={TON_LOGO} alt={''} />
+                  </Flex>
+                </Link>
+                <Link
+                  href={`${ETHERSCAN_LINK}/address/${WTON_ADDRESS}`}
+                  isExternal={true}
+                  border={'1px solid #007aff'}
                   w={'32px'} 
                   h={'32px'} 
-                  justifyContent={'center'} 
-                  alignItems={'center'} 
                   borderRadius={'100px'}
+                  bgColor={'#007aff'}
                 >
-                  <Image src={WTON_LOGO} alt={''} />
-                </Flex>
+                  <Flex
+                    w={'32px'} 
+                    h={'32px'} 
+                    justifyContent={'center'} 
+                    alignItems={'center'} 
+                  >
+                    <Image src={WTON_LOGO} alt={''} />
+                  </Flex>
+                </Link>
               </Flex>
               <Flex fontSize={'11px'} color={'#304156'} fontWeight={700} mt={'9px'}>
-                <Flex>
+                <Link
+                  href={`${ETHERSCAN_LINK}/address/${TON_ADDRESS}`}
+                  isExternal={true}
+                  textDecor={'none'}
+                  _hover={{
+                    textDecor: 'none'
+                  }}
+                >
                   TON
-                </Flex>
+                </Link>
                 <Flex color={'#c7d1d8'} mx={'3px'}>
                   /   
                 </Flex>
-                <Flex>
+                <Link
+                  href={`${ETHERSCAN_LINK}/address/${WTON_ADDRESS}`}
+                  isExternal={true}
+                  textDecor={'none'}
+                  _hover={{
+                    textDecor: 'none'
+                  }}
+                >
                   WTON
-                </Flex>
+                </Link>
               </Flex>
             </Flex>
             <Flex
