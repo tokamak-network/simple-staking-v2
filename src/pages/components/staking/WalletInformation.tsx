@@ -144,7 +144,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 
   const theme = useTheme();
   const { btnStyle } = theme;
-
+  
   return (
     <Container maxW={'330px'} shadow={'md'} borderRadius={'lg'} border={'solid 1px #f4f6f8'} h={'137px'}>
       <Box w={'100%'} p={0} textAlign={'center'} px={2}>
@@ -212,9 +212,9 @@ export const WalletInformation: FC<WalletInformationProps> = ({
                 />
               </Flex>
             </Flex>
-            <Flex flexDir={'row'} alignItems={'center'}>
-              <Flex color={'#304156'} fontSize={'25px'} fontWeight={700} mr={'9px'} w={'96px'}>
-                {compounds === 'NaN' ? '0.00' : compounds} %
+            <Flex flexDir={'row'} alignItems={'center'} justifyContent={'space-between'}>
+              <Flex color={'#304156'} fontSize={'25px'} fontWeight={700} mr={'9px'} w={'110px'}>
+                {compounds === 'NaN' || Number(compounds) === Infinity ? '0.00' : compounds} %
               </Flex>
               <Button
                 {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}

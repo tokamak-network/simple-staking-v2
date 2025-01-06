@@ -48,11 +48,11 @@ function DesktopStaking () {
     ],
     [],
   );
-  const { stakingInfo } = useStakingInformation();
-
+  
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const { candidateList } = useCandidateList()
   const { account } = useWeb3React();
+  const { stakingInfo } = useStakingInformation(candidateList);
 
   const [isOpen, setIsOpen] = useRecoilState(openInfonState);
 
