@@ -292,7 +292,7 @@ function OperatorCard(props: { operator: any }) {
           >
             <Text fontSize={"12px"} color="gray.300">
               {" "}
-              Expected APY
+              Staking APY
             </Text>
             <Text fontSize={"13px"} color="gray.700">
               {" "}

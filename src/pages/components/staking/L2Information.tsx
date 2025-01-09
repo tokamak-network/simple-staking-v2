@@ -66,7 +66,6 @@ function L2Information({ data }: L2InformationProps) {
   useEffect(() => {
     const infos = L2Info.find((info: any) => info.name === data.name)
     
-    
     if (infos) {
       setBridgeValue(infos.bridge)
       setExplorerValue(infos.explorer)
@@ -74,7 +73,7 @@ function L2Information({ data }: L2InformationProps) {
     }
   }, [L2Info])
 
-  console.log(data)
+  // console.log(data)
 
   useEffect(() => {
     if (data) {

@@ -6,7 +6,7 @@ import useCallContract from "@/hooks/useCallContract"
 import { convertToRay, floatParser } from "@/components/number"
 import { StakeModalDataType } from "@/types"
 import { useWeb3React } from "@web3-react/core"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { inputState } from "@/atom/global/input"
 import { txHashStatus, txState } from "@/atom/global/transaction"
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
@@ -18,6 +18,7 @@ import NoLOGO from '@/assets/images/modal/gallery.svg'
 import { useIsOperator } from "@/hooks/staking/useIsOperator"
 import { useWithdrawalAndDeposited } from "@/hooks/staking/useWithdrawable"
 import { LoadingDots } from "@/common/Loader/LoadingDots"
+import L2Info from '../../../../l2_info.json'
 
 type ToTitanProps = {
   selectedModalData: StakeModalDataType
@@ -67,14 +68,17 @@ export const ToTitan = (args: ToTitanProps) => {
     setIsChecked(e.target.checked);
   }
 
-  const [logo, setLogo] = useState<string>('')
-  // const { l2Infos } = useIsOperator(selectedModalData?.layer2)
-  
-  // useEffect(() => {
-  //   if (l2Infos) {
-  //     setLogo(l2Infos.logo)
-  //   }
-  // }, [l2Infos])
+  const [logo, setLogoValue] = useState<string>('')
+
+  useEffect(() => {
+    if (selectedModalData) {
+      const infos = L2Info.find((info: any) => info.name === selectedModalData.name)
+    
+      if (infos) {
+        setLogoValue(infos.logo)
+      }
+    }
+  }, [L2Info, selectedModalData])
 
   useEffect(() => {
     async function waitReceipt() {

@@ -15,7 +15,7 @@ export const Info = (args: InfoType) => {
       w={
         title === 'Total Staked'
         ? '235px'
-        : title === 'Expected APY'
+        : title === 'Staking APY'
         ? '195px'
         : title === 'Your Staked'
         ? '220px'
@@ -27,7 +27,7 @@ export const Info = (args: InfoType) => {
     >
       <Text mr={'10px'}>{title}</Text>
       {
-        title === 'Expected APY' ?
+        title === 'Staking APY' ?
           <Text flexDir={'row'}>
             {value}{' '}{unit}
           </Text> 

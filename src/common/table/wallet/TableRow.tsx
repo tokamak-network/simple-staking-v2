@@ -66,8 +66,8 @@ export const TableRow: FC<TableRowProps> = ({
         if (currentBlock > withdrawableBlock) {
           setRemainTime('0')
         } else {
-          const apiValue = await getCountdown(withdrawableBlock)
-          setRemainTime(apiValue.EstimateTimeInSec)
+          const remainTimes = (withdrawableBlock - currentBlock) * 12
+          setRemainTime(remainTimes.toString())
         }
       }
     }

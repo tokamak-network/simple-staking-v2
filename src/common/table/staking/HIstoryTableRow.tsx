@@ -29,21 +29,19 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   selectedModalData
 }) => {
   const {
-    id,
     timestamp,
     data,
     eventName,
     sender,
     amount,
     transaction,
-    layer2,
-    value,
     transactionHash,
     blockTimestamp,
     from,
     index,
     withdrawable,
-    withdrawn
+    withdrawn,
+    // withdrawableBlock
   } = cell.row?.original;
 
   const txSender = sender ? sender : from
@@ -56,7 +54,7 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   const typeName = getEventName(eventName)
   const { library, account } = useWeb3React()
 
-  const [ remainTime, setRemainTime ] = useState('')
+  const [ remainTime, setRemainTime ] = useState('0')
   const [, setSelectedModalData] = useRecoilState(modalData);
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [ block, setBlock ] = useState(0)
@@ -76,14 +74,14 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
 
         const withdrawableBlock = Number(blockNo) + delay
         const currentBlock = await library.getBlockNumber()
-
+        
         setBlock(currentBlock)
 
         if (currentBlock > withdrawableBlock) {
           setRemainTime('0')
         } else {
-          const apiValue = await getCountdown(withdrawableBlock)
-          setRemainTime(apiValue.EstimateTimeInSec)
+          const remainTimes = (withdrawableBlock - currentBlock) * 12
+          setRemainTime(remainTimes.toString())
         }
       }
     }
@@ -129,7 +127,7 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
                 </Link>
               </Flex>
               <Flex ml={'3px'} color={'#828d99'}>
-                {calcCountDown(remainTime)}
+                {calcCountDown(remainTime.toString())}
               </Flex>
             </Flex>
           )

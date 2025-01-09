@@ -237,7 +237,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
           <Flex flexDir={'column'}>
             <Flex color={'#808992'} fontSize={'12px'} fontWeight={'normal'}>
               <Flex>
-                Expected APY
+                Staking APY
               </Flex>
               <Flex mt={'3px'} ml={'3px'}>
                 <BasicTooltip 

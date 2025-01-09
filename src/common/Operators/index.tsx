@@ -20,6 +20,7 @@ import { InfoTypeSelector } from "../selector/InfoType";
 import ContractAddressInfo from "../table/staking/ContractAddressInfo";
 import { openInfonState } from "@/atom/staking/openInfo";
 import { useCalculateAPR } from "@/hooks/staking/useCalculateAPR";
+import L2Info from '../../../l2_info.json'
 
 
 type OpearatorInfoProps = {
@@ -77,7 +78,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
   
   const compounds = useCalculateAPR(data)
 
-  const [logo, setLogo] = useState<string>('')
+  const [logo, setLogoValue] = useState<string>('')
 
   const clickOpen = (candidateContract: string, index: number) => {
     setIsOpen(candidateContract);
@@ -90,6 +91,14 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
       });
     }, 100);
   };
+  
+  useEffect(() => {
+    const infos = L2Info.find((info: any) => info.name === data.name)
+  
+    if (infos) {
+      setLogoValue(infos.logo)
+    }
+  }, [L2Info])
   
   const candidateAmount = stakeOfCandidate? convertNumber({
     amount: stakeOfCandidate,
@@ -186,7 +195,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
             }
           </Flex>
           <Info 
-            title={'Expected APY'}
+            title={'Staking APY'}
             value={compounds === 'NaN' ? '00.00' : compounds}
             unit={'%'}
           />

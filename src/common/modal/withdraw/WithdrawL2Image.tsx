@@ -41,7 +41,7 @@ export const WithdrawL2Image = (args: WithdrawL2ImageProps) => {
       <Flex mx={'15px'} mt={'10px'}>
         <Image src={Arrow} alt={''} />
       </Flex>
-      <Flex flexDir={'column'} alignItems={'center'}>
+      <Flex flexDir={'column'} alignItems={'center'} justifyContent={'center'}>
         <Flex 
           w={'40px'} 
           h={'40px'} 
@@ -52,7 +52,7 @@ export const WithdrawL2Image = (args: WithdrawL2ImageProps) => {
         >
           <ChakraImage src={l2Image} alt={''} />
         </Flex>
-        <Flex mt={'6px'} w={'50px'} textAlign={'center'}>
+        <Flex mt={'6px'} minW={'50px'} justifyContent={'center'}>
           {l2Name}
         </Flex>
       </Flex>

@@ -19,10 +19,12 @@ import { ToEthereum } from './ToEthereum';
 import { ToTitan } from './ToTitan';
 import { useWithdrawable, useWithdrawRequests } from '@/hooks/staking/useWithdrawable';
 import { inputState } from '@/atom/global/input';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { txState } from '@/atom/global/transaction';
 import { useIsOperator } from '@/hooks/staking/useIsOperator';
 import NoLOGO from '@/assets/images/modal/gallery.svg'
+import L2Info from '../../../../l2_info.json'
+
 
 function WithdrawModal () {
   const theme = useTheme();
@@ -38,14 +40,18 @@ function WithdrawModal () {
   const [input, setInput] = useRecoilState(inputState);
   const [txPending, ] = useRecoilState(txState);
 
-  const [logo, setLogo] = useState<string>('')
-  // const { l2Infos } = useIsOperator(selectedModalData?.layer2)
-  
-  // useEffect(() => {
-  //   if (l2Infos) {
-  //     setLogo(l2Infos.logo)
-  //   }
-  // }, [l2Infos])
+  const [logo, setLogoValue] = useState<string>('')
+
+  useEffect(() => {
+    if (selectedModalData) {
+      const infos = L2Info.find((info: any) => info.name === selectedModalData.name)
+    
+      if (infos) {
+        setLogoValue(infos.logo)
+      }
+    }
+  }, [L2Info, selectedModalData])
+
 
   const closeThisModal = useCallback(() => {
     setInput('');
