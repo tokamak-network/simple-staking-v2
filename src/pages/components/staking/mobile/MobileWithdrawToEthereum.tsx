@@ -97,13 +97,6 @@ export function MobileWithdrawToEthereum (args: MobileWithdrawToEthereumProps) {
       localeString: true
     }) : '0.00'
 
-  // useEffect(() => {
-  //   value.includes('a') 
-  //     ? setArrLength(value.length - 1) 
-  //     : setArrLength(value.length)
-  //   if (value.includes('a') && arrLength === 1) setValue([])
-  // }, [value])
-
   const options = ['WTON', 'TON']
   const handleSetOption = useCallback((option: any) => {
     setOption(option)

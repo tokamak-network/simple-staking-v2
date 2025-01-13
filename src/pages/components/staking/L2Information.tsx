@@ -188,7 +188,7 @@ function L2Information({ data }: L2InformationProps) {
           </Flex>
           <Flex mt={'9px'} ml={'5px'}>
             <BasicTooltip 
-              label={'a'}
+              label={'Sequencer seigniorage is the amount of seigniorage that the L2 operator can claim.'}
             />
           </Flex>
         </Flex>

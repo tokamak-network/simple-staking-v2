@@ -38,7 +38,8 @@ export const TableRow: FC<TableRowProps> = ({
     candidate,
     index,
     withdrawable,
-    withdrawn
+    withdrawn,
+    withdrawDelay
   } = cell?.row.original;
   
   const txSender = sender ? sender : from
@@ -58,9 +59,9 @@ export const TableRow: FC<TableRowProps> = ({
   
   useEffect(() => {
     async function fetch () {
-      if (typeName === 'Unstake' && delay) {
+      if (typeName === 'Unstake' && withdrawDelay) {
         
-        const withdrawableBlock = Number(blockNo) + delay
+        const withdrawableBlock = Number(blockNo) + withdrawDelay
         const currentBlock = await library.getBlockNumber()
         
         if (currentBlock > withdrawableBlock) {
@@ -74,29 +75,51 @@ export const TableRow: FC<TableRowProps> = ({
     fetch()
   }, [])
 
-
   const withdrawableTime = (blockNumber: number) => {
-    const withdrawableBlock = Number(blockNumber) + 93046
+    const withdrawableBlock = Number(blockNumber) + Number(withdrawDelay)
+    
     return (
-      <Flex justifyContent={'center'}>
-        <Flex justifyContent={'center'} flexDir={'column'}>
-          <Flex flexDir={'row'}>
-            <Flex mr={'3px'} color={'#304156'}>
-              Withdrawable at block
+      // <Flex justifyContent={'center'} flexDir={'column'}>
+      //   {
+      //     remainTime === '0' ? (
+      //       <Flex>
+      //         <Button 
+      //           w={'80px'}
+      //           h={'25px'}
+      //           justifyContent={'center'}
+      //           alignItems={'center'}
+      //           borderRadius={'4px'}
+      //           border={'1px solid #2a72e5'}
+      //           bgColor={'#fff'}
+      //           color={'#2a72e5'}
+      //           fontSize={'12px'}
+      //           fontWeight={400}
+      //           onClick={() => modalButton('withdraw', selectedModalData)}
+      //         > 
+      //           Withdraw 
+      //         </Button>
+      //       </Flex>
+      //     ) : (
+            <Flex justifyContent={'center'} flexDir={'column'}>
+              <Flex flexDir={'row'}>
+                <Flex mr={'3px'} color={'#304156'}>
+                  Withdrawable at block
+                </Flex>
+                <Link
+                  isExternal
+                  href={`${ETHERSCAN_LINK}/block/countdown/${withdrawableBlock}`}
+                  color={'#2a72e5'}
+                >
+                  {withdrawableBlock}
+                </Link>
+              </Flex>
+              <Flex ml={'3px'} color={'#828d99'}>
+                {calcCountDown(remainTime.toString())}
+              </Flex>
             </Flex>
-            <Link
-              isExternal
-              href={`${ETHERSCAN_LINK}/block/countdown/${withdrawableBlock}`}
-              color={'#2a72e5'}
-            >
-              {withdrawableBlock}
-            </Link>
-          </Flex>
-          <Flex ml={'3px'} color={'#828d99'}>
-            {calcCountDown(remainTime)}
-          </Flex>
-        </Flex>
-      </Flex>
+      //     )
+      //   }
+      // </Flex>
     )
   }
 
@@ -166,12 +189,12 @@ export const TableRow: FC<TableRowProps> = ({
       ) : ('')}
       {type === 'blockNumber' ? (
         //@ts-ignore
-        <Text textAlign={'center'} color={'#304156'} w={'100%'}>
+        <Flex justifyContent={'center'} color={'#304156'} w={'100%'}>
           {typeName === 'Unstake' ? 
             withdrawn ? moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)') 
               : withdrawableTime(blockNo) 
             : moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')}
-        </Text>
+        </Flex>
       ) : ('')}
       {type === 'status' ? (
         <Text color={'#304156'} textAlign={'center'} w={'100%'}>

@@ -60,7 +60,6 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [ block, setBlock ] = useState(0)
 
-  const delay = 93046
   const blockNo = transaction.blockNumber
 
   const modalButton = useCallback(async (modalType: ModalType, data: any) => {

@@ -66,7 +66,7 @@ export function L2Content (args: L2ContentProps) {
           <Flex>
             <Flex marginTop={'4px'} marginLeft={'3px'}>
               <BasicTooltip 
-                label={'a'}
+                label={'TON bridged to L2 is the amount of TON that has been bridged to L2.'}
               />
             </Flex>
             <Link 

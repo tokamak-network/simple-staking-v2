@@ -123,7 +123,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
           })
         //@ts-ignore
         const pendingRequests = await withdrawRequests(data.candidateContract)
-        console.log(pendingRequests)
+
         let toggleWithdrawble: any[] = [];
         for (let i = 0; toggleFilter.length > i; i ++) {
           if (toggleFilter[i].eventName === 'Unstake') {

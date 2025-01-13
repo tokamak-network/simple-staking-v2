@@ -30,18 +30,18 @@ export function useUserHistory () {
           const unstakeHistoryPerLayer = users[0].unstaked.filter((unstake: any) => unstake.candidate.id === obj.layer2.toLowerCase())
           
           let fixWithdrawble: any[] = [];
-
-          if (pendingRequests) {
+          
+          if (pendingRequests && pendingRequests.length > 0) {
             for (let i = 0; unstakeHistoryPerLayer.length > i; i ++) {           
                 const withdrawable = pendingRequests.find((request: any) => {
-                  return Number(request.withdrawableBlock) === Number(unstakeHistoryPerLayer[i].transaction.blockNumber) + 93046
-                        || Number(request.withdrawableBlock) === Number(unstakeHistoryPerLayer[i].transaction.blockNumber) + 930460
+                  return Number(request.withdrawableBlock) === Number(unstakeHistoryPerLayer[i].transaction.blockNumber) + Number(request.withdrawDelay)
                 })
                 
                 const data = { 
                   ...unstakeHistoryPerLayer[i], 
                   withdrawable: withdrawable ? true : false, 
-                  withdrawn: i + 1 > pendingRequests.length
+                  withdrawn: i + 1 > pendingRequests.length,
+                  withdrawDelay: pendingRequests[0].withdrawDelay
                   // withdrawableBlock: request.withdrawableBlock 
                 } 
                 fixWithdrawble.push(data);   
