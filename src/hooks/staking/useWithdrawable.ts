@@ -151,6 +151,12 @@ export function useWithdrawRequests () {
         const pendingRequests: any = [];
         const numPendingRequests = await DepositManager_CONTRACT.numPendingRequests(layer2, account)
         let requestIndex = await DepositManager_CONTRACT.withdrawalRequestIndex(layer2, account)
+        let withdrawDelay = await DepositManager_CONTRACT.withdrawalDelay(layer2)
+        let globalWithdrawalDelay = await DepositManager_CONTRACT.globalWithdrawalDelay()
+        
+        withdrawDelay = Number(withdrawDelay.toString()) > Number(globalWithdrawalDelay.toString()) ? 
+          Number(withdrawDelay.toString()) : Number(globalWithdrawalDelay.toString())
+        
         const currentBlock = await library.getBlock('latest')
         const requestIdx = requestIndex.toString()
         for (const _ of range(numPendingRequests)) {
@@ -164,8 +170,9 @@ export function useWithdrawRequests () {
             amount: request.amount,
             time: withdrawableTime === 'Withdrawable' ? 'Withdrawable' : calcCountDown2(withdrawableTime.EstimateTimeInSec),
             requestIndex: requestIndex,
-            withdrawableBlock: withdrawableBlock
+            withdrawableBlock: withdrawableBlock,
             // process: request.process
+            withdrawDelay: Number(withdrawDelay.toString())
           }
 
           pendingRequests.push(data);

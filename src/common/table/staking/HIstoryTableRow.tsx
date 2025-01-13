@@ -41,6 +41,7 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
     index,
     withdrawable,
     withdrawn,
+    withdrawDelay
     // withdrawableBlock
   } = cell.row?.original;
 
@@ -70,9 +71,9 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   
   useEffect(() => {
     async function fetch () {
-      if (typeName === 'Unstake' && delay) {
-
-        const withdrawableBlock = Number(blockNo) + delay
+      if (typeName === 'Unstake' && withdrawDelay) {
+        
+        const withdrawableBlock = Number(blockNo) + withdrawDelay
         const currentBlock = await library.getBlockNumber()
         
         setBlock(currentBlock)
@@ -89,12 +90,12 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   }, [])
 
   const withdrawableTime = (blockNumber: number) => {
-    const withdrawableBlock = Number(blockNumber) + 93046
+    const withdrawableBlock = Number(blockNumber) + Number(withdrawDelay)
     
     return (
       <Flex>
         {
-          withdrawable ? (
+          remainTime === '0' ? (
             <Flex>
               <Button 
                 w={'80px'}

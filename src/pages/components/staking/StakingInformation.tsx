@@ -123,19 +123,19 @@ export const StakingInformation: FC<StakingInformationProps> = ({
           })
         //@ts-ignore
         const pendingRequests = await withdrawRequests(data.candidateContract)
-        
+        console.log(pendingRequests)
         let toggleWithdrawble: any[] = [];
         for (let i = 0; toggleFilter.length > i; i ++) {
           if (toggleFilter[i].eventName === 'Unstake') {
             const withdrawable = pendingRequests.find((request: any) => {
-              return Number(request.withdrawableBlock) === Number(toggleFilter[i].transaction.blockNumber) + 93046
-                    || Number(request.withdrawableBlock) === Number(toggleFilter[i].transaction.blockNumber) + 930460
+              return Number(request.withdrawableBlock) === Number(toggleFilter[i].transaction.blockNumber) + Number(request.withdrawDelay)
             })
-
+            
             const data = { 
-              ...toggleFilter[i], 
+              ...toggleFilter[i],
               withdrawable: withdrawable ? true : false, 
               withdrawn: i + 1 > pendingRequests.length,
+              withdrawDelay: pendingRequests[0].withdrawDelay
               // withdrawableBlock: pendingRequests.withdrawableBlock 
             } 
             toggleWithdrawble.push(data);
