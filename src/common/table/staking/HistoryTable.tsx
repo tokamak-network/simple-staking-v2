@@ -165,7 +165,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
           }
         </Flex>
       </Flex>
-      <Box overflowX={'none'}>
+      
         <chakra.table
           width={'full'}
           {...getTableProps()}
@@ -216,7 +216,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
             
           </chakra.tbody>
         </chakra.table>
-      </Box>
+
     </Flex>
   )
 }

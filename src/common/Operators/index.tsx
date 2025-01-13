@@ -120,7 +120,6 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
       flexDir={'column'}
     >
       <Flex 
-        overflowX={'none'} 
         ref={(el) => (focusTarget.current[index] = el)}
         h={'74px'}
         key={index}
