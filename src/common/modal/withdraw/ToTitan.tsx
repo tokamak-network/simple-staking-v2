@@ -35,7 +35,7 @@ export const ToTitan = (args: ToTitanProps) => {
   const [withdrawTx, setWithdrawTx] = useState<any[]>([]);
   const { account, library } = useWeb3React();
   const [input, setInput] = useRecoilState(inputState);
-  const [, setTxPending] = useRecoilState(txState);
+  const [txPending, setTxPending] = useRecoilState(txState);
   const [, setModalOpen] = useRecoilState(transactionModalStatus);
   const [, setIsOpen] = useRecoilState(transactionModalOpenStatus);
   const [, setSelectedMode] = useRecoilState(getModeData);
@@ -105,7 +105,7 @@ export const ToTitan = (args: ToTitanProps) => {
       }
     }
     fetch()
-  }, [])
+  }, [selectedModalData, txPending])
 
   const withdrawL2 = useCallback(async () => {
     const amount = floatParser(input);

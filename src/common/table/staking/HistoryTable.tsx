@@ -117,6 +117,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
       justifyContent={'start'}
       h={'100%'}
       mb={'15px'}
+      border={'none'}
     >
       <Flex fontSize={'15px'} fontWeight={'bold'} mb={'5px'} flexDir={'row'} w={'100%'} justifyContent={'space-between'}>
         <Flex 
@@ -164,7 +165,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
           }
         </Flex>
       </Flex>
-      <Box overflowX={'auto'}>
+      <Box overflowX={'none'}>
         <chakra.table
           width={'full'}
           {...getTableProps()}
@@ -172,6 +173,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
           flexDirection="column"
           justifyContent={"start"}
           mr={'30px'}
+          border={'none'}
         >
           <HistoryTableHeader
             tableType={tableType}
@@ -191,7 +193,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                   key={i}
                   w="100%"
                   bg={'white.100' }
-                  border={''}
+                  border={'none'}
                   display="flex"
                   alignItems="center"
                   {...row.getRowProps()}

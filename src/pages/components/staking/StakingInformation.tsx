@@ -131,7 +131,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
               return Number(request.withdrawableBlock) === Number(toggleFilter[i].transaction.blockNumber) + 93046
                     || Number(request.withdrawableBlock) === Number(toggleFilter[i].transaction.blockNumber) + 930460
             })
-            console.log(withdrawable)
+
             const data = { 
               ...toggleFilter[i], 
               withdrawable: withdrawable ? true : false, 

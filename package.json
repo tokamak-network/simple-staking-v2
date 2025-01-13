@@ -23,7 +23,7 @@
     "@fontsource/roboto": "^4.5.8",
     "@fontsource/titillium-web": "^4.5.9",
     "@ledgerhq/hw-transport-node-hid": "^6.27.10",
-    "@tanstack/react-query": "^5.51.18",
+    "@tanstack/react-query": "^5.63.0",
     "@tokamak-network/tokamak-layer2-sdk": "^0.0.4",
     "@types/ms": "^0.7.34",
     "apollo": "^2.34.0",

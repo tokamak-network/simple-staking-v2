@@ -55,7 +55,7 @@ export const WithdrawL2Table: FC<WithdrawL2TableProps> = ({
       h={'100%'}
       mt={'25px'}
     >
-      <Box overflowX={'auto'}>
+      <Box>
         <chakra.table
           width={'320px'}
           {...getTableProps()}

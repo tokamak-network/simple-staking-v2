@@ -60,7 +60,7 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
       justifyContent={'start'}
       h={'100%'}
     >
-      <Box overflowX={'auto'}>
+      {/* <Box> */}
         <chakra.table
           width={mobile ? '100%' : '320px'}
           {...getTableProps()}
@@ -68,6 +68,7 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
           flexDirection="column"
           justifyContent={"start"}
           mr={mobile ? '0px' : '30px'}
+          border={"none"}
         >
           <WithdrawTableHeader />
           <chakra.tbody
@@ -77,35 +78,36 @@ export const WithdrawTable: FC<WithdrawTableProps> = ({
           >
             {page && page.length > 0 ? page.map((row: any, i) => {
               prepareRow(row);
-              return [
-                <chakra.tr
-                  boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}
-                  h={'38px'}
-                  key={i}
-                  w="100%"
-                  bg={'white.100' }
-                  border={''}
-                  display="flex"
-                  alignItems="center"
-                  {...row.getRowProps()}
-                >
-                  {row.cells ? row.cells.map((cell: any, index: number) => {
-                    return (         
-                      <WithdrawTableRow 
-                        key={index}
-                        index={index}
-                        cell={cell}
-                        tonPrice={tonPriceUSD}
-                        toggle={toggle}
-                      />
-                    )
-                  }) : 'No transaction history'}
-                </chakra.tr>
-              ]
+              return (
+                <Fragment key={i}>
+                  <chakra.tr
+                    boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}
+                    h={'38px'}
+                    w="100%"
+                    bg={'white.100' }
+                    border={''}
+                    display="flex"
+                    alignItems="center"
+                    {...row.getRowProps()}
+                  >
+                    {row.cells ? row.cells.map((cell: any, index: number) => {
+                      return (         
+                        <WithdrawTableRow 
+                          key={index}
+                          index={index}
+                          cell={cell}
+                          tonPrice={tonPriceUSD}
+                          toggle={toggle}
+                        />
+                      )
+                    }) : 'No transaction history'}
+                  </chakra.tr>
+                </Fragment>
+              )
             }) : ''}
           </chakra.tbody>
         </chakra.table>
-      </Box>
+      {/* </Box> */}
     </Flex>
   )
 }

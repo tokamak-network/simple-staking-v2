@@ -103,7 +103,7 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
       <Flex fontSize={'18px'} fontWeight={'bold'} mb={'15px'} justifyContent={'center'}>
         History
       </Flex>
-      <Box overflowX={'auto'}>
+      <Box overflowX={'none'}>
         <chakra.table
           width={'full'}
           {...getTableProps()}
