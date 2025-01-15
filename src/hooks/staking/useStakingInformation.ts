@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useDailyStaked } from '../home/useDailyStaked';
 
 import { useTONPrice } from './useTONPrice';
+import useCallContract from '../useCallContract';
 
 type SupplyValueProps = {
   title: string;
@@ -18,6 +19,9 @@ type SupplyValueProps = {
 }
 
 export function useStakingInformation (candidateList?: any) {
+  const { 
+    SeigManager_CONTRACT, 
+  } = useCallContract();
 
   const [stakingInfo, setStakingInfo] = useState<SupplyValueProps[]>([
     {
@@ -59,7 +63,7 @@ export function useStakingInformation (candidateList?: any) {
       let aprList = []
       if (candidateList) {
         for (let i = 0; i < candidateList.length; i++) {
-          let apr = calculateAPR(roi, candidateList[i]);
+          let apr = await calculateAPR(roi, candidateList[i], SeigManager_CONTRACT);
           aprList.push(Number(apr))
         }
         

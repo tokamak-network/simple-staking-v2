@@ -30,9 +30,10 @@ export function useCalculateAPR (data: any) {
       }
       if (roi !== 0 && roi !== Infinity && SeigManager_CONTRACT) {
         const apr = roi
+        
         const commissionRate = await SeigManager_CONTRACT.commissionRates(data.candidateContract);
-      
         const commission = Number(commissionRate.toString()) / 1e27
+
         const convertedAPR = apr === 0 ? 0.35 : Number(apr) / 100
         const numOfCompounds = compounds.length === 0 ? 1 : compounds.length
         const expectedAPR = (1 + convertedAPR * (1 - Number(commission)) / numOfCompounds) ** numOfCompounds - 1
