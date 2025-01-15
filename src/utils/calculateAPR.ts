@@ -33,6 +33,5 @@ export async function calculateAPR (roi: any, data: any, SeigManager_CONTRACT: a
     return (expectedAPR * 100).toLocaleString(undefined, {maximumFractionDigits: 2, minimumFractionDigits: 2});
   }
   
-  
   return '0.00'
 }

@@ -102,6 +102,7 @@ function StakeModal() {
             setModalOpen("confirmed")
             setTxPending(false);
             setTx(undefined);
+            setInput('');
           }
         });
       }
