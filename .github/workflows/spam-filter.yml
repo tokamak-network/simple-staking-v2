@@ -1,0 +1,60 @@
+name: "Spam Filter on Issue Comments"
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  spam_filter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check for spammy comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const commentUser = context.payload.comment.user.login;
+            console.log(`User who commented: ${commentUser}`);
+
+            // 1. 사용자 정보 가져오기 (REST API)
+            const { data: userInfo } = await github.rest.users.getByUsername({
+              username: commentUser
+            });
+
+            // 2. 가입일(혹은 다른 특이사항) 확인
+            const createdAt = new Date(userInfo.created_at);
+            const now = new Date();
+            const daysSinceCreation = (now - createdAt) / (1000 * 60 * 60 * 24);
+            
+            // 스팸 기준 예시: 가입 후 7일 이하이면서, 공개 Repo=0, Followers=0 등
+            const suspicious =
+              daysSinceCreation < 7 &&
+              userInfo.public_repos === 0 &&
+              userInfo.followers === 0;
+
+            if (suspicious) {
+              console.log(
+                `User ${commentUser} seems suspicious (brand new account with no activity). Deleting comment...`
+              );
+
+              // 3. 스팸 댓글 삭제
+              // 이 작업에는 repo에 write 권한 이상이 필요합니다.
+              await github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: context.payload.comment.id
+              });
+
+              // 4. (옵션) 조직 차원에서 유저 차단
+              // 해당 API -> PUT /orgs/{org}/blocks/{username}
+              // 권한이 있다면 아래 로직 추가 (orgName 부분 수정 필요):
+              /*
+              await github.rest.orgs.blockUser({
+                org: "YourOrgName",
+                username: commentUser
+              });
+              console.log(`User ${commentUser} blocked from the org.`);
+              */
+            } else {
+              console.log(`User ${commentUser} is not flagged as spam.`);
+            }
