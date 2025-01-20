@@ -51,7 +51,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
   const [selectedMode, setSelectedMode] = useRecoilState(getModeData);
 
   const { withdrawRequests } = useWithdrawRequests()
-  const { pendingUnstaked } = usePendingUnstaked(selectedModalData?.layer2, account);
+  const { pendingUnstaked, loading } = usePendingUnstaked(selectedModalData?.layer2, account);
 
   const [tx, setTx] = useState();
 
@@ -121,7 +121,7 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
 
   const [requests, setRequests] = useState([])
   
-  const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength } = useWithdrawable(
+  const { withdrawable, withdrawableLength, withdrawLoading } = useWithdrawable(
     selectedModalData?.layer2,
   );
 
@@ -130,7 +130,6 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
       if (selectedModalData) {
         //@ts-ignore
         const pendingRequests = await withdrawRequests(selectedModalData.layer2)
-        
         setRequests(pendingRequests)
       }
     }
@@ -248,8 +247,13 @@ export const WithdrawToEthereum = (args: WithdrawToEthereumProps) => {
         >
           <Flex mr={'9px'}>
             {
-              toggle === 'Withdraw'
-                ? withdrawable
+              // loading  ? <LoadingDots /> :
+              withdrawLoading ? 
+              <Flex mt={'7px'}>
+                <LoadingDots /> 
+              </Flex>:
+              toggle === 'Withdraw' ? 
+                withdrawable
                 : 
                 <BalanceTooltip 
                   label={requests.length === 0 ? '0' : pendingUnstaked.toString()}
