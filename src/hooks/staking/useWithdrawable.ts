@@ -164,11 +164,12 @@ export function useWithdrawRequests () {
           
           const withdrawableBlock = request.withdrawableBlockNumber.toString()
           const withdrawable = withdrawableBlock < currentBlock.number ? true : false
-          const withdrawableTime = withdrawable ? 'Withdrawable' : await getCountdown(withdrawableBlock)
+          const remainTimes = (withdrawableBlock - currentBlock.number) * 12
+          const withdrawableTime = withdrawable ? 'Withdrawable' : remainTimes.toString()
 
           const data = {
             amount: request.amount,
-            time: withdrawableTime === 'Withdrawable' ? 'Withdrawable' : calcCountDown2(withdrawableTime.EstimateTimeInSec),
+            time: withdrawableTime === 'Withdrawable' ? 'Withdrawable' : calcCountDown2(withdrawableTime),
             requestIndex: requestIndex,
             withdrawableBlock: withdrawableBlock,
             // process: request.process
