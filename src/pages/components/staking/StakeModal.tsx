@@ -33,6 +33,7 @@ import { StakeModalComponentType } from 'types'
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from '@/atom/global/modal';
 import { TokenTypeSelector } from '@/common/selector/TokenType';
 import { UnstakeBalanceInput } from '@/common/modal/withdraw/UnstakeBalanceInput';
+import useUserBalance from '@/hooks/useUserBalance';
 
 function StakeModal() {
   const theme = useTheme();
@@ -59,6 +60,8 @@ function StakeModal() {
   const [modalComponent, setModalComponent] = useState<StakeModalComponentType>()
 
   const [stakeDisabled, setStakeDisabled] = useState(true);
+
+  const {userTonBalance, userWTonBalance} = useUserBalance(account);
 
   useEffect(() => {
     if (selectedModal && selectedModalData)
@@ -197,7 +200,6 @@ function StakeModal() {
   useEffect(() => {
     if (selectedModalData) {
       btnDisabledStake();
-      
     }
     /*eslint-disable*/
   }, [
@@ -270,7 +272,7 @@ function StakeModal() {
                       w={'100%'}
                     >   
                       <UnstakeBalanceInput 
-                        stakedAmount={tokenType === 'TON' ? modalComponent.balance : modalComponent.balance2}
+                        stakedAmount={tokenType === 'TON' ? userTonBalance : userWTonBalance}
                         tokenType={tokenType}
                       />
                     </Flex>

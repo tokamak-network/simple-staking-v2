@@ -19,6 +19,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import WalletInformation from "./WalletInformation";
 import { useWithdrawRequests } from '../../../hooks/staking/useWithdrawable';
+import { txState } from "@/atom/global/transaction";
 
 
 type StakingInformationProps = {
@@ -89,6 +90,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   useEffect(() => {
     account ? setToggle('My') : setToggle('All')
   }, [account])
+  const [txPending, setTxPending] = useRecoilState(txState);
 
   const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account);
   const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength, requests } = useWithdrawable(
@@ -106,7 +108,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
       setIsL2(data.candidateAddOn !== null)
       setName(data.name)
     }
-  }, [data]);
+  }, [data, txPending]);
   
   useEffect(() => {
     async function fetch () {

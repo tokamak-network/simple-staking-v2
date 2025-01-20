@@ -16,6 +16,7 @@ import WithdrawTable from "./WithdrawTable"
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal"
 import { LoadingDots } from "@/common/Loader/LoadingDots"
 import { useWithdrawRequests } from "@/hooks/staking/useWithdrawable"
+import { useGetStakeOf } from "@/hooks/staking/useGetStakeOf"
 
 type UnstakeProps = {
   selectedModalData: StakeModalDataType
@@ -49,6 +50,8 @@ export const Unstake = (args: UnstakeProps) => {
   const {
     stakedAmount
   } = selectedModalData
+  
+  const { stakeOf } = useGetStakeOf(selectedModalData.layer2, account)
 
   const columns = useMemo(
     () => [
@@ -129,7 +132,7 @@ export const Unstake = (args: UnstakeProps) => {
   return (
     <Flex flexDir={'column'} w={'350px'} alignItems={'center'}>
       <UnstakeBalanceInput 
-        stakedAmount={stakedAmount}
+        stakedAmount={stakeOf}
       />
       <Flex w={'100%'} h={'1px'} my={'25px'} bgColor={'#f4f6f8'} />
       <StakingCheckbox 
@@ -162,15 +165,17 @@ export const Unstake = (args: UnstakeProps) => {
         </Flex>
       </Flex>
       {
-        requests && requests.length == 0 ?
-        'No history'
-        : requests && requests.length !== 0 ?
-        <WithdrawTable 
-          columns={columns}
-          data={requests}
-          toggle={selectedMode}
-        /> : 
-        <LoadingDots />
+        requests && requests.length == 0 ? (
+          'No history'
+        ) : requests && requests.length !== 0 ? (
+          <WithdrawTable 
+            columns={columns}
+            data={requests as any[]}
+            toggle={selectedMode}
+          />
+        ) : (
+          <LoadingDots />
+        )
       }
     </Flex>
   )
