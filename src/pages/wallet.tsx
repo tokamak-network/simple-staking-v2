@@ -8,10 +8,11 @@ import { useUserHistory } from '../hooks/wallet/useUserHIstory';
 // import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
 import { convertNumber } from '../utils/number';
 import { useTopCardInfo } from '@/hooks/wallet/useTopCardInfo';
+import { LoadingDots } from '@/common/Loader/LoadingDots';
 
 function Wallet () {
   const theme = useTheme();
-  const { userHistory } = useUserHistory();
+  const { userHistory, loading } = useUserHistory();
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const { userTotalStaked, userPendingWithdrawal } = useTopCardInfo()
   
@@ -57,26 +58,28 @@ function Wallet () {
     ],
     [],
   );
-
+  
   return (
     <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
       <PageHeader title={'Account'} subtitle={'Check the status of your assets in the account'}/>
-      <Box fontFamily={theme.fonts.roboto}>
+      <Flex fontFamily={theme.fonts.roboto} flexDir={'column'} w={'100%'} alignItems={'center'}>
         <TopCardContainer
           totalStaked={myTotalStaked}
           pendingWithdrawal={myPendingWithdrawal}
           accumulatedReward={''}
         />
-        {/* <GraphContainer /> */}
-        {
-          userHistory ?
-          <MyHistoryTable 
-            columns={historyColumns}
-            data={userHistory}
-            isLoading={tableLoading}
-          /> : ''
-        }
-      </Box>
+        <Flex mt={loading ? "50px" : '0px'}>
+          {
+            loading ? <LoadingDots /> :
+            userHistory && userHistory.length > 0 ?
+            <MyHistoryTable 
+              columns={historyColumns}
+              data={userHistory}
+              isLoading={tableLoading}
+            /> : ''
+          }
+        </Flex>
+      </Flex>
     </Flex>
   );
 }

@@ -21,6 +21,7 @@ export const TopCard: FC<TopCardProps> = ({
       boxShadow={'0 1px 1px 0 rgba(96, 97, 112, 0.16)'}
       justifyContent={'center'}
       alignItems={'center'}
+      mr={title === 'Total Staked' ? '20px' : '0px'}
     >
       <Text
         h={'18px'}

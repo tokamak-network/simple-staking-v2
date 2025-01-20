@@ -13,6 +13,7 @@ export function useUserHistory () {
   const [userHistory, setUserHistory] = useState([])
   const { blockNumber } = useBlockNumber()
   const { account } = useWeb3React();
+  const [loading, setLoading] = useState(true)
   
   const { users } = useGetUserHistory(account)
   const { withdrawRequests } = useWithdrawRequests()
@@ -77,12 +78,13 @@ export function useUserHistory () {
             datas.push(indexedData)
           }
           setUserHistory(datas)
+          setLoading(false)
         }
       }
     }
     fetchList()
   }, [account, users])
 
-  return { userHistory }
+  return { userHistory, loading }
 }
 
