@@ -137,7 +137,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
               ...toggleFilter[i],
               withdrawable: withdrawable ? true : false, 
               withdrawn: i + 1 > pendingRequests.length,
-              withdrawDelay: pendingRequests[0].withdrawDelay
+              withdrawDelay: pendingRequests[0] ? pendingRequests[0].withdrawDelay : '93046'
               // withdrawableBlock: pendingRequests.withdrawableBlock 
             } 
             toggleWithdrawble.push(data);

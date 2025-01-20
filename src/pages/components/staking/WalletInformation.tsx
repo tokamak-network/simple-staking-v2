@@ -267,7 +267,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
                 Seigniorage is updated
               </Flex>
               <Flex>
-                {commitHistory ? fromNow(commitHistory[0].timestamp) : ''}.
+                {commitHistory && commitHistory[0] ? fromNow(commitHistory[0].timestamp) : ''}.
               </Flex>
             </Flex>
           </Flex>
