@@ -24,6 +24,8 @@ export const TITAN_SUBGRAPH = REACT_APP_MODE === "PRODUCTION" ? process.env.NEXT
 export const THANOS_SUBGRAPH = REACT_APP_MODE === "PRODUCTION" ? process.env.NEXT_PUBLIC_THANOS_SUBGRAPH : process.env.NEXT_PUBLIC_THANOS_SEPOLIA_SUBGRAPH
 export const TITAN_RPC = REACT_APP_MODE === "PRODUCTION" ? process.env.NEXT_PUBLIC_TITAN_RPC : process.env.NEXT_PUBLIC_TITAN_SEPOLIA_RPC
 
+export const PRICE_API = process.env.NEXT_PUBLIC_API_PRICE;
+
 export const BASE_PROVIDER =
 REACT_APP_MODE === "PRODUCTION"
     ? ethers.getDefaultProvider("mainnet")

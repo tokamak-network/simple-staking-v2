@@ -15,7 +15,6 @@ import axios from 'axios';
 import { getTotalSupply } from '@/api';
 import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
 import { useDailyStaked } from '@/hooks/home/useDailyStaked';
-import { useKrwPrice } from '../../../hooks/staking/useKRWPrice';
 import { useTONPrice } from '@/hooks/staking/useTONPrice';
 
 function CalculatorModal() {

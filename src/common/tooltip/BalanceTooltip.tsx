@@ -41,6 +41,7 @@ export const BalanceTooltip = (args: BalanceTooltipProps) => {
     localeString: true
   }) : '0.00'
 
+  
   const labelDiv = (Number(label) / (types === 'ray' ? ray : wei)).toLocaleString(undefined, {maximumFractionDigits: 18});
   const usdValue = label ? ((+label * tonPriceUSD) / Math.pow(10, types === 'ray' ? 27 : 18)).toLocaleString(undefined, {maximumFractionDigits: 3}) : '0.00';
 

@@ -4,8 +4,6 @@ import { calculateRoiBasedonCompound } from '@/components/calculateRoi';
 import { duration } from 'moment';
 import { useState, useEffect } from 'react';
 import { useDailyStaked } from '../home/useDailyStaked';
-
-import { useTONPrice } from './useTONPrice';
 import useCallContract from '../useCallContract';
 
 type SupplyValueProps = {

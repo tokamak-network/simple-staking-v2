@@ -6,7 +6,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { BigNumber } from 'ethers';
 import { calcCountDown2, convertNumber } from '../../utils/number';
 import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
-import { getCountdown } from '@/api';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { txState } from '@/atom/global/transaction';
 import { useGetWithdrawalAndDeposited } from '../graphql/useGetWithdrawalAndDeposited';

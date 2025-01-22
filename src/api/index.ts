@@ -1,12 +1,18 @@
 import axios from 'axios';
 import { API } from '@/constants';
 import { DEFAULT_NETWORK } from '@/constants/index';
-import { ETHERSCAN_API_KEY, ETHERSCAN_API } from '@/constants'
+import { ETHERSCAN_API_KEY, ETHERSCAN_API, PRICE_API } from '@/constants'
 
 function createInstatnceCandidate () {
   return axios.create({
     baseURL: API,
   });
+}
+
+function priceInstance () {
+  return axios.create({
+    baseURL: PRICE_API,
+  })
 }
 
 function createInstanceEtherscan () {
@@ -15,12 +21,15 @@ function createInstanceEtherscan () {
   })
 }
 
+const price = priceInstance();
 const candidate = createInstatnceCandidate();
 const etherscan = createInstanceEtherscan();
 
 export async function getTONPrice() {
-  const res = await axios.get('https://api.upbit.com/v1/ticker?markets=KRW-tokamak')
-  return res.data[0]
+  // const res = await axios.get('https://api.upbit.com/v1/ticker?markets=KRW-tokamak')
+  const res = await price.get('/tonprice')
+  
+  return res.data
 }
 
 export async function getEvent (event: string) {
