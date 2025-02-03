@@ -200,7 +200,7 @@ function L2Information({ data }: L2InformationProps) {
             type={'ton'} 
             isOperator={isOperator}
           />
-          {
+          {/* {
             isOperator ?
             <Flex alignItems={'end'} mr={'30px'}>
               <Button 
@@ -221,7 +221,7 @@ function L2Information({ data }: L2InformationProps) {
               </Button>
             </Flex>
             : ''
-          }
+          } */}
           {
             isOperator ?
             <L2Content
@@ -282,7 +282,7 @@ function L2Information({ data }: L2InformationProps) {
           }
         </Flex>
       </Flex>
-      {/* <ClaimModal /> */}
+      <ClaimModal />
     </Flex>
   );
 }

@@ -91,7 +91,7 @@ export function L2Content (args: L2ContentProps) {
         {
           type === 'ton' ?
           <Flex>
-            {
+            {/* {
               isOperator ?
               <Flex>
                 <Flex fontWeight={'bold'}>
@@ -111,7 +111,7 @@ export function L2Content (args: L2ContentProps) {
                 </Flex>
               </Flex>
               : ''
-            }
+            } */}
             <Flex
               fontWeight={'bold'}
             >
