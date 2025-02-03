@@ -153,7 +153,7 @@ function ClaimModal () {
                     {
                       selectedModalData.name === 'Claim' 
                       ? '' 
-                      : ` + ${selectedModalData.expectedSeig} TON`
+                      : ` + ${selectedModalData.expectedSeigs} TON`
                     } 
                   </Flex>
                   <Flex 

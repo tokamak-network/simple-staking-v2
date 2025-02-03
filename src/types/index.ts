@@ -43,6 +43,7 @@ export type ClaimModalDataType = {
   contractAddress: string,
   claimable: string,
   expectedSeig: string,
+  expectedSeigs: string,
   layerName: string,
 }
 

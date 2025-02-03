@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import useCallContract from "../useCallContract";
 import { getContract } from "utils/getContract";
 import { l2InfoType } from "@/types";
+import { txState } from "@/atom/global/transaction";
+import { useRecoilState } from "recoil";
 
 export function useIsOperator (layer2: string | undefined) {
   const { account, library } = useWeb3React()
@@ -17,6 +19,7 @@ export function useIsOperator (layer2: string | undefined) {
   const [claimable, setClaimable] = useState<string>('')
   const [stakable, setStakable] = useState<string>('')
   const {WTON_CONTRACT, SeigManager_CONTRACT} = useCallContract()
+  const [txPending, setTxPending] = useRecoilState(txState);
   
   useEffect(() => {
     async function fetch() {
@@ -65,6 +68,6 @@ export function useIsOperator (layer2: string | undefined) {
     }
     fetch()
     
-  }, [CandidateAddOn_CONTRACT, account])
+  }, [CandidateAddOn_CONTRACT, account, txPending])
   return { isOperator, bridgeTypes, operatorManager, managers, claimable }
 }

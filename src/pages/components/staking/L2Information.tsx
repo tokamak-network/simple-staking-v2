@@ -41,16 +41,15 @@ function L2Information({ data }: L2InformationProps) {
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
   const [, setSelectedModalData] = useRecoilState(modalData);
-  const [, setTxPending] = useRecoilState(txState);
-  const [tx, setTx] = useState();
+  const [txPending, ] = useRecoilState(txState);
+  // const [tx, setTx] = useState();
+  const [claimableAmount, setClaimableAmount] = useState('0.00');
 
   // console.log(data);
 
   const [bridgeValue, setBridgeValue] = useRecoilState(editL2Info_bridge_input);
   const [explorerValue, setExplorerValue] = useRecoilState(editL2Info_explorer_input);
   const [logoValue, setLogoValue] = useRecoilState(editL2Info_logo_input);
-
-  const CandidateAddOn_CONTRACT = useContract(data?.candidateContract, CandidateAddOn);
   
   const { 
     isOperator, 
@@ -84,22 +83,17 @@ function L2Information({ data }: L2InformationProps) {
       setLayerName(data.name)
     }
   },[data, managers, operatorManager]);
+
+  const { expectedSeig } = useExpectedSeig(data?.candidateContract, data?.stakedAmount, data?.candidate)
   
-  const claimableAmount = claimable
+  const expectedSeigs = expectedSeig
     ? convertNumber({
-        amount: claimable,
+        amount: expectedSeig,
         type: 'ray',
         localeString: true,
       })
     : '0.00';
-  
-  const expectedSeig = data?.expectedSeig
-    ? convertNumber({
-        amount: data?.expectedSeig,
-        type: 'ray',
-        localeString: true,
-      })
-    : '0.00';
+    
 
   const converted = lockedInBridge
     ? convertNumber({
@@ -108,10 +102,22 @@ function L2Information({ data }: L2InformationProps) {
         localeString: true,
       })
     : '0.00';
-    
+
   //@ts-ignore
-  const stakableAmount = floatParser(claimableAmount) + floatParser(expectedSeig) 
+  const stakableAmount = floatParser(claimableAmount) + floatParser(expectedSeigs) 
   const stakable = stakableAmount.toLocaleString(undefined,{maximumFractionDigits: 2})
+
+  useEffect(() => {
+    const claim = claimable
+        ? convertNumber({
+          amount: claimable,
+          type: 'ray',
+          localeString: true,
+        })
+    : '0.00' 
+    setClaimableAmount(claim ? claim : '0.00');
+    // console.log(claimableAmount)
+  }, [claimableAmount, expectedSeigs, txPending]);
 
   const dataModal: ClaimModalDataType = {
     amount: amount,
@@ -120,6 +126,7 @@ function L2Information({ data }: L2InformationProps) {
     name: '',
     contractAddress: contractAddress,
     claimable: claimableAmount ? claimableAmount : '0.00',
+    expectedSeigs: expectedSeigs ? expectedSeigs : '0.00',
     expectedSeig: stakable,
     layerName: layerName
   }
@@ -132,7 +139,7 @@ function L2Information({ data }: L2InformationProps) {
       name: name,
     });
   }, [dataModal]);
-
+  
   return (
     <Flex
       w="100%"
@@ -222,18 +229,15 @@ function L2Information({ data }: L2InformationProps) {
             </Flex>
             : ''
           } */}
-          {
-            isOperator ?
-            <L2Content
-              title={'Claimable seigniorage'}
-              content={claimableAmount}
-              content2={stakable}
-              type={'seig'}
-              contractAddress={data?.candidateContract}
-              isOperator={isOperator}
-            />
-            : ''
-          }
+          <L2Content
+            title={'Claimable seigniorage'}
+            content={claimableAmount}
+            content2={stakable}
+            type={'seig'}
+            contractAddress={data?.candidateContract}
+            isOperator={isOperator}
+          />
+           
           {
             isOperator ?
             <Flex 
