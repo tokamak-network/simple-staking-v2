@@ -80,8 +80,12 @@ export function L2Content (args: L2ContentProps) {
             >
               <Image src={ETHERSCAN_LINK_Image} alt={'alt'} />
             </Link> 
-          </Flex>
-          : ''
+          </Flex> :
+          <Flex marginTop={'4px'} marginLeft={'3px'}>
+            <BasicTooltip 
+              label={'Claimable seigniorage is the amount of seigniorage that the L2 operator can claim.'}
+            />
+          </Flex> 
         }
       </Flex>
       <Flex
