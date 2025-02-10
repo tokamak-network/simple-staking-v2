@@ -54,10 +54,6 @@ const navItemList = [
     link: "staking",
     name: "Staking"
   },
-  // {
-  //   link: "fastwithdraw",
-  //   name: "Tokamak Fast Withdraw"
-  // },
   {
     link: "account",
     name: "Account"
