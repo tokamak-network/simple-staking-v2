@@ -166,7 +166,7 @@ function DesktopStaking () {
 
           </Flex>
         </Flex>
-        <Flex justifyContent={'space-between'} mb={'15px'} ml={'17px'}>
+        <Flex justifyContent={'space-between'} mb={'15px'} ml={'17px'} maxWidth={'1100px'}>
           <Flex fontSize={'11px'} flexDir={'row'} alignItems={'center'} justifyContent={'start'} w={'1100px'}>
             {getCircle('member')}
             <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
@@ -187,12 +187,12 @@ function DesktopStaking () {
               />
             </Flex>
           </Flex>
-          <Flex w={'170px'}>
+          <Flex w={'180px'}>
             <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
               {
                 account ?
                 <Flex>
-                  <FormLabel color={'#828d99'} fontSize={'11px'} mt={'2px'}>
+                  <FormLabel color={'#828d99'} fontSize={'11px'} mt={'2px'} w={'100px'} textAlign={'right'}>
                     {toggle} candidates
                   </FormLabel>
                     <Switch 
