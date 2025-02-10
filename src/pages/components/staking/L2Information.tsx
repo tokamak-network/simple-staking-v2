@@ -191,7 +191,7 @@ function L2Information({ data }: L2InformationProps) {
           </Flex>
           <Flex mt={'9px'} ml={'5px'}>
             <BasicTooltip 
-              label={'Sequencer seigniorage is the amount of seigniorage that the L2 operator can claim.'}
+              label={'Sequencer seigniorage represents the portion of newly issued TON that the L2 operator can claim as a reward. This reward increases with the growth of L2 deposits and helps incentivize both the expansion and security of the network.'}
             />
           </Flex>
         </Flex>

@@ -9,11 +9,8 @@ import {
   Flex,
   Link
 } from "@chakra-ui/react";
-import { BigNumber } from "ethers";
 import { useState } from "react";
-import BasicTooltip from ".";
 import { useTONPrice } from '../../hooks/staking/useTONPrice';
-import {  floatParser } from "@/components/number"
 
 type BalanceTooltipProps = {
   label: string | undefined;

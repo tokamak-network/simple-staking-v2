@@ -189,7 +189,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
                 Update seigniorage
               </Flex>
               <BasicTooltip 
-                label={'Update seigniorage to claim the staking reward.'}
+                label={'Update Seigniorage: Refresh the seigniorage distribution to claim your accrued staking rewards based on the current L2 deposits and staked TON.'}
               />
             </Flex>
           </Flex> 
@@ -207,7 +207,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
                 Withdraw
               </Flex>
               <BasicTooltip 
-                label={'Withdraw the staked TON.'}
+                label={'Withdraw Staked TON: Initiate a withdrawal of your staked TON. Note that the withdrawal process may be subject to L2 network conditions and dispute periods.'}
               />
             </Flex>
           </Flex> 
@@ -225,7 +225,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
                 Restake
               </Flex>
               <BasicTooltip 
-                label={'Restake the pending withdrawal.'}
+                label={'Restake Pending Withdrawal: Reinvest your pending withdrawal TON back into staking to continue earning rewards and help secure the network.'}
               />
             </Flex>
           </Flex>

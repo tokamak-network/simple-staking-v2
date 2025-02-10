@@ -49,15 +49,15 @@ const BasicTooltip: React.FC<tooltipProps> = (props) => {
     return (
       <Text>
         An operator 
-        <Link
+        {/* <Link
           href={'https://docs.tokamak.network/docs/en/guides/ton-staking/how-to-set-candidate'}
           rel="noopener noreferrer" 
           target="_blank"
           textDecor={'underline'}
           mx={'3px'}
-        >
+        > */}
           registered 
-        </Link>
+        {/* </Link> */}
         as a DAO candidate who has staked a minimum of 1,000.1 TON (non-withdrawable).
       </Text>
     )

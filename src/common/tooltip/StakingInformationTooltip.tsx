@@ -1,11 +1,6 @@
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 import {
-  Tooltip,
-  useColorMode,
-  PlacementWithLogical,
-  Text,
   Flex,
-  Link
 } from "@chakra-ui/react";
 import BasicTooltip from ".";
 
