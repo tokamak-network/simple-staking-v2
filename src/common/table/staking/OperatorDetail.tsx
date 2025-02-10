@@ -189,7 +189,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
                 Update seigniorage
               </Flex>
               <BasicTooltip 
-                label={'Update Seigniorage: Refresh the seigniorage distribution to claim your accrued staking rewards based on the current L2 deposits and staked TON.'}
+                label={'Update Seigniorage: Request the seigniorage distribution to claim your accrued staking rewards based on the current L2 deposits and staked TON.'}
               />
             </Flex>
           </Flex> 

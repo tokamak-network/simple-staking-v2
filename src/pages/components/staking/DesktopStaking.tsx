@@ -53,8 +53,8 @@ function DesktopStaking () {
   const { candidateList } = useCandidateList()
   const { account } = useWeb3React();
   const { stakingInfo } = useStakingInformation(candidateList);
-  const [toggle, setToggle] = useState('All');
-  const [filteredCandidate, setFilteredCandidate] = useState<any[]>([]);
+  // const [toggle, setToggle] = useState('All');
+  // const [filteredCandidate, setFilteredCandidate] = useState<any[]>([]);
 
   const [isOpen, setIsOpen] = useRecoilState(openInfonState);
 
@@ -62,21 +62,21 @@ function DesktopStaking () {
     candidateList ? setTableLoading(false) : setTableLoading(true)
   }, [candidateList])
 
-  useEffect(() => {
-    async function fetch() {
-      if (toggle === 'Staked' && account) {
-        const filtered = candidateList.filter((candidate: any) => candidate.stakeOf > 0)
-        setFilteredCandidate(filtered)
-      } else {
-        setFilteredCandidate(candidateList)
-      }
-    }
-    fetch()
-  }, [toggle, candidateList])
+  // useEffect(() => {
+  //   async function fetch() {
+  //     if (toggle === 'Staked' && account) {
+  //       const filtered = candidateList.filter((candidate: any) => candidate.stakeOf > 0)
+  //       setFilteredCandidate(filtered)
+  //     } else {
+  //       setFilteredCandidate(candidateList)
+  //     }
+  //   }
+  //   fetch()
+  // }, [toggle, candidateList])
 
-  useEffect(() => {
-    setToggle('All')
-  }, [account])
+  // useEffect(() => {
+  //   setToggle('All')
+  // }, [account])
 
   useEffect(() => {
     if (asPath.includes('#')) {
@@ -187,7 +187,7 @@ function DesktopStaking () {
               />
             </Flex>
           </Flex>
-          <Flex w={'180px'}>
+          {/* <Flex w={'180px'}>
             <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
               {
                 account ?
@@ -206,16 +206,16 @@ function DesktopStaking () {
                 </Flex> : ""
               }
             </FormControl> 
-          </Flex>
+          </Flex> */}
         </Flex>
-        {filteredCandidate.length === 0 ? 
+        {candidateList.length === 0 ? 
           <Flex justifyContent="center" alignItems={"center"} h='200px'>
             <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
           </Flex> :
           <Flex flexDir={'column'}>
             <Flex flexDir={'column'}>
               {
-                filteredCandidate.map((candidate: any, index: number) => {
+                candidateList.map((candidate: any, index: number) => {
                   
                   return [
                     <OpearatorInfos
