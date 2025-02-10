@@ -9,10 +9,6 @@ export function useCalculateAPR (data: any) {
   const [compound, setCompound] = useState('00.00')
   const month = 2629743;
   const now = Date.now()
-
-  const { 
-    SeigManager_CONTRACT, 
-  } = useCallContract();
   
   let compounds = []
   for (let i = 0; i < 12; i ++) {
@@ -28,10 +24,10 @@ export function useCalculateAPR (data: any) {
       if (roi === 0) {
         setCompound('0.35')
       }
-      if (roi !== 0 && roi !== Infinity && SeigManager_CONTRACT) {
+      if (roi !== 0 && roi !== Infinity ) {
         const apr = roi
         
-        const commissionRate = await SeigManager_CONTRACT.commissionRates(data.candidateContract);
+        const commissionRate = data.commissionRate;
         const commission = Number(commissionRate.toString()) / 1e27
 
         const convertedAPR = apr === 0 ? 0.35 : Number(apr) / 100
@@ -43,7 +39,7 @@ export function useCalculateAPR (data: any) {
     }
     
     fetch()
-  }, [roi, SeigManager_CONTRACT])
+  }, [roi])
   
   return compound
 }

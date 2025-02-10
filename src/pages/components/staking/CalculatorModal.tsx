@@ -16,7 +16,6 @@ import { getTotalSupply } from '@/api';
 import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
 import { useDailyStaked } from '@/hooks/home/useDailyStaked';
 import { useTONPrice } from '@/hooks/staking/useTONPrice';
-import { calculateAPR } from '@/components/calculateAPR';
 
 function CalculatorModal() {
   const theme = useTheme();

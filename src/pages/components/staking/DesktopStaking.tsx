@@ -64,7 +64,7 @@ function DesktopStaking () {
 
   useEffect(() => {
     async function fetch() {
-      if (toggle === 'Staked') {
+      if (toggle === 'Staked' && account) {
         const filtered = candidateList.filter((candidate: any) => candidate.stakeOf > 0)
         setFilteredCandidate(filtered)
       } else {
@@ -73,6 +73,10 @@ function DesktopStaking () {
     }
     fetch()
   }, [toggle, candidateList])
+
+  useEffect(() => {
+    setToggle('All')
+  }, [account])
 
   useEffect(() => {
     if (asPath.includes('#')) {

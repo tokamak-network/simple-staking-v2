@@ -1,6 +1,6 @@
 import { getCommitHistory } from "@/utils/getTransactionHistory";
 
-export async function calculateAPR (roi: any, data: any, SeigManager_CONTRACT: any) {
+export async function calculateAPR (roi: any, data: any) {
   const commitHistory = getCommitHistory(data)
   
   const month = 2629743;
@@ -15,12 +15,10 @@ export async function calculateAPR (roi: any, data: any, SeigManager_CONTRACT: a
     compound ? compounds.push(compound) : compound
   }
   
-  if (roi !== Infinity && roi !== 0 && roi !== -Infinity && SeigManager_CONTRACT) {
+  if (roi !== Infinity && roi !== 0 && roi !== -Infinity ) {
     // value which title is 'Average APR' in stakingInfo
     const apr = roi
-
-    const commissionRate = await SeigManager_CONTRACT.commissionRates(data.candidateContract);
-    const commission = Number(commissionRate.toString()) / 1e27
+    const commission = Number(data.commissionRate.toString()) / 1e27
 
     //@ts-ignore
     const convertedAPR = apr === 0 ? 0.35 : Number(apr) / 100

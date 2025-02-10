@@ -4,7 +4,6 @@ import { calculateRoiBasedonCompound } from '@/components/calculateRoi';
 import { duration } from 'moment';
 import { useState, useEffect } from 'react';
 import { useDailyStaked } from '../home/useDailyStaked';
-import useCallContract from '../useCallContract';
 
 type SupplyValueProps = {
   title: string;
@@ -17,10 +16,6 @@ type SupplyValueProps = {
 }
 
 export function useStakingInformation (candidateList?: any) {
-  const { 
-    SeigManager_CONTRACT, 
-  } = useCallContract();
-
   const [stakingInfo, setStakingInfo] = useState<SupplyValueProps[]>([
     {
       title: "Staking APY",
@@ -61,13 +56,13 @@ export function useStakingInformation (candidateList?: any) {
       let aprList = []
       if (candidateList) {
         for (let i = 0; i < candidateList.length; i++) {
-          let apr = await calculateAPR(roi, candidateList[i], SeigManager_CONTRACT);
+          let apr = await calculateAPR(roi, candidateList[i]);
           aprList.push(Number(apr))
         }
         
         const maxApr = Math.max.apply(null, aprList)
         const minApr = Math.min.apply(null, aprList)
-
+        
         setStakingInfo([
           {
             title: "Staking APY",
