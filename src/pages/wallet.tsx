@@ -5,7 +5,6 @@ import GraphContainer from './components/wallet/GraphContainer';
 import { MyHistoryTable } from '../common/table/wallet/MyHistoryTable';
 import { useMemo, useState } from 'react';
 import { useUserHistory } from '../hooks/wallet/useUserHIstory';
-// import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
 import { convertNumber } from '../utils/number';
 import { useTopCardInfo } from '@/hooks/wallet/useTopCardInfo';
 import { LoadingDots } from '@/common/Loader/LoadingDots';

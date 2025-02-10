@@ -12,7 +12,6 @@ import { txHashStatus, txState } from "@/atom/global/transaction"
 import { StakingCheckbox } from "@/common/checkbox/StakingCheckbox"
 import WithdrawL2Table from "./WithdrawL2Table"
 import { WithdrawL2Image } from "./WithdrawL2Image"
-import useGetTransaction from "@/hooks/staking/useGetTransaction"
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal"
 import NoLOGO from '@/assets/images/modal/gallery.svg'
 import { useIsOperator } from "@/hooks/staking/useIsOperator"
@@ -43,7 +42,6 @@ export const ToTitan = (args: ToTitanProps) => {
   
   const [tx, setTx] = useState();
   const { DepositManager_CONTRACT } = useCallContract();
-  // const tData = useGetTransaction();
   const { request } = useWithdrawalAndDeposited();
 
   const columns = useMemo(

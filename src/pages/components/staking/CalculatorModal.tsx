@@ -16,6 +16,7 @@ import { getTotalSupply } from '@/api';
 import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
 import { useDailyStaked } from '@/hooks/home/useDailyStaked';
 import { useTONPrice } from '@/hooks/staking/useTONPrice';
+import { calculateAPR } from '@/components/calculateAPR';
 
 function CalculatorModal() {
   const theme = useTheme();
@@ -57,7 +58,7 @@ function CalculatorModal() {
     const inputBalance = Number(input.replace(/,/g, ''));
     const totalSup = await getTotalSupply();
     
-    if (Staked) {
+    if (Staked && selectedModalData) {
       const total = Number(Staked.replace(/,/g, '')) + inputBalance;
 
       const returnRate = calculateRoiBasedonCompound({ totalStakedAmount: total, totalSupply: totalSup, duration });
@@ -72,10 +73,7 @@ function CalculatorModal() {
       setRewardUSD(rewardUSD);
       setRewardTON(rewardTON);
       setROI(
-        returnRate?.toLocaleString(undefined, {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
-        }) ?? '-',
+        selectedModalData.apy ?? '-',
       );
       setType('result');
     }

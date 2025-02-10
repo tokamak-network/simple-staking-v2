@@ -8,7 +8,6 @@ import { getColumnWidthStaking } from '@/utils/getColumnWidth';
 import { useTheme } from '@chakra-ui/react';
 import { ETHERSCAN_API, ETHERSCAN_LINK } from "@/constants";
 import { fromNow } from "@/components/getDate";
-import { getCountdown } from "@/api";
 import { useWeb3React } from "@web3-react/core";
 import { useRecoilState } from "recoil";
 import { modalData, modalState } from "@/atom/global/modal";

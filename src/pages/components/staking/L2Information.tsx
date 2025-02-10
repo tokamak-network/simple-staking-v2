@@ -10,12 +10,12 @@ import { ClaimModalDataType } from '@/types';
 import { ModalType } from '@/types/modal';
 import { modalData, modalState } from '@/atom/global/modal';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { editL2Info_bridge_input, editL2Info_bridge_state, editL2Info_explorer_input, editL2Info_explorer_state, editL2Info_logo_input, editL2Info_logo_state } from '@/atom/staking/editL2Info';
-import useContract from '@/hooks/useContract';
-import CandidateAddOn from "services/abi/CandidateAddOn.json"
-import OperatorManager from "services/abi/OperatorManager.json"
+import { 
+  editL2Info_bridge_input, 
+  editL2Info_explorer_input, 
+  editL2Info_logo_input, 
+} from '@/atom/staking/editL2Info';
 import { useWeb3React } from '@web3-react/core';
-import { getContract } from '@/components/getContract';
 import { txState } from '@/atom/global/transaction';
 import { useExpectedSeig } from '@/hooks/staking/useCalculateExpectedSeig';
 import { floatParser } from '../../../utils/number';
@@ -28,10 +28,6 @@ type L2InformationProps = {
 };
 
 function L2Information({ data }: L2InformationProps) {
-  const { account, library } = useWeb3React()
-  // const {
-
-  // } = data?.candidateAddOn
   const [editStat, setEditStat] = useState(false);
   const [contractAddress, setContractAddress] = useState('');
   const [amount, setAmount] = useState('');

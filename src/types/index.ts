@@ -33,6 +33,7 @@ export type StakeModalDataType = {
   requests: any[],
   isL2: boolean,
   name: string,
+  apy: string,
 }
 
 export type ClaimModalDataType = {

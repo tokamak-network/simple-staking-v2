@@ -1,15 +1,12 @@
 import { getEventName } from '@/components/getEventName';
 import { convertNumber } from '@/components/number';
-import trimAddress from '@/components/trimAddress';
 import { chakra, Link, Text, Flex, Button } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
 import { useTheme } from '@chakra-ui/react';
 import { getLayerName } from '../../../utils/getOldLayerAddress';
 import moment from 'moment';
-import { getCountdown } from '@/api';
 import { useWeb3React } from '@web3-react/core';
 import { calcCountDown } from '../../../utils/number';
-import useCallContract from 'hooks/useCallContract';
 import { DEFAULT_NETWORK, ETHERSCAN_API, ETHERSCAN_LINK } from '@/constants';
 
 type TableRowProps = {

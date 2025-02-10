@@ -1,7 +1,4 @@
 import { getCommitHistory } from "@/utils/getTransactionHistory";
-import { useState, useEffect } from 'react';
-import { calculateRoiBasedonCompound } from "./calculateRoi";
-import useCallContract from "@/hooks/useCallContract";
 
 export async function calculateAPR (roi: any, data: any, SeigManager_CONTRACT: any) {
   const commitHistory = getCommitHistory(data)

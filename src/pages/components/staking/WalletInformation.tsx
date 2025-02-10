@@ -137,6 +137,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
     old_layer2: getOldLayerAddress(candidateContracts) ? getOldLayerAddress(candidateContracts) : '',
     requests: requests,
     isL2: isL2,
+    apy: compounds,
     name: name
   };
 
