@@ -46,8 +46,6 @@ export const StakingInformation: FC<StakingInformationProps> = ({
   const [expSeig, setExpSeig] = useState('');
   const [name, setName] = useState('');
   const [stakeCandidate, setStakeCandidate] = useState('');
-  // const [minimumAmount, setMinimumAmount] = useRecoilState(minimumAmountState)
-  const [isOperator, setIsOperator] = useState<boolean>(false);
   const [isL2, setIsL2] = useState<boolean>(false);
 
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
@@ -197,7 +195,8 @@ export const StakingInformation: FC<StakingInformationProps> = ({
     old_layer2: getOldLayerAddress(candidateContracts) ? getOldLayerAddress(candidateContracts) : '',
     requests: requests,
     isL2: isL2,
-    name: name
+    name: name,
+    apy: ''
   };
 
   const modalButton = useCallback(async (modalType: ModalType, data: any) => {

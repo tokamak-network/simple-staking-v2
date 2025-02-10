@@ -184,10 +184,14 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
             mt={'6px'}
             onClick={()=> updateSeig()}
           >
-            <Flex>
-              Update seigniorage
+            <Flex alignItems={'center'}>
+              <Flex mr={'3px'}>
+                Update seigniorage
+              </Flex>
+              <BasicTooltip 
+                label={'Update seigniorage to claim the staking reward.'}
+              />
             </Flex>
-            
           </Flex> 
         : title === 'Staked' &&
           account ?
@@ -198,7 +202,14 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
             mt={'6px'}
             onClick={dataModal}
           >
-            Withdraw
+            <Flex alignItems={'center'}>
+              <Flex mr={'3px'}>
+                Withdraw
+              </Flex>
+              <BasicTooltip 
+                label={'Withdraw the staked TON.'}
+              />
+            </Flex>
           </Flex> 
         : title === 'Pending Withdrawal' &&
           account ?
@@ -209,7 +220,14 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
             mt={'6px'}
             onClick={dataModal}
           >
-            Restake
+            <Flex alignItems={'center'}>
+              <Flex mr={'3px'}>
+                Restake
+              </Flex>
+              <BasicTooltip 
+                label={'Restake the pending withdrawal.'}
+              />
+            </Flex>
           </Flex>
         :  ''
       }
