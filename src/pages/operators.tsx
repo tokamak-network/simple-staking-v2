@@ -4,11 +4,22 @@ import OperatorCard from "./components/operators/OperatorCard";
 import { useCandidateList } from '../hooks/staking/useCandidateList';
 import { useStakingInformation } from "@/hooks/staking/useStakingInformation";
 import { StakingInformationTooltip } from "@/common/tooltip/StakingInformationTooltip";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 
 function Operators() {
   const theme = useTheme();
   const { candidateList } = useCandidateList();
   const { stakingInfo } = useStakingInformation(candidateList);
+  const router = useRouter();
+
+  const [width] = useWindowDimensions();
+  const mobile = width && width < 1040;
+
+  useEffect(() => {
+    if (width && width > 1040) router.push("/staking");
+  }, [width]);
 
   return (
     <Flex
