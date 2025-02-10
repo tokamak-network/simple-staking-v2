@@ -1,6 +1,6 @@
 import { IconClose } from "@/common/Icons/IconClose";
 import { IconOpen } from "@/common/Icons/IconOpen";
-import { Box, Flex, Spinner, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
+import { Box, Flex, FormControl, FormLabel, Spinner, Switch, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
 import { useMemo, useCallback, useState, useRef } from 'react';
 import PageHeader from "../layout/PageHeader";
 import { useEffect } from 'react';
@@ -53,12 +53,26 @@ function DesktopStaking () {
   const { candidateList } = useCandidateList()
   const { account } = useWeb3React();
   const { stakingInfo } = useStakingInformation(candidateList);
+  const [toggle, setToggle] = useState('All');
+  const [filteredCandidate, setFilteredCandidate] = useState<any[]>([]);
 
   const [isOpen, setIsOpen] = useRecoilState(openInfonState);
 
   useEffect(() => {
     candidateList ? setTableLoading(false) : setTableLoading(true)
   }, [candidateList])
+
+  useEffect(() => {
+    async function fetch() {
+      if (toggle === 'Staked') {
+        const filtered = candidateList.filter((candidate: any) => candidate.stakeOf > 0)
+        setFilteredCandidate(filtered)
+      } else {
+        setFilteredCandidate(candidateList)
+      }
+    }
+    fetch()
+  }, [toggle, candidateList])
 
   useEffect(() => {
     if (asPath.includes('#')) {
@@ -169,15 +183,35 @@ function DesktopStaking () {
               />
             </Flex>
           </Flex>
+          <Flex w={'170px'}>
+            <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
+              {
+                account ?
+                <Flex>
+                  <FormLabel color={'#828d99'} fontSize={'11px'} mt={'2px'}>
+                    {toggle} candidates
+                  </FormLabel>
+                    <Switch 
+                      colorScheme={'green'} 
+                      onChange={() =>
+                        toggle === 'All'
+                          ? setToggle('Staked')
+                          : setToggle('All')
+                      }
+                    /> 
+                </Flex> : ""
+              }
+            </FormControl> 
+          </Flex>
         </Flex>
-        {candidateList.length === 0 ? 
+        {filteredCandidate.length === 0 ? 
           <Flex justifyContent="center" alignItems={"center"} h='200px'>
             <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
           </Flex> :
           <Flex flexDir={'column'}>
             <Flex flexDir={'column'}>
               {
-                candidateList.map((candidate: any, index: number) => {
+                filteredCandidate.map((candidate: any, index: number) => {
                   
                   return [
                     <OpearatorInfos

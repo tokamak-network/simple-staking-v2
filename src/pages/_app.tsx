@@ -13,7 +13,6 @@ import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import MobileFooter from './components/layout/MobileFooter';
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from '../apollo';
-import TokamakGNB from './components/layout/TokamakGNB';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Modals from './Modal';
 import "@/css/spinner.css";
@@ -47,7 +46,6 @@ function MyApp({ Component, pageProps }: AppProps) {
                 </Flex>
               ) : (
                 <Flex flexDir={'column'} w={'100%'} alignItems={'center'} justifyContent={'space-between'}>
-                  <TokamakGNB />
                   <Header
                   // walletopen={() => handleWalletModalOpen("wallet")}
                   />
