@@ -24,18 +24,6 @@ const iconList = [
     url: 'https://github.com/tokamak-network/',
   },
   {
-    icon: FACEBOOK_ICON,
-    url: 'https://www.facebook.com/OntherInc/',
-  },
-  // {
-  //   icon: INSTAGRAM_ICON,
-  //   url: '',
-  // },
-  {
-    icon: YOUTUBE_ICON,
-    url: 'https://www.youtube.com/channel/UCF6vtIKF_0QQVRG983czVEQ/',
-  },
-  {
     icon: TWITTER_ICON,
     url: 'https://twitter.com/tokamak_network/',
   },
@@ -45,7 +33,7 @@ const iconList = [
   },
   {
     icon: MEDIUM_ICON,
-    url: 'https://medium.com/onther-tech/',
+    url: 'https://medium.com/tokamak-network/',
   },
 ];
 function Footer() {
