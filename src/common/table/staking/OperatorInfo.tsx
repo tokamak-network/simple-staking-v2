@@ -11,7 +11,10 @@ export const Info = (args: InfoType) => {
   const {title, value, unit} = args
   return (
     <Flex 
-      color={'#86929d'}
+      color={
+        title === 'Your Staked'
+        ? '#304156' : '#86929d'
+      }
       w={
         title === 'Total Staked'
         ? '235px'
