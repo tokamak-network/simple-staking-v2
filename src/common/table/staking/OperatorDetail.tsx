@@ -159,7 +159,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
               color={'#2a72e5'}
               mx={'3px'}
             >
-            operator
+              operator
             </Link>
             is required to stake at least
             <Link
