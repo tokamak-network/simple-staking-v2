@@ -2,7 +2,7 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
   const modalComponent = {
     staking: {
       header: 'Stake',
-      subHeader: 'Stake TON (or WTON) to earn staking rewards.',
+      subHeader: '',
       balanceInfo: 'Balance',
       balance: data.tonBalance,
       balance2: data.wtonBalance,
@@ -18,9 +18,9 @@ export function getStakeModalComponent (type: string | undefined, data: any) {
       buttonName: 'Unstake',
     },
     restaking: {
-      header: 'Restaking',
+      header: 'Restake',
       subHeader: 'Restake unstaked TON to continue earning staking rewards.',
-      balanceInfo: 'Restakable Amount',
+      balanceInfo: 'Restakable Balance',
       balance: data.pendingUnstaked,
       bottomComment: '',
       buttonName: 'Restake',

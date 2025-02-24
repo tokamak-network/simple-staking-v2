@@ -5,41 +5,66 @@ import Candidate from "services/abi/Candidate.json"
 import { getContract } from '../../../utils/getContract';
 import { useWeb3React } from '@web3-react/core';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { txState } from "@/atom/global/transaction";
+import { txHashStatus, txState } from "@/atom/global/transaction";
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
 import { ETHERSCAN_LINK } from "@/constants";
+import { getModeData, transactionModalOpenStatus, transactionModalStatus } from "@/atom/global/modal";
+import BasicTooltip from "@/common/tooltip";
+import { BalanceTooltip } from "@/common/tooltip/BalanceTooltip";
 
 type OperatorDetailProps = {
   title: string; 
-  value: string | number | undefined; 
+  value: string; 
+  totalValue: string; 
   unit?: string; 
   type?: string;
   contractInfo?: any;
   minimumAmount?: boolean;
   candidate?: string
+  dataModal?: any
 }
 
 export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
   title,
   value,
   unit,
+  totalValue,
   type,
   contractInfo,
   minimumAmount,
-  candidate
+  candidate,
+  dataModal
 }) => {
   const { library, account } = useWeb3React()
   const [tx, setTx] = useState();
   const [txPending, setTxPending] = useRecoilState(txState);
+  const [, setModalOpen] = useRecoilState(transactionModalStatus);
+  const [, setIsOpen] = useRecoilState(transactionModalOpenStatus);
+  const [, setSelectedMode] = useRecoilState(getModeData);
+  const [, setTxHash] = useRecoilState(txHashStatus)  
   const minimum = useRecoilValue(minimumAmountState)
+
   const updateSeig = useCallback(async () => {
-    if (account && library) {
-      const Candidate_CONTRACT = getContract(contractInfo, Candidate.abi, library, account)
-      const tx = await Candidate_CONTRACT.updateSeigniorage()
-      setTx(tx);
-      setTxPending(true);
+    try {
+      if (account && library && value !== '-') {
+        setSelectedMode('Update Seigniorage');
+        setIsOpen(true)
+        setModalOpen("waiting")
+        
+        const Candidate_CONTRACT = getContract(contractInfo, Candidate.abi, library, account)
+        const tx = await Candidate_CONTRACT.updateSeigniorage()
+
+        setTx(tx);
+        setTxPending(true);
+        setTxHash(tx.hash)
+        
+        setModalOpen("confirming")
+      }
+    } catch (e) {
+      console.log(e)
+      setModalOpen("error");
     }
-  }, [])
+  }, [account, library, value])
 
   useEffect(() => {
     async function waitReceipt() {
@@ -47,6 +72,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
         //@ts-ignore
         await tx.wait().then((receipt: any) => {
           if (receipt.status) {
+            setModalOpen("confirmed")
             setTxPending(false);
             setTx(undefined);
           }
@@ -60,34 +86,59 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
   return (
     <Flex
       flexDir={'column'}
+      minW={'175px'}
+      mr={'30px'}
     >
       <Text 
         color={'#808992'}
-        fontSize={'15px'} 
-        mb={'12px'}
+        fontSize={'12px'} 
+        mb={'9px'}
       >
         {title}
       </Text>
-      <Flex flexDir={'row'} alignItems={type === 'date' ? 'start' : 'end'} h={'37px'}>
-        <Text 
-          fontSize={type === 'date' ? '16px' : '28px'}
-          fontWeight={type === 'date' ? 500 : 'bold'}
-          color={'#304156'}
-        >
-          {title === 'Unclaimed Staking Reward' && !minimumAmount ? '-' : value}
-        </Text>
-        {
-          unit ? 
+      <Flex flexDir={'column'} alignItems={'start'} h={'37px'}>
+        <Flex flexDir={'row'}>
           <Text 
-            fontSize={'13px'} 
-            fontWeight={500} 
-            ml={'6px'} 
-            mb={'5px'}
+            fontSize={type === 'date' ? '16px' : '18px'}
+            fontWeight={type === 'date' ? 500 : 700}
+            color={'#304156'}
           >
-            {unit}
-          </Text> :
-          ''
-        }
+            {
+              title === 'Unclaimed Staking Reward' && !minimumAmount 
+              ? '-' 
+              : <BalanceTooltip 
+                label={value}
+                types={'ray'}
+              />
+            }
+          </Text>
+          {
+            unit ? 
+            <Text 
+              fontSize={'13px'} 
+              fontWeight={500} 
+              ml={'6px'} 
+              mt={'5px'}
+            >
+              {unit}
+            </Text> :
+            ''
+          }
+        </Flex>
+        <Flex h={'13px'} fontSize={'11px'} fontWeight={400}>
+          <Flex color={'#808992'} mr={'3px'}>
+            out of
+          </Flex>
+          <Flex>
+            <BalanceTooltip 
+              label={totalValue}
+              types={'ray'}
+            />
+            <Flex ml={'3px'}>
+              TON
+            </Flex>
+          </Flex>
+        </Flex>
       </Flex>
       {
         title === 'Unclaimed Staking Reward' && !minimum && account ?
@@ -95,7 +146,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
             <Text
               fontSize={'11px'}
               color={'#ff2d78'}
-              mt={'3px'}
+              mt={'6px'}
               w={'215px'}
               textAlign={'left'}
               // w={'250px'}
@@ -108,7 +159,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
               color={'#2a72e5'}
               mx={'3px'}
             >
-            operator
+              operator
             </Link>
             is required to stake at least
             <Link
@@ -123,18 +174,62 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
           </Text>
           )
         : title === 'Unclaimed Staking Reward' && 
-          value !== '0.00' && 
+          value !== '0.00' &&
+          value !== '-' &&
           account ?
           <Flex
             fontSize={'11px'}
             color={'#2a72e5'}
             cursor={'pointer'}
-            mt={'3px'}
+            mt={'6px'}
             onClick={()=> updateSeig()}
           >
-            Add to Your Staked
-          </Flex> : 
-          ''
+            <Flex alignItems={'center'}>
+              <Flex mr={'3px'}>
+                Update seigniorage
+              </Flex>
+              <BasicTooltip 
+                label={'Update Seigniorage: Request the seigniorage distribution to claim your accrued staking rewards based on the current L2 deposits and staked TON.'}
+              />
+            </Flex>
+          </Flex> 
+        : title === 'Staked' &&
+          account ?
+          <Flex
+            fontSize={'11px'}
+            color={'#2a72e5'}
+            cursor={'pointer'}
+            mt={'6px'}
+            onClick={dataModal}
+          >
+            <Flex alignItems={'center'}>
+              <Flex mr={'3px'}>
+                Withdraw
+              </Flex>
+              <BasicTooltip 
+                label={'Withdraw Staked TON: Initiate a withdrawal of your staked TON. Note that the withdrawal process may be subject to L2 network conditions and dispute periods.'}
+              />
+            </Flex>
+          </Flex> 
+        : title === 'Pending Withdrawal' &&
+          account ?
+          <Flex
+            fontSize={'11px'}
+            color={'#2a72e5'}
+            cursor={'pointer'}
+            mt={'6px'}
+            onClick={dataModal}
+          >
+            <Flex alignItems={'center'}>
+              <Flex mr={'3px'}>
+                Restake
+              </Flex>
+              <BasicTooltip 
+                label={'Restake Pending Withdrawal: Reinvest your pending withdrawal TON back into staking to continue earning rewards and help secure the network.'}
+              />
+            </Flex>
+          </Flex>
+        :  ''
       }
     </Flex>
   )

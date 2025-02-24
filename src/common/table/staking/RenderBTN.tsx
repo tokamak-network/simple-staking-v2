@@ -1,20 +1,26 @@
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { Flex } from "@chakra-ui/react";
 
-export const renderBtn = (layer2: string, isOpen: string) => {
+type renderBtnProps = {
+  layer2: string
+  isOpen: string
+}
+
+export const RenderBtn = (args: renderBtnProps) => {
+  const { layer2, isOpen } = args
+
   if (isOpen === layer2)
     return (
-      <Flex w={'100%'} justifyContent="flex-end" _hover={{cursor: 'pointer'}} ml={'90px'}>
+      <Flex justifyContent="flex-end" _hover={{cursor: 'pointer'}} mr={'30px'}>
         <TriangleUpIcon color="blue.100" _hover={{cursor: 'pointer'}} />
       </Flex>
     );
   return (
     <Flex
-      w={'100%'}
       justifyContent="flex-end"
       // onClick={() => clickOpen(contractAddress, index)}
       _hover={{cursor: 'pointer'}}
-      ml={'90px'}
+      mr={'30px'}
     >
       <TriangleDownIcon
         color="blue.100"
@@ -25,4 +31,4 @@ export const renderBtn = (layer2: string, isOpen: string) => {
 };
 
 
-export default renderBtn
+export default RenderBtn

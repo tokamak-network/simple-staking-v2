@@ -1,5 +1,5 @@
 export type TokenTypes = 'ETH' | 'TON' | 'WTON';
-
+export type TxSort = 'Stake' | 'Unstake' | 'Withdraw' | 'Restake' | 'Update Seigniorage' | 'Claim' | "Withdraw L2"
 export type Pages = 'Home' | 'Wallet' | 'Staking' | 'Support';
 export type PageKey = 'Staking_screen' | 'Wallet_screen';
 
@@ -9,6 +9,12 @@ export type CheckBoxValueType = {
   key: string;
   pageKey: PageKey;
 };
+
+export type l2InfoType = {
+  bridge: string,
+  explorer: string,
+  url: string  
+} | any
 
 export type StakeModalDataType = {
   tonBalance: string,
@@ -24,6 +30,22 @@ export type StakeModalDataType = {
   seig: string,
   candidate: string,
   minimumAmount: boolean,
+  requests: any[],
+  isL2: boolean,
+  name: string,
+  apy: string,
+}
+
+export type ClaimModalDataType = {
+  name: string,
+  target: string,
+  address: string,
+  amount: string,
+  contractAddress: string,
+  claimable: string,
+  expectedSeig: string,
+  expectedSeigs: string,
+  layerName: string,
 }
 
 export type StakeModalComponentType = {

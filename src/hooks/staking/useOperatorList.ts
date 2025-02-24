@@ -1,4 +1,4 @@
-import { getEventByLayer2, getOperatorsInfo, getDelegators, getOperatorUserHistory } from "@/api";
+import { getOperatorsInfo } from "@/api";
 import { useEffect, useState } from 'react';
 import { NON_CANDIDATE } from "@/constants";
 import { useWeb3React } from '@web3-react/core';
@@ -9,8 +9,6 @@ import { useRecoilValue } from 'recoil';
 import { txState } from '@/atom/global/transaction';
 import { useWindowDimensions } from "../useWindowDimensions";
 // import { useCandidateList } from './useCandidateList';
-import { GET_CANDIDATE } from "@/graphql/getCandidates";
-import { useQuery } from "@apollo/client";
 
 export function useOperatorList() {
   const [operatorList, setOperatorList] = useState([]);

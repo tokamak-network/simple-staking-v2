@@ -3,7 +3,8 @@ import { modalData, modalLoadingState, modalState } from "atom/global/modal";
 import React, { SetStateAction, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { ModalType } from "types/modal";
-import { StakeModalDataType } from "types"
+import { ClaimModalDataType, StakeModalDataType } from "types"
+import { txState } from "@/atom/global/transaction";
 
 function useModal<T>(
   modalType?: ModalType,
@@ -16,6 +17,7 @@ function useModal<T>(
   >(modalData);
   const [value, setValue] = useRecoilState(inputState);
   const [isModalLoading, setIsModalLoading] = useRecoilState(modalLoadingState);
+  const [txPending, setTxPending] = useRecoilState(txState);
 
   const openModal = () => {
     if (modalType) {

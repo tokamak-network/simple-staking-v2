@@ -2,10 +2,24 @@ import { Box, Flex, Text, useTheme, Button, Spinner } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import OperatorCard from "./components/operators/OperatorCard";
 import { useCandidateList } from '../hooks/staking/useCandidateList';
+import { useStakingInformation } from "@/hooks/staking/useStakingInformation";
+import { StakingInformationTooltip } from "@/common/tooltip/StakingInformationTooltip";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 
 function Operators() {
   const theme = useTheme();
   const { candidateList } = useCandidateList();
+  const { stakingInfo } = useStakingInformation(candidateList);
+  const router = useRouter();
+
+  const [width] = useWindowDimensions();
+  const mobile = width && width < 1040;
+
+  useEffect(() => {
+    if (width && width > 1040) router.push("/staking");
+  }, [width]);
 
   return (
     <Flex
@@ -22,7 +36,7 @@ function Operators() {
         color="gray.700"
         mb="5px"
       >
-        Select Your Operator
+        DAO Candidates
       </Text>
       <Text
         fontSize={"12px"}
@@ -32,8 +46,32 @@ function Operators() {
         w="250px"
         color={"gray.300"}
       >
-        Choose an operator to stake, restake, unstake, or withdraw TON (or WTON).
+        Stake your TON with a DAO candidate to earn seigniorage rewards while delegating your voting power to help shape Tokamak Network's governance.
       </Text>
+      <Flex justifyContent={'center'}>
+          <Flex flexDir={'column'} minW={'290px'} justifyContent={'space-between'} mb={'60px'}>
+            {
+              stakingInfo.map((info: any, index: number) => {
+                const {
+                  title,
+                  tooltip,
+                  value,
+                  unit
+                } = info
+                return (
+                  <StakingInformationTooltip
+                    key={index}
+                    title={title}
+                    tooltip={tooltip}
+                    value={value}
+                    unit={unit}
+                  />
+                )
+              })
+            }
+
+          </Flex>
+        </Flex>
       <Flex w="100%" px="20px" flexDir={"column"}>
         {candidateList.length !== 0 ? (
           candidateList.map((operator: any, index: number) => {

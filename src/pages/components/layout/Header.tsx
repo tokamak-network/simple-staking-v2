@@ -16,7 +16,7 @@ import Image from 'next/image';
 // import {NavLink, RouteMatch} from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import trimAddress from '@/utils/trimAddress';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useModal from '@/hooks/useModal';
 import WalletModal from '@/common/modal/Wallet/index';
 import { useRouter } from "next/router";
@@ -27,6 +27,7 @@ import TOKAMAK_ICON from '@/assets/images/tnss_bi.png';
 import { useRecoilValue } from 'recoil';
 import { txStatusState } from '@/atom/global/transaction';
 import arrow from "assets/images/smallArrow.svg";
+import { DEFAULT_NETWORK } from '../../../constants/index';
 
 type MenuLinksProps = {
   walletopen: () => void;
@@ -36,7 +37,7 @@ type MenuLinksProps = {
 const dropdownList = [
   {
     link: "support",
-    name: "Support"
+    name: "User Guide"
   },
   {
     link: "",
@@ -45,21 +46,17 @@ const dropdownList = [
 ]
 
 const navItemList = [
-  {
-    link: "home",
-    name: "Home"
-  },
+  // {
+  //   link: "home",
+  //   name: "Home"
+  // },
   {
     link: "staking",
     name: "Staking"
   },
-  // {
-  //   link: "fastwithdraw",
-  //   name: "Tokamak Fast Withdraw"
-  // },
   {
-    link: "wallet",
-    name: "Wallet"
+    link: "account",
+    name: "Account"
   },
 ];
 
@@ -102,7 +99,14 @@ const NavItem = () => {
 const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
   const theme = useTheme();
   const txPending = useRecoilValue(txStatusState);
+  const { chainId, deactivate } = useWeb3React()
 
+  useEffect(() => {
+    if (Number(DEFAULT_NETWORK) !== chainId) {
+      deactivate()
+    } 
+  }, [chainId])
+  
   return (
     <Box display={{ base:'none', md: 'block' }} flexBasis={{ base: '100%', md: 'auto' }}>
       <Stack
@@ -143,7 +147,7 @@ const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
           zIndex={100}
           _hover={{}}
         >
-          {account ? (
+          {account && Number(DEFAULT_NETWORK) === chainId ? (
             txPending === true ? (
               <Text fontFamily={theme.fonts.roboto} fontWeight={100} fontSize={'14px'} ml={'18px'} pt={'1px'}>
                 Tx PENDING
@@ -216,16 +220,16 @@ export const Header = () => {
       // pb={'20px'}
     >
       <Flex flexDir={'row'} w={'95%'} justifyContent="space-between">
-        <Flex fontSize={'27px'} fontWeight={900}>
+        <Link href={'home'} >
           <Image src={TOKAMAK_ICON} alt="" />
-        </Flex>
+        </Link>
         <Flex 
           fontSize={'18px'} 
           fontWeight={'bold'} 
           justifyContent="space-between" 
           alignItems={'center'} 
           w={'340px'} 
-          mr={'10%'}
+          mr={'17%'}
         >
           <NavItem/>
           <Menu 
@@ -239,7 +243,7 @@ export const Header = () => {
               fontSize={'18px'}
               cursor={"pointer"}
               onMouseEnter={handleMenuButtonhover}
-              // onMouseLeave={()=> setHoverOn(false)}
+              onMouseLeave={()=> setMenuState(false)}
               onMouseDown={handleMenuButtonClick}
               borderBottom={menuState ? "none" : ""}
               onClick={handleMenuButtonClick}
@@ -260,8 +264,9 @@ export const Header = () => {
             </MenuButton>
             <MenuList
               onMouseLeave={() => setMenuState(false)}
+              onMouseEnter={() => setMenuState(true)}
               bg="#fff"
-              mt={"17px"}
+              mt={"-5px"}
               border={"none"}
               fontSize={'13px'}
               fontWeight={'normal'}
@@ -278,9 +283,9 @@ export const Header = () => {
               <MenuItem
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
-                // target="_blank"
+                target="_blank"
                 as={"a"}
-                href={"support"}
+                href={"https://docs.tokamak.network/home/service-guide/staking-and-dao/simple-staking"}
                 h={"18px"}
                 marginBottom={"16px"}
                 padding={"0px"}
@@ -290,7 +295,7 @@ export const Header = () => {
                 _hover={{ bg: "none", color: "#2a72e5" }}
               >
                 <Text>
-                  Support
+                  User Guide
                 </Text>
               </MenuItem>
               <MenuItem
@@ -312,14 +317,13 @@ export const Header = () => {
                 </Text>
               </MenuItem>
             </MenuList>
-
           </Menu>
         </Flex>
         <Flex>
           <MenuLinks account={account} walletopen={openModal} />
         </Flex>
       </Flex>
-      <WalletModal />
+      {/* <WalletModal /> */}
       {/* <WalletModalTest /> */}
     </Flex>
   );

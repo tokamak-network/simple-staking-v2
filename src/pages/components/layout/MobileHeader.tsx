@@ -45,14 +45,16 @@ function MobileHeader() {
   const router = useRouter();
   const { pathname } = router;
   const [width] = useWindowDimensions();
+  const more = () => {
 
+  }
   const navItemList = [
+    // {
+    //   name: "Home",
+    //   link: "home",
+    // },
     {
-      name: "Home",
-      link: "home",
-    },
-    {
-      name: "Operators",
+      name: "DAO Candidates",
       link: "operators",
     },
     {
@@ -64,10 +66,21 @@ function MobileHeader() {
       link: "account",
     },
     {
+      name: "More",
+      link: ""
+    }
+  ];
+
+  const navSubItemList = [
+    {
+      name: "User Guide",
+      link: "https://docs.tokamak.network/home/service-guide/staking-and-dao/simple-staking"
+    },
+    {
       name: "Get Help",
       link: "https://docs.google.com/forms/d/16H_To1WJjIVvdS5h6Ng9rTi2EXZhwgz5Oz4IGOdfdwc/edit"
     }
-  ];
+  ]
 
   const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
     const theme = useTheme();
@@ -184,7 +197,9 @@ function MobileHeader() {
       pl="20px"
       pr="10px"
     >
-      <Image src={mobile_logo} alt={"mobile logo"} height={30} width={135} />
+      <Link href={'home'}>
+        <Image src={mobile_logo} alt={"mobile logo"} height={30} width={135} />
+      </Link>
       <Flex height={"35px"} alignItems="center">
         <MenuLinks account={account} walletopen={openModal} />
         <Button
@@ -238,45 +253,12 @@ function MobileHeader() {
               <Flex mt="24px" flexDir={"column"}>
                 {navItemList.map((item: any, index: number) => {
                   return (
-                    <Flex>
-                      {
-                      item.name === "Get Help" ?
-                      <Flex
-                        key={`nav-item-${index}`}
-                        onClick={onClose}
-                      >
-                        <Flex
-                          fontSize={"20px"}
-                          fontWeight={600}
-                          mb="30px"
-                          color={
-                            isHover === index
-                              ? pathname === "/" + item.link
-                                ? "#2a72e5"
-                                : "#3e495c"
-                              : pathname === "/" + item.link
-                              ? "#2a72e5"
-                              : "#3e495c"
-                          }
-                          cursor={"pointer"}
-                          onMouseEnter={() => setIsHover(index)}
-                          onMouseLeave={() => setIsHover(undefined)}
-                        >
-                          <a 
-                            target="_blank" 
-                            href={`${item.link}`} 
-                            rel="noopener noreferrer"
-                          >
-                            {item.name}
-                          </a>
-                        </Flex>
-                      </Flex>
-                      :
+                    <Flex flexDir={'column'}>
                       <Link
                         href={`${item.link}`}
                         key={`nav-item-${index}`}
                         passHref
-                        onClick={onClose}
+                        onClick={item.name === 'More' ? more : onClose}
                       >
                         <Flex
                           fontSize={"20px"}
@@ -298,6 +280,48 @@ function MobileHeader() {
                           {item.name}
                         </Flex>
                       </Link>
+                      {
+                      item.name === "More" ?
+                      <Flex
+                        key={`nav-item-${index}`}
+                        onClick={onClose}
+                        flexDir={'column'}
+                        ml={'20px'}
+                      >
+                        {navSubItemList.map((title: any, index: number) => {
+                          return (
+                            <Flex
+                              fontSize={"16px"}
+                              fontWeight={600}
+                              mb="30px"
+                              color={
+                                isHover === index
+                                  ? pathname === "/" + item.link
+                                    ? "#2a72e5"
+                                    : "#3e495c"
+                                  : pathname === "/" + item.link
+                                  ? "#2a72e5"
+                                  : "#3e495c"
+                              }
+                              cursor={"pointer"}
+                              onMouseEnter={() => setIsHover(index)}
+                              onMouseLeave={() => setIsHover(undefined)}
+                            >
+                              <a 
+                                target="_blank" 
+                                href={`${title.link}`} 
+                                rel="noopener noreferrer"
+                              >
+                                {title.name}
+                              </a>
+                            </Flex>
+                          )
+                        })}
+                        
+                        
+                      </Flex>
+                      :
+                      ''
                       }
                       
 

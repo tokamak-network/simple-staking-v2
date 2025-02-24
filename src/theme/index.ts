@@ -1,4 +1,4 @@
-import { extendTheme } from '@chakra-ui/react';
+import { extendTheme, Checkbox } from '@chakra-ui/react';
 import '@fontsource/titillium-web';
 import '@fontsource/roboto';
 
@@ -77,11 +77,10 @@ const PAGE_STYLE = {
     fontWeight: 'normal',
     fontStretch: 'normal',
     fontStyle: 'normal',
-    lineHeight: 3.75,
     letterSpacing: '0.4px',
     textAlign: 'center',
     color: '#808992',
-    mt: '15px',
+    mt: '21px',
     mb: '60px',
   }),
 }
@@ -109,6 +108,17 @@ const INPUT_STYLE = {
     _placeholder:{ color: '#304156' },
     border: '',
     ml:'15px',
+  }),
+  inputUnstaking: () => ({
+    fontSize:'18px',
+    height:'100%',
+    borderRadius: 0,
+    textAlign:'right',
+    overflow:'auto',
+    fontWeight: 'bold',
+    _placeholder:{ color: '#c6cbd9' },
+    border: '',
+    // ml:'15px',
   }),
   inputCalc: () => ({
     fontSize:'13px',
@@ -171,13 +181,23 @@ const STAKING_HISTORY_TABLE_STYLE = {
     pt: '5px',
     pr: 9,
     border: '',
-    mb: '25px',
+    // mb: '25px',
     borderTopWidth: 0,
     borderBottomRadius: '10px',
   }),
   paginationButton: () => ({
     width: '24px',
     height: '24px',
+    border: 'solid 1px #e6eaee',
+    color: '#e6eaee',
+    bg: 'white.100',
+    borderRadius: 4,
+    size: 'sm',
+    _hover: { borderColor: '#2a72e5', color: '#2a72e5' },
+  }),
+  paginationButton2: () => ({
+    width: '21px',
+    height: '21px',
     border: 'solid 1px #e6eaee',
     color: '#e6eaee',
     bg: 'white.100',
@@ -282,8 +302,23 @@ const theme = extendTheme({
       },
       button: {
         backgroundColor: 'black.100',
-      },
+      }
     }),
+  },
+  components: {
+    Checkbox: {
+      control: {
+        backgroundColor: '#fff',
+        border: 'solid 1px #e7ebf2'
+      }
+    },
+    Menu: {
+      baseStyle: {
+        item: {
+          maxW: '100px'
+        }
+      }
+    }
   },
 })
 

@@ -15,6 +15,7 @@ import {
 import { Pagination } from '@/common/table/Pagination';
 import { TableRow } from '@/common/table/wallet/TableRow';
 import { TableHeader } from '@/common/table/wallet/TableHeader';
+import useCallContract from '../../../hooks/useCallContract';
 
 type MyHistoryTableProps = {
   columns: Column[];
@@ -27,6 +28,8 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
   data,
   isLoading
 }) => {
+  const [currentPageIndex, setCurrentPageIndex] = useState(0)
+  
   const {
     getTableProps,
     getTableBodyProps,
@@ -40,9 +43,18 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
     previousPage,
     nextPage,
     page,
+    gotoPage,
     state: {pageIndex, pageSize},
   } = useTable(
-    {columns, data, initialState: {pageIndex: 0}},
+    {
+      columns, 
+      data, 
+      initialState: { 
+        pageSize: 3,
+        pageIndex: currentPageIndex,
+      }, 
+      autoResetPage: false
+    },
     useSortBy,
     useExpanded,
     usePagination,
@@ -50,7 +62,21 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
 
   const [currentPage, setCurrentPage] = useState(0)
   const [buttonClick, setButtonClick] = useState(Boolean)
+  const [withdrawalDelay,setWithdrawalDelay] = useState(0)
+
+  const { DepositManager_CONTRACT } = useCallContract()
+
   const theme = useTheme();
+
+  useEffect(() => {
+    async function fetch() {
+      if (DepositManager_CONTRACT) {
+        const delay = await DepositManager_CONTRACT.globalWithdrawalDelay()
+        setWithdrawalDelay(Number(delay.toString()))
+      }
+    }
+    fetch()
+  }, [])
 
   useEffect(() => {
     setPageSize(5)
@@ -77,7 +103,7 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
       <Flex fontSize={'18px'} fontWeight={'bold'} mb={'15px'} justifyContent={'center'}>
         History
       </Flex>
-      <Box overflowX={'auto'}>
+      <Box>
         <chakra.table
           width={'full'}
           {...getTableProps()}
@@ -112,6 +138,7 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
                         key={index}
                         index={i}
                         cell={cell}
+                        delay={withdrawalDelay}
                       />
                     )
                   })}
@@ -129,6 +156,7 @@ export const MyHistoryTable: FC<MyHistoryTableProps> = ({
               canNextPage={canNextPage}
               pageOptions={pageOptions}
               pageIndex={pageIndex}
+              gotoPage={gotoPage}
             />
           </chakra.tbody>
         </chakra.table>

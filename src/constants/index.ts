@@ -14,8 +14,17 @@ const MAINNET_API = process.env.NEXT_PUBLIC_API_PRODUCTION;
 const DEV_API = process.env.NEXT_PUBLIC_API_DEV;
 const GRAPHQL_MAINNET = process.env.NEXT_PUBLIC_GRAPHQL_API_PRODUCTION;
 const GRAPHQL_DEV = process.env.NEXT_PUBLIC_GRAPHQL_API_DEV;
+export const ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
+export const ETHERSCAN_API = REACT_APP_MODE === "PRODUCTION" ? "https://api.etherscan.io" : "https://api-sepolia.etherscan.io"
 
 export const ETHERSCAN_LINK = REACT_APP_MODE === "PRODUCTION" ? "https://etherscan.io" : "https://sepolia.etherscan.io"
+export const TITAN_EXPLORER_LINK = REACT_APP_MODE === "PRODUCTION" ? "https://explorer.titan.tokamak.network" : "https://explorer.titan-sepolia.tokamak.network"
+
+export const TITAN_SUBGRAPH = REACT_APP_MODE === "PRODUCTION" ? process.env.NEXT_PUBLIC_TITAN_SUBGRAPH : process.env.NEXT_PUBLIC_TITAN_SEPOLIA_SUBGRAPH
+export const THANOS_SUBGRAPH = REACT_APP_MODE === "PRODUCTION" ? process.env.NEXT_PUBLIC_THANOS_SUBGRAPH : process.env.NEXT_PUBLIC_THANOS_SEPOLIA_SUBGRAPH
+export const TITAN_RPC = REACT_APP_MODE === "PRODUCTION" ? process.env.NEXT_PUBLIC_TITAN_RPC : process.env.NEXT_PUBLIC_TITAN_SEPOLIA_RPC
+
+export const PRICE_API = process.env.NEXT_PUBLIC_API_PRICE;
 
 export const BASE_PROVIDER =
 REACT_APP_MODE === "PRODUCTION"
@@ -49,11 +58,8 @@ export const NON_CANDIDATE = [
   },
 ]
 
-export const MEMBER_ADDRESS_TEMP = [
-  "0xf3b17fdb808c7d0df9acd24da34700ce069007df",
-  "0x0f42d1c40b95df7a1478639918fc358b4af5298d",
-  "0x06d34f65869ec94b3ba8c0e08bceb532f65005e2"
-]
+export const RAY = '1000000000000000000000000000'
+export const WEI = '1000000000000000000'
 
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
