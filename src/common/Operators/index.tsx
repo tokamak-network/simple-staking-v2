@@ -21,6 +21,7 @@ import ContractAddressInfo from "../table/staking/ContractAddressInfo";
 import { openInfonState } from "@/atom/staking/openInfo";
 import { useCalculateAPR } from "@/hooks/staking/useCalculateAPR";
 import L2Info from '../../../l2_info.json'
+import { promises as fs } from 'fs';
 
 
 type OpearatorInfoProps = {
@@ -94,7 +95,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
   
   useEffect(() => {
     const infos = L2Info.find((info: any) => info.candidate === data.candidate)
-  
+    console.log(L2Info)
     if (infos) {
       setLogoValue(infos.logo)
     }
@@ -114,8 +115,6 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
     type: 'ray',
     localeString: true
   }) : '0.00'
-
-  console.log(candidateAddOn)
 
   return (
     <Flex
