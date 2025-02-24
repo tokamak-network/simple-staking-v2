@@ -115,6 +115,8 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
     localeString: true
   }) : '0.00'
 
+  console.log(candidateAddOn)
+
   return (
     <Flex
       flexDir={'column'}
