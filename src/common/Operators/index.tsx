@@ -44,6 +44,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
   const { asPath } = router;
 
   const { 
+    
     candidateContract, 
     stakedAmount, 
     candidate, 
@@ -95,7 +96,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
   
   useEffect(() => {
     const infos = L2Info.find((info: any) => info.candidate === data.candidate)
-    console.log(L2Info)
+
     if (infos) {
       setLogoValue(infos.logo)
     }

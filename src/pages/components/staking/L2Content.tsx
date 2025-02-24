@@ -139,7 +139,7 @@ export function L2Content (args: L2ContentProps) {
               <Flex
                 fontWeight={'bold'}
               >
-                {convert}
+                {convert }
               </Flex>
               <Flex 
                 fontSize={'13px'}

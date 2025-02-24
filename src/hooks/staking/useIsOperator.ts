@@ -23,50 +23,32 @@ export function useIsOperator (layer2: string | undefined) {
   
   useEffect(() => {
     async function fetch() {
-      
       if (CandidateAddOn_CONTRACT && account && layer2) {
         try {
-          const operatorAddress = await CandidateAddOn_CONTRACT.operator()
-          const OperatorManager_CONTRACT = await getContract(operatorAddress, OperatorManager, library, account)
+          const operatorAddress = await CandidateAddOn_CONTRACT.operator();
+          const OperatorManager_CONTRACT = await getContract(operatorAddress, OperatorManager, library, account);
           if (OperatorManager_CONTRACT && WTON_CONTRACT && SeigManager_CONTRACT) {
-            const manager = await OperatorManager_CONTRACT.manager()
-
-            const checkIsOperator = manager.toLowerCase() === account.toLowerCase()
-            
-            const bridgeType = await OperatorManager_CONTRACT.checkL1Bridge()
-            
+            const manager = await OperatorManager_CONTRACT.manager();
+            const checkIsOperator = manager.toLowerCase() === account.toLowerCase();
+            const bridgeType = await OperatorManager_CONTRACT.checkL1Bridge();
             const blockNumber = await library.getBlockNumber();
-            const wtonBalanceOfOM = await WTON_CONTRACT.balanceOf(operatorAddress)
-            const estimatedDistribution = await SeigManager_CONTRACT.estimatedDistribute(blockNumber + 1, layer2, true)
-            // const stakeOfOperator = await SeigManager_CONTRACT.stakeOf(layer2, manager)
-
-            // const wtonBalance = wtonBalanceOfOM.toString()
-            // const estiDistribution = estimatedDistribution.layer2Seigs.toString();
+            const wtonBalanceOfOM = await WTON_CONTRACT.balanceOf(operatorAddress);
+            const estimatedDistribution = await SeigManager_CONTRACT.estimatedDistribute(blockNumber + 1, layer2, true);
+            const addedWton = wtonBalanceOfOM.add(estimatedDistribution.layer2Seigs);
             
-            const addedWton = wtonBalanceOfOM.add(estimatedDistribution.layer2Seigs)
-            
-            setClaimable(addedWton.toString())
-            // setStakable
-            
-            const infoType = {
-              bridge: "",
-              explorer: "",
-              logo: ""
-            }
-            
-            setOperatorManger(operatorAddress)
-            setIsOperator(checkIsOperator !== undefined ? checkIsOperator : false);
-            // setL2Infos(l2Info === '' ? infoType : JSON.parse(l2Info))
-            setBridgeTypes(bridgeType._type)
-            setManagers(manager)
+            setClaimable(addedWton.toString());
+            setOperatorManger(operatorAddress);
+            setIsOperator(checkIsOperator);
+            setBridgeTypes(bridgeType._type);
+            setManagers(manager);
           }
         } catch (e) {
-          console.log(e)
+          console.log(e);
         }
       }
     }
-    fetch()
-    
-  }, [CandidateAddOn_CONTRACT, account, txPending])
+    fetch();
+  }, [CandidateAddOn_CONTRACT, account, library, layer2, txPending, WTON_CONTRACT, SeigManager_CONTRACT]);
+  
   return { isOperator, bridgeTypes, operatorManager, managers, claimable }
 }

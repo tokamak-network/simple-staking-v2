@@ -39,7 +39,7 @@ function L2Information({ data }: L2InformationProps) {
   const [, setSelectedModalData] = useRecoilState(modalData);
   const [txPending, ] = useRecoilState(txState);
   // const [tx, setTx] = useState();
-  const [claimableAmount, setClaimableAmount] = useState('0.00');
+  const [claimableAmount, setClaimableAmount] = useState<string | undefined>('0.00');
 
   const [bridgeValue, setBridgeValue] = useRecoilState(editL2Info_bridge_input);
   const [explorerValue, setExplorerValue] = useRecoilState(editL2Info_explorer_input);
@@ -99,6 +99,7 @@ function L2Information({ data }: L2InformationProps) {
   const stakableAmount = floatParser(claimableAmount) + floatParser(expectedSeigs) 
   const stakable = stakableAmount.toLocaleString(undefined,{maximumFractionDigits: 2})
 
+
   useEffect(() => {
     const claim = claimable
         ? convertNumber({
@@ -106,10 +107,9 @@ function L2Information({ data }: L2InformationProps) {
           type: 'ray',
           localeString: true,
         })
-    : '0.00' 
-    setClaimableAmount(claim ? claim : '0.00');
-    console.log(claimableAmount)
-  }, [claimableAmount, expectedSeigs, txPending]);
+    : '0.00'   
+    setClaimableAmount(claim);
+  }, [claimable, expectedSeigs, txPending]);
 
   const dataModal: ClaimModalDataType = {
     amount: amount,
