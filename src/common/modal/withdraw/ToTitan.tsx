@@ -70,7 +70,7 @@ export const ToTitan = (args: ToTitanProps) => {
 
   useEffect(() => {
     if (selectedModalData) {
-      const infos = L2Info.find((info: any) => info.name === selectedModalData.name)
+      const infos = L2Info.find((info: any) => info.candidate === selectedModalData.candidate)
     
       if (infos) {
         setLogoValue(infos.logo)

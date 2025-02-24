@@ -27,11 +27,10 @@ export function useIsOperator (layer2: string | undefined) {
       if (CandidateAddOn_CONTRACT && account && layer2) {
         try {
           const operatorAddress = await CandidateAddOn_CONTRACT.operator()
-          
           const OperatorManager_CONTRACT = await getContract(operatorAddress, OperatorManager, library, account)
           if (OperatorManager_CONTRACT && WTON_CONTRACT && SeigManager_CONTRACT) {
             const manager = await OperatorManager_CONTRACT.manager()
-          
+
             const checkIsOperator = manager.toLowerCase() === account.toLowerCase()
             
             const bridgeType = await OperatorManager_CONTRACT.checkL1Bridge()

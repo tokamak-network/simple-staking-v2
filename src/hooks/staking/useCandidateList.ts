@@ -31,7 +31,7 @@ export function useCandidateList () {
 
   const [width] = useWindowDimensions();
   const mobile = width && width < 1040;
-  // console.log(loading, error)
+  
   useEffect(() => {
     async function fetch () {
       if (candidates) {     
@@ -44,8 +44,6 @@ export function useCandidateList () {
           let oldHistory
           let expSeig
           let myPending
-
-          // console.log(obj)
 
           const oldCandidate = getOldLayerAddress(obj.candidateContract)
 

@@ -93,7 +93,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
   };
   
   useEffect(() => {
-    const infos = L2Info.find((info: any) => info.name === data.name)
+    const infos = L2Info.find((info: any) => info.candidate === data.candidate)
   
     if (infos) {
       setLogoValue(infos.logo)

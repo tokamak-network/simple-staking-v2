@@ -135,26 +135,39 @@ export function L2Content (args: L2ContentProps) {
           <Flex
             flexDir={'row'}
           >
-            {
-              isOperator ?
-              <Flex>
-                <Flex
-                  fontWeight={'bold'}
-                >
-                  {convert}
-                </Flex>
-                <Flex 
-                  fontSize={'13px'}
-                  fontWeight={500}
-                  ml={'4px'}
-                  alignItems={'end'}
-                  mb={'2px'}
-                >
-                  TON
-                </Flex> 
-                
-              </Flex> : ''
-            }
+            <Flex>
+              <Flex
+                fontWeight={'bold'}
+              >
+                {convert}
+              </Flex>
+              <Flex 
+                fontSize={'13px'}
+                fontWeight={500}
+                ml={'4px'}
+                alignItems={'end'}
+                mb={'2px'}
+              >
+                TON
+              </Flex>      
+            </Flex> 
+            {/* <Flex mx={'5px'} fontWeight={'normal'}> / </Flex>
+            <Flex>
+              <Flex
+                fontWeight={'bold'}
+              >
+                {content2}
+              </Flex>
+              <Flex 
+                fontSize={'13px'}
+                fontWeight={500}
+                ml={'4px'}
+                alignItems={'end'}
+                mb={'2px'}
+              >
+                TON
+              </Flex>      
+            </Flex>  */}
           </Flex> : '' 
         }
        

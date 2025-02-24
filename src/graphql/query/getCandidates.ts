@@ -17,7 +17,6 @@ export const GET_CANDIDATE = gql`
         bridge
         portal
         txData
-        stateRoot
         seigGiven: seigGiven(first: 10, orderBy: blockTimestamp, orderDirection: desc) {
           id
           l2TotalSeigs

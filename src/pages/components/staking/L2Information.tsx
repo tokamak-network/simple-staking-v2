@@ -41,8 +41,6 @@ function L2Information({ data }: L2InformationProps) {
   // const [tx, setTx] = useState();
   const [claimableAmount, setClaimableAmount] = useState('0.00');
 
-  // console.log(data);
-
   const [bridgeValue, setBridgeValue] = useRecoilState(editL2Info_bridge_input);
   const [explorerValue, setExplorerValue] = useRecoilState(editL2Info_explorer_input);
   const [logoValue, setLogoValue] = useRecoilState(editL2Info_logo_input);
@@ -67,8 +65,6 @@ function L2Information({ data }: L2InformationProps) {
       setLogoValue(infos.logo)
     }
   }, [L2Info])
-
-  // console.log(data)
 
   useEffect(() => {
     if (data) {
@@ -112,7 +108,7 @@ function L2Information({ data }: L2InformationProps) {
         })
     : '0.00' 
     setClaimableAmount(claim ? claim : '0.00');
-    // console.log(claimableAmount)
+    console.log(claimableAmount)
   }, [claimableAmount, expectedSeigs, txPending]);
 
   const dataModal: ClaimModalDataType = {
