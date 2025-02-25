@@ -1,5 +1,5 @@
-name: Simple Staking v2.5 internal test
-description: This is an internal test on Sepolia Network to test upcoming features in simple staking service. https://simple-staking-v2-one.vercel.app/staking
+name: Simple Staking v2 bug bounty
+description: This is a public test on Sepolia Network to test upcoming features in simple staking service. https://sepolia.staking.tokamak.network/staking
 title: "[Simple Staking V2 - Bug bounty]: "
 labels: [bug,bug-bounty-simple-staking-v2]
 assignees:
@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Report bugs based on [Test page](https://sepolia.staking.tokamak.network/staking) and [feat/v2](https://github.com/tokamak-network/simple-staking-v2/tree/feat/sepolia) branch.
+        Report bugs based on [Test page](https://sepolia.staking.tokamak.network/staking) and [feat/sepolia](https://github.com/tokamak-network/simple-staking-v2/tree/feat/sepolia) branch.
   - type: dropdown
     id: feature
     attributes:
