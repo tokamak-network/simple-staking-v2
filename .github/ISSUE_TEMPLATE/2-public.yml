@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Report bugs based on [Test page](https://sepolia.staking.tokamak.network/staking) and [feat/sepolia](https://github.com/tokamak-network/simple-staking-v2/tree/feat/sepolia) branch.
+        Report bugs based on [Test page](https://sepolia.staking.tokamak.network/staking) and [public-test/v2](https://github.com/tokamak-network/simple-staking-v2/tree/public-test/v2) branch.
   - type: dropdown
     id: feature
     attributes:
