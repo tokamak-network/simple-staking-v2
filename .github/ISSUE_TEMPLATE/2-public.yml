@@ -1,0 +1,77 @@
+name: Simple Staking v2 bug bounty
+description: This is a public test on Sepolia Network to test upcoming features in simple staking service. https://sepolia.staking.tokamak.network/staking
+title: "[Simple Staking V2 - Bug bounty]: "
+labels: [bug,bug-bounty-simple-staking-v2]
+assignees:
+  - cd4761
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report bugs based on [Test page](https://sepolia.staking.tokamak.network/staking) and [public-test/v2](https://github.com/tokamak-network/simple-staking-v2/tree/public-test/v2) branch.
+  - type: dropdown
+    id: feature
+    attributes:
+      label: Can you specify where the bug exists?
+      multiple: true
+      options:
+        - Stake
+        - Withdraw
+        - Account
+        - Others
+  - type: dropdown
+    id: Device
+    attributes:
+      label: Which device are you seeing the problem on? (can select multiple)
+      multiple: true
+      options:
+        - Desktop
+        - Tablet
+        - Mobile
+        - Others
+  - type: dropdown
+    id: OS
+    attributes:
+      label: Which OS are you seeing the problem on? (can select multiple)
+      multiple: true
+      options:
+        - Windows
+        - Android
+        - MacOS
+        - iOS
+        - Others
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on? (can select multiple)
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+        - Others
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen? 
+      placeholder: Tell us what you see! 
+      value: "Describe the bug and its behavior! You can also upload the image and code links"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+  - type: textarea
+    id: additional-output
+    attributes:
+      label: Upload any screenshots to aid with explaining the bug.
+      description: Upload screenshots
+      placeholder:  Tell us what you see!
+      value: "Upload image here"
+    validations:
+      required: true
