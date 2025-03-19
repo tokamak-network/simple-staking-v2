@@ -11,4 +11,4 @@ export type Stake_InputKey =
   | 'stake_modal'
   | 'restake_modal';
 
-export type InputKey = Stake_InputKey | Bond_InputKey;
+export type InputKey = Stake_InputKey;
