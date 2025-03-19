@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { getDailyStakedTotal, getTotalSupply, getTotalStaked } from '@/api';
+import {  getTotalSupply, getTotalStaked } from '@/api';
 import { useQuery } from '@apollo/client';
 import { GET_GRAPH, GET_FACTORY } from '../../graphql/getGraphdata';
 import moment from 'moment';
@@ -20,7 +20,7 @@ export function useDailyStaked() {
 
   useEffect(() => {
     async function fetchData() {
-      const dailyStakedTotal = await getDailyStakedTotal();
+      
       // const totalStakedCurrent: number = await getTotalStaked();
       const totalSup = await getTotalSupply();
       const stakeTotal = factory.data?.factories[0].totalStaked;
@@ -62,9 +62,8 @@ export function useDailyStaked() {
       }
       //@ts-ignore
       const setData = [...new Set(filledData.map(JSON.stringify))].map(JSON.parse)
-
-      const filteredData = dailyStakedTotal.filter((item: any) => item.fetchDateUTC < 20231024);
-      const concatData = setData?.concat(filteredData);
+      
+      const concatData = setData;
       
       const graphdata = concatData?.map((item: any, index) => {
         const totalStaked = parseFloat(item.totalSupply) / Math.pow(10, 27);
