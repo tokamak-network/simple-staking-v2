@@ -44,7 +44,6 @@ function CalculatorModal() {
         localeString: true,
       })
     : undefined;
-
   const closeThisModal = useCallback(() => {
     // setResetValue();
     // setInput('0')
@@ -56,7 +55,7 @@ function CalculatorModal() {
   const calButton = useCallback(async () => {
     const inputBalance = Number(input.replace(/,/g, ''));
     const totalSup = await getTotalSupply();
-    
+    console.log(totalSup)
     if (Staked && selectedModalData) {
       const total = Number(Staked.replace(/,/g, '')) + inputBalance;
 
