@@ -23,6 +23,7 @@ type BalanceTooltipProps = {
 export const BalanceTooltip = (args: BalanceTooltipProps) => {
   const { label, label2, placement, types, size } = args;
 
+  
   const [isLabelOpen, setIsLabelOpen] = useState(false)
   const { tonPriceUSD } = useTONPrice()
 
