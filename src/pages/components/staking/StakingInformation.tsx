@@ -119,8 +119,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({
         const toggleFilter = toggle === 'All' 
           ? filtered
           : filtered.filter((history: any) => {
-            console.log(history.sender, account)
-            return history.sender.toLowerCase() === account?.toLowerCase()
+            return history.sender?.toLowerCase() === account?.toLowerCase()
           })
         //@ts-ignore
         const pendingRequests = await withdrawRequests(data.candidateContract)

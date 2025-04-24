@@ -41,7 +41,7 @@ export function useCandidateList() {
     }
 
     async function fetchCandidateDetails(candidateObj: any, index: number) {
-      const { candidateContract, stakedUserList, candidate } = candidateObj;
+      const { candidateContract, stakedUserList, candidate, name } = candidateObj;
       let stakeOf, sumPending, stakeOfCandidate, oldCommitHistory, oldHistory, expSeig, myPending;
 
       const oldCandidate = getOldLayerAddress(candidateContract);
@@ -56,20 +56,19 @@ export function useCandidateList() {
         }
       }
 
-      // 후보의 스테이크 정보를 추출
       const candidateStaked = stakedUserList.find(
         (user: any) => user.user.id === candidate
       );
       if (candidateStaked) {
         stakeOfCandidate = candidateStaked.stakedAmount;
       }
-
-      // 컨트랙트 관련 데이터 호출
+      
       if (SeigManager_CONTRACT && DepositManager_CONTRACT && Old_DepositManager_CONTRACT) {
         try {
           if (account) {
             stakeOf = await SeigManager_CONTRACT.stakeOf(candidateContract, account);
             myPending = await DepositManager_CONTRACT.pendingUnstaked(candidateContract, account);
+            stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(candidateContract, candidate);
 
             if (mobile && stakeOf !== "0" && TON_CONTRACT) {
               const blockNumber = await library.getBlockNumber();

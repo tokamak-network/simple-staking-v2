@@ -54,7 +54,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
     kind,
     name
   } = data;
-
+  
   const [isOpen, setIsOpen] = useRecoilState(openInfonState);
   const [tab, setTab] = useState('staking')
   // const [members, setMembers] = useState()
