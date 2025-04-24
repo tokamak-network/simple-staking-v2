@@ -3,7 +3,7 @@ import { v1 } from 'uuid';
 
 const toggleState = atom({
   key: `checkValues/${v1()}`,
-  default: 'All',
+  default: 'My',
 });
 
 const selectedToggleState = selector({

@@ -19,7 +19,6 @@ const useCallContract = (ERC20_ADDRESS?: string) => {
     Old_DepositManager_ADDRESS,
     Old_SeigManager_ADDRESS
   } = CONTRACT_ADDRESS;
-
   const TON_CONTRACT = useContract(TON_ADDRESS, TON);
   const WTON_CONTRACT = useContract(WTON_ADDRESS, WTON);
   const Layer2Registry_CONTRACT = useContract(Layer2Registry_ADDRESS, Layer2Registry);
@@ -29,7 +28,6 @@ const useCallContract = (ERC20_ADDRESS?: string) => {
   const Old_SeigManager_CONTRACT = useContract(Old_SeigManager_ADDRESS, SeigManager);
   // const TOS_CONTRACT = useContract(TOS_ADDRESS, ERC20.abi);
   // const ERC20_CONTRACT = useContract(ERC20_ADDRESS, ERC20.abi);
-
   
   return {
     TON_CONTRACT,

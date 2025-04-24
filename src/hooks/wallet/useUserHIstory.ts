@@ -3,46 +3,88 @@ import { useWeb3React } from '@web3-react/core';
 import { useEffect, useState } from 'react';
 import useCallContract from '../useCallContract';
 import { useBlockNumber } from '../useBlockNumber';
-import { GET_HISTORY } from '@/graphql/getUserHIstory';
+import { GET_HISTORY } from '@/graphql/query/getUserHIstory';
 import { useQuery } from '@apollo/client';
 import { getTransactionHistory } from '../../utils/getTransactionHistory';
+import { useGetUserHistory } from '../graphql/useGetUserHistory';
+import { useWithdrawRequests } from '../staking/useWithdrawable';
 
 export function useUserHistory () {
   const [userHistory, setUserHistory] = useState([])
   const { blockNumber } = useBlockNumber()
   const { account } = useWeb3React();
-  const {data} = useQuery(GET_HISTORY, {
-    variables: {
-      id: account?.toLowerCase()
-    },
-    pollInterval: 10000
-  });
-  const { DepositManager_CONTRACT , SeigManager_CONTRACT} = useCallContract();
+  const [loading, setLoading] = useState(true)
+  
+  const { users } = useGetUserHistory(account)
+  const { withdrawRequests } = useWithdrawRequests()
 
   useEffect(() => {
     async function fetchList () {  
-      if (account && data) {
+      if (account && users) {
         const pastData = await getOperatorsInfo();
-
-        let myHistory: any = []
-
+        
+        let myHistory: any = [];
+        let fixedUnstaked: any = [];
         await Promise.all(pastData.map(async (obj: any) => {
-          const history = await getOperatorUserHistory(obj.layer2.toLowerCase(), account.toLowerCase())
+          const history = await getOperatorUserHistory(obj.layer2.toLowerCase(), account.toLowerCase());
+          const pendingRequests = await withdrawRequests(obj.layer2.toLowerCase());
+          const unstakeHistoryPerLayer = users[0].unstaked.filter((unstake: any) => unstake.candidate.id === obj.layer2.toLowerCase())
+          
+          let fixWithdrawble: any[] = [];
+          
+          if (pendingRequests && pendingRequests.length > 0) {
+            for (let i = 0; unstakeHistoryPerLayer.length > i; i ++) {           
+                const withdrawable = pendingRequests.find((request: any) => {
+                  return Number(request.withdrawableBlock) === Number(unstakeHistoryPerLayer[i].transaction.blockNumber) + Number(request.withdrawDelay)
+                })
+                
+                const data = { 
+                  ...unstakeHistoryPerLayer[i], 
+                  withdrawable: withdrawable ? true : false, 
+                  withdrawn: i + 1 > pendingRequests.length,
+                  withdrawDelay: pendingRequests[0].withdrawDelay
+                  // withdrawableBlock: request.withdrawableBlock 
+                } 
+                fixWithdrawble.push(data);   
+            }
+          }
+
+          fixedUnstaked = [...fixedUnstaked, ...fixWithdrawble]
           myHistory = [...myHistory, ...history]
           return await myHistory
         }))
+        
         myHistory = myHistory.sort(function (a: any, b: any) {
           return b.blockNumber - a.blockNumber
         })
-        if (data.users[0]) {
-          const txData = getTransactionHistory({...data.users[0], oldHistory: myHistory})
-          setUserHistory(txData)
-        }
 
+        if (users[0]) {
+          const txData = getTransactionHistory({
+            staked: fixedUnstaked,
+            unstaked: users[0].staked,
+            withdrawal: users[0].withdrawal,
+            withdrawL2: users[0].withdrawL2, 
+            oldHistory: myHistory
+          })
+
+          let datas: any = []
+          for (let i = 0; i < txData.length ; i++) {
+            
+
+            const indexedData = {
+              ...txData[i],
+              index: txData.length - i - 1
+            }
+            datas.push(indexedData)
+          }
+          setUserHistory(datas)
+          setLoading(false)
+        }
       }
     }
     fetchList()
-  }, [DepositManager_CONTRACT, SeigManager_CONTRACT, account, blockNumber, data])
+  }, [account, users])
 
-  return { userHistory }
+  return { userHistory, loading }
 }
+

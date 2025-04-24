@@ -12,7 +12,7 @@ export const PageHeader: FC<PageHeadProps> = ({
 }) => {
   const theme = useTheme();
   return (
-    <Flex w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
+    <Flex w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'} maxW={'558px'}>
       <Flex {...theme.PAGE_STYLE.layoutHeader()}>
         {title}
       </Flex>

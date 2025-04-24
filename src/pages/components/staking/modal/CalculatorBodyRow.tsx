@@ -6,7 +6,7 @@ import { useRecoilState } from 'recoil';
 import { Duration, durationState } from '@/atom/staking/duration';
 
 export const CalculatorBodyRow = (args: { title: string; value: any }) => {
-  const [, setDuration] = useRecoilState(durationState);
+  const [duration, setDuration] = useRecoilState(durationState);
   const { title, value } = args;
 
   return (
@@ -35,7 +35,7 @@ export const CalculatorBodyRow = (args: { title: string; value: any }) => {
           <Select
             h={'32px'}
             fontSize={'13px'}
-            defaultValue={'1-year'}
+            defaultValue={duration}
             onChange={(e) => {
               setDuration(e.target.value as Duration);
             }}

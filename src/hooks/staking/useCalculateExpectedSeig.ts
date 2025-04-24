@@ -7,6 +7,8 @@ import { useWeb3React } from '@web3-react/core';
 import CONTRACT_ADDRESS from "services/addresses/contract";
 import { getContract } from '@/components/getContract';
 import { ethers } from 'ethers';
+import { useRecoilState } from 'recoil';
+import { txState } from '@/atom/global/transaction';
 
 const RAYDIFF = ethers.BigNumber.from("1"+"0".repeat(9))
 const RAY = ethers.BigNumber.from("1"+"0".repeat(27))
@@ -16,6 +18,8 @@ const REFACTOR_BOUNDARY = BigNumber.from("1"+"0".repeat(28));
 export function useExpectedSeig (candidateContract: string, stakedAmount: string, candidate: string) {
   const { account, library } = useWeb3React()
   const [expectedSeig, setExpectedSeig] = useState('')
+  const [seigOfLayer, setSeigOfLayer] = useState('')
+  const [txPending, setTxPending] = useRecoilState(txState);
 
 
   const { TON_CONTRACT, WTON_CONTRACT, DepositManager_CONTRACT, SeigManager_CONTRACT } = useCallContract();
@@ -82,6 +86,8 @@ export function useExpectedSeig (candidateContract: string, stakedAmount: string
           } else {
             seig = stakedAmount === '0' ? 0 : seigOfLayer.mul(BigNumber.from(userStaked)).div(BigNumber.from(stakedAmount))
           }
+          // console.log(seigOfLayer)
+          setSeigOfLayer(seigOfLayer.toString())
           setExpectedSeig(seig.toString())
         } catch (e) {
           console.log(e)
@@ -89,8 +95,8 @@ export function useExpectedSeig (candidateContract: string, stakedAmount: string
       }
     }
     fetch ()
-  }, [account, candidateContract])
-  return expectedSeig
+  }, [account, candidateContract, txPending])
+  return { expectedSeig, seigOfLayer }
 }
 
 const calcMaxSeigs = async  (lastSeigBlock: any, seigPerBlock: any, blockNumber: number) => {

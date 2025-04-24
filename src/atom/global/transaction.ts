@@ -1,5 +1,7 @@
+import { TxSort } from '@/types';
 import { atom, selector } from 'recoil';
 import { v1 } from 'uuid';
+import { ethers } from "ethers";
 
 const txState = atom({
   key: `txState/${v1()}`,
@@ -16,3 +18,8 @@ const txStatusState = selector({
 });
 
 export { txState, txStatusState };
+
+export const txHashStatus = atom<string | undefined>({
+  key: `txHashStatus/${v1()}`,
+  default: undefined,
+});

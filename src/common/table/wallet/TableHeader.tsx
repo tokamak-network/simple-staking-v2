@@ -1,5 +1,6 @@
-import { chakra } from "@chakra-ui/react";
+import { chakra, Flex } from "@chakra-ui/react";
 import { getColumnWidthWallet } from "@/utils/getColumnWidth";
+import { TypeItem } from "../staking/HistoryTableHeader";
 
 export const TableHeader = ({}) => {
   return (
@@ -14,7 +15,6 @@ export const TableHeader = ({}) => {
       <chakra.tr fontSize={"13px"} color={"#808992"} h={"40px"}>
         {HeaderColumn("index")}
         {HeaderColumn("txHash")}
-        {HeaderColumn("contractAddress")}
         {HeaderColumn("txType")}
         {HeaderColumn("amount")}
         {HeaderColumn("blockNumber")}
@@ -34,11 +34,9 @@ const HeaderColumn = (columnName: string) => {
       {columnName === "index"
         ? "#"
         : columnName === "txHash"
-        ? "Transaction Hash"
-        : columnName === "contractAddress"
         ? "Candidate"
         : columnName === "txType"
-        ? "Type"
+        ? <Flex justifyContent={'center'} ml={'10px'}><TypeItem /></Flex>
         : columnName === "amount"
         ? "Amount"
         : columnName === "blockNumber"

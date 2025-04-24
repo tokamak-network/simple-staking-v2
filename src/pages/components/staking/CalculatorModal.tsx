@@ -15,6 +15,7 @@ import axios from 'axios';
 import { getTotalSupply } from '@/api';
 import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
 import { useDailyStaked } from '@/hooks/home/useDailyStaked';
+import { useTONPrice } from '@/hooks/staking/useTONPrice';
 
 function CalculatorModal() {
   const theme = useTheme();
@@ -23,7 +24,6 @@ function CalculatorModal() {
   const { closeModal, isModalLoading, selectedModalData } = useModal();
 
   const [duration, setDuration] = useRecoilState(durationState);
-  // const duration = useRecoilValue(selectedDurationState)
   const input = useRecoilValue(inputBalanceState);
   const [selectedModal, setSelectedModal] = useRecoilState(modalState);
 
@@ -33,9 +33,9 @@ function CalculatorModal() {
   const [rewardKRW, setRewardKRW] = useState('0.00');
   const [rewardUSD, setRewardUSD] = useState('0.00');
 
-  const { totalStaked, userTotalStaked } = useOperatorList();
   const { userTonBalance } = useUserBalance(account);
   const { dailyStaked } = useDailyStaked();
+  const {tonPriceKRW, tonPriceUSD} = useTONPrice()
 
   const Staked = dailyStaked[0]
     ? convertNumber({
@@ -44,53 +44,34 @@ function CalculatorModal() {
         localeString: true,
       })
     : undefined;
-
   const closeThisModal = useCallback(() => {
     // setResetValue();
     // setInput('0')
     setType('calculate');
     setDuration('1-year');
     closeModal();
-  }, [closeModal, setDuration]);
+  }, [closeModal]);
 
   const calButton = useCallback(async () => {
     const inputBalance = Number(input.replace(/,/g, ''));
-    const maxCompensate = 26027.39726;
-    const pSeigDeduction = 40;
-    const KRW = await axios('https://api.upbit.com/v1/ticker?markets=KRW-TON').then((response: any) => {
-      return JSON.parse(JSON.stringify(response.data).replace(/]|[[]/g, '')).trade_price;
-    });
-    const usdRates = await axios('https://api.frankfurter.app/latest?from=KRW').then((response): any => {
-      //@ts-ignore
-      return response.data.rates.USD;
-    });
     const totalSup = await getTotalSupply();
-    const USD = KRW * usdRates;
-    if (Staked) {
+    console.log(totalSup)
+    if (Staked && selectedModalData) {
       const total = Number(Staked.replace(/,/g, '')) + inputBalance;
 
-      const unit = duration === '1-year' ? 365 : duration === '6-month' ? 30 : 7;
-
       const returnRate = calculateRoiBasedonCompound({ totalStakedAmount: total, totalSupply: totalSup, duration });
-
-      const stakedRatio = total / totalSup;
-      const compensatePeraDay = stakedRatio * maxCompensate;
-      const dailyNotMintedSeig = maxCompensate - maxCompensate * stakedRatio;
       const expectedSeig = inputBalance * (returnRate / 100);
 
       // const roi = returnRate.toLocaleString(undefined, { maximumFractionDigits: 2 });
       const rewardTON = expectedSeig.toLocaleString(undefined, { maximumFractionDigits: 2 });
-      const rewardUSD = (expectedSeig * USD).toLocaleString(undefined, { maximumFractionDigits: 2 });
-      const rewardKRW = (expectedSeig * KRW).toLocaleString(undefined, { maximumFractionDigits: 0 });
+      const rewardUSD = (expectedSeig * tonPriceUSD).toLocaleString(undefined, { maximumFractionDigits: 2 });
+      const rewardKRW = (expectedSeig * tonPriceKRW).toLocaleString(undefined, { maximumFractionDigits: 0 });
 
       setRewardKRW(rewardKRW);
       setRewardUSD(rewardUSD);
       setRewardTON(rewardTON);
       setROI(
-        returnRate?.toLocaleString(undefined, {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
-        }) ?? '-',
+        selectedModalData.apy ?? '-',
       );
       setType('result');
     }
@@ -98,14 +79,13 @@ function CalculatorModal() {
 
   const recalcButton = useCallback(() => {
     setType('calculate');
-    setDuration('1-year');
-  }, [setDuration]);
+  }, []);
 
   const toStakeButton = useCallback(async () => {
     setSelectedModal('staking');
     setType('calculate');
     setDuration('1-year');
-  }, [setDuration, setSelectedModal]);
+  }, [setSelectedModal]);
 
   const totalStakedAmount = useMemo(() => {
     //@ts-ignore

@@ -9,8 +9,6 @@ import { useRecoilValue } from 'recoil';
 import { txState } from '@/atom/global/transaction';
 import { useWindowDimensions } from "../useWindowDimensions";
 // import { useCandidateList } from './useCandidateList';
-import { GET_CANDIDATE } from "@/graphql/getCandidates";
-import { useQuery } from "@apollo/client";
 
 export function useOperatorList() {
   const [operatorList, setOperatorList] = useState([]);

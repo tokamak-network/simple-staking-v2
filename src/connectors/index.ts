@@ -32,9 +32,43 @@ const newWalletLink = () =>
     appName: "",
   });
 
+export enum ImageFileType {
+  JPEG = ".jpg",
+  PNG = ".png",
+  SVG = ".svg",
+}
+
 export const injected = new InjectedConnector({
-  supportedChainIds: [1, 4, 5, 11155111],
+  supportedChainIds: [1, 11155111, 5],
 });
+
+export enum SupportedChainId {
+  MAINNET = 1,
+  //   ARBITRUM_ONE = 42161,
+  //   ARBITRUM_GOERLI = 421613,
+  //   OPTIMISM = 10,
+  //   OPTIMISM_GOERLI = 420,
+  //   POLYGON = 137,
+  //   POLYGON_MUMBAI = 80001,
+  //   CELO = 42220,
+  //   CELO_ALFAJORES = 44787,
+  //   BNB = 56,
+  TITAN = 55004,
+  SEPOLIA = 11155111,
+  THANOS_SEPOLIA = 111551119090,
+  TITAN_SEPOLIA = 55007,
+}
+
+export interface SupportedChainProperties {
+  chainId: SupportedChainId;
+  chainName: keyof typeof SupportedChainId;
+  rpcAddress: string;
+  networkImage: ImageFileType;
+  isTokamak?: boolean;
+  layer: "L1" | "L2";
+  isTOP?: boolean;
+  isTestnet?: boolean;
+}
 
 export const trazorConnector = new TrezorConnector({
   chainId: 1,

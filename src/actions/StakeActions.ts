@@ -150,6 +150,7 @@ export const unstake = async (
   //   if (confirm('Stake, Unstake, and Restake functionalities are temporarily disabled. Please refer to the posting for more details and check our official Twitter page for updates')) {
   //     }
   if (DepositManager_CONTRACT && account && layer2) {
+    console.log('aaa')
     try {
       const numPendRequest = await DepositManager_CONTRACT.numRequests(layer2, account);
       const tx = await DepositManager_CONTRACT.requestWithdrawal(layer2, convertToRay(amount.toString()));

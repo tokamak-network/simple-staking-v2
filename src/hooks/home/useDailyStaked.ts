@@ -1,31 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { getDailyStakedTotal, getTotalSupply, getTotalStaked } from '@/api';
-import { useQuery } from '@apollo/client';
-import { GET_GRAPH, GET_FACTORY } from '../../graphql/getGraphdata';
+import { getTotalSupply, getTotalStaked } from '@/api';
 import moment from 'moment';
 import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
+import { useGetFactory, useGetGraphData } from '../graphql/useGetGraphData';
 
 export function useDailyStaked() {
   const [dailyStaked, setDailyStaked] = useState<any[]>([]);
   const [totalStaked, setTotalStaked] = useState<number>(0);
 
-  const { data } = useQuery(GET_GRAPH, {
-    pollInterval: 10000,
-  });
-
-  const factory = useQuery(GET_FACTORY, {
-    pollInterval: 10000,
-  });
+  const { factories } = useGetFactory()
+  const { stakingDayDatas } = useGetGraphData()
 
   useEffect(() => {
     async function fetchData() {
-      const dailyStakedTotal = await getDailyStakedTotal();
+      
       // const totalStakedCurrent: number = await getTotalStaked();
       const totalSup = await getTotalSupply();
-      const stakeTotal = factory.data?.factories[0].totalStaked;
+      const stakeTotal = factories;
       const totalStake = parseFloat(stakeTotal) / Math.pow(10, 27);
-
+      
       function pushToArray(date: number, stakeAmount: string) {
         const day = new Date(date * 1000);
         const fetchDay = moment(day).utc().format('YYYYMMDD');
@@ -36,8 +30,7 @@ export function useDailyStaked() {
         };
       }
       let filledData = [];
-      if (data) {
-        const { stakingDayDatas } = data;
+      if (factories && stakingDayDatas) {
         const day = 86400;
         const now = Math.floor(new Date().getTime() / 1000);
         const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day);
@@ -63,8 +56,8 @@ export function useDailyStaked() {
       //@ts-ignore
       const setData = [...new Set(filledData.map(JSON.stringify))].map(JSON.parse)
 
-      const filteredData = dailyStakedTotal.filter((item: any) => item.fetchDateUTC < 20231024);
-      const concatData = setData?.concat(filteredData);
+      
+      const concatData = setData;
       const graphdata = concatData?.map((item: any, index) => {
         const totalStaked = parseFloat(item.totalSupply) / Math.pow(10, 27);
         let my = Number(1000);
@@ -101,6 +94,6 @@ export function useDailyStaked() {
       setTotalStaked(totalStake);
     }
     fetchData();
-  }, [data, factory]);
+  }, [factories, stakingDayDatas]);
   return { dailyStaked, totalStaked };
 }

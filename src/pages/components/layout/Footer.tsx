@@ -5,9 +5,6 @@ import TWITTER_ICON from '@/assets/images/community/TwitterX.svg';
 import GITHUB_ICON from '@/assets/images/community/github.png';
 import TELEGRAM_ICON from '@/assets/images/community/telegram.png';
 import DISCORD_ICON from '@/assets/images/community/discord.png';
-import FACEBOOK_ICON from '@/assets/images/community/facebook.png';
-// import INSTAGRAM_ICON from '@/assets/images/community/instagram.png';
-import YOUTUBE_ICON from '@/assets/images/community/youtube.png';
 import LINKEDIN_ICON from '@/assets/images/community/linkedin.png';
 
 const iconList = [
@@ -24,18 +21,6 @@ const iconList = [
     url: 'https://github.com/tokamak-network/',
   },
   {
-    icon: FACEBOOK_ICON,
-    url: 'https://www.facebook.com/OntherInc/',
-  },
-  // {
-  //   icon: INSTAGRAM_ICON,
-  //   url: '',
-  // },
-  {
-    icon: YOUTUBE_ICON,
-    url: 'https://www.youtube.com/channel/UCF6vtIKF_0QQVRG983czVEQ/',
-  },
-  {
     icon: TWITTER_ICON,
     url: 'https://twitter.com/tokamak_network/',
   },
@@ -45,9 +30,10 @@ const iconList = [
   },
   {
     icon: MEDIUM_ICON,
-    url: 'https://medium.com/onther-tech/',
+    url: 'https://medium.com/tokamak-network/',
   },
 ];
+
 function Footer() {
   const [width] = useWindowDimensions();
   const mobile = width && width < 1040;
@@ -62,13 +48,9 @@ function Footer() {
         rowGap={mobile ? '15px' : 0}
       >
         <Flex h={'17px'} justifyContent={'space-between'}>
-          <Text mr={'5px'}>
-            Copyright © 2024
+          <Text color={'#999999'} fontWeight={'bold'} mr={'25px'}>
+          Copyright © 2024 <span style={{color: '#1c1c1c'}}>Tokamak Network</span> All Rights Reserved.
           </Text>
-          <Text fontWeight={'bold'} color={'black.100'} mr={'5px'}>Tokamak Network</Text>
-          <Flex>
-            All Rights Reserved.
-          </Flex>
         </Flex>
 
         <Flex h={'17px'} justifyContent={mobile ? 'center' : 'flex-end'}>

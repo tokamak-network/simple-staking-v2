@@ -18,22 +18,26 @@ import {
 } from '@chakra-ui/react';
 import { HistoryTableHeader } from '@/common/table/staking/HistoryTableHeader';
 // import { HistoryTableRow } from './table/HistoryTableRow';
-import { Pagination } from '@/common/table/Pagination';
 import { useRecoilState } from 'recoil';
 import { toggleState } from '@/atom/staking/toggle';
 import HistoryTableRow from '@/common/table/staking/HIstoryTableRow';
+import { useWeb3React } from '@web3-react/core';
+import { SimplePagination } from '../SimplePagination';
 
 type HistoryTableProps = {
   columns: Column[];
   data: any[];
   tableType: string;
+  dataModal: any;
 }
 
 export const HistoryTable: FC<HistoryTableProps> = ({
   columns,
   data,
   tableType,
+  dataModal
 }) => {
+  const [currentPageIndex, setCurrentPageIndex] = useState(0)
   const {
     getTableProps,
     getTableBodyProps,
@@ -43,12 +47,20 @@ export const HistoryTable: FC<HistoryTableProps> = ({
     canNextPage,
     pageOptions,
     page,
-    setPageSize,
     previousPage,
     nextPage,
+    gotoPage,
     state: {pageIndex, pageSize},
   } = useTable(
-    {columns, data, initialState: {pageIndex: 0}},
+    {
+      columns, 
+      data, 
+      initialState: { 
+        pageSize: 3,
+        pageIndex: currentPageIndex,
+      }, 
+      autoResetPage: false
+    },
     useSortBy,
     useExpanded,
     usePagination,
@@ -56,17 +68,36 @@ export const HistoryTable: FC<HistoryTableProps> = ({
   const [currentPage, setCurrentPage] = useState(0)
   const [buttonClick, setButtonClick] = useState(Boolean)
   const [toggle, setToggle] = useRecoilState(toggleState)
+  
+  const { account } = useWeb3React()
+  
   const theme = useTheme();
 
   useEffect(() => {
-    setPageSize(5)
-  },[setPageSize])
+    if (account) {
+      setToggle('My')
+    }
+  }, [])
+  // const tableStateUpdateRef = useRef(false);
 
+  // useEffect(() => {
+  //   if (!tableStateUpdateRef.current) {
+  //     gotoPage(0);
+  //   }
+  // }, [data, gotoPage]);
+
+  // // clear our ref when the data is loaded, after we perform any side effects
+  // useEffect(() => {
+  //   tableStateUpdateRef.current = false;
+  // }, [data]);
+  
+  
   useEffect(() => {
     if (pageIndex % 4 === 0 && buttonClick) setCurrentPage(pageIndex)
     if (pageIndex % 4 === 3 && !buttonClick) setCurrentPage(pageIndex - 3)
-  }, [buttonClick, pageIndex])
-
+    setCurrentPageIndex(pageIndex)
+  }, [pageIndex])
+  
   const goPrevPage = () => {
     previousPage();
     setButtonClick(false)
@@ -76,56 +107,65 @@ export const HistoryTable: FC<HistoryTableProps> = ({
     nextPage();
     setButtonClick(true)
   };
-
+  
   return (
     <Flex 
-      w={tableType === 'Staking' ? '625px' : '285px'}
+      w={tableType === 'Transactions' ? '625px' : '285px'}
       flexDir={'column'}
       mr={'30px'}
       fontFamily={theme.fonts.Roboto}
       justifyContent={'start'}
       h={'100%'}
+      mb={'15px'}
+      border={'none'}
     >
       <Flex fontSize={'15px'} fontWeight={'bold'} mb={'5px'} flexDir={'row'} w={'100%'} justifyContent={'space-between'}>
         <Flex 
           w={'100%'}
           flexDir={'row'}
           justifyContent={'space-between'}
-          mt={tableType === 'Commit' ? '0px' : ''}
+          h={'31px'}
+          mt={tableType === 'Update Seigniorage' ? '0px' : ''}
         >
-          <Text>
-            {tableType}
-          </Text>
+          <Flex>
+            <Text mt={'5px'}>
+              {tableType}
+            </Text>
+            <Flex ml={'10px'} mb={'15px'}>
+              <SimplePagination
+                prevPage={goPrevPage}
+                nextPage={goNextPage}
+                canPreviousPage={canPreviousPage}
+                canNextPage={canNextPage}
+              />
+            </Flex>
+
+          </Flex>
           {
-            tableType === 'Commit' ?
-            <Text
-              fontSize={'13px'}
-              fontWeight={'normal'}
-              color={'#808992'}
-            >
-              Commit count: {data.length}
-            </Text> : ''
+            tableType === 'Update Seigniorage' ?
+            '' : 
+            <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
+              {
+                account ?
+                <Flex>
+                  <FormLabel color={'#828d99'} fontSize={'11px'} mt={'2px'}>
+                    {toggle} transactions
+                  </FormLabel>
+                    <Switch 
+                      colorScheme={'green'} 
+                      onChange={() =>
+                        toggle === 'All'
+                          ? setToggle('My')
+                          : setToggle('All')
+                      }
+                    /> 
+                </Flex> : ""
+              }
+            </FormControl>  
           }
         </Flex>
-        {/* {
-          tableType === 'Staking' ? 
-          <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
-            <FormLabel color={'#828d99'} fontSize={'11px'} mt={'7px'}>
-              {toggle} Tx Hash
-            </FormLabel>
-            <Switch 
-              colorScheme={'green'} 
-              onChange={() =>
-                toggle === 'All'
-                  ? setToggle('My')
-                  : setToggle('All')
-              }
-            /> 
-          </FormControl>       
-          : ''
-        } */}
       </Flex>
-      <Box overflowX={'auto'}>
+      
         <chakra.table
           width={'full'}
           {...getTableProps()}
@@ -133,6 +173,7 @@ export const HistoryTable: FC<HistoryTableProps> = ({
           flexDirection="column"
           justifyContent={"start"}
           mr={'30px'}
+          border={'none'}
         >
           <HistoryTableHeader
             tableType={tableType}
@@ -152,39 +193,30 @@ export const HistoryTable: FC<HistoryTableProps> = ({
                   key={i}
                   w="100%"
                   bg={'white.100' }
-                  border={''}
+                  border={'none'}
                   display="flex"
                   alignItems="center"
                   {...row.getRowProps()}
                 >
                   {row.cells ? row.cells.map((cell: any, index: number) => {
+                    
                     return (         
                       <HistoryTableRow 
                         key={index}
-                        index={index}
                         cell={cell}
                         tableType={tableType}
+                        currentPage={currentPage}
+                        selectedModalData={dataModal}
                       />
                     )
                   }) : ''}
                 </chakra.tr>
               ]
             }) : ''}
-            <Pagination 
-              columns={columns}
-              data={data}
-              currentPage={currentPage}
-              prevPage={goPrevPage}
-              nextPage={goNextPage}
-              visibleColumns={visibleColumns}
-              canPreviousPage={canPreviousPage}
-              canNextPage={canNextPage}
-              pageOptions={pageOptions}
-              pageIndex={pageIndex}
-            />
+            
           </chakra.tbody>
         </chakra.table>
-      </Box>
+
     </Flex>
   )
 }
