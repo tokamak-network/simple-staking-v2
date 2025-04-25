@@ -255,24 +255,6 @@ function L2Information({ data }: L2InformationProps) {
               >
                 Claim
               </Button>
-              <Button
-                w={'80px'}
-                h={'25px'}
-                ml={'6px'}
-                borderRadius={'4px'}
-                border={'solid 1px #dfe4ee'}
-                bgColor={'#fff'}
-                color={'#86929d'}
-                fontSize={'12px'}
-                fontWeight={'normal'}
-                _hover={{
-                  borderColor: '#2a72e5',
-                  color: '#2a72e5'
-                }}
-                onClick={()=> { modalButton('claim', 'Stake',  dataModal)}}
-              >
-                Stake
-              </Button>
             </Flex> 
            : ''
           }
