@@ -56,12 +56,12 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
     },
     data.operatorManager ?
     {
-      title: 'Operator manager',
+      title: 'Operator manager(Contract)',
       content: data.operatorManager,
     } : '',
     data.managers ?
     {
-      title: 'Operator Manager address',
+      title: 'Operator Manager(EOA)',
       content: data.managers,
     } : '',
   ]
