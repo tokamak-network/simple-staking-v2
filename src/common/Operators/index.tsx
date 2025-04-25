@@ -60,7 +60,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
   const [tab, setTab] = useState('staking')
   // const [members, setMembers] = useState()
   const [toggle, setToggle] = useRecoilState(toggleState)
-  const { operatorManager, managers } = useIsOperator(candidateContract)
+  const { operatorManager, managers, bridge, rollupConfig } = useIsOperator(candidateContract)
 
   const { memberAddresses } = useChangedMembers()
 
@@ -272,7 +272,9 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
                     data={{
                       ...data,
                       managers,
-                      operatorManager
+                      operatorManager,
+                      bridge,
+                      rollupConfig
                     }}
                   />
                 </Flex>

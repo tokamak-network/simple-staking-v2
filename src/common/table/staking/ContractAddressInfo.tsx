@@ -75,14 +75,16 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
       title: 'Sequencer signiorage manager',
       content: SequencerSeig_ADDRESS,
     },
+    data.rollupConfig ?
     {
       title: 'Rollup config',
-      content: RollupConfig_ADDRESS,
-    },
+      content: data.rollupConfig,
+    } : '',
+    data.bridge ?
     {
       title: 'L1 TON bridge',
-      content: L1Bridge_ADDRESS,
-    },
+      content: data.bridge,
+    } : '',
   ]
   
   return (
