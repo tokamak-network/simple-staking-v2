@@ -54,10 +54,16 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
       title: 'DAO candidate',
       content: data.candidateContract,
     },
+    data.operatorManager ?
     {
-      title: 'DAO candidate manager',
-      content: '0x757DE9c340c556b56f62eFaE859Da5e08BAAE7A2',
-    },
+      title: 'Operator manager',
+      content: data.operatorManager,
+    } : '',
+    data.managers ?
+    {
+      title: 'Operator Manager address',
+      content: data.managers,
+    } : '',
   ]
 
   const l2Info = [
