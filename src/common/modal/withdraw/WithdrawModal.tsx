@@ -151,7 +151,7 @@ function WithdrawModal () {
                       <WithdrawType 
                         name={'L2'}
                         content={'Instead of withdrawing to Ethereum, staked TON can be withdrawn to this layer as TON. By withdrawing to this layer, TON can be used right away without needing to wait for 14 days.'}
-                        src={logo ? logo : NoLOGO.src}
+                        src={logo ? logo : 'L2'}
                         onClick={() => setType('titan')}
                       /> : ''
                     }

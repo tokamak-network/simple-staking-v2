@@ -135,7 +135,7 @@ export const ToTitan = (args: ToTitanProps) => {
   return (
     <Flex flexDir={'column'}>
       <WithdrawL2Image 
-        l2Image={logo ? logo : NoLOGO.src}
+        l2Image={logo ? logo : ''}
         l2Name={selectedModalData?.name}
       />
       <UnstakeBalanceInput 

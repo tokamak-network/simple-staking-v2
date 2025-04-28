@@ -30,6 +30,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
     RollupConfig_ADDRESS,
     L1Bridge_ADDRESS
   } = CONTRACT_ADDRESS
+  
   useEffect(() => {
     setIsLabelOpen(false)
   }, [tab])
