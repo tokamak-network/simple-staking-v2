@@ -11,7 +11,7 @@ type WithdrawL2ImageProps = {
 
 export const WithdrawL2Image = (args: WithdrawL2ImageProps) => {
   const { l2Image, l2Name } = args
-  console.log(l2Image)
+
   return (
     <Flex
       h={'112px'}

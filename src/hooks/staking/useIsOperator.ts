@@ -33,6 +33,7 @@ export function useIsOperator (layer2: string | undefined) {
           if (OperatorManager_CONTRACT && WTON_CONTRACT && SeigManager_CONTRACT) {
             const manager = await OperatorManager_CONTRACT.manager();
             const rollupConfig = await OperatorManager_CONTRACT.rollupConfig();
+            console.log(rollupConfig)
             const RollupConfig = await getContract(rollupConfig, SystemConfig, library, account)
             const checkIsOperator = manager.toLowerCase() === account.toLowerCase();
             const bridgeType = await OperatorManager_CONTRACT.checkL1Bridge();

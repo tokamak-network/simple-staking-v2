@@ -49,26 +49,26 @@ export function WarningMessage (args: WarningMessageProps) {
             </Link>
             on this layer2 before stakers can receive the staking reward. Users are unable to stake until this minimum collateral requirement is fulfilled.
           </Text>
-          : title === 'Stake' && minimumAmount ?
-          <Text
-            fontSize={'12px'}
-            color={'#3e495c'}
-            flexDir={'row'}
-            mt={'15px'}
+          // : title === 'Stake' && minimumAmount ?
+          // <Text
+          //   fontSize={'12px'}
+          //   color={'#3e495c'}
+          //   flexDir={'row'}
+          //   mt={'15px'}
             
-          >
-              Recommended minimum staking amount is 
-              <span
-                style={{
-                  marginLeft: '3px',
-                  color: '#2a72e5',
-                  textDecoration: 'none'
-                }}
-              >
-                5 TON
-              </span>
+          // >
+          //     Recommended minimum staking amount is 
+          //     <span
+          //       style={{
+          //         marginLeft: '3px',
+          //         color: '#2a72e5',
+          //         textDecoration: 'none'
+          //       }}
+          //     >
+          //       5 TON
+          //     </span>
             
-          </Text>
+          // </Text>
           : title === 'Restake' ? 
           <Text
             fontSize={'12px'}
