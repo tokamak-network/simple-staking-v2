@@ -49,7 +49,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
       content: DepositManager_ADDRESS,
     },
   ]
-
+  
   const candidate = [
     {
       title: 'DAO candidate',
@@ -59,12 +59,12 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
     {
       title: 'Operator manager (Contract)',
       content: data.operatorManager,
-    } : '',
+    } : undefined,
     data.managers ?
     {
       title: 'Operator Manager (EOA)',
       content: data.managers,
-    } : '',
+    } : undefined,
   ]
 
   const l2Info = [
@@ -87,7 +87,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
       content: data.bridge,
     } : '',
   ]
-  
+
   return (
     <Tooltip
       display={label?.length === 0 ? "none" : "flex"}
@@ -172,8 +172,8 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
                 candidate.map((info: any, index: number) => {
                   return (
                     <L1ContractInfo 
-                      title={info.title}
-                      content={info.content}
+                      title={info?.title}
+                      content={info?.content}
                       key={index}
                     />
                   )
