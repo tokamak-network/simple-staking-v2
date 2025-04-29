@@ -38,6 +38,7 @@ import { useCalculateAPR } from "@/hooks/staking/useCalculateAPR";
 import CONTRACT_ADDRESS from "@/services/addresses/contract";
 import L2Info from '../../../../l2_info.json'
 import { editL2Info_bridge_input, editL2Info_explorer_input, editL2Info_logo_input } from "@/atom/staking/editL2Info";
+import { useIsOperator } from "@/hooks/staking/useIsOperator";
 
 function OperatorCard(props: { operator: any }) {
   const { operator } = props;
@@ -69,6 +70,15 @@ function OperatorCard(props: { operator: any }) {
     withdrawable, 
     notWithdrawable
   } = useWithdrawable(operator?.candidateContract)
+
+  const { 
+    isOperator, 
+    bridgeTypes, 
+    operatorManager,
+    managers,
+    rollupConfig,
+    bridge
+  } = useIsOperator(operator?.candidateContract)
 
   const lockedInBridge = useL2CandidateInfo(operator?.candidateAddOn)
 
@@ -232,17 +242,17 @@ function OperatorCard(props: { operator: any }) {
       tooltip: "", 
       type: 'address'
     },
-    candidate?.operatorManager ?
+    operatorManager ?
     {
       title: 'Operator manager (Contract)',
-      value: candidate?.operatorManager,
+      value: operatorManager,
       tooltip: "", 
       type: 'address'
     } : '',
-    candidate?.managers ?
+    managers ?
     {
       title: 'Operator Manager (EOA)',
-      value: candidate?.managers,
+      value: managers,
       tooltip: "", 
       type: 'address'
     } : '',
@@ -262,22 +272,22 @@ function OperatorCard(props: { operator: any }) {
       tooltip: "", 
       type: 'address'
     },
-    candidate?.rollupConfig ?
+    rollupConfig ?
     {
       title: 'Rollup config',
-      value: candidate?.rollupConfig,
+      value: rollupConfig,
       tooltip: "", 
       type: 'address'
     } : '',
-    candidate?.bridge ?
+    bridge ?
     {
       title: 'L1 TON bridge',
-      value: candidate?.bridge,
+      value: bridge,
       tooltip: "", 
       type: 'address'
     } : '',
   ];
-
+  
   
   return (
     <Flex
