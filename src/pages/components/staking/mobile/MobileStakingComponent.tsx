@@ -183,6 +183,8 @@ function  MobileStakingComponent(props: {
           title === 'Withdraw' ?
           <MobileWithdraw 
             operatorList={operatorList}
+            setSelectedOp={setSelectedOp}
+            selectedOp={selectedOp}
           /> :
           <Flex
             w="100%"

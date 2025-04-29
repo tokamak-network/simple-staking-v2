@@ -13,7 +13,7 @@ import { useWithdrawalAndDeposited } from '@/hooks/staking/useWithdrawable';
 import WithdrawL2Table from "../../../../common/modal/withdraw/WithdrawL2Table"
 import { UnstakeBalanceInput } from '../../../../common/modal/withdraw/UnstakeBalanceInput';
 import { WithdrawL2Image } from "../../../../common/modal/withdraw/WithdrawL2Image"
-
+import L2Info from '../../../../../l2_info.json'
 
 type MobileToL2Props = {
   selectedOp: any
@@ -34,6 +34,18 @@ export function MobileToL2 (args: MobileToL2Props) {
   const [withdrawTx, setWithdrawTx] = useState<any[]>([]);
 
   const { request } = useWithdrawalAndDeposited();
+
+  const [logo, setLogoValue] = useState<string>('')
+
+  useEffect(() => {
+    if (selectedOp) {
+      const infos = L2Info.find((info: any) => info.candidate === selectedOp.candidate)
+    
+      if (infos) {
+        setLogoValue(infos.logo)
+      }
+    }
+  }, [L2Info, selectedOp])
 
   const columns = useMemo(
     () => [
@@ -106,14 +118,14 @@ export function MobileToL2 (args: MobileToL2Props) {
   return (
     <Flex flexDir={'column'}>
       <WithdrawL2Image 
-        l2Image={TITAN_SYMBOL}
+        l2Image={logo ? logo : ''}
         l2Name={selectedOp?.name}
       />
       <UnstakeBalanceInput 
         stakedAmount={myStaked ? myStaked : '0.00'}
       />
       <StakingCheckbox 
-        content={'Restaking unstaked TON earns you TON from staking. However, to withdraw, they need to be unstaked and wait for 93,046 blocks (~14 days).'}
+        content={`TON withdrawals to L2 typically take 1–5 minutes or longer. If TON isn't credited on L2, contact the L2 operator directly.`}
         handleCheckboxChange={handleCheckboxChange}
         isChecked={isChecked}
       />

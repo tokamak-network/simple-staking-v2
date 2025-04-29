@@ -1,22 +1,25 @@
 import { Flex, useDisclosure } from "@chakra-ui/react"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { WithdrawType } from "../../../../common/modal/withdraw/WithdrawType"
-import TITAN from '@/assets/images/titan_symbol.svg'
+// import TITAN from '@/assets/images/titan_symbol.svg'
 import ETHEREUM from '@/assets/images/ethereum_symbol.svg'
 import { WithdrawDrawer } from "./WithdrawDrawer"
 import { SelectOperator } from "./components/SelectOperators"
 import { convertNumber } from "@/components/number"
 import { UnstakableBalance } from "@/common/balance/UnstakableBalance"
+import L2Info from '../../../../../l2_info.json'
 
 type MobileWithdrawProps = {
   operatorList: any
+  setSelectedOp: any
+  selectedOp: any
 }
 
 export function MobileWithdraw (args: MobileWithdrawProps) {
-  const { operatorList } = args
+  const { operatorList, setSelectedOp, selectedOp } = args
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [type, setType] = useState('')
-  const [selectedOp, setSelectedOp] = useState<any>(undefined);
+  // const [selectedOp, setSelectedOp] = useState<any>(undefined);
 
   const openDrawer = (type: string) => {
     onOpen()
@@ -29,6 +32,18 @@ export function MobileWithdraw (args: MobileWithdrawProps) {
       type: 'ray',
       localeString: true
     }) : '0.00'
+
+    const [logo, setLogoValue] = useState<string>('')
+
+    useEffect(() => {
+      if (selectedOp) {
+        const infos = L2Info.find((info: any) => info.candidate === selectedOp.candidate)
+      
+        if (infos) {
+          setLogoValue(infos.logo)
+        }
+      }
+    }, [L2Info, selectedOp])
     
   return (
     <Flex>
@@ -60,13 +75,13 @@ export function MobileWithdraw (args: MobileWithdrawProps) {
             <WithdrawType 
               name={'Withdraw to Ethereum'}
               content={'Staked TON can be unstaked and can be withdrawn after 93,046 blocks from unstaking (~14 days).'}
-              src={ETHEREUM}
+              src={ETHEREUM.src}
               onClick={() => openDrawer('Ethereum')}
             /> 
             <WithdrawType 
-              name={'Withdraw to Titan'}
+              name={'Withdraw to L2'}
               content={'Instead of withdrawing to Ethereum, staked TON can be withdrawn to this layer as TON. By withdrawing to this layer, TON can be used right away without needing to wait for 14 days.'}
-              src={TITAN}
+              src={logo ? logo : 'L2'}
               onClick={() => openDrawer('Titan')}
             />
           </Flex>
@@ -74,7 +89,7 @@ export function MobileWithdraw (args: MobileWithdrawProps) {
           <WithdrawType 
             name={'Withdraw to Ethereum'}
             content={'Staked TON can be unstaked and can be withdrawn after 93,046 blocks from unstaking (~14 days).'}
-            src={ETHEREUM}
+            src={ETHEREUM.src}
             onClick={() => openDrawer('Ethereum')}
           />  : ''
           
