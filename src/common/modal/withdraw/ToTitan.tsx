@@ -135,8 +135,6 @@ export const ToTitan = (args: ToTitanProps) => {
       setModalOpen("error")
     }
   }, [DepositManager_CONTRACT, input, selectedModalData, setTx, setTxPending])
-
-  console.log(!isChecked && Number(rollupConfigInfo) == 2, !isChecked , Number(rollupConfigInfo) == 2)
   
   return (
     <Flex flexDir={'column'}>
