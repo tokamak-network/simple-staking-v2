@@ -36,6 +36,10 @@ export function L2InfoContent (args: L2ContentProps) {
       dots: content ? content.length > 28 ? '...' : '' : ''
     }) 
     : content
+  
+    const href = (content.startsWith('http://') || content.startsWith('https://'))
+    ? content
+    : `https://${content}`;
     
   return (
     <Flex
@@ -90,7 +94,7 @@ export function L2InfoContent (args: L2ContentProps) {
             justifyContent={'center'} 
             alignItems={'center'}
             ml={'6px'}
-            href={content.substring(0, 8) !== 'https://' ? `https://${content}` : content}
+            href={href}
             isExternal
           >
             <Image src={ETHERSCAN_LINK} alt={'alt'} />
