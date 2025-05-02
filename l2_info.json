@@ -2,8 +2,9 @@
   {
     "name": "Poseidon",
     "candidate": "0xF078AE62eA4740E19ddf6c0c5e17Ecdb820BbEe1",
-    "bridge": "https://bridge.tokamak.network",
-    "explorer": "https://explorer.thanos.tokamak.network",
+    "bridge": "http://k8s-bridge-1abbe77a89-100985143.ap-northeast-2.elb.amazonaws.com",
+    "explorer": "http://k8s-blockscout-17523318b3-800786680.ap-northeast-2.elb.amazonaws.com",
+    "chainId": 111551153248,
     "logo": "https://file.notion.so/f/f/64903c51-687e-448d-8297-662b977d8aa9/d00d66c8-ac42-498d-8993-8315657bf258/TITAN_circle.svg?table=block&id=bb89c126-79c4-487d-a942-4150f3f1a24d&spaceId=64903c51-687e-448d-8297-662b977d8aa9&expirationTimestamp=1736755200000&signature=AX1Q-PnmQqkhyyRNP4obN7EdgRB9X38Dq6N35DnLu_k&downloadName=TITAN_circle.svg"
   },
   {
