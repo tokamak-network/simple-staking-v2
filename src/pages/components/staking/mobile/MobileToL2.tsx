@@ -65,7 +65,6 @@ export function MobileToL2 (args: MobileToL2Props) {
     async function fetch() {
       if (selectedOp) {
         const queryData = await request(selectedOp.candidateContract)
-        console.log(queryData)
         setWithdrawTx(queryData)
       }
     }

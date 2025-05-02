@@ -20,9 +20,13 @@ export function useIsOperator (layer2: string | undefined) {
   const [managers, setManagers] = useState<string>('')
   const [rollupConfig, setRollupConfig] = useState<string>('')
   const [claimable, setClaimable] = useState<string>('')
-  const [stakable, setStakable] = useState<string>('')
-  const {WTON_CONTRACT, SeigManager_CONTRACT} = useCallContract()
+  const [rollupConfigInfo, setRollupConfigInfo] = useState<string>('')
   const [txPending, setTxPending] = useRecoilState(txState);
+  const {
+    WTON_CONTRACT, 
+    SeigManager_CONTRACT,
+    Layer2Manager_CONTRACT
+  } = useCallContract()
   
   useEffect(() => {
     async function fetch() {
@@ -30,10 +34,16 @@ export function useIsOperator (layer2: string | undefined) {
         try {
           const operatorAddress = await CandidateAddOn_CONTRACT.operator();
           const OperatorManager_CONTRACT = await getContract(operatorAddress, OperatorManager, library, account);
-          if (OperatorManager_CONTRACT && WTON_CONTRACT && SeigManager_CONTRACT) {
+
+          if (OperatorManager_CONTRACT && WTON_CONTRACT && SeigManager_CONTRACT && Layer2Manager_CONTRACT) {
             const manager = await OperatorManager_CONTRACT.manager();
             const rollupConfig = await OperatorManager_CONTRACT.rollupConfig();
-            // console.log(rollupConfig)
+
+            const rollupConfigInfo = await Layer2Manager_CONTRACT.rollupConfigInfo(rollupConfig);
+            setRollupConfigInfo(rollupConfigInfo.status);
+            if (rollupConfigInfo.status !== 1) {
+              return;
+            }
             const RollupConfig = await getContract(rollupConfig, SystemConfig, library, account)
             const checkIsOperator = manager.toLowerCase() === account.toLowerCase();
             const bridgeType = await OperatorManager_CONTRACT.checkL1Bridge();
@@ -43,7 +53,7 @@ export function useIsOperator (layer2: string | undefined) {
             const wtonBalanceOfOM = await WTON_CONTRACT.balanceOf(operatorAddress);
             const estimatedDistribution = await SeigManager_CONTRACT.estimatedDistribute(blockNumber + 1, layer2, true);
             const addedWton = wtonBalanceOfOM.add(estimatedDistribution.layer2Seigs);
-
+            
             setBridge(bridge)
             setRollupConfig(rollupConfig);
             setClaimable(addedWton.toString());
@@ -58,7 +68,7 @@ export function useIsOperator (layer2: string | undefined) {
       }
     }
     fetch();
-  }, [CandidateAddOn_CONTRACT, account, library, layer2, txPending, WTON_CONTRACT, SeigManager_CONTRACT]);
+  }, [CandidateAddOn_CONTRACT, account, library, layer2, txPending, WTON_CONTRACT, SeigManager_CONTRACT, Layer2Manager_CONTRACT]);
   
-  return { isOperator, bridgeTypes, operatorManager, managers, claimable, rollupConfig, bridge }
+  return { isOperator, bridgeTypes, operatorManager, managers, claimable, rollupConfig, bridge, rollupConfigInfo }
 }

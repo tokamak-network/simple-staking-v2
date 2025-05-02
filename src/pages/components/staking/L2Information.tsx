@@ -50,7 +50,8 @@ function L2Information({ data }: L2InformationProps) {
     bridgeTypes, 
     operatorManager,
     managers,
-    claimable
+    claimable,
+    rollupConfigInfo
   } = useIsOperator(data?.candidateContract)
   // const isOperator = true
 
@@ -99,6 +100,8 @@ function L2Information({ data }: L2InformationProps) {
   const stakableAmount = floatParser(claimableAmount) + floatParser(expectedSeigs) 
   const stakable = stakableAmount.toLocaleString(undefined,{maximumFractionDigits: 2})
 
+  // console.log(data?.name, rollupConfigInfo, typeof rollupConfigInfo)
+  // useEffect(() => {}, [rollupConfigInfo]);
 
   useEffect(() => {
     const claim = claimable
@@ -190,6 +193,13 @@ function L2Information({ data }: L2InformationProps) {
               label={'Sequencer seigniorage represents the portion of newly issued TON that the L2 operator can claim as a reward. This reward increases with the growth of L2 deposits and helps incentivize both the expansion and security of the network.'}
             />
           </Flex>
+          {
+            Number(rollupConfigInfo) === 2 ?
+            <Flex color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'} alignItems={'center'} ml={'10px'}>
+              <span style={{ color: '#ff2d78' }}>Warning</span>: This layer has stopped the l2 sequencer seigniorage.  
+            </Flex>
+            : ''
+          }
         </Flex>
         <Flex flexDir={'row'}>
           <L2Content 

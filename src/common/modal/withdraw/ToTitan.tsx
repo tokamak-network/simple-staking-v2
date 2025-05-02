@@ -1,4 +1,4 @@
-import { Button, Checkbox, Flex, useTheme } from "@chakra-ui/react"
+import { Button, Checkbox, Flex, useTheme, Text } from "@chakra-ui/react"
 import TITAN_SYMBOL from '@/assets/images/symbol.svg'
 import { UnstakeBalanceInput } from "./UnstakeBalanceInput"
 import { useCallback, useEffect, useMemo, useState } from "react"
@@ -43,6 +43,10 @@ export const ToTitan = (args: ToTitanProps) => {
   const [tx, setTx] = useState();
   const { DepositManager_CONTRACT } = useCallContract();
   const { request } = useWithdrawalAndDeposited();
+
+  const { 
+    rollupConfigInfo
+  } = useIsOperator(selectedModalData?.layer2)
 
   const columns = useMemo(
     () => [
@@ -131,6 +135,8 @@ export const ToTitan = (args: ToTitanProps) => {
       setModalOpen("error")
     }
   }, [DepositManager_CONTRACT, input, selectedModalData, setTx, setTxPending])
+
+  console.log(!isChecked && Number(rollupConfigInfo) == 2, !isChecked , Number(rollupConfigInfo) == 2)
   
   return (
     <Flex flexDir={'column'}>
@@ -142,25 +148,36 @@ export const ToTitan = (args: ToTitanProps) => {
         stakedAmount={stakedAmount}
       />
       <Flex w={'100%'} h={'1px'} my={'25px'} bgColor={'#f4f6f8'} />
-      <StakingCheckbox 
-        content={`TON withdrawals to L2 typically take 1–5 minutes or longer. If TON isn't credited on L2, contact the L2 operator directly.`}
-        handleCheckboxChange={handleCheckboxChange}
-        isChecked={isChecked}
-      />
-      <Flex justifyContent={'center'}>
-        <Button
-          {...btnStyle.btnAble()}
-          w={'130px'}
-          h={'38px'}
-          mt={'25px'}
-          fontSize={'14px'}
-          fontWeight={500}
-          isDisabled={!isChecked}
-          onClick={() => withdrawL2()}
-        >
-          Withdraw
-        </Button>
-      </Flex>
+      
+      {
+        Number(rollupConfigInfo) === 2 ?
+        <Text color={'#3e495c'} fontSize={'12px'} fontWeight={500} textAlign={'center'}  ml={'10px'}>
+          <span style={{ color: '#ff2d78' }}>Warning</span>: You cannot withdraw to this layer.
+        </Text>
+        : 
+        <Flex flexDir={'column'} alignItems={'center'}>
+          <StakingCheckbox 
+            content={`TON withdrawals to L2 typically take 1–5 minutes or longer. If TON isn't credited on L2, contact the L2 operator directly.`}
+            handleCheckboxChange={handleCheckboxChange}
+            isChecked={isChecked}
+          />
+          <Flex justifyContent={'center'}>
+            <Button
+              {...btnStyle.btnAble()}
+              w={'130px'}
+              h={'38px'}
+              mt={'25px'}
+              fontSize={'14px'}
+              fontWeight={500}
+              isDisabled={!isChecked || Number(rollupConfigInfo) == 2}
+              onClick={() => withdrawL2()}
+            >
+              Withdraw
+            </Button>
+          </Flex>
+
+        </Flex>
+      }
       {
         withdrawTx && withdrawTx.length > 0 ?
         <WithdrawL2Table 

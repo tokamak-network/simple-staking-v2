@@ -56,6 +56,8 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 
   const compounds = useCalculateAPR(data)
 
+  // console.log(convertNumber({amount: data.commissionRate.toString(), localeString: false}), data.commissionRate)
+
   useEffect(() => {
     if (data) {
       setCandidateContracts(data.candidateContract);
