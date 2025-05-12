@@ -55,12 +55,12 @@ function CalculatorModal() {
   const calButton = useCallback(async () => {
     const inputBalance = Number(input.replace(/,/g, ''));
     const totalSup = await getTotalSupply();
-    console.log(totalSup)
+    
     if (Staked && selectedModalData) {
       const total = Number(Staked.replace(/,/g, '')) + inputBalance;
 
       const returnRate = calculateRoiBasedonCompound({ totalStakedAmount: total, totalSupply: totalSup, duration });
-      const expectedSeig = inputBalance * (returnRate / 100);
+      const expectedSeig = inputBalance * (Number(selectedModalData?.apy) / 100);
 
       // const roi = returnRate.toLocaleString(undefined, { maximumFractionDigits: 2 });
       const rewardTON = expectedSeig.toLocaleString(undefined, { maximumFractionDigits: 2 });
