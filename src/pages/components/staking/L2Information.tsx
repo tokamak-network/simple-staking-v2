@@ -149,7 +149,6 @@ function L2Information({ data }: L2InformationProps) {
     }
   }, [chainIdValue]);
 
-  // 2) addNetwork function
   const handleAddNetwork = useCallback(async () => {
     if (!(window as any).ethereum || !chainIdHex) {
       console.error('No Ethereum provider found or invalid chainId');

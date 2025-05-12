@@ -16,12 +16,15 @@ import { useRecoilState } from 'recoil';
 import trimAddress from '@/components/trimAddress';
 import { txHashStatus, txState } from '@/atom/global/transaction';
 import { getContract } from '@/components/getContract';
-import CandidateAddOn from 'services/abi/CandidateAddOn.json'
+import OperatorManager from 'services/abi/OperatorManager.json'
 import { getModeData, transactionModalOpenStatus, transactionModalStatus } from '@/atom/global/modal';
+import { useIsOperator } from '@/hooks/staking/useIsOperator';
+import CONTRACT_ADDRESS from '@/services/addresses/contract';
 
 function ClaimModal () {
   const theme = useTheme();
   const { btnStyle } = theme;
+  const { WTON_ADDRESS } = CONTRACT_ADDRESS
 
   const { selectedModalData, selectedModal, closeModal, isModalLoading } = useClaimModal();
   const { account, library } = useWeb3React();
@@ -49,6 +52,8 @@ function ClaimModal () {
     }
   }, [selectedModalData])
 
+  const { operatorManager, claimable } = useIsOperator(selectedModalData?.contractAddress)
+
   const updateSeig = useCallback(async (type: number) => {
     if (account && library && selectedModalData) {
       try {
@@ -56,8 +61,8 @@ function ClaimModal () {
         setIsOpen(true)
         setModalOpen("waiting")
 
-        const CandidateAddOn_CONTRACT = getContract(selectedModalData.contractAddress, CandidateAddOn, library, account)
-        const tx = await CandidateAddOn_CONTRACT.updateSeigniorage(type)
+        const OperatorManager_CONTRACT = getContract(selectedModalData.contractAddress, OperatorManager, library, account)
+        const tx = await OperatorManager_CONTRACT.claimERC20(WTON_ADDRESS, claimable)
 
         setTx(tx);
         setTxPending(true);
