@@ -12,8 +12,10 @@ import { modalData, modalState } from '@/atom/global/modal';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { 
   editL2Info_bridge_input, 
+  editL2Info_chainId_input, 
   editL2Info_explorer_input, 
-  editL2Info_logo_input, 
+  editL2Info_logo_input,
+  editL2Info_rpc_input, 
 } from '@/atom/staking/editL2Info';
 import { useWeb3React } from '@web3-react/core';
 import { txState } from '@/atom/global/transaction';
@@ -43,7 +45,9 @@ function L2Information({ data }: L2InformationProps) {
 
   const [bridgeValue, setBridgeValue] = useRecoilState(editL2Info_bridge_input);
   const [explorerValue, setExplorerValue] = useRecoilState(editL2Info_explorer_input);
+  const [chainIdValue, setChainIdValue] = useRecoilState(editL2Info_chainId_input);
   const [logoValue, setLogoValue] = useRecoilState(editL2Info_logo_input);
+  const [rpcValue, setRpcValue] = useRecoilState(editL2Info_rpc_input);
   
   const { 
     isOperator, 
@@ -64,6 +68,8 @@ function L2Information({ data }: L2InformationProps) {
       setBridgeValue(infos.bridge)
       setExplorerValue(infos.explorer)
       setLogoValue(infos.logo)
+      setChainIdValue(infos.chainId.toString())
+      setRpcValue(infos.rpc)
     }
   }, [L2Info])
 
@@ -134,6 +140,40 @@ function L2Information({ data }: L2InformationProps) {
       name: name,
     });
   }, [dataModal]);
+
+  const chainIdHex = useMemo(() => {
+    try {
+      return '0x' + Number(chainIdValue).toString(16);
+    } catch {
+      return undefined;
+    }
+  }, [chainIdValue]);
+
+  // 2) addNetwork function
+  const handleAddNetwork = useCallback(async () => {
+    if (!(window as any).ethereum || !chainIdHex) {
+      console.error('No Ethereum provider found or invalid chainId');
+      return;
+    }
+    try {
+      await (window as any).ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainId: chainIdHex,
+          chainName: layerName || `L2 ${chainIdValue}`,
+          nativeCurrency: {
+            name: 'TON',
+            symbol: 'TON',
+            decimals: 18
+          },
+          rpcUrls: [rpcValue],
+          blockExplorerUrls: [explorerValue]
+        }]
+      });
+    } catch (error) {
+      console.error('Failed to add network:', error);
+    }
+  }, [chainIdHex, rpcValue, explorerValue, layerName, chainIdValue]);
   
   return (
     <Flex
@@ -176,11 +216,22 @@ function L2Information({ data }: L2InformationProps) {
           }
           <L2InfoContent title={'Bridge'} content={bridgeValue} type={'bridge'} editStat={editStat} />
           <L2InfoContent title={'Block explorer'} content={explorerValue} type={'explorer'} editStat={editStat} />
-          {
+          <L2InfoContent title={'Chain Id'} content={chainIdValue} type={'string'} editStat={editStat} />
+          <Flex
+            fontSize={'11px'}
+            color={'#2a72e5'}
+            cursor={'pointer'}
+            minW={'80px'}
+            mt={'30px'}
+            onClick={() => handleAddNetwork()}
+          >
+            Add network
+          </Flex>
+          {/* {
             isOperator ?
             <L2InfoContent title={'L2 Logo'} content={logoValue} type={'logo'} editStat={editStat} /> 
             : ''
-          }
+          } */}
         </Flex>
       </Flex>
       <Flex flexDir={'column'} my={'54px'}>

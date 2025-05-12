@@ -25,6 +25,7 @@ export function L2InfoContent (args: L2ContentProps) {
     editStat
   } = args
 
+  const safeContent = content || '';
   const linkType = type === 'bridge' || type === 'explorer' || type === 'logo' ? true : false
   const stringType = type === 'string' ? true : false
 
@@ -37,9 +38,11 @@ export function L2InfoContent (args: L2ContentProps) {
     }) 
     : content
   
-    const href = (content.startsWith('http://') || content.startsWith('https://'))
-    ? content
-    : `https://${content}`;
+    const href = safeContent.startsWith('http://') || safeContent.startsWith('https://')
+      ? safeContent
+      : safeContent
+        ? `https://${safeContent}`
+        : '';
     
   return (
     <Flex
