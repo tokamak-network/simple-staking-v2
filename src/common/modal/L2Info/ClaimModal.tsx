@@ -149,7 +149,7 @@ function ClaimModal () {
                     color={'#3e495c'}
                     fontSize={'13px'}
                   >
-                    {selectedModalData.claimable} TON 
+                    {selectedModalData.claimable} WTON 
                     {
                       selectedModalData.name === 'Claim' 
                       ? '' 
