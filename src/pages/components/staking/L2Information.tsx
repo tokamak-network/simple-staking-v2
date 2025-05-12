@@ -155,6 +155,16 @@ function L2Information({ data }: L2InformationProps) {
       console.error('No Ethereum provider found or invalid chainId');
       return;
     }
+    if (
+      !(rpcValue.startsWith('https://') ||
+        rpcValue.startsWith('http://localhost') ||
+        rpcValue.startsWith('http://127.0.0.1'))
+    ) {
+      window.alert(
+        'Your RPC URL must be served over HTTPS (or be a localhost URL for development).'
+      );
+      return;
+    }
     try {
       await (window as any).ethereum.request({
         method: 'wallet_addEthereumChain',
