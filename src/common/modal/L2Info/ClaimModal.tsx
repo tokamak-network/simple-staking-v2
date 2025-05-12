@@ -60,8 +60,7 @@ function ClaimModal () {
         setSelectedMode(selectedModalData.name);
         setIsOpen(true)
         setModalOpen("waiting")
-
-        const OperatorManager_CONTRACT = getContract(selectedModalData.contractAddress, OperatorManager, library, account)
+        const OperatorManager_CONTRACT = getContract(operatorManager, OperatorManager, library, account)
         const tx = await OperatorManager_CONTRACT.claimERC20(WTON_ADDRESS, claimable)
 
         setTx(tx);
@@ -86,7 +85,7 @@ function ClaimModal () {
         setTx(undefined);
       }
     }
-  }, [account, library, selectedModalData])
+  }, [account, library, selectedModalData, operatorManager, claimable])
   
   return (
     <Modal

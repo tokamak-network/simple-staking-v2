@@ -56,7 +56,7 @@ export function useIsOperator (layer2: string | undefined) {
             
             setBridge(bridge)
             setRollupConfig(rollupConfig);
-            setClaimable(addedWton.toString());
+            setClaimable(wtonBalanceOfOM.toString());
             setOperatorManger(operatorAddress);
             setIsOperator(checkIsOperator);
             setBridgeTypes(bridgeType._type);
