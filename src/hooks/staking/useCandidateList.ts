@@ -13,6 +13,7 @@ import Coinage from "services/abi/AutoRefactorCoinage.json";
 import { useRecoilState } from "recoil";
 import { txState } from "@/atom/global/transaction";
 import { useGetCandidates } from "../graphql/useGetCandidates";
+import pLimit from "p-limit";
 
 export function useCandidateList() {
   const [candidateList, setCandidateList] = useState<any[]>([]);
@@ -32,12 +33,15 @@ export function useCandidateList() {
     async function fetchCandidates() {
       if (!candidates) return;
       // console.log(candidates)
-      const candidatesList = await Promise.all(
-        candidates.map((candidateObj: any, index: number) =>
-          fetchCandidateDetails(candidateObj, index)
-        )
+      const limit = pLimit(5);
+
+      const tasks = candidates.map((c: any, i: number) =>
+        limit(() => fetchCandidateDetails(c, i))
       );
-      setCandidateList(candidatesList);
+
+      const results = await Promise.all(tasks);
+
+      setCandidateList(results)
     }
 
     async function fetchCandidateDetails(candidateObj: any, index: number) {

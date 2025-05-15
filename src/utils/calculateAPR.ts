@@ -23,6 +23,7 @@ export async function calculateAPR (roi: any, data: any) {
     //@ts-ignore
     const convertedAPR = apr === 0 ? 0.35 : Number(apr) / 100
     const numOfCompounds = compounds.length === 0 ? 1 : compounds.length
+
     const expectedAPR = (1 + convertedAPR * (1 - Number(commission)) / numOfCompounds) ** numOfCompounds - 1
     
     return (expectedAPR * 100).toLocaleString(undefined, {maximumFractionDigits: 2, minimumFractionDigits: 2});
