@@ -298,7 +298,7 @@ export const Header = () => {
                   User Guide
                 </Text>
               </MenuItem>
-              <MenuItem
+              {/* <MenuItem
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
                 target="_blank"
@@ -315,7 +315,7 @@ export const Header = () => {
                 <Text>
                   Get Help
                 </Text>
-              </MenuItem>
+              </MenuItem> */}
             </MenuList>
           </Menu>
         </Flex>

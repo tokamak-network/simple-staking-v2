@@ -7,7 +7,8 @@ import {
   PlacementWithLogical,
   Text,
   Flex,
-  Link
+  Link,
+  Box
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTONPrice } from '../../hooks/staking/useTONPrice';
@@ -54,7 +55,9 @@ export const BalanceTooltip = (args: BalanceTooltipProps) => {
         placement={placement ?? "top"}
         pointerEvents={"all"}
         label={
-          `${labelDiv}  |  $${usdValue}`
+          <Flex>
+            `${labelDiv}  |  $${usdValue}`
+          </Flex>
         }
         borderRadius={"3px"}
         color={'#fff'}
@@ -68,13 +71,15 @@ export const BalanceTooltip = (args: BalanceTooltipProps) => {
         isOpen={isLabelOpen}
         border={'0px'}
       >
-        <Flex
-          onMouseLeave={() => setIsLabelOpen(false)}
-          onMouseEnter={() =>  setIsLabelOpen(true)}
-          cursor={'pointer'}
-        >
-          {convertedNumber}
-        </Flex>
+        <Box as="div">
+          <Flex
+            onMouseLeave={() => setIsLabelOpen(false)}
+            onMouseEnter={() =>  setIsLabelOpen(true)}
+            cursor={'pointer'}
+          >
+            {convertedNumber}
+          </Flex>
+        </Box>
       </Tooltip>
     </Flex>
   )
