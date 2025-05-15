@@ -55,9 +55,9 @@ export const BalanceTooltip = (args: BalanceTooltipProps) => {
         placement={placement ?? "top"}
         pointerEvents={"all"}
         label={
-          <Flex>
-            `${labelDiv}  |  $${usdValue}`
-          </Flex>
+          // <Flex>
+            `${labelDiv}  |  ${usdValue}`
+          // </Flex>
         }
         borderRadius={"3px"}
         color={'#fff'}
