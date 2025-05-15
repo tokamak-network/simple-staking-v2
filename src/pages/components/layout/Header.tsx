@@ -228,11 +228,11 @@ export const Header = () => {
           fontWeight={'bold'} 
           justifyContent="space-between" 
           alignItems={'center'} 
-          w={'340px'} 
-          mr={'17%'}
+          w={'200px'} 
+          mr={'15%'}
         >
           <NavItem/>
-          <Menu 
+          {/* <Menu 
             onClose={() => {
               setMenuState(false);
             }}
@@ -298,26 +298,9 @@ export const Header = () => {
                   User Guide
                 </Text>
               </MenuItem>
-              {/* <MenuItem
-                onMouseEnter={() => setHover(true)}
-                onMouseLeave={() => setHover(false)}
-                target="_blank"
-                as={"a"}
-                href={"https://docs.google.com/forms/d/14fuV1B10UBguVKPjdX9UAj3TV-mggBbsFpGIvdcWsoA/edit"}
-                h={"18px"}
-                marginBottom={"16px"}
-                padding={"0px"}
-                // border={'1px solid red'}
-                bg="#fff"
-                _focus={{ background: "0F0F12" }}
-                _hover={{ bg: "none", color: "#2a72e5" }}
-              >
-                <Text>
-                  Get Help
-                </Text>
-              </MenuItem> */}
+             
             </MenuList>
-          </Menu>
+          </Menu> */}
         </Flex>
         <Flex>
           <MenuLinks account={account} walletopen={openModal} />
