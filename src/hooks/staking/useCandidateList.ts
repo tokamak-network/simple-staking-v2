@@ -32,18 +32,19 @@ export function useCandidateList() {
     async function fetchCandidates() {
       if (!candidates) return;
       // console.log(candidates)
-      const candidatesList = await Promise.all(
-        candidates.map((candidateObj: any, index: number) =>
-          fetchCandidateDetails(candidateObj, index)
-        )
-      );
-      setCandidateList(candidatesList);
+
+      let i = 0;
+      for(i = 0; i < candidates.length; i++){
+        console.log("*** fetchCandidates", candidates[i])
+        await fetchCandidateDetails(candidates[i], i)
+      }
+      setCandidateList(candidates);
     }
 
     async function fetchCandidateDetails(candidateObj: any, index: number) {
       const { candidateContract, stakedUserList, candidate, name } = candidateObj;
       let stakeOf, sumPending, stakeOfCandidate, oldCommitHistory, oldHistory, expSeig, myPending;
-
+      // console.log("*** fetchCandidateDetails index ", index)
       const oldCandidate = getOldLayerAddress(candidateContract);
       if (oldCandidate) {
         try {
@@ -55,23 +56,25 @@ export function useCandidateList() {
           console.error("Error fetching old candidate data:", error);
         }
       }
-
+      // console.log("*** fetchCandidateDetails 2")
       const candidateStaked = stakedUserList.find(
         (user: any) => user.user.id === candidate
       );
       if (candidateStaked) {
         stakeOfCandidate = candidateStaked.stakedAmount;
       }
-      
+
       if (SeigManager_CONTRACT && DepositManager_CONTRACT && Old_DepositManager_CONTRACT) {
         try {
+          // console.log("*** fetchCandidateDetails 3")
           if (account) {
             stakeOf = await SeigManager_CONTRACT.stakeOf(candidateContract, account);
             myPending = await DepositManager_CONTRACT.pendingUnstaked(candidateContract, account);
             stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(candidateContract, candidate);
-
+            // console.log("*** fetchCandidateDetails 4", account )
             if (mobile && stakeOf !== "0" && TON_CONTRACT) {
               const blockNumber = await library.getBlockNumber();
+
               const totAddress = await SeigManager_CONTRACT.tot();
               const TotContract = getContract(totAddress, Coinage, library, account);
               const coinageAddress = await SeigManager_CONTRACT.coinages(candidateContract);
@@ -112,6 +115,7 @@ export function useCandidateList() {
         } catch (error) {
           console.error("Error fetching candidate contract data:", error);
         }
+
       }
 
       return {
