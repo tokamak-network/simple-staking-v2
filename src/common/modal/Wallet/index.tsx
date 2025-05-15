@@ -56,6 +56,7 @@ function WalletModal() {
   const [pendingWallet, setPendingWallet] = useState<AbstractConnector | undefined>();
   const [pendingError, setPendingError] = useState<boolean>();
   const [activatingConnector, setActivatingConnector] = useState<any>();
+  const [chainSupported, setChainSupported] = useState<boolean>(true);
 
   const previousAccount = usePrevious(account);
   /* eslint-disable */
@@ -73,7 +74,7 @@ function WalletModal() {
     if (account && !previousAccount) {
       closeModal();
     }
-  }, [account, previousAccount, closeModal]);
+  }, [account, previousAccount]);
 
   // useEffect(() => {
   //   if (isOpen) {
@@ -91,6 +92,17 @@ function WalletModal() {
     }
   }, [setWalletView, active, error, connector, activePrevious, connectorPrevious]);
 
+  useEffect(() => {
+    if (chainId === undefined) {
+      return 
+    }
+    if (chainId !== Number(DEFAULT_NETWORK)) {
+      setChainSupported(false)
+    } else {
+      setChainSupported(true)
+    }
+  }, [chainId])
+
   const handleWalletChange = useCallback(() => {
     setWalletView(WALLET_VIEWS.OPTIONS);
   }, []);
@@ -104,6 +116,21 @@ function WalletModal() {
       isClosable: true,
     });
   }, [copyText, onCopy]);
+
+  const switchToDefaultNetwork = useCallback(async () => {
+    if (!(window as any).ethereum) return;
+    const hexChainId = '0x' + Number(DEFAULT_NETWORK).toString(16);
+    try {
+      await (window as any).ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: hexChainId }],
+      });
+      toast({ title: 'Switched network', status: 'success' });
+    } catch (switchError: any) {
+      // console.error('Failed to switch network', switchError);
+      toast({ title: 'Failed to switch network', status: 'error' });
+    }
+  }, [toast]);
 
   const tryActivation = async (connector: AbstractConnector | undefined) => {
     Object.keys(SUPPORTED_WALLETS).map((key) => {
@@ -240,7 +267,12 @@ function WalletModal() {
   };
   
   return (
-    <Modal isOpen={selectedModal === 'wallet'} onClose={closeModal}>
+    <Modal 
+      isOpen={selectedModal === 'wallet'} 
+      onClose={closeModal}
+      closeOnOverlayClick={false}
+      closeOnEsc={false}
+    >
       {walletView === WALLET_VIEWS.ACCOUNT && account ? (
         <ModalContent
           w={'280px'}
@@ -311,7 +343,7 @@ function WalletModal() {
             </Flex>
           </ModalBody>
         </ModalContent>
-      ) : error || (chainId && Number(DEFAULT_NETWORK) !== chainId) ? (
+      ) : !chainSupported ? (
         <ModalContent
           w={'280px'}
           px={'0px'}
@@ -320,11 +352,26 @@ function WalletModal() {
         >
           <ModalHeader>
             {Number(DEFAULT_NETWORK) !== chainId ? (
-              <Text>
-                Network not supported.
-                <br />
-                {`Please change to ${REACT_APP_MODE === 'DEV' ? 'Sepolia' : 'Mainnet'}`}.
-              </Text>
+              <Flex
+                h={'200px'}
+                justifyContent={'end'}
+                flexDir={'column'}
+              >
+                <Flex mb={'15px'}>
+                  Network not supoorted.
+                  <br />
+                  {`Please change to ${REACT_APP_MODE === 'DEV' ? 'Sepolia' : 'Mainnet'}`}.
+                </Flex>
+                <Button
+                  colorScheme="blue"
+                  w="full"
+                  mb={3}
+                  onClick={switchToDefaultNetwork}
+                >
+                  Switch to {REACT_APP_MODE === 'DEV' ? 'Sepolia' : 'Mainnet'}
+                </Button>
+
+              </Flex>
             ) : (
               <Text>Error connecting</Text>
             )}
