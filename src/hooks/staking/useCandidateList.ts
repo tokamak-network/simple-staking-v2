@@ -27,6 +27,7 @@ export function useCandidateList() {
   } = useCallContract();
   const [width] = useWindowDimensions();
   const mobile = width && width < 1040;
+  console.log(candidates)
 
   useEffect(() => {
     async function fetchCandidates() {
