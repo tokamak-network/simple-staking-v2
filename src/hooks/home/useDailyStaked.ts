@@ -34,7 +34,7 @@ export function useDailyStaked() {
         const day = 86400;
         const now = Math.floor(new Date().getTime() / 1000);
         const sinceLastday = Math.floor((now - stakingDayDatas[0].date) / day);
-        // input staked ton data in the end of graph
+        
         for (let i = 1; i < sinceLastday + 1; i++) {
           const today = (stakingDayDatas[0].date) + day * i;
           if (today > 0) {
