@@ -31,7 +31,7 @@ export function useCandidateList() {
   useEffect(() => {
     async function fetchCandidates() {
       if (!candidates) return;
-      console.log(candidates)
+      // console.log(candidates)
       const candidatesList = await Promise.all(
         candidates.map((candidateObj: any, index: number) =>
           fetchCandidateDetails(candidateObj, index)

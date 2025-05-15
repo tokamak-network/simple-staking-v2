@@ -44,19 +44,7 @@ export const injected = new InjectedConnector({
 
 export enum SupportedChainId {
   MAINNET = 1,
-  //   ARBITRUM_ONE = 42161,
-  //   ARBITRUM_GOERLI = 421613,
-  //   OPTIMISM = 10,
-  //   OPTIMISM_GOERLI = 420,
-  //   POLYGON = 137,
-  //   POLYGON_MUMBAI = 80001,
-  //   CELO = 42220,
-  //   CELO_ALFAJORES = 44787,
-  //   BNB = 56,
-  TITAN = 55004,
   SEPOLIA = 11155111,
-  THANOS_SEPOLIA = 111551119090,
-  TITAN_SEPOLIA = 55007,
 }
 
 export interface SupportedChainProperties {
