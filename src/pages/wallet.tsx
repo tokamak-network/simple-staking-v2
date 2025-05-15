@@ -8,9 +8,11 @@ import { useUserHistory } from '../hooks/wallet/useUserHIstory';
 import { convertNumber } from '../utils/number';
 import { useTopCardInfo } from '@/hooks/wallet/useTopCardInfo';
 import { LoadingDots } from '@/common/Loader/LoadingDots';
+import { useWeb3React } from '@web3-react/core';
 
 function Wallet () {
   const theme = useTheme();
+  const { account } = useWeb3React();
   const { userHistory, loading } = useUserHistory();
   const [tableLoading, setTableLoading] = useState<boolean>(true);
   const { userTotalStaked, userPendingWithdrawal } = useTopCardInfo()
@@ -69,6 +71,7 @@ function Wallet () {
         />
         <Flex mt={loading ? "50px" : '0px'}>
           {
+            !account ? <Flex mt={'100px'}>Please Connect to Wallet</Flex> :
             loading ? <LoadingDots /> :
             userHistory && userHistory.length > 0 ?
             <MyHistoryTable 
