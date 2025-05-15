@@ -25,6 +25,7 @@ export function L2InfoContent (args: L2ContentProps) {
     editStat
   } = args
 
+  const safeContent = content || '';
   const linkType = type === 'bridge' || type === 'explorer' || type === 'logo' ? true : false
   const stringType = type === 'string' ? true : false
 
@@ -36,6 +37,12 @@ export function L2InfoContent (args: L2ContentProps) {
       dots: content ? content.length > 28 ? '...' : '' : ''
     }) 
     : content
+  
+    const href = safeContent.startsWith('http://') || safeContent.startsWith('https://')
+      ? safeContent
+      : safeContent
+        ? `https://${safeContent}`
+        : '';
     
   return (
     <Flex
@@ -90,7 +97,7 @@ export function L2InfoContent (args: L2ContentProps) {
             justifyContent={'center'} 
             alignItems={'center'}
             ml={'6px'}
-            href={content.substring(0, 8) !== 'https://' ? `https://${content}` : content}
+            href={href}
             isExternal
           >
             <Image src={ETHERSCAN_LINK} alt={'alt'} />

@@ -4,16 +4,14 @@ import { useCallback, useMemo, useState } from 'react';
 import { ModalHeader } from './modal/ModalHeader';
 import { CalculatorBody } from './modal/CalculatorBody';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { durationState, selectedDurationState } from '@/atom/staking/duration';
-import useOperatorList from '@/hooks/staking/useOperatorList';
+import { durationState } from '@/atom/staking/duration';
 import { convertNumber } from '@/components/number';
 import useUserBalance from '@/hooks/useUserBalance';
 import { useWeb3React } from '@web3-react/core';
 import { inputBalanceState } from '@/atom/global/input';
 import { modalState } from '@/atom/global/modal';
-import axios from 'axios';
 import { getTotalSupply } from '@/api';
-import { calculateRoi, calculateRoiBasedonCompound } from '@/components/calculateRoi';
+import { calculateRoiBasedonCompound } from '@/components/calculateRoi';
 import { useDailyStaked } from '@/hooks/home/useDailyStaked';
 import { useTONPrice } from '@/hooks/staking/useTONPrice';
 
@@ -55,12 +53,12 @@ function CalculatorModal() {
   const calButton = useCallback(async () => {
     const inputBalance = Number(input.replace(/,/g, ''));
     const totalSup = await getTotalSupply();
-    console.log(totalSup)
+    
     if (Staked && selectedModalData) {
       const total = Number(Staked.replace(/,/g, '')) + inputBalance;
 
       const returnRate = calculateRoiBasedonCompound({ totalStakedAmount: total, totalSupply: totalSup, duration });
-      const expectedSeig = inputBalance * (returnRate / 100);
+      const expectedSeig = inputBalance * (Number(selectedModalData?.apy) / 100);
 
       // const roi = returnRate.toLocaleString(undefined, { maximumFractionDigits: 2 });
       const rewardTON = expectedSeig.toLocaleString(undefined, { maximumFractionDigits: 2 });

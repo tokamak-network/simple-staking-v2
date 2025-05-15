@@ -76,27 +76,26 @@ export const TableRow: FC<TableRowProps> = ({
     const withdrawableBlock = Number(blockNumber) + Number(withdrawDelay)
     
     return (
-      // <Flex justifyContent={'center'} flexDir={'column'}>
-      //   {
-      //     remainTime === '0' ? (
-      //       <Flex>
-      //         <Button 
-      //           w={'80px'}
-      //           h={'25px'}
-      //           justifyContent={'center'}
-      //           alignItems={'center'}
-      //           borderRadius={'4px'}
-      //           border={'1px solid #2a72e5'}
-      //           bgColor={'#fff'}
-      //           color={'#2a72e5'}
-      //           fontSize={'12px'}
-      //           fontWeight={400}
-      //           onClick={() => modalButton('withdraw', selectedModalData)}
-      //         > 
-      //           Withdraw 
-      //         </Button>
-      //       </Flex>
-      //     ) : (
+      <Flex justifyContent={'center'} flexDir={'column'}>
+        {
+          remainTime === '0' ? (
+            <Flex color={'#2a72e5'}>
+              {/* <Button 
+                w={'80px'}
+                h={'25px'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                borderRadius={'4px'}
+                border={'1px solid #2a72e5'}
+                bgColor={'#fff'}
+                color={'#2a72e5'}
+                fontSize={'12px'}
+                fontWeight={400}
+              >  */}
+                Withdrawable
+              {/* </Button> */}
+            </Flex>
+          ) : (
             <Flex justifyContent={'center'} flexDir={'column'}>
               <Flex flexDir={'row'}>
                 <Flex mr={'3px'} color={'#304156'}>
@@ -114,9 +113,9 @@ export const TableRow: FC<TableRowProps> = ({
                 {calcCountDown(remainTime.toString())}
               </Flex>
             </Flex>
-      //     )
-      //   }
-      // </Flex>
+          )
+        }
+      </Flex>
     )
   }
 

@@ -39,6 +39,7 @@ export const WithdrawType = (args: WithdrawTypeProps) => {
       alignItems={'center'}
       borderRadius={'15px'}
       cursor={'pointer'}
+      bgColor={'#fff'}
       boxShadow={'0 2px 6px 0 rgba(61, 73, 93, 0.1)'}
       textAlign={'center'}
       _hover={{

@@ -35,6 +35,10 @@ import { InfoTypeSelector } from "@/common/selector/InfoType";
 import { useL2CandidateInfo } from "@/hooks/staking/useL2CandidateInfo";
 import { getDate } from "@/components/getDate";
 import { useCalculateAPR } from "@/hooks/staking/useCalculateAPR";
+import CONTRACT_ADDRESS from "@/services/addresses/contract";
+import L2Info from '../../../../l2_info.json'
+import { editL2Info_bridge_input, editL2Info_explorer_input, editL2Info_logo_input } from "@/atom/staking/editL2Info";
+import { useIsOperator } from "@/hooks/staking/useIsOperator";
 
 function OperatorCard(props: { operator: any }) {
   const { operator } = props;
@@ -50,10 +54,31 @@ function OperatorCard(props: { operator: any }) {
   const { account } = useWeb3React();
   const [, setCandidateIndex] = useRecoilState(candidateState)
 
+  const [bridgeValue, setBridgeValue] = useRecoilState(editL2Info_bridge_input);
+  const [explorerValue, setExplorerValue] = useRecoilState(editL2Info_explorer_input);
+  const [logoValue, setLogoValue] = useRecoilState(editL2Info_logo_input);
+
+  const { 
+    DepositManager_ADDRESS, 
+    SeigManager_ADDRESS, 
+    DAO_Committiee_ADDRESS,
+    L2Registry_ADDRESS,
+    SequencerSeig_ADDRESS,
+  } = CONTRACT_ADDRESS;
+
   const { 
     withdrawable, 
     notWithdrawable
   } = useWithdrawable(operator?.candidateContract)
+
+  const { 
+    isOperator, 
+    bridgeTypes, 
+    operatorManager,
+    managers,
+    rollupConfig,
+    bridge
+  } = useIsOperator(operator?.candidateContract)
 
   const lockedInBridge = useL2CandidateInfo(operator?.candidateAddOn)
 
@@ -65,6 +90,16 @@ function OperatorCard(props: { operator: any }) {
     })
     setCommit(commitHistory)
   }, [])
+
+  useEffect(() => {
+    const infos = L2Info.find((info: any) => info.name === operator.name)
+    
+    if (infos) {
+      setBridgeValue(infos.bridge)
+      setExplorerValue(infos.explorer)
+      setLogoValue(infos.logo)
+    }
+  }, [L2Info])
   
   
   const [open, setOpen] = useState(false);
@@ -112,10 +147,10 @@ function OperatorCard(props: { operator: any }) {
       title: 'Information', value: 'title',
     },
     {
-      title: 'Bridge', value: 'https://app.bridge.tokamak.network',
+      title: 'Bridge', value: bridgeValue,
     },
     {
-      title: 'Block explorer', value: 'https://explorer.titan.tokamak.network',
+      title: 'Block explorer', value: explorerValue,
     },
     {
       title: 'Sequencer seigniorage', value: 'title',
@@ -181,19 +216,19 @@ function OperatorCard(props: { operator: any }) {
     },
     {
       title: "DAO",
-      value: "",
+      value: DAO_Committiee_ADDRESS,
       tooltip: "", 
       type: 'address'
     },
     {
       title: "Seigniorage",
-      value: "",
+      value: SeigManager_ADDRESS,
       tooltip: "", 
       type: 'address'
     },
     {
       title: "Staking",
-      value: "",
+      value: DepositManager_ADDRESS,
       tooltip: "", 
       type: 'address'
     },
@@ -203,46 +238,56 @@ function OperatorCard(props: { operator: any }) {
     },
     {
       title: "DAO candidate",
-      value: "",
+      value: candidate?.candidateContract,
       tooltip: "", 
       type: 'address'
     },
+    operatorManager ?
     {
-      title: "DAO candidate manager",
-      value: "",
+      title: 'Operator manager (Contract)',
+      value: operatorManager,
       tooltip: "", 
       type: 'address'
-    },
+    } : '',
+    managers ?
+    {
+      title: 'Operator Manager (EOA)',
+      value: managers,
+      tooltip: "", 
+      type: 'address'
+    } : '',
     {
       title: "L2 Info",
       value: "address",
     },
     {
       title: "L2 registry",
-      value: "",
+      value: L2Registry_ADDRESS,
       tooltip: "", 
       type: 'address'
     },
     {
       title: "Sequencer seigniorage manager",
-      value: "",
+      value: SequencerSeig_ADDRESS,
       tooltip: "", 
       type: 'address'
     },
+    rollupConfig ?
     {
-      title: "Rollup config",
-      value: "",
+      title: 'Rollup config',
+      value: rollupConfig,
       tooltip: "", 
       type: 'address'
-    },
+    } : '',
+    bridge ?
     {
-      title: "L1 TON bridge",
-      value: "",
+      title: 'L1 TON bridge',
+      value: bridge,
       tooltip: "", 
       type: 'address'
-    },
+    } : '',
   ];
-
+  
   
   return (
     <Flex

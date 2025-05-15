@@ -19,7 +19,7 @@ function OperatorSelect(props: {
   setSelectedOp: React.Dispatch<SetStateAction<any>>;
 }) {
   const { operatorList, onClose, isOpen, setSelectedOp } = props;
-
+  
   return (
     <Drawer placement={"bottom"} onClose={onClose} isOpen={isOpen} size="md">
       <DrawerOverlay />
@@ -58,6 +58,22 @@ function OperatorSelect(props: {
                   >
                     {operator.name}
                   </Text>
+                  {
+                    operator?.candidateAddOn !== null ?
+                    <Flex
+                      w={'34px'}
+                      h={'18px'}
+                      bgColor={'#257eee'}
+                      fontSize={'12px'}
+                      color={'#fff'}
+                      borderRadius={'3px'}
+                      justifyContent={'center'}
+                      ml={'9px'}
+                      mt={'3px'}
+                    >
+                      L2
+                    </Flex> : ''
+                  }
                 </Flex>
               </Flex>
             );

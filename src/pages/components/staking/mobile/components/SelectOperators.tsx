@@ -3,6 +3,7 @@ import { Flex, Text, useDisclosure } from "@chakra-ui/react";
 import Image from "next/image";
 import select1_arrow_inactive from "assets/images/select1_arrow_inactive.png";
 import OperatorSelect from "../OperatorSelect";
+import trimAddress from "@/components/trimAddress";
 
 type SelectOperatorProps = {
   onOpen: any
@@ -33,7 +34,16 @@ export function SelectOperator (args: SelectOperatorProps) {
           <Flex>
             <OperatorImage height="20px" width="20px" />
             <Text ml="7px" fontSize={"13px"} fontWeight="bold">
-              {selectedOp?.name}
+              {
+                selectedOp?.name.length > 12 ?
+                trimAddress({
+                  address: selectedOp?.name,
+                  firstChar: 10,
+                  lastChar: 0,
+                  dots:'...'
+                }) :
+                selectedOp?.name
+              }
             </Text>
           </Flex> : 
           <Flex color={'#3e495c'} fontSize={'13px'} fontWeight={'bold'}>

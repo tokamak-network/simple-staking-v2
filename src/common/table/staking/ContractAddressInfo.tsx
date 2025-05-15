@@ -30,6 +30,7 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
     RollupConfig_ADDRESS,
     L1Bridge_ADDRESS
   } = CONTRACT_ADDRESS
+  
   useEffect(() => {
     setIsLabelOpen(false)
   }, [tab])
@@ -48,16 +49,22 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
       content: DepositManager_ADDRESS,
     },
   ]
-
+  
   const candidate = [
     {
       title: 'DAO candidate',
       content: data.candidateContract,
     },
+    data.operatorManager ?
     {
-      title: 'DAO candidate manager',
-      content: '0x757DE9c340c556b56f62eFaE859Da5e08BAAE7A2',
-    },
+      title: 'Operator manager (Contract)',
+      content: data.operatorManager,
+    } : undefined,
+    data.managers ?
+    {
+      title: 'Operator Manager (EOA)',
+      content: data.managers,
+    } : undefined,
   ]
 
   const l2Info = [
@@ -69,16 +76,18 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
       title: 'Sequencer signiorage manager',
       content: SequencerSeig_ADDRESS,
     },
+    data.rollupConfig ?
     {
       title: 'Rollup config',
-      content: RollupConfig_ADDRESS,
-    },
+      content: data.rollupConfig,
+    } : '',
+    data.bridge ?
     {
       title: 'L1 TON bridge',
-      content: L1Bridge_ADDRESS,
-    },
+      content: data.bridge,
+    } : '',
   ]
-  
+
   return (
     <Tooltip
       display={label?.length === 0 ? "none" : "flex"}
@@ -163,8 +172,8 @@ const ContractAddressInfo: React.FC<tooltipProps> = (props) => {
                 candidate.map((info: any, index: number) => {
                   return (
                     <L1ContractInfo 
-                      title={info.title}
-                      content={info.content}
+                      title={info?.title}
+                      content={info?.content}
                       key={index}
                     />
                   )

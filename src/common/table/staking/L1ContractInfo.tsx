@@ -26,41 +26,45 @@ export const L1ContractInfo = (props: L1ContractInfoType) => {
       p={'15px'}
       borderBottom={'1px solid #F4F6F8'}
     >
-      <Flex flexDir={'column'}>
-        <Flex
-          fontSize={'12px'}
-          fontWeight={'normal'}
-          color={'#86929d'}
-          mb={'3px'}  
-        >
-          {title}
-        </Flex>
-        <Flex justifyContent={'space-between'}>
+      {
+        content ?
+        <Flex flexDir={'column'}>
           <Flex
-            fontSize={'16px'}
-            fontWeight={500}
-            color={'#3d495c'}
+            fontSize={'12px'}
+            fontWeight={'normal'}
+            color={'#86929d'}
+            mb={'3px'}  
           >
-            {trimAddress({
-                address: content,
-                firstChar: 6,
-                lastChar: 4,
-                dots: '...'
-              })}
+            {title}
           </Flex>
-          <Link 
-            w={'20px'} 
-            h={'20px'} 
-            mt={'2px'}
-            ml={'6px'}
-            cursor={'pointer'}
-            href={`${ETHERSCAN_LINK}/address/${content}`}
-            isExternal
-          >
-            <Image src={ETHERSCAN_LINK_Image} alt={''} />
-          </Link>
+          <Flex justifyContent={'space-between'}>
+            <Flex
+              fontSize={'16px'}
+              fontWeight={500}
+              color={'#3d495c'}
+            >
+              {trimAddress({
+                  address: content,
+                  firstChar: 6,
+                  lastChar: 4,
+                  dots: '...'
+                })}
+            </Flex>
+            <Link 
+              w={'20px'} 
+              h={'20px'} 
+              mt={'2px'}
+              ml={'6px'}
+              cursor={'pointer'}
+              href={`${ETHERSCAN_LINK}/address/${content}`}
+              isExternal
+            >
+              <Image src={ETHERSCAN_LINK_Image} alt={''} />
+            </Link>
+          </Flex>
         </Flex>
-      </Flex>
+        : ''
+      }
       {
         title === 'L2 txn data' ?
         <Flex 

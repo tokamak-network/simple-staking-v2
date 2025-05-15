@@ -22,6 +22,7 @@ import { openInfonState } from "@/atom/staking/openInfo";
 import { useCalculateAPR } from "@/hooks/staking/useCalculateAPR";
 import L2Info from '../../../l2_info.json'
 import { promises as fs } from 'fs';
+import { useIsOperator } from "@/hooks/staking/useIsOperator";
 
 
 type OpearatorInfoProps = {
@@ -59,6 +60,7 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
   const [tab, setTab] = useState('staking')
   // const [members, setMembers] = useState()
   const [toggle, setToggle] = useRecoilState(toggleState)
+  const { operatorManager, managers, bridge, rollupConfig } = useIsOperator(candidateContract)
 
   const { memberAddresses } = useChangedMembers()
 
@@ -267,7 +269,13 @@ export const OpearatorInfos: FC<OpearatorInfoProps> = ({
                   <ContractAddressInfo 
                     label={candidateAddOn}
                     tab={tab}
-                    data={data}
+                    data={{
+                      ...data,
+                      managers,
+                      operatorManager,
+                      bridge,
+                      rollupConfig
+                    }}
                   />
                 </Flex>
                 
