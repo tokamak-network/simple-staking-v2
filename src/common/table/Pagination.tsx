@@ -1,10 +1,6 @@
-import { FC, useState, useEffect } from 'react';
+import { FC } from 'react';
 import {
   Column,
-  useExpanded,
-  usePagination,
-  useTable,
-  useSortBy,
 } from 'react-table';
 import {
   chakra,
@@ -28,6 +24,7 @@ type PaginationProps = {
   canNextPage: any
   pageOptions: any
   pageIndex: any
+  gotoPage: any
 }
 
 export const Pagination: FC<PaginationProps> = ({
@@ -41,42 +38,10 @@ export const Pagination: FC<PaginationProps> = ({
   canNextPage,
   pageOptions,
   pageIndex,
+  gotoPage
 }) => {
-  // const {
-  //   // visibleColumns,
-  //   // canPreviousPage,
-  //   // canNextPage,
-  //   // pageOptions,
-  //   state: {pageIndex, pageSize},
-  // } = useTable(
-  //   {columns, data, initialState: {pageIndex: 0}},
-  //   useSortBy,
-  //   useExpanded,
-  //   usePagination,
-  // );
   const theme = useTheme();
-  // const [currentPage, setCurrentPage] = useState(0)
-  // const [buttonClick, setButtonClick] = useState(Boolean)
   
-
-  // useEffect(() => {
-  //   setPageSize(5)
-  // },[setPageSize])
-
-  // useEffect(() => {
-  //   if (pageIndex % 4 === 0 && buttonClick) setCurrentPage(pageIndex)
-  //   if (pageIndex % 4 === 3 && !buttonClick) setCurrentPage(pageIndex - 3)
-  // }, [buttonClick, pageIndex])
-
-  // const goPrevPage = () => {
-  //   previousPage();
-  //   setButtonClick(false)
-  // };
-
-  // const goNextPage = () => {
-  //   nextPage();
-  //   setButtonClick(true)
-  // };
   return (
     <chakra.tr
       w={'100%'}
@@ -106,13 +71,15 @@ export const Pagination: FC<PaginationProps> = ({
             return [
               // eslint-disable-next-line react/jsx-key
               <Flex
-              key={i}
+                key={i}
                 alignItems="center"
                 p={0}
                 fontSize={'13px'}
                 // fontFamily={theme.fonts.roboto}
                 color={'#3a495f'}
                 pb={'3px'}
+                onClick={() => gotoPage(page)}
+                cursor={'pointer'}
               >
                 <Text flexShrink={0}>
                   <Text

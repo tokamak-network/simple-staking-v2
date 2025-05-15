@@ -5,9 +5,10 @@ type OperatorImageProps = {
   imageLink?: string;
   height?:string,
   width?:string
+  placeholder?: string
 };
 export const OperatorImage: React.FC<OperatorImageProps> = (props) => {
-  const {imageLink,height,width} = props;
+  const {imageLink, height, width, placeholder} = props;
   const {colorMode} = useColorMode();
 
   if (imageLink === '' || imageLink === undefined) {
@@ -19,9 +20,12 @@ export const OperatorImage: React.FC<OperatorImageProps> = (props) => {
         justifyContent="center"
         border={'1px solid #f4f6f8' }
         borderRadius={25}
-        fontSize={height && width? 8:14}
-        color={'#c7d1d8'}>
-        <Text>CDD</Text>
+        fontSize={height && width? 12:14}
+        color={'#c7d1d8'}
+      >
+        <Text textAlign={'center'}>
+          { placeholder ? placeholder : 'CDD'}
+        </Text>
       </Flex>
     );
   }

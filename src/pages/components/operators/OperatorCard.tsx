@@ -31,6 +31,14 @@ import { useWithdrawable } from "@/hooks/staking/useWithdrawable";
 import { getCommitHistory } from '../../../utils/getTransactionHistory';
 import { candidateState } from "@/atom/global/candidateList";
 import { ETHERSCAN_LINK } from "@/constants";
+import { InfoTypeSelector } from "@/common/selector/InfoType";
+import { useL2CandidateInfo } from "@/hooks/staking/useL2CandidateInfo";
+import { getDate } from "@/components/getDate";
+import { useCalculateAPR } from "@/hooks/staking/useCalculateAPR";
+import CONTRACT_ADDRESS from "@/services/addresses/contract";
+import L2Info from '../../../../l2_info.json'
+import { editL2Info_bridge_input, editL2Info_explorer_input, editL2Info_logo_input } from "@/atom/staking/editL2Info";
+import { useIsOperator } from "@/hooks/staking/useIsOperator";
 
 function OperatorCard(props: { operator: any }) {
   const { operator } = props;
@@ -38,16 +46,41 @@ function OperatorCard(props: { operator: any }) {
   const [clicked, setClicked] = useState(false);
   const [candidate, setCandidate] = useState<any>();
   const [commit, setCommit] = useState<any>();
-  const [minimumAmount, setMinimumAmount] = useState<boolean>(false);
+  const [minimumAmount, setMinimumAmount] = useState<boolean>();
+  const [tab, setTab] = useState('staking')
+  const compounds = useCalculateAPR(operator)
   
   const theme = useTheme();
   const { account } = useWeb3React();
   const [, setCandidateIndex] = useRecoilState(candidateState)
 
+  const [bridgeValue, setBridgeValue] = useRecoilState(editL2Info_bridge_input);
+  const [explorerValue, setExplorerValue] = useRecoilState(editL2Info_explorer_input);
+  const [logoValue, setLogoValue] = useRecoilState(editL2Info_logo_input);
+
+  const { 
+    DepositManager_ADDRESS, 
+    SeigManager_ADDRESS, 
+    DAO_Committiee_ADDRESS,
+    L2Registry_ADDRESS,
+    SequencerSeig_ADDRESS,
+  } = CONTRACT_ADDRESS;
+
   const { 
     withdrawable, 
     notWithdrawable
   } = useWithdrawable(operator?.candidateContract)
+
+  const { 
+    isOperator, 
+    bridgeTypes, 
+    operatorManager,
+    managers,
+    rollupConfig,
+    bridge
+  } = useIsOperator(operator?.candidateContract)
+
+  const lockedInBridge = useL2CandidateInfo(operator?.candidateAddOn)
 
   useEffect(() => {
     setCandidate(operator)
@@ -57,6 +90,16 @@ function OperatorCard(props: { operator: any }) {
     })
     setCommit(commitHistory)
   }, [])
+
+  useEffect(() => {
+    const infos = L2Info.find((info: any) => info.name === operator.name)
+    
+    if (infos) {
+      setBridgeValue(infos.bridge)
+      setExplorerValue(infos.explorer)
+      setLogoValue(infos.logo)
+    }
+  }, [L2Info])
   
   
   const [open, setOpen] = useState(false);
@@ -66,17 +109,16 @@ function OperatorCard(props: { operator: any }) {
     type: 'ray',
     localeString: true
   })
-  useEffect(() => {
-    if (candidate && account) {
-      const candidateAmount = candidate?.stakeOfCandidate ? convertNumber({
-        amount: candidate?.stakeOfCandidate,
-        type: 'ray'
-      }) : '0.00'
-      setMinimumAmount(Number(candidateAmount) > 1000)
 
-    }
-   
-  }, [candidate, account])
+  const candidateAmount = candidate?.stakeOfCandidate ? convertNumber({
+    amount: candidate?.stakeOfCandidate,
+    type: 'ray'
+  }) : '0.00'
+
+  useEffect(() => {
+    setMinimumAmount(Number(candidateAmount) > 1000)
+
+  }, [account, candidateAmount])
 
   const commissionRate = candidate?.commissionRate ?
     Number(
@@ -86,7 +128,41 @@ function OperatorCard(props: { operator: any }) {
         localeString: false
       })
     ) / 10000000 : '0'
+  
+  const lockedInBridges = lockedInBridge 
+    ? convertNumber({
+      amount: lockedInBridge,
+      type: 'ray',
+      localeString: true
+    }) : '0.00'
 
+  const earned = operator?.candidateAddOn?.seigGiven[0] ?  convertNumber({
+    amount: operator?.candidateAddOn?.seigGiven[0].layer2Seigs,
+    type: 'ray',
+    localeString: true
+  }) : '0.00'
+  
+  const l2Tabs = [
+    {
+      title: 'Information', value: 'title',
+    },
+    {
+      title: 'Bridge', value: bridgeValue,
+    },
+    {
+      title: 'Block explorer', value: explorerValue,
+    },
+    {
+      title: 'Sequencer seigniorage', value: 'title',
+    },
+    {
+      title: 'TON locked in Bridge', value: lockedInBridges,
+    },
+    // {
+    //   title: 'Earned seigniorage', value: earned,
+    // },
+  ]
+  
   const tabs = [
     {
       title: "Website",
@@ -96,8 +172,8 @@ function OperatorCard(props: { operator: any }) {
           : candidate?.website,
     },
     // { title: "Description", value: operator?.description },
-    { title: "Operator Address", value: candidate?.candidate },
-    { title: "Operator Contract", value: candidate?.candidateContract },
+    { title: "Operator Address", value: candidate?.candidate, type: 'address' },
+    { title: "Operator Contract", value: candidate?.candidateContract, type: 'address' },
     // { title: "Chain ID", value: operator?.chainId },
     { title: "Commit Count", value: commit ? commit.length : 0 },
     {
@@ -106,12 +182,6 @@ function OperatorCard(props: { operator: any }) {
         ? `${moment.unix(commit[0].timestamp).fromNow()}`
         : "",
     },
-    // {
-    //   title: "Running Time",
-    //   value: commitHistory[0]
-    //     ? `${moment.unix(operator?.deployedAt).fromNow(true)}`
-    //     : "",
-    // },
     {
       title: "Commission Rate",
       value: ` ${candidate?.isCommissionRateNegative ? "-" : ""}
@@ -136,24 +206,88 @@ function OperatorCard(props: { operator: any }) {
       // value: Number(withdrawable) + Number(old_withdrawable),
       value: withdrawable
     },
-    // {
-    //   title: "New Commission Rate",
-    //   value: ` ${operator?.delayedCommissionRateNegative ? "-" : ""}
-    // ${
-    //   Number(
-    //     operator?.delayedCommissionRate.toLocaleString("fullwide", {
-    //       useGrouping: false,
-    //     })
-    //   ) / 10000000
-    // }
-    // %`,
-    // },
-    // {
-    //   title: "New Commission Rate Changed At",
-    //   value: operator?.delayedCommissionBlock?.toString(),
-    // },
-    // { title: "Withdrawal Delay", value: delay() },
+    {
+      title: "L1 Contract address",
+      value: "main",
+    },
+    {
+      title: "Core",
+      value: "address",
+    },
+    {
+      title: "DAO",
+      value: DAO_Committiee_ADDRESS,
+      tooltip: "", 
+      type: 'address'
+    },
+    {
+      title: "Seigniorage",
+      value: SeigManager_ADDRESS,
+      tooltip: "", 
+      type: 'address'
+    },
+    {
+      title: "Staking",
+      value: DepositManager_ADDRESS,
+      tooltip: "", 
+      type: 'address'
+    },
+    {
+      title: "DAO Candidate",
+      value: "address",
+    },
+    {
+      title: "DAO candidate",
+      value: candidate?.candidateContract,
+      tooltip: "", 
+      type: 'address'
+    },
+    operatorManager ?
+    {
+      title: 'Operator manager (Contract)',
+      value: operatorManager,
+      tooltip: "", 
+      type: 'address'
+    } : '',
+    managers ?
+    {
+      title: 'Operator Manager (EOA)',
+      value: managers,
+      tooltip: "", 
+      type: 'address'
+    } : '',
+    {
+      title: "L2 Info",
+      value: "address",
+    },
+    {
+      title: "L2 registry",
+      value: L2Registry_ADDRESS,
+      tooltip: "", 
+      type: 'address'
+    },
+    {
+      title: "Sequencer seigniorage manager",
+      value: SequencerSeig_ADDRESS,
+      tooltip: "", 
+      type: 'address'
+    },
+    rollupConfig ?
+    {
+      title: 'Rollup config',
+      value: rollupConfig,
+      tooltip: "", 
+      type: 'address'
+    } : '',
+    bridge ?
+    {
+      title: 'L1 TON bridge',
+      value: bridge,
+      tooltip: "", 
+      type: 'address'
+    } : '',
   ];
+  
   
   return (
     <Flex
@@ -203,12 +337,12 @@ function OperatorCard(props: { operator: any }) {
           >
             <Text fontSize={"12px"} color="gray.300">
               {" "}
-              Commission Rate
+              Staking APY
             </Text>
             <Text fontSize={"13px"} color="gray.700">
               {" "}
               {candidate?.isCommissionRateNegative ? "-" : ""}
-              {commissionRate}
+              {compounds}
               %
             </Text>
           </Flex>
@@ -258,61 +392,6 @@ function OperatorCard(props: { operator: any }) {
               Manage Your Stake
             </Link>
           </Flex>
-          {/* <Flex
-            w="100%"
-            justifyContent={"space-between"}
-            h="35px"
-            alignItems={"center"}
-            my="10px"
-          >
-            <Text fontSize={"12px"} color="gray.300">
-              Available Amount
-            </Text>
-            <Text fontSize={"13px"} color="gray.700">
-              {userTonBalance ? userTonBalance : '0.00'} TON
-            </Text>
-          </Flex>
-          <MobileCustomInput
-            w="90%"
-            placeHolder={"0.00"}
-            type={"staking"}
-            maxValue={tokenType === 'TON' ? userTonBalance : userWTonBalance}
-            setAmount={setAmount}
-            setTokenType={setTokenType}
-            tokenType={tokenType}
-            maxButton={false}
-            txt={"Amount"}
-          />
-          <Button
-            my="15px"
-            w="100%"
-            bg="blue.200"
-            color="white.100"
-            fontSize={"14px"}
-            _focus={{ bg: "blue.200", color: "white.100" }}
-            _active={{ bg: "blue.200", color: "white.100" }}
-            isDisabled={
-              userTonBalance === "0.00" ||
-              amount === 0 ||
-              Number.isNaN(amount) ||
-              amount === undefined ||
-              (tonB ? amount > tonB : false) ||
-              candidate?.name === 'Talken'
-            }
-            _disabled={{ bg: "#86929d", color: "#e9edf1" }}
-            onClick={() =>
-              staking(
-                userTonBalance,
-                TON_CONTRACT,
-                amount,
-                candidate?.candidateContract,
-                setTxPending,
-                setTx
-              )
-            }
-          >
-            Stake
-          </Button> */}
           {
             account && !minimumAmount ?
             <Text
@@ -356,22 +435,42 @@ function OperatorCard(props: { operator: any }) {
         <Flex ml="22px" onClick={() => setOpen(!open)}>
           <OperatorImage />
           <Flex ml="22px" flexDir={"column"}>
-            <Text
-              w={"176px"}
-              fontSize="17px"
-              color={"black.300"}
-              fontWeight={"bold"}
-            >
-              {candidate?.name}
-            </Text>
+            <Flex flexDir={'row'} justifyContent={'start'}>
+              <Text
+                // w={"176px"}
+                fontSize="17px"
+                color={"black.300"}
+                fontWeight={"bold"}
+              >
+                {candidate?.name}
+              </Text>
+              {
+              operator?.candidateAddOn !== null ?
+              <Flex
+                w={'34px'}
+                h={'18px'}
+                bgColor={'#257eee'}
+                fontSize={'12px'}
+                color={'#fff'}
+                borderRadius={'3px'}
+                justifyContent={'center'}
+                ml={'9px'}
+                mt={'3px'}
+              >
+                L2
+              </Flex>
+              : ''
+            }
 
-            <Flex fontSize="11px" color={"gray.300"}>
+            </Flex>
+
+            <Flex mt={'5px'} fontSize="11px" color={"gray.300"}>
               <Text>
-                Commission Rate{" "}
+                Expected APY{" "}
                 <span>
                   {" "}
                   {candidate?.isCommissionRateNegative ? "-" : ""}
-                  {commissionRate}
+                  {compounds}
                   %
                 </span>
               </Text>
@@ -448,14 +547,36 @@ function OperatorCard(props: { operator: any }) {
                     borderTop={"1px solid #dfe4ee"}
                     pt="20px"
                   >
-                    {tabs.map((tab: any, index: number) => (
-                      <OperatorInfoSub
-                        title={tab.title}
-                        value={tab.value}
-                        setClicked={setClicked}
-                        key={index}
-                      />
-                    ))}
+                    {
+                      candidate?.candidateAddOn !== null ?
+                      (
+                        <InfoTypeSelector 
+                          tab={tab}
+                          setTab={setTab}
+                          type={'mobile'}
+                        />
+                      ) : ''
+                    }
+                    {
+                      tab === 'l2' ?
+                      l2Tabs.map((tab: any, index: number) => (
+                        <OperatorInfoSub 
+                          title={tab.title}
+                          value={tab.value}
+                          setClicked={setClicked}
+                          key={index}
+                        />
+                      )) :
+                      tabs.map((tab: any, index: number) => (
+                        <OperatorInfoSub
+                          title={tab.title}
+                          value={tab.value}
+                          type={tab.type}
+                          setClicked={setClicked}
+                          key={index}
+                        />
+                      ))
+                    }
                   </Flex>
                 </DrawerBody>
               </>

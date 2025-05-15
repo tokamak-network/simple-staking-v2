@@ -1,6 +1,5 @@
 import { Button, calc, Flex, Text, useTheme } from '@chakra-ui/react';
 import { GraphSideContainer } from '@/common/graph/GraphSideContainer';
-import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
 import { useDailyWalletRewards } from '@/hooks/wallet/useDailyWalletRewards';
 import { useDailyStaked } from '@/hooks/wallet/useDailyStaked';
 import { useDailyWithdrawals } from '@/hooks/wallet/useDailyWithdrawals';

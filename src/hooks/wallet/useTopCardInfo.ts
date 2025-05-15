@@ -1,8 +1,8 @@
-import { GET_CANDIDATE } from '@/graphql/getCandidates';
-import { useQuery } from '@apollo/client';
-import { useWeb3React } from '@web3-react/core';
-import { useState, useEffect } from 'react';
-import useCallContract from '../useCallContract';
+import { GET_CANDIDATE } from "@/graphql/query/getCandidates";
+import { useQuery } from "@apollo/client";
+import { useWeb3React } from "@web3-react/core";
+import { useState, useEffect } from "react";
+import useCallContract from "../useCallContract";
 import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
 import { getEventByLayer2, getOperatorUserHistory } from '@/api';
 import { BigNumber } from 'ethers';

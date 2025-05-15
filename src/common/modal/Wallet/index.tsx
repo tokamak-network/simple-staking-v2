@@ -12,6 +12,7 @@ import {
   Link,
   useClipboard,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
 import { AbstractConnector } from '@web3-react/abstract-connector';
@@ -25,19 +26,15 @@ import {
 import { WalletPending } from './Pending';
 import usePrevious from '@/hooks/usePrevious';
 import { useEagerConnect, useInactiveListener } from '@/hooks/useWeb3';
-// import {selectExplorerLink, selectNetwork} from 'store/app/app.reducer';
-// import {useAppSelector} from 'hooks/useRedux';
 import { useLocalStorage } from 'hooks/useStorage';
-// import store from 'store'
-// import {fetchUserInfo} from 'store/app/user.reducer';
 import { useRecoilValue } from 'recoil';
 import { selectedModalState } from '@/atom/global/modal';
 import useModal from '@/hooks/useModal';
-// import { useConfig } from '@/hooks/useConfig';
 import Image from 'next/image';
-
+import copy from "copy-to-clipboard";
 import ACCOUNT_COPY from '@/assets/images/account_copy_icon.png'
 import ETHERSCAN_LINK from '@/assets/images/etherscan_link_icon.png'
+import { REACT_APP_MODE, DEFAULT_NETWORK } from '@/constants/index';
 
 const WALLET_VIEWS = {
   OPTIONS: 'options',
@@ -47,18 +44,19 @@ const WALLET_VIEWS = {
 };
 
 function WalletModal() {
-  const { account, connector, activate, error, active, deactivate } = useWeb3React();
+  const { account, connector, activate, error, active, deactivate, chainId } = useWeb3React();
   const { onCopy } = useClipboard(account as string);
   // @ts-ignore
   const selectedModal = useRecoilValue(selectedModalState);
+  const toast = useToast();
   const { closeModal } = useModal();
-  // const { config } = useConfig();
   // @ts-ignore
   const [copyText, setCopyText] = useState<string>('Copy Address');
   const [walletView, setWalletView] = useState<string>(WALLET_VIEWS.ACCOUNT);
   const [pendingWallet, setPendingWallet] = useState<AbstractConnector | undefined>();
   const [pendingError, setPendingError] = useState<boolean>();
   const [activatingConnector, setActivatingConnector] = useState<any>();
+  const [chainSupported, setChainSupported] = useState<boolean>(true);
 
   const previousAccount = usePrevious(account);
   /* eslint-disable */
@@ -76,7 +74,7 @@ function WalletModal() {
     if (account && !previousAccount) {
       closeModal();
     }
-  }, [account, previousAccount, closeModal]);
+  }, [account, previousAccount]);
 
   // useEffect(() => {
   //   if (isOpen) {
@@ -94,17 +92,45 @@ function WalletModal() {
     }
   }, [setWalletView, active, error, connector, activePrevious, connectorPrevious]);
 
+  useEffect(() => {
+    if (chainId === undefined) {
+      return 
+    }
+    if (chainId !== Number(DEFAULT_NETWORK)) {
+      setChainSupported(false)
+    } else {
+      setChainSupported(true)
+    }
+  }, [chainId])
+
   const handleWalletChange = useCallback(() => {
     setWalletView(WALLET_VIEWS.OPTIONS);
   }, []);
 
   const handleCopyAction = useCallback(() => {
-    onCopy();
-    setCopyText('Copied!');
-    setTimeout(() => {
-      setCopyText(copyText);
-    }, 1000);
+    copy(account !== null && account ? account : "");
+    toast({
+      title: "Copied to Clipboard",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
   }, [copyText, onCopy]);
+
+  const switchToDefaultNetwork = useCallback(async () => {
+    if (!(window as any).ethereum) return;
+    const hexChainId = '0x' + Number(DEFAULT_NETWORK).toString(16);
+    try {
+      await (window as any).ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: hexChainId }],
+      });
+      toast({ title: 'Switched network', status: 'success' });
+    } catch (switchError: any) {
+      // console.error('Failed to switch network', switchError);
+      toast({ title: 'Failed to switch network', status: 'error' });
+    }
+  }, [toast]);
 
   const tryActivation = async (connector: AbstractConnector | undefined) => {
     Object.keys(SUPPORTED_WALLETS).map((key) => {
@@ -117,13 +143,16 @@ function WalletModal() {
     setPendingWallet(connector); // set wallet for pending view
     setWalletView(WALLET_VIEWS.PENDING);
     setAccountValue({ signIn: true });
-
+    
     try {
       connector &&
         activate(connector, undefined, true).catch((error) => {
-          if (error instanceof UnsupportedChainIdError) {
+          if (
+            // error instanceof UnsupportedChainIdError
+            Number(DEFAULT_NETWORK) === chainId
+          ) {
             try {
-              activate(connector); // a little janky...can't use setError because the connector isn't set
+              // activate(connector); // a little janky...can't use setError because the connector isn't set
             } catch {
               // activate(trazorConnector);
             }
@@ -133,6 +162,7 @@ function WalletModal() {
         });
     } catch {}
   };
+  // console.log(chainId, DEFAULT_NETWORK)
 
   function formatConnectorName() {
     // @ts-ignore
@@ -235,9 +265,14 @@ function WalletModal() {
       );
     });
   };
-
+  
   return (
-    <Modal isOpen={selectedModal === 'wallet'} onClose={closeModal}>
+    <Modal 
+      isOpen={selectedModal === 'wallet'} 
+      onClose={closeModal}
+      closeOnOverlayClick={false}
+      closeOnEsc={false}
+    >
       {walletView === WALLET_VIEWS.ACCOUNT && account ? (
         <ModalContent
           w={'280px'}
@@ -300,6 +335,7 @@ function WalletModal() {
                 onClick={() => {
                   deactivate();
                   closeModal();
+                  setAccountValue({ signIn: false })
                 }}
               >
                 Logout
@@ -307,7 +343,7 @@ function WalletModal() {
             </Flex>
           </ModalBody>
         </ModalContent>
-      ) : error ? (
+      ) : !chainSupported ? (
         <ModalContent
           w={'280px'}
           px={'0px'}
@@ -315,12 +351,27 @@ function WalletModal() {
           right={'45px'}
         >
           <ModalHeader>
-            {error instanceof UnsupportedChainIdError ? (
-              <Text>
-                Network not supported.
-                <br />
-                Please change to Mainnet.
-              </Text>
+            {Number(DEFAULT_NETWORK) !== chainId ? (
+              <Flex
+                h={'200px'}
+                justifyContent={'end'}
+                flexDir={'column'}
+              >
+                <Flex mb={'15px'}>
+                  Network not supoorted.
+                  <br />
+                  {`Please change to ${REACT_APP_MODE === 'DEV' ? 'Sepolia' : 'Mainnet'}`}.
+                </Flex>
+                <Button
+                  colorScheme="blue"
+                  w="full"
+                  mb={3}
+                  onClick={switchToDefaultNetwork}
+                >
+                  Switch to {REACT_APP_MODE === 'DEV' ? 'Sepolia' : 'Mainnet'}
+                </Button>
+
+              </Flex>
             ) : (
               <Text>Error connecting</Text>
             )}

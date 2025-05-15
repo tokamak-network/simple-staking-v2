@@ -1,72 +1,83 @@
-import { Container, Center, Box, Text, Heading, Button, Grid, Flex, useColorMode, useTheme } from '@chakra-ui/react';
+import { Container, Center, Box, Text, Heading, Button, Grid, Flex, useColorMode, useTheme, Link } from '@chakra-ui/react';
 import React, { FC, useState, useCallback } from 'react';
 // import {LoadingComponent} from 'components/Loading';
 
 import { useEffect } from 'react';
-
-import { LoadingDots } from 'common/Loader/LoadingDots';
 import useUserBalance from '@/hooks/useUserBalance';
 import { useWeb3React } from '@web3-react/core';
 import { usePendingUnstaked } from '@/hooks/staking/usePendingUnstaked';
-import StakeModal from './StakeModal';
 import { ModalType } from '@/types/modal';
 import { modalData, modalState } from '@/atom/global/modal';
 import { useRecoilState } from 'recoil';
-import CalculatorModal from './CalculatorModal';
-import { useUserHistory } from '@/hooks/wallet/useUserHIstory';
 import { useWithdrawable } from '../../../hooks/staking/useWithdrawable';
 import { convertNumber } from '@/components/number';
 import { getOldLayerAddress } from '@/components/getOldLayerAddress';
 import { StakeModalDataType } from "types"
-import WalletModal from '@/common/modal/Wallet';
 import useModal from '@/hooks/useModal';
 import { minimumAmountState } from '@/atom/staking/minimumAmount';
 import { useWithdrawDelay } from '@/hooks/staking/useWithdrawDelay';
 
+import Image from 'next/image';
+import TON_LOGO from '@/assets/images/ton_symbol.svg'
+import WTON_LOGO from '@/assets/images/wton_large.svg'
+import BasicTooltip from '@/common/tooltip';
+import { useCalculateAPR } from '@/hooks/staking/useCalculateAPR';
+import { fromNow } from '@/components/getDate';
+import { ETHERSCAN_LINK } from '@/constants';
+import CONTRACT_ADDRESS from '@/services/addresses/contract';
+
 type WalletInformationProps = {
   // dispatch: AppDispatch;
   data: any;
+  commitHistory: any;
 };
 
 export const WalletInformation: FC<WalletInformationProps> = ({
   data,
   // dispatch,
+  commitHistory
 }) => {
   const [loading, setLoading] = useState(false);
   const { account, library } = useWeb3React();
-
-  //Buttons
-  const [stakeDisabled, setStakeDisabled] = useState(true);
-  const [unstakeDisabled, setUnstakeDisabled] = useState(true);
-  const [reStakeDisabled, setReStakeDisabled] = useState(true);
-  const [withdrawDisabled, setwithdrawDisabled] = useState(true);
+  const { WTON_ADDRESS, TON_ADDRESS } = CONTRACT_ADDRESS;
+  
   const [candidateContracts, setCandidateContracts] = useState('');
   const [candidates, setCandidates] = useState('');
   const [stakeOfUser, setStakeOfUser] = useState('');
   const [expSeig, setExpSeig] = useState('');
+  const [name, setName] = useState('');
   const [stakeCandidate, setStakeCandidate] = useState('');
-  const [minimumAmount, setMinimumAmount] = useState<boolean>(false);
+  const [minimumAmount, setMinimumAmount] = useRecoilState(minimumAmountState)
+  const [minimumAmountForButton, setMinimumAmountForButton] = useState<boolean>(false);
+  const [isOperator, setIsOperator] = useState<boolean>(false);
+  const [isL2, setIsL2] = useState<boolean>(false);
 
   const { userTonBalance, userWTonBalance } = useUserBalance(account);
-  const { openModal } = useModal('wallet');
-  // const {
-  //   candidateContract,
-  //   stakeOf,
-  //   candidate,
-  //   expectedSeig,
-  //   stakeOfCandidate
-  // } = data
+
+  const compounds = useCalculateAPR(data)
+
+  // console.log(convertNumber({amount: data.commissionRate.toString(), localeString: false}), data.commissionRate)
 
   useEffect(() => {
-    setCandidateContracts(data?.candidateContract);
-    setCandidates(data?.candidate);
-    setStakeOfUser(data?.stakeOf);
-    setExpSeig(data?.expectedSeig);
-    setStakeCandidate(data?.stakeOfCandidate);
+    if (data) {
+      setCandidateContracts(data.candidateContract);
+      setCandidates(data.candidate);
+      setStakeOfUser(data.stakeOf);
+      setExpSeig(data.expectedSeig);
+      setStakeCandidate(data.stakeOfCandidate);
+      setIsL2(data.candidateAddOn !== null)
+      setName(data.name)
+    }
   }, [data]);
 
+  useEffect(() => {
+    if (account) {
+      setIsOperator(candidates.toLowerCase() === account.toLowerCase())
+    }
+  }, [account, candidates])
+
   const { pendingUnstaked } = usePendingUnstaked(data?.candidateContract, account);
-  const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength } = useWithdrawable(
+  const { withdrawable, withdrawableLength, old_withdrawable, old_withdrawableLength, requests } = useWithdrawable(
     data?.candidateContract,
   );
   const checkDelay = useWithdrawDelay(data?.candidateContract)
@@ -90,197 +101,182 @@ export const WalletInformation: FC<WalletInformationProps> = ({
       })
     : '0.00';
   
-  const btnDisabledStake = () => {
-    return account && (userTonBalance !== '0.00' || userWTonBalance !== '0.00') ? setStakeDisabled(false) : setStakeDisabled(true);
-  };
+  const candidateAmountForButton = stakeCandidate
+  ? convertNumber({
+      amount: stakeCandidate,
+      type: 'ray',
+    })
+  : '0.00';
 
-  const btnDisabledReStake = () => {
-    return account === undefined || pendingUnstaked === '0.00' ? setReStakeDisabled(true) : setReStakeDisabled(false);
-  };
+  const candidateAmount = stakeCandidate 
+    ? convertNumber({
+      amount: stakeCandidate,
+      type: 'ray',
+    })
+  : '1000.1';
 
-  const btnDisabledUnStake = () => {
-    return account === undefined || yourStaked === '0.00' || yourStaked === '-' || !checkDelay
-      ? setUnstakeDisabled(true)
-      : setUnstakeDisabled(false);
-  };
-
-  const btnDisabledWithdraw = () => {
-    return account === undefined || (withdrawable === '0.00' && old_withdrawable === '0.00')
-      ? setwithdrawDisabled(true)
-      : setwithdrawDisabled(false);
-  };
 
   useEffect(() => {
-    btnDisabledStake();
-    btnDisabledUnStake();
-    btnDisabledReStake();
-    btnDisabledWithdraw();
-    /*eslint-disable*/
-  }, [account, pendingUnstaked, userTonBalance, withdrawable, old_withdrawable]);
+    // console.log(Number(candidateAmount), Number(candidateAmount) > 1000)
+    setMinimumAmount(Number(candidateAmount) > 1000)
+    setMinimumAmountForButton(Number(candidateAmountForButton) > 1000)
 
-  // const candidateAmount = stakeCandidate
-  //   ? convertNumber({
-  //       amount: stakeCandidate,
-  //       type: 'ray',
-  //     })
-  //   : '0.00';
-
-  // const minimumAmount = Number(candidateAmount) > 100;
-
-  useEffect(() => {
-    if (stakeCandidate && account) {
-      const candidateAmount = stakeCandidate ? convertNumber({
-        amount: stakeCandidate,
-        type: 'ray'
-      }) : '0.00'
-      setMinimumAmount(Number(candidateAmount) > 1000)
-    }
-  }, [stakeCandidate, account])
-
-
+  }, [account, candidateAmount])
+  
   const dataModal: StakeModalDataType = {
     tonBalance: userTonBalance ? userTonBalance : '0.00',
     wtonBalance: userWTonBalance ? userWTonBalance : '0.00',
-    pendingUnstaked: pendingUnstaked,
     stakedAmount: yourStaked ? yourStaked : '0.00',
-    withdrawable: withdrawable,
-    old_withdrawable: old_withdrawable,
     layer2: candidateContracts,
-    old_layer2: getOldLayerAddress(candidateContracts) ? getOldLayerAddress(candidateContracts) : '',
     withdrawableLength: withdrawableLength,
-    old_withdrawableLength: old_withdrawableLength,
     seig: expectedSeigs ? expectedSeigs : '0.00',
     candidate: candidates,
     minimumAmount: minimumAmount,
+    pendingUnstaked: pendingUnstaked,
+    withdrawable: withdrawable,
+    // old_withdrawableLength: old_withdrawableLength,
+    old_withdrawableLength: '1',
+    old_withdrawable: old_withdrawable,
+    old_layer2: getOldLayerAddress(candidateContracts) ? getOldLayerAddress(candidateContracts) : '',
+    requests: requests,
+    isL2: isL2,
+    apy: compounds,
+    name: name
   };
 
   const modalButton = useCallback(async (modalType: ModalType, data: any) => {
     setSelectedModal(modalType);
     setSelectedModalData(data);
-  }, []);
+  }, [dataModal]);
 
   const theme = useTheme();
   const { btnStyle } = theme;
-
+  
   return (
-    <Container maxW={'sm'} shadow={'md'} borderRadius={'lg'} border={'solid 1px #f4f6f8'} h={'273px'}>
-      <Box w={'100%'} p={0} textAlign={'center'} pb={'30px'} px={5}>
-        <Flex
-          mt={'20px'}
-          fontSize={'11px'}
-          color={'#2a72e5'}
-          w={'100%'}
-          justifyContent={'end'}
-          cursor={'pointer'}
-          h={'13px'}
-          onClick={() => modalButton('calculator', dataModal)}
-        >
-          Simulator
-        </Flex>
-        <Heading
-          color={'#2a72e5'}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          fontWeight={500}
-          // fontSize={'42px'}
-          h={'55px'}
-        >
-          {
-            // userTonBalance === undefined 
-            // ? <LoadingDots /> 
-            // : (
-              <Flex flexDir={'row'} color={'#304156'} fontSize={'18px'} fontWeight={'bold'}>
-                <Flex alignItems={'end'}>
-                  {account ? userTonBalance : '-'}
-                  <Text fontSize={'13px'} fontWeight={500} ml={'3px'}>
-                    TON
-                  </Text>
-                </Flex>
-                <Flex mx={'6px'} color={'#c7d1d8'} fontWeight={'normal'}>
-                  /
-                </Flex>
-                <Flex alignItems={'end'}>
-                  {account ? userWTonBalance : '-'}
-                  <Text fontSize={'13px'} fontWeight={500} ml={'3px'}>
-                    WTON
-                  </Text>
-                </Flex>
+    <Container maxW={'330px'} shadow={'md'} borderRadius={'lg'} border={'solid 1px #f4f6f8'} h={'137px'}>
+      <Box w={'100%'} p={0} textAlign={'center'} px={2}>
+        <Flex flexDir={'row'} py={'15px'} alignItems={'center'} mt={'10px'}>
+          <Flex flexDir={'column'} h={'76px'}>
+            <Flex flexDir={'column'} >
+              <Flex>
+                <Link
+                  href={`${ETHERSCAN_LINK}/address/${TON_ADDRESS}`}
+                  isExternal={true}
+                  border={'1px solid #f4f6f8'}
+                  w={'32px'} 
+                  h={'32px'} 
+                  justifyContent={'center'} 
+                  alignItems={'center'} 
+                  borderRadius={'100px'}
+                  mr={'6px'}
+                >
+                  <Flex
+                    justifyContent={'center'} 
+                    alignItems={'center'} 
+                    w={'32px'} 
+                    h={'32px'}   
+                  >
+                    <Image src={TON_LOGO} alt={''} />
+                  </Flex>
+                </Link>
+                <Link
+                  href={`${ETHERSCAN_LINK}/address/${WTON_ADDRESS}`}
+                  isExternal={true}
+                  border={'1px solid #007aff'}
+                  w={'32px'} 
+                  h={'32px'} 
+                  borderRadius={'100px'}
+                  bgColor={'#007aff'}
+                >
+                  <Flex
+                    w={'32px'} 
+                    h={'32px'} 
+                    justifyContent={'center'} 
+                    alignItems={'center'} 
+                  >
+                    <Image src={WTON_LOGO} alt={''} />
+                  </Flex>
+                </Link>
               </Flex>
-            // )
-            }
-        </Heading>
-        <Box pt={'5px'} pb={'30px'}>
-          <Text fontSize={'15px'} color={'gray.400'}>
-            Available in wallet
-          </Text>
-        </Box>
-        {
-          account ?
-          <Grid pos="relative" templateColumns={'repeat(2, 1fr)'} gap={4}>
-             <Button
-              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account ? false : true}
-              fontSize={'14px'}
-              opacity={loading === true ? 0.5 : 1}
-              onClick={() => modalButton('staking', dataModal)}
-            >
-              Stake
-            </Button>
-            <Button
-              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account && !checkDelay ? false : true}
-              fontSize={'14px'}
-              opacity={loading === true ? 0.5 : 1}
-              onClick={() => modalButton('unstaking', dataModal)}
-            >
-              Unstake
-            </Button>
-            <Button
-              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account ? false : true}
-              fontSize={'14px'}
-              opacity={loading === true ? 0.5 : 1}
-              onClick={() => modalButton('restaking', dataModal)}
-            >
-              Restake
-            </Button>
-            <Button
-              {...(!account ? { ...btnStyle.btnDisable() } : { ...btnStyle.btnAble() })}
-              isDisabled={account ? false : true}
-              fontSize={'14px'}
-              opacity={loading === true ? 0.5 : 1}
-              onClick={() => modalButton('withdraw', dataModal)}
-            >
-              Withdraw
-            </Button>
-
-            {loading === true ? (
-              <Flex pos="absolute" zIndex={100} w="100%" h="100%" alignItems="cneter" justifyContent="center">
-                <Center>{/* <LoadingComponent></LoadingComponent> */}</Center>
+              <Flex fontSize={'11px'} color={'#304156'} fontWeight={700} mt={'9px'}>
+                <Link
+                  href={`${ETHERSCAN_LINK}/address/${TON_ADDRESS}`}
+                  isExternal={true}
+                  textDecor={'none'}
+                  _hover={{
+                    textDecor: 'none'
+                  }}
+                >
+                  TON
+                </Link>
+                <Flex color={'#c7d1d8'} mx={'3px'}>
+                  /   
+                </Flex>
+                <Link
+                  href={`${ETHERSCAN_LINK}/address/${WTON_ADDRESS}`}
+                  isExternal={true}
+                  textDecor={'none'}
+                  _hover={{
+                    textDecor: 'none'
+                  }}
+                >
+                  WTON
+                </Link>
               </Flex>
-            ) : null}
-          </Grid>
-          :
-          <Flex
-            justifyContent={'center'}
-            alignItems={'center'}
-            mt={'20px'}
-            
-          >
-            <Button
-              {...btnStyle.btnAble()}
-              isDisabled={false}
-              onClick={openModal}
+            </Flex>
+            <Flex
+              mt={'9px'}
+              fontSize={'11px'}
+              color={'#2a72e5'}
+              w={'100%'}
+              justifyContent={'center'}
+              cursor={'pointer'}
+              h={'13px'}
+              onClick={() => modalButton('calculator', dataModal)}
             >
-              Connect wallet
-            </Button>
+              Simulator
+            </Flex>
           </Flex>
-        }
+          <Flex w={'1px'} h={'60px'} bgColor={'#f4f6f8'} mx={'15px'} />
+          <Flex flexDir={'column'}>
+            <Flex color={'#808992'} fontSize={'12px'} fontWeight={'normal'}>
+              <Flex>
+                Staking APY
+              </Flex>
+              <Flex mt={'3px'} ml={'3px'}>
+                <BasicTooltip 
+                  label={'360-day historical staking APY calculated from seigniorage update frequency, with a 10% commission fee to the DAO candidate'} 
+                  width={'430px'}
+                />
+              </Flex>
+            </Flex>
+            <Flex flexDir={'row'} alignItems={'center'} justifyContent={'space-between'}>
+              <Flex color={'#304156'} fontSize={'25px'} fontWeight={700} mr={'9px'} w={'110px'}>
+                {compounds === 'NaN' || Number(compounds) === Infinity ? '0.00' : compounds} %
+              </Flex>
+              <Button
+                {...(minimumAmountForButton || isOperator ? { ...btnStyle.btnAble() } : { ...btnStyle.btnDisable() })}
+                isDisabled={minimumAmountForButton || isOperator ? false : true}
+                fontSize={'14px'}
+                w={'70px'}
+                h={'29px'}
+                opacity={loading === true ? 0.5 : 1}
+                onClick={() => modalButton('staking', dataModal)}
+              >
+                Stake
+              </Button>
+            </Flex>
+            <Flex color={'#808992'} fontSize={'11px'} fontWeight={400} flexDir={'column'}>
+              <Flex>
+                Seigniorage is updated
+              </Flex>
+              <Flex>
+                {commitHistory && commitHistory[0] ? fromNow(commitHistory[0].timestamp) : ''}.
+              </Flex>
+            </Flex>
+          </Flex>
+        </Flex>
       </Box>
-      <StakeModal />
-      <WalletModal />
-      <CalculatorModal />
     </Container>
   );
 };

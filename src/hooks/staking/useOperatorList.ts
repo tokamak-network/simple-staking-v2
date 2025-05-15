@@ -7,7 +7,8 @@ import useCallContract from '@/hooks/useCallContract';
 import { BigNumber } from 'ethers';
 import { useRecoilValue } from 'recoil';
 import { txState } from '@/atom/global/transaction';
-import { useWindowDimensions } from '../useWindowDimensions';
+import { useWindowDimensions } from "../useWindowDimensions";
+// import { useCandidateList } from './useCandidateList';
 
 export function useOperatorList() {
   const [operatorList, setOperatorList] = useState([]);

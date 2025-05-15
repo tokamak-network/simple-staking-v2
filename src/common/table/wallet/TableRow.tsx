@@ -1,23 +1,23 @@
 import { getEventName } from '@/components/getEventName';
 import { convertNumber } from '@/components/number';
-import trimAddress from '@/components/trimAddress';
-import { chakra, Link, Text, Flex } from '@chakra-ui/react';
+import { chakra, Link, Text, Flex, Button } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
 import { useTheme } from '@chakra-ui/react';
 import { getLayerName } from '../../../utils/getOldLayerAddress';
 import moment from 'moment';
-import { getCountdown } from '@/api';
 import { useWeb3React } from '@web3-react/core';
 import { calcCountDown } from '../../../utils/number';
+import { DEFAULT_NETWORK, ETHERSCAN_API, ETHERSCAN_LINK } from '@/constants';
 
 type TableRowProps = {
   index: number
   cell: any
+  delay: number
 }
 
 export const TableRow: FC<TableRowProps> = ({
-  index,
   cell,
+  delay,
 }) => {
   // console.log(cell?.row.original)
   const {
@@ -33,6 +33,10 @@ export const TableRow: FC<TableRowProps> = ({
     from,
     blockNumber,
     candidate,
+    index,
+    withdrawable,
+    withdrawn,
+    withdrawDelay
   } = cell?.row.original;
   
   const txSender = sender ? sender : from
@@ -52,38 +56,65 @@ export const TableRow: FC<TableRowProps> = ({
   
   useEffect(() => {
     async function fetch () {
-      if (typeName === 'Unstake') {
-        const withdrawableBlock = Number(blockNo) + 93046
+      if (typeName === 'Unstake' && withdrawDelay) {
+        
+        const withdrawableBlock = Number(blockNo) + withdrawDelay
         const currentBlock = await library.getBlockNumber()
+        
         if (currentBlock > withdrawableBlock) {
           setRemainTime('0')
         } else {
-          const apiValue = await getCountdown(withdrawableBlock)
-          setRemainTime(apiValue.EstimateTimeInSec)
+          const remainTimes = (withdrawableBlock - currentBlock) * 12
+          setRemainTime(remainTimes.toString())
         }
       }
     }
     fetch()
   }, [])
 
-
   const withdrawableTime = (blockNumber: number) => {
-    const withdrawableBlock = Number(blockNumber) + 93046
+    const withdrawableBlock = Number(blockNumber) + Number(withdrawDelay)
+    
     return (
-      <Flex justifyContent={'center'}>
-        <Flex mr={'3px'}>
-          Withdrawable at block
-        </Flex>
-        <Link
-          isExternal
-          href={`https://etherscan.io/block/countdown/${withdrawableBlock}`}
-          color={'#2a72e5'}
-        >
-          {withdrawableBlock}
-        </Link>
-        <Flex ml={'3px'}>
-          {calcCountDown(remainTime)}
-        </Flex>
+      <Flex justifyContent={'center'} flexDir={'column'}>
+        {
+          remainTime === '0' ? (
+            <Flex color={'#2a72e5'}>
+              {/* <Button 
+                w={'80px'}
+                h={'25px'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                borderRadius={'4px'}
+                border={'1px solid #2a72e5'}
+                bgColor={'#fff'}
+                color={'#2a72e5'}
+                fontSize={'12px'}
+                fontWeight={400}
+              >  */}
+                Withdrawable
+              {/* </Button> */}
+            </Flex>
+          ) : (
+            <Flex justifyContent={'center'} flexDir={'column'}>
+              <Flex flexDir={'row'}>
+                <Flex mr={'3px'} color={'#304156'}>
+                  Withdrawable at block
+                </Flex>
+                <Link
+                  isExternal
+                  href={`${ETHERSCAN_LINK}/block/countdown/${withdrawableBlock}`}
+                  color={'#2a72e5'}
+                >
+                  {withdrawableBlock}
+                </Link>
+              </Flex>
+              <Flex ml={'3px'} color={'#828d99'}>
+                {calcCountDown(remainTime.toString())}
+              </Flex>
+            </Flex>
+          )
+        }
       </Flex>
     )
   }
@@ -93,8 +124,9 @@ export const TableRow: FC<TableRowProps> = ({
       key={index}
       w={ 
         type === 'index' ? '70px' :
-        type === 'txHash' || type === 'contractAddress' ? '140px' :
-        type === 'txType' || type === 'amount' ? '130px' :
+        type === 'txHash' ? '160px' :
+        type === 'txType' ? '170px' : 
+        type === 'amount' ? '190px' :
         type === 'blockNumber' ? '360px' :
         type === 'status' ? '140px' : ''
       }
@@ -107,22 +139,19 @@ export const TableRow: FC<TableRowProps> = ({
         </Text>
       ) : ('')}
       {txId && type === 'txHash' ? (
+        
         <Link
           isExternal
-          href={`https://etherscan.io/tx/${txId}`}
+          href={`https://${DEFAULT_NETWORK === '1' ? 'simple' : 'sepolia'}.staking.tokamak.network/staking#${candidate ? candidate.id : layer2}`}
           textAlign={'center'}
           w={'100%'}
           color={'#2a72e5'}
         >
-          {trimAddress({
-            address: txId,
-            firstChar: 6,
-            lastChar: 4,
-            dots: '...'
-          })}
+          {candidate ? candidate.name : 'Unknown'}
+          
         </Link>
       ) : ('')}
-      {type === 'contractAddress' ? (
+      {/* {type === 'contractAddress' ? (
         <Link
           isExternal
           href={`https://etherscan.io/address/${txSender}`}
@@ -132,12 +161,18 @@ export const TableRow: FC<TableRowProps> = ({
         >
           {layerName}
         </Link>
-      ) : ('')}
+      ) : ('')} */}
       {type === 'txType' ? (
         //@ts-ignore
-        <Text textAlign={'center'} color={'#304156'} w={'100%'}>
+        <Link
+          isExternal
+          href={`${ETHERSCAN_LINK}/tx/${txId}`}
+          textAlign={'center'}
+          w={'100%'}
+          color={'#2a72e5'}
+        >
           {typeName}
-        </Text>
+        </Link>
       ) : ('')}
       {type === 'amount' ? (
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
@@ -150,9 +185,12 @@ export const TableRow: FC<TableRowProps> = ({
       ) : ('')}
       {type === 'blockNumber' ? (
         //@ts-ignore
-        <Text textAlign={'center'} color={'#304156'} w={'100%'}>
-          {typeName === 'Unstake' ? withdrawableTime(blockNo) : moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')}
-        </Text>
+        <Flex justifyContent={'center'} color={'#304156'} w={'100%'}>
+          {typeName === 'Unstake' ? 
+            withdrawn ? moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)') 
+              : withdrawableTime(blockNo) 
+            : moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')}
+        </Flex>
       ) : ('')}
       {type === 'status' ? (
         <Text color={'#304156'} textAlign={'center'} w={'100%'}>

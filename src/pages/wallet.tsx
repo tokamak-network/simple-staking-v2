@@ -5,18 +5,18 @@ import GraphContainer from './components/wallet/GraphContainer';
 import { MyHistoryTable } from '../common/table/wallet/MyHistoryTable';
 import { useMemo, useState } from 'react';
 import { useUserHistory } from '../hooks/wallet/useUserHIstory';
-// import { useAccumulatedReward } from '@/hooks/wallet/useAccumulatedReward';
 import { convertNumber } from '../utils/number';
 import { useTopCardInfo } from '@/hooks/wallet/useTopCardInfo';
+import { LoadingDots } from '@/common/Loader/LoadingDots';
+import { useWeb3React } from '@web3-react/core';
 
 function Wallet () {
   const theme = useTheme();
-  const { userHistory } = useUserHistory();
+  const { account } = useWeb3React();
+  const { userHistory, loading } = useUserHistory();
   const [tableLoading, setTableLoading] = useState<boolean>(true);
-  // const { accumulatedReward } = useAccumulatedReward()
-  // const { userTotalStaked } = useOperatorList()
   const { userTotalStaked, userPendingWithdrawal } = useTopCardInfo()
-
+  
   const myTotalStaked = userTotalStaked ? convertNumber({
     amount: userTotalStaked,
     type: 'ray',
@@ -59,23 +59,29 @@ function Wallet () {
     ],
     [],
   );
-
+  
   return (
     <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
       <PageHeader title={'Account'} subtitle={'Check the status of your assets in the account'}/>
-      <Box fontFamily={theme.fonts.roboto}>
+      <Flex fontFamily={theme.fonts.roboto} flexDir={'column'} w={'100%'} alignItems={'center'}>
         <TopCardContainer
           totalStaked={myTotalStaked}
           pendingWithdrawal={myPendingWithdrawal}
           accumulatedReward={''}
         />
-        {/* <GraphContainer /> */}
-        <MyHistoryTable 
-          columns={historyColumns}
-          data={userHistory}
-          isLoading={tableLoading}
-        />
-      </Box>
+        <Flex mt={loading ? "50px" : '0px'}>
+          {
+            !account ? <Flex mt={'100px'}>Please Connect to Wallet</Flex> :
+            loading ? <LoadingDots /> :
+            userHistory && userHistory.length > 0 ?
+            <MyHistoryTable 
+              columns={historyColumns}
+              data={userHistory}
+              isLoading={tableLoading}
+            /> : ''
+          }
+        </Flex>
+      </Flex>
     </Flex>
   );
 }

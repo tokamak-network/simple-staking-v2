@@ -25,9 +25,8 @@ export function calculateRoi(totalStakedAmount: number, totalSupply: number, fet
   const seigPerBlock = 3.92;
   const blockNumsPerYear = 2628000;
   const stakedRatio = totalStakedAmount / totalSupply;
-  
-  const getStakerRatio = fetchDateUTC ? fetchDateUTC > 20241016 ? 0.5 : 0.4 : 0.5
-  const roi = (seigPerBlock * blockNumsPerYear * (stakedRatio + getStakerRatio * (1 - stakedRatio))) / totalStakedAmount;
+
+  const roi = (seigPerBlock * blockNumsPerYear * (stakedRatio + 0.5 * (1 - stakedRatio))) / totalStakedAmount;
 
   return roi;
 }

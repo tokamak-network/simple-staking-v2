@@ -1,253 +1,240 @@
 import { IconClose } from "@/common/Icons/IconClose";
 import { IconOpen } from "@/common/Icons/IconOpen";
-import { Box, Flex, Spinner, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
-import { useMemo, useCallback, useState } from 'react';
-import OperatorDetailInfo from "@/common/table/staking/OperatorDetail";
+import { Box, Flex, FormControl, FormLabel, Spinner, Switch, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
+import { useMemo, useCallback, useState, useRef } from 'react';
 import PageHeader from "../layout/PageHeader";
-import OpearatorTable from "@/common/table/staking/Operators";
-import { WalletInformation } from "./WalletInformation";
-import HistoryTable from "@/common/table/staking/HistoryTable";
-import moment from "moment";
 import { useEffect } from 'react';
 import { useCandidateList } from '@/hooks/staking/useCandidateList';
-import { getTransactionHistory, getCommitHistory } from '../../../utils/getTransactionHistory';
 import { useWeb3React } from "@web3-react/core";
-import { convertNumber } from "@/components/number";
+import { StakingInformation } from "./StakingInformation";
+import L2Information from "./L2Information";
+import getCircle from "@/common/table/staking/Circle";
+import BasicTooltip from "@/common/tooltip/index";
+import OpearatorInfos from "@/common/Operators";
+import { useStakingInformation } from "@/hooks/staking/useStakingInformation";
+import { StakingInformationTooltip } from "@/common/tooltip/StakingInformationTooltip";
+import { useRecoilState } from "recoil";
+import { openInfonState } from "@/atom/staking/openInfo";
+import { useRouter } from "next/router";
 
 function DesktopStaking () {
+  const theme = useTheme();
+  const router = useRouter();
+  const { asPath } = router;
 
-    const theme = useTheme();
+  const focusTarget = useRef<any>([]);
+  const historyColumns = useMemo(
+    () => [
+      {
+        Header: 'Account Address',
+        accessor: 'account',
+      },
+      {
+        Header: 'TX Hash',
+        accessor: 'txHash',
+      },
+      {
+        Header: 'Type',
+        accessor: 'txType',
+      },
+      {
+        Header: 'Amount',
+        accessor: 'amount',
+      },
+      {
+        Header: 'Date',
+        accessor: 'date',
+      }
+    ],
+    [],
+  );
+  
+  const [tableLoading, setTableLoading] = useState<boolean>(true);
+  const { candidateList } = useCandidateList()
+  const { account } = useWeb3React();
+  const { stakingInfo } = useStakingInformation(candidateList);
+  // const [toggle, setToggle] = useState('All');
+  // const [filteredCandidate, setFilteredCandidate] = useState<any[]>([]);
 
-    const columns = useMemo(
-      () => [
-        {
-          Header: 'name',
-          accessor: 'name',
-        },
-        {
-          Header: 'total staked',
-          accessor: 'totalStaked',
-        },
-        {
-          Header: 'commision rate',
-          accessor: 'commisionRate',
-        },
-        {
-          Header: 'your staked',
-          accessor: 'yourStaked',
-        },
-        {
-          // Make an expander cell
-          Header: () => null, // No header
-          id: 'expander', // It needs an ID
-          Cell: ({row}: {row: any}) => (
-            // Use Cell to render an expander for each row.
-            // We can use the getToggleRowExpandedProps prop-getter
-            // to build the expander.
-            <span {...row.getToggleRowExpandedProps()}>
-              {row.isExpanded ? <IconClose /> : <IconOpen />}
-            </span>
-          ),
-        },
-      ],
-      [],
-    );
-    const historyColumns = useMemo(
-      () => [
-        {
-          Header: 'Account Address',
-          accessor: 'account',
-        },
-        {
-          Header: 'TX Hash',
-          accessor: 'txHash',
-        },
-        {
-          Header: 'Type',
-          accessor: 'txType',
-        },
-        {
-          Header: 'Amount',
-          accessor: 'amount',
-        },
-        {
-          Header: 'Date',
-          accessor: 'date',
-        }
-      ],
-      [],
-    );
+  const [isOpen, setIsOpen] = useRecoilState(openInfonState);
 
-    const [tableLoading, setTableLoading] = useState<boolean>(true);
-    const { candidateList } = useCandidateList()
-    const { account } = useWeb3React();
+  useEffect(() => {
+    candidateList ? setTableLoading(false) : setTableLoading(true)
+  }, [candidateList])
 
-    useEffect(() => {
-      candidateList ? setTableLoading(false) : setTableLoading(true)
-    }, [candidateList, tableLoading])
-    
-    const renderRowSubComponent = useCallback(
-      ({row}: any) => {
-      const { 
-        candidateContract, 
-        expectedSeig, 
-        candidate, 
-        pending, 
-        stakeOf, 
-        stakedUserList, 
-        asCommit,
-        stakeOfCandidate
-      } = row.original;
-      const txHistory = getTransactionHistory(row.original)
-      const commitHistory = getCommitHistory(row.original)
+  // useEffect(() => {
+  //   async function fetch() {
+  //     if (toggle === 'Staked' && account) {
+  //       const filtered = candidateList.filter((candidate: any) => candidate.stakeOf > 0)
+  //       setFilteredCandidate(filtered)
+  //     } else {
+  //       setFilteredCandidate(candidateList)
+  //     }
+  //   }
+  //   fetch()
+  // }, [toggle, candidateList])
 
-      const candidateAmount = stakeOfCandidate? convertNumber({
-        amount: stakeOfCandidate,
-        type: 'ray'
-      }) : '0.00'
+  // useEffect(() => {
+  //   setToggle('All')
+  // }, [account])
 
-      const minimumAmount = Number(candidateAmount) >= 1000
-
-      const userExpectedSeig = expectedSeig ? 
-        convertNumber({
-          amount: expectedSeig,
-          type: 'ray',
-          localeString: true
-        }) : '-' 
+  useEffect(() => {
+    if (asPath.includes('#')) {
+      const indexOf = asPath.indexOf('#')
+      const dataIndex = candidateList.findIndex((candidateData: any) => candidateData.candidateContract === asPath.slice(indexOf + 1))
       
-      const yourStake = convertNumber({
-        amount: stakeOf, 
-        type: 'ray',
-        localeString: true
-      })
+      setIsOpen(asPath.slice(9));
+      setTimeout(() => {
+      focusTarget?.current[dataIndex]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 100);
+    }
+  }, [])
 
-      const pendingUnstaked = convertNumber({
-        amount: pending,
-        type: 'ray',
-        localeString: true
-      })
-    
+  const renderL2Component = 
+    useCallback(({data}: any) => {
+
       return (
         <Flex
           w="100%"
           m={0}
           justifyContent={'space-between'}
           alignItems="start"
-          pt="70px"
+          // pt="70px"
           border={'none'}
           flexDir={'column'}
         >
-          <Flex>
-            <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
-              <Flex flexDir={'column'} alignItems={'space-between'}>
-                <OperatorDetailInfo 
-                  title={'Total Stakers'}
-                  value={stakedUserList.length}
-                />
-              </Flex>
-              <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
-                <OperatorDetailInfo 
-                  title={'Pending Withdrawal'}
-                  value={pendingUnstaked}
-                  unit={'TON'}
-                  type={''}
-                />
-              </Flex>
-            </Flex>
-            <Box p={0} w={'390px'} borderRadius={'10px'} alignSelf={'flex-start'}>
-              <WalletInformation 
-                data={row.original}
-              />
-            </Box>
-  
-            <Flex flexDir={'column'} justifyContent={'start'} h={'100%'} mt={'30px'} w={'285px'} ml={'70px'}>
-              <Flex flexDir={'column'} alignItems={'space-between'}>
-                <OperatorDetailInfo 
-                  title={'Your Staked'}
-                  value={yourStake}
-                  unit={'TON'}
-                  type={''}
-                />
-              </Flex>
-              <Flex flexDir={'column'} alignItems={'space-between'} mt={'40px'}>
-                <OperatorDetailInfo 
-                  title={'Unclaimed Staking Reward'}
-                  value={userExpectedSeig}
-                  unit={'TON'}
-                  type={''}
-                  contractInfo={candidateContract}
-                  candidate={candidate}
-                  minimumAmount={minimumAmount}
-                />
-              </Flex>
-            </Flex>
-          </Flex>
-          {/* table area */}
-          <Flex 
-            flexDir={'row'} 
-            mt={'60px'} 
-            ml={'70px'} 
-            justifyContent={'center'} 
-            alignItems={'center'}
-          >
-            {
-              txHistory &&
-              <HistoryTable 
-                columns={historyColumns}
-                data={txHistory}
-                tableType={'Staking'}
-              />
-            }
-            {
-              commitHistory &&
-              <HistoryTable 
-                columns={historyColumns}
-                data={commitHistory}
-                tableType={'Commit'}
-              />
-            }
-          </Flex>
+          <L2Information 
+            data={data}
+          />
         </Flex>
       )
-    }, [historyColumns]);
+    }, []
+  )
     
-    
-    return (
-      <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
-        <PageHeader title={'DAO Candidates'} subtitle={'Choose a DAO candidate to stake, restake, unstake, or withdraw TON (or WTON).'}/>
-        <Box fontFamily={theme.fonts.roboto}>
-          {candidateList.length === 0 ? 
-            <Flex justifyContent="center" alignItems={"center"} h='200px'>
-              <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
-            </Flex> :
-            <Flex flexDir={'column'}>
-              <OpearatorTable 
-                renderDetail={renderRowSubComponent}
-                columns={columns}
-                // @ts-ignore
-                data={candidateList}
-                isLoading={tableLoading}
+  const renderStakingComponent = 
+    useCallback(({data}: any) => {
+      
+      return (
+        <Flex
+          w="100%"
+          m={0}
+          justifyContent={'space-between'}
+          alignItems="start"
+          // pt="70px"
+          mt={'40px'}
+          border={'none'}
+          flexDir={'column'}
+        >
+          <StakingInformation 
+            data={data}
+          />
+        </Flex>
+      )
+    }, [historyColumns]
+  );
+  
+  return (
+    <Flex minH={'80vh'} w={'100%'} mt={'36px'} flexDir={'column'} alignItems={'center'}>
+      <PageHeader title={'DAO Candidates'} subtitle={'Stake your TON with a DAO candidate to earn seigniorage rewards while delegating your voting power to help shape Tokamak Network\'s governance.'}/>
+      <Box fontFamily={theme.fonts.roboto} overflowX={'hidden'}>
+        <Flex justifyContent={'center'}>
+          <Flex w={'538px'} justifyContent={'space-between'} mb={'60px'}>
+            {
+              stakingInfo.map((info: any, index: number) => {
+                const {
+                  title,
+                  tooltip,
+                  value,
+                  unit,
+                  width
+                } = info
+                return (
+                  <StakingInformationTooltip
+                    key={index}
+                    title={title}
+                    tooltip={tooltip}
+                    value={value}
+                    unit={unit}
+                    widths={width}
+                  />
+                )
+              })
+            }
+
+          </Flex>
+        </Flex>
+        <Flex justifyContent={'space-between'} mb={'15px'} ml={'17px'} maxWidth={'1100px'}>
+          <Flex fontSize={'11px'} flexDir={'row'} alignItems={'center'} justifyContent={'start'} w={'1100px'}>
+            {getCircle('member')}
+            <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
+              <Flex mr={'3px'}>
+                DAO Committee Member
+              </Flex>
+              <BasicTooltip 
+                label={'member'} 
               />
             </Flex>
-          }
-          {/* {
-          noStakingRewardList.length !== 0 ? (
-            <Flex flexDir={'column'}>
-              <OpearatorTable 
-                renderDetail={renderRowSubComponent}
-                columns={columns}
-                // @ts-ignore
-                data={noStakingRewardList}
-                isLoading={tableLoading}
+            {getCircle('candidate')}
+            <Flex mr={'20px'} flexDir={'row'} alignItems={'center'}>
+            <Flex mr={'3px'}>
+                DAO Candidate
+              </Flex>
+              <BasicTooltip 
+                label={'candidate'} 
               />
             </Flex>
-          ) : (
-            <Flex />
-          )
-        } */}
-        </Box>
-      </Flex>
-    );
+          </Flex>
+          {/* <Flex w={'180px'}>
+            <FormControl display={'flex'} justifyContent={'end'} alignItems={'center'} mr={'10px'}>
+              {
+                account ?
+                <Flex>
+                  <FormLabel color={'#828d99'} fontSize={'11px'} mt={'2px'} w={'100px'} textAlign={'right'}>
+                    {toggle} candidates
+                  </FormLabel>
+                    <Switch 
+                      colorScheme={'green'} 
+                      onChange={() =>
+                        toggle === 'All'
+                          ? setToggle('Staked')
+                          : setToggle('All')
+                      }
+                    /> 
+                </Flex> : ""
+              }
+            </FormControl> 
+          </Flex> */}
+        </Flex>
+        {candidateList.length === 0 ? 
+          <Flex justifyContent="center" alignItems={"center"} h='200px'>
+            <Spinner size="md" emptyColor="gray.200" color="#2775ff" />
+          </Flex> :
+          <Flex flexDir={'column'}>
+            <Flex flexDir={'column'}>
+              {
+                candidateList.map((candidate: any, index: number) => {
+                  
+                  return [
+                    <OpearatorInfos
+                      index={index}
+                      renderDetail={renderStakingComponent}
+                      renderL2={renderL2Component}
+                      data={candidate}
+                      isLoading={tableLoading}
+                    />
+                  ]   
+                })
+              }
+            </Flex>
+          </Flex>
+        }
+        
+      </Box>
+    </Flex>
+  );
 }
  
 export default DesktopStaking;

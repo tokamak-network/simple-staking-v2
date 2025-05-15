@@ -1,116 +1,149 @@
-import { GET_CANDIDATE } from '@/graphql/getCandidates';
-import { useQuery } from '@apollo/client';
-import { useWeb3React } from '@web3-react/core';
-import { useState, useEffect } from 'react';
-import useCallContract from '../useCallContract';
-import { getOldLayerAddress } from '../../utils/getOldLayerAddress';
-import { getEventByLayer2, getOperatorUserHistory } from '@/api';
-import { useWindowDimensions } from '../useWindowDimensions';
-import { getContract } from '@/components/getContract';
-import { toBN } from 'web3-utils';
-import { calculateExpectedSeig } from 'tokamak-staking-lib';
-import BN from 'bn.js';
-import CONTRACT_ADDRESS from 'services/addresses/contract';
-import Coinage from 'services/abi/AutoRefactorCoinage.json';
+import { useState, useEffect } from "react";
+import { useWeb3React } from "@web3-react/core";
+import useCallContract from "../useCallContract";
+import { getOldLayerAddress } from "../../utils/getOldLayerAddress";
+import { getEventByLayer2, getOperatorUserHistory } from "@/api";
+import { useWindowDimensions } from "../useWindowDimensions";
+import { getContract } from "@/components/getContract";
+import { toBN } from "web3-utils";
+import { calculateExpectedSeig } from "tokamak-staking-lib";
+import BN from "bn.js";
+import CONTRACT_ADDRESS from "services/addresses/contract";
+import Coinage from "services/abi/AutoRefactorCoinage.json";
+import { useRecoilState } from "recoil";
+import { txState } from "@/atom/global/transaction";
+import { useGetCandidates } from "../graphql/useGetCandidates";
+import pLimit from "p-limit";
 
 export function useCandidateList() {
   const [candidateList, setCandidateList] = useState<any[]>([]);
-  const { data } = useQuery(GET_CANDIDATE, {
-    pollInterval: 600000,
-    fetchPolicy: 'cache-and-network',
-  });
-  const { account, library } = useWeb3React();
-  const { SeigManager_CONTRACT, DepositManager_CONTRACT, Old_DepositManager_CONTRACT, TON_CONTRACT } =
-    useCallContract();
+  const { candidates } = useGetCandidates();
+  const { account, library, chainId } = useWeb3React();
+  const [txPending] = useRecoilState(txState);
+  const {
+    SeigManager_CONTRACT,
+    DepositManager_CONTRACT,
+    Old_DepositManager_CONTRACT,
+    TON_CONTRACT,
+  } = useCallContract();
   const [width] = useWindowDimensions();
   const mobile = width && width < 1040;
 
   useEffect(() => {
-    async function fetch() {
-      if (data) {
-        const candidates = await Promise.all(
-          data.candidates.map(async (obj: any, index: number) => {
-            let tempObj = obj;
-            let stakeOf;
-            let sumPending;
-            let stakeOfCandidate;
-            let oldCommitHistory;
-            let oldHistory;
-            let expSeig;
+    async function fetchCandidates() {
+      if (!candidates) return;
+      // console.log(candidates)
+      const limit = pLimit(5);
 
-            const oldCandidate = getOldLayerAddress(obj.candidateContract);
+      const tasks = candidates.map((c: any, i: number) =>
+        limit(() => fetchCandidateDetails(c, i))
+      );
 
-            if (oldCandidate) {
-              oldHistory = await getOperatorUserHistory(oldCandidate);
-              oldCommitHistory = await getEventByLayer2(oldCandidate, 'Comitted', 1, 300);
-            }
-            if (SeigManager_CONTRACT && DepositManager_CONTRACT && Old_DepositManager_CONTRACT && obj) {
-              try {
-                if (account) {
-                  stakeOf = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, account);
-                  if (mobile && stakeOf !== '0' && TON_CONTRACT) {
-                    const blockNumber = library && (await library.getBlockNumber());
-                    const Tot = getContract(await SeigManager_CONTRACT.tot(), Coinage, library, account);
-                    const coinage = getContract(
-                      await SeigManager_CONTRACT.coinages(obj.candidateContract),
-                      Coinage,
-                      library,
-                      account,
-                    );
+      const results = await Promise.all(tasks);
 
-                    const userStaked = await coinage.balanceOf(account);
-
-                    const tonTotalSupply = await TON_CONTRACT.totalSupply();
-                    const totTotalSupply = await Tot.totalSupply();
-                    const tonBalanceOfWTON = await TON_CONTRACT.balanceOf(CONTRACT_ADDRESS.WTON_ADDRESS);
-                    const relativeSeigRate = await SeigManager_CONTRACT.relativeSeigRate();
-                    const tos = toBN(tonTotalSupply)
-                      .mul(toBN('1000000000'))
-                      .add(toBN(totTotalSupply))
-                      .sub(toBN(tonBalanceOfWTON));
-                    const fromBlockNumber = await SeigManager_CONTRACT.lastCommitBlock(obj.candidateContract);
-                    expSeig = calculateExpectedSeig(
-                      new BN(fromBlockNumber.toString()),
-                      new BN(blockNumber),
-                      new BN(userStaked.toString()),
-                      new BN(totTotalSupply.toString()),
-                      new BN(tos),
-                      new BN(relativeSeigRate.toString()),
-                    );
-                  }
-                }
-                stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(obj.candidateContract, obj.candidate);
-                const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(obj.candidateContract);
-                if (oldCandidate) {
-                  const old_pending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(oldCandidate);
-                  sumPending = pending.add(old_pending);
-                } else {
-                  sumPending = pending;
-                }
-              } catch (e) {
-                console.log(e);
-              }
-            }
-
-            tempObj = {
-              ...obj,
-              stakeOf: stakeOf ? stakeOf.toString() : '0.00',
-              expSeig: expSeig ? parseFloat(expSeig) / Math.pow(10, 27) : 0,
-              pending: sumPending && sumPending.toString(),
-              stakeOfCandidate: stakeOfCandidate && stakeOfCandidate.toString(),
-              oldHistory: oldHistory,
-              oldCommitHistory: oldCommitHistory,
-              index: index,
-            };
-            return tempObj;
-          }),
-        );
-
-        setCandidateList(candidates);
-      }
+      setCandidateList(results)
     }
-    fetch();
-  }, [data, account]);
+
+    async function fetchCandidateDetails(candidateObj: any, index: number) {
+      const { candidateContract, stakedUserList, candidate, name } = candidateObj;
+      let stakeOf, sumPending, stakeOfCandidate, oldCommitHistory, oldHistory, expSeig, myPending;
+
+      const oldCandidate = getOldLayerAddress(candidateContract);
+      if (oldCandidate) {
+        try {
+          [oldHistory, oldCommitHistory] = await Promise.all([
+            getOperatorUserHistory(oldCandidate),
+            getEventByLayer2(oldCandidate, "Comitted", 1, 300),
+          ]);
+        } catch (error) {
+          console.error("Error fetching old candidate data:", error);
+        }
+      }
+
+      const candidateStaked = stakedUserList.find(
+        (user: any) => user.user.id === candidate
+      );
+      if (candidateStaked) {
+        stakeOfCandidate = candidateStaked.stakedAmount;
+      }
+      
+      if (SeigManager_CONTRACT && DepositManager_CONTRACT && Old_DepositManager_CONTRACT) {
+        try {
+          if (account) {
+            stakeOf = await SeigManager_CONTRACT.stakeOf(candidateContract, account);
+            myPending = await DepositManager_CONTRACT.pendingUnstaked(candidateContract, account);
+            stakeOfCandidate = await SeigManager_CONTRACT.stakeOf(candidateContract, candidate);
+
+            if (mobile && stakeOf !== "0" && TON_CONTRACT) {
+              const blockNumber = await library.getBlockNumber();
+              const totAddress = await SeigManager_CONTRACT.tot();
+              const TotContract = getContract(totAddress, Coinage, library, account);
+              const coinageAddress = await SeigManager_CONTRACT.coinages(candidateContract);
+              const coinageContract = getContract(coinageAddress, Coinage, library, account);
+
+              const userStaked = await coinageContract.balanceOf(account);
+              const tonTotalSupply = await TON_CONTRACT.totalSupply();
+              const totTotalSupply = await TotContract.totalSupply();
+              const tonBalanceOfWTON = await TON_CONTRACT.balanceOf(
+                CONTRACT_ADDRESS.WTON_ADDRESS
+              );
+              const relativeSeigRate = await SeigManager_CONTRACT.relativeSeigRate();
+
+              const tos = toBN(tonTotalSupply)
+                .mul(toBN("1000000000"))
+                .add(toBN(totTotalSupply))
+                .sub(toBN(tonBalanceOfWTON));
+              const fromBlockNumber = await SeigManager_CONTRACT.lastCommitBlock(candidateContract);
+
+              expSeig = calculateExpectedSeig(
+                new BN(fromBlockNumber.toString()),
+                new BN(blockNumber),
+                new BN(userStaked.toString()),
+                new BN(totTotalSupply.toString()),
+                new BN(tos),
+                new BN(relativeSeigRate.toString())
+              );
+            }
+          }
+
+          const pending = await DepositManager_CONTRACT.pendingUnstakedLayer2(candidateContract);
+          if (oldCandidate) {
+            const oldPending = await Old_DepositManager_CONTRACT.pendingUnstakedLayer2(oldCandidate);
+            sumPending = pending.add(oldPending);
+          } else {
+            sumPending = pending;
+          }
+        } catch (error) {
+          console.error("Error fetching candidate contract data:", error);
+        }
+      }
+
+      return {
+        ...candidateObj,
+        stakeOf: stakeOf ? stakeOf.toString() : "0.00",
+        expSeig: expSeig ? parseFloat(expSeig) / Math.pow(10, 27) : 0,
+        pending: sumPending ? sumPending.toString() : "0.00",
+        stakeOfCandidate: stakeOfCandidate ? stakeOfCandidate.toString() : "0.00",
+        oldHistory,
+        oldCommitHistory,
+        myPending,
+        index,
+      };
+    }
+
+    fetchCandidates();
+  }, [
+    candidates,
+    account,
+    chainId,
+    txPending,
+    library,
+    SeigManager_CONTRACT,
+    DepositManager_CONTRACT,
+    Old_DepositManager_CONTRACT,
+    TON_CONTRACT,
+    mobile,
+  ]);
 
   return { candidateList };
 }

@@ -1,39 +1,47 @@
 import { getEventName } from "@/components/getEventName";
-import { convertNumber } from "@/components/number";
+import { calcCountDown, convertNumber } from "@/components/number";
 import trimAddress from "@/components/trimAddress";
-import { chakra, Flex, Link, Text } from "@chakra-ui/react";
+import { Button, chakra, Flex, Link, Text } from "@chakra-ui/react";
 import moment from "moment";
-import { FC } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { getColumnWidthStaking } from '@/utils/getColumnWidth';
 import { useTheme } from '@chakra-ui/react';
+import { ETHERSCAN_API, ETHERSCAN_LINK } from "@/constants";
+import { fromNow } from "@/components/getDate";
+import { useWeb3React } from "@web3-react/core";
+import { useRecoilState } from "recoil";
+import { modalData, modalState } from "@/atom/global/modal";
+import { ModalType } from "@/types/modal";
 
 type HistoryTableRowProps = {
-  // key: number
-  index: number
+  key: number
+  
   cell: any
   tableType: string
+  currentPage: any
+  selectedModalData: any
 }
 
 export const HistoryTableRow: FC<HistoryTableRowProps> = ({
-  // key,
-  index,
   cell,
   tableType,
-  
+  selectedModalData
 }) => {
   const {
-    id,
     timestamp,
     data,
     eventName,
     sender,
     amount,
     transaction,
-    layer2,
-    value,
     transactionHash,
     blockTimestamp,
-    from
+    from,
+    index,
+    withdrawable,
+    withdrawn,
+    withdrawDelay
+    // withdrawableBlock
   } = cell.row?.original;
 
   const txSender = sender ? sender : from
@@ -42,19 +50,105 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
   const values = amount ? amount : data?.amount
   const theme = useTheme()
   const type = cell.column.id;
+  
   const typeName = getEventName(eventName)
+  const { library, account } = useWeb3React()
+
+  const [ remainTime, setRemainTime ] = useState('0')
+  const [, setSelectedModalData] = useRecoilState(modalData);
+  const [selectedModal, setSelectedModal] = useRecoilState(modalState);
+  const [ block, setBlock ] = useState(0)
+  
+  const blockNo = transaction ? transaction.blockNumber : 0
+
+  const modalButton = useCallback(async (modalType: ModalType, data: any) => {
+    setSelectedModal(modalType);
+    setSelectedModalData(data);
+  }, []);
+  
+  
+  useEffect(() => {
+    async function fetch () {
+      if (typeName === 'Unstake' && withdrawDelay) {
+        
+        const withdrawableBlock = Number(blockNo) + withdrawDelay
+        const currentBlock = await library.getBlockNumber()
+        
+        setBlock(currentBlock)
+
+        if (currentBlock > withdrawableBlock) {
+          setRemainTime('0')
+        } else {
+          const remainTimes = (withdrawableBlock - currentBlock) * 12
+          setRemainTime(remainTimes.toString())
+        }
+      }
+    }
+    fetch()
+  }, [])
+
+  const withdrawableTime = (blockNumber: number) => {
+    const withdrawableBlock = Number(blockNumber) + Number(withdrawDelay)
+    
+    return (
+      <Flex>
+        {
+          remainTime === '0' ? (
+            <Flex>
+              <Button 
+                w={'80px'}
+                h={'25px'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                borderRadius={'4px'}
+                border={'1px solid #2a72e5'}
+                bgColor={'#fff'}
+                color={'#2a72e5'}
+                fontSize={'12px'}
+                fontWeight={400}
+                onClick={() => modalButton('withdraw', selectedModalData)}
+              > 
+                Withdraw 
+              </Button>
+            </Flex>
+          ) : (
+            <Flex justifyContent={'center'} flexDir={'column'}>
+              <Flex flexDir={'row'}>
+                <Flex mr={'3px'} color={'#304156'}>
+                  Withdrawable at block
+                </Flex>
+                <Link
+                  isExternal
+                  href={`${ETHERSCAN_LINK}/block/countdown/${withdrawableBlock}`}
+                  color={'#2a72e5'}
+                >
+                  {withdrawableBlock}
+                </Link>
+              </Flex>
+              <Flex ml={'3px'} color={'#828d99'}>
+                {calcCountDown(remainTime.toString())}
+              </Flex>
+            </Flex>
+          )
+        }
+      </Flex>
+    )
+  }
   
   return  (
     <chakra.td
-      key={index}
       w={ getColumnWidthStaking(tableType, type) }
       {...theme.STAKING_HISTORY_TABLE_STYLE.tableRow()}
       {...cell.getCellProps()}
+      justifyContent={ 
+        ((type === 'date' && tableType) || 
+          (tableType === 'Transactions' && type === 'account')) 
+          == 'Update Seigniorage' ? 'start' : 'center'}
     >
-      {tableType === 'Staking' && type === 'account' ? (
+      {tableType === 'Transactions' && type === 'account' ? (
         <Link
           isExternal
-          href={`https://etherscan.io/address/${txSender}`}
+          href={`${ETHERSCAN_LINK}/address/${txSender}`}
           color={'#2a72e5'}
         >
           {trimAddress({
@@ -65,27 +159,27 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
           })}
         </Link>
       ) : ('')}
-      {type === 'txHash' ? (
+      {tableType === 'Update Seigniorage' && type === 'txHash' ? (
         <Link
           isExternal
-          href={`https://etherscan.io/tx/${txId}`}
+          href={`${ETHERSCAN_LINK}/tx/${txId}`}
           color={'#2a72e5'}
+          alignItems={'center'}
+          
         >
-          {trimAddress({
-            address: txId,
-            firstChar: 6,
-            lastChar: 4,
-            dots: '...'
-          })}
+          {index}
         </Link>
       ) : ('')}
-      {tableType === 'Staking' && type === 'txType' ? (
-        //@ts-ignore
-        <Text textAlign={'center'} color={'#304156'} w={'100%'}>
+      {tableType === 'Transactions' && type === 'txType' ? (
+        <Link
+          isExternal
+          href={`${ETHERSCAN_LINK}/tx/${txId}`}
+          color={'#2a72e5'}
+        >
           {typeName}
-        </Text>
+        </Link>
       ) : ('')}
-      {tableType === 'Staking' && type === 'amount' ? (
+      {tableType === 'Transactions' && type === 'amount' ? (
         <Text textAlign={'center'} color={'#304156'} w={'100%'}>
           {convertNumber({
             amount: values,
@@ -94,9 +188,19 @@ export const HistoryTableRow: FC<HistoryTableRowProps> = ({
           })} TON
         </Text>
       ) : ('')}
-      {type === 'date' ? (
+      {type === 'date' && tableType == 'Update Seigniorage' ? (
         <Flex color={'#828d99'}>
-          {moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')}
+          {fromNow(txTime)}
+      </Flex>
+      ) : ''}
+      {type === 'date' && tableType === 'Transactions' ? (
+        <Flex color={'#828d99'}>
+          {
+            typeName === 'Unstake' 
+            && account?.toLowerCase() === sender.toLowerCase() 
+              ? withdrawn ? moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)') : withdrawableTime(blockNo) 
+                : moment.unix(txTime).format('YYYY.MM.DD HH:mm:ss (Z)')
+          }
         </Flex>
       ) : ('')}
     </chakra.td>

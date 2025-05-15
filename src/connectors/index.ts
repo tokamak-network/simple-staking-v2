@@ -32,10 +32,31 @@ const newWalletLink = () =>
     appName: "",
   });
 
+export enum ImageFileType {
+  JPEG = ".jpg",
+  PNG = ".png",
+  SVG = ".svg",
+}
+
 export const injected = new InjectedConnector({
-  supportedChainIds: [1, 4, 5, 11155111],
+  supportedChainIds: [1, 11155111, 5],
 });
 
+export enum SupportedChainId {
+  MAINNET = 1,
+  SEPOLIA = 11155111,
+}
+
+export interface SupportedChainProperties {
+  chainId: SupportedChainId;
+  chainName: keyof typeof SupportedChainId;
+  rpcAddress: string;
+  networkImage: ImageFileType;
+  isTokamak?: boolean;
+  layer: "L1" | "L2";
+  isTOP?: boolean;
+  isTestnet?: boolean;
+}
 
 export const trazorConnector = new TrezorConnector({
   chainId: 1,

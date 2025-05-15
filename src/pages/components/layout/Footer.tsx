@@ -5,9 +5,6 @@ import TWITTER_ICON from '@/assets/images/community/TwitterX.svg';
 import GITHUB_ICON from '@/assets/images/community/github.png';
 import TELEGRAM_ICON from '@/assets/images/community/telegram.png';
 import DISCORD_ICON from '@/assets/images/community/discord.png';
-import FACEBOOK_ICON from '@/assets/images/community/facebook.png';
-// import INSTAGRAM_ICON from '@/assets/images/community/instagram.png';
-import YOUTUBE_ICON from '@/assets/images/community/youtube.png';
 import LINKEDIN_ICON from '@/assets/images/community/linkedin.png';
 
 const iconList = [
@@ -24,18 +21,6 @@ const iconList = [
     url: 'https://github.com/tokamak-network/',
   },
   {
-    icon: FACEBOOK_ICON,
-    url: 'https://www.facebook.com/OntherInc/',
-  },
-  // {
-  //   icon: INSTAGRAM_ICON,
-  //   url: '',
-  // },
-  {
-    icon: YOUTUBE_ICON,
-    url: 'https://www.youtube.com/channel/UCF6vtIKF_0QQVRG983czVEQ/',
-  },
-  {
     icon: TWITTER_ICON,
     url: 'https://twitter.com/tokamak_network/',
   },
@@ -48,6 +33,7 @@ const iconList = [
     url: 'https://medium.com/tokamak-network/',
   },
 ];
+
 function Footer() {
   const [width] = useWindowDimensions();
   const mobile = width && width < 1040;
