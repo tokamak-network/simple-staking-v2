@@ -245,7 +245,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
               </Flex>
               <Flex mt={'3px'} ml={'3px'}>
                 <BasicTooltip 
-                  label={`360-day historical staking APY calculated from seigniorage update frequency, with a ${Number(data.commissionRate.toString()) / 1e25}% commission fee to the DAO candidate`} 
+                  label={`360-day historical staking APY calculated from seigniorage update frequency, with a ${Number(data?.commissionRate.toString()) / 1e25}% commission fee to the DAO candidate`} 
                   width={'430px'}
                 />
               </Flex>
