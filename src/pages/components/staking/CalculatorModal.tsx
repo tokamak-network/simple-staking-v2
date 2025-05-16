@@ -58,7 +58,8 @@ function CalculatorModal() {
       const total = Number(Staked.replace(/,/g, '')) + inputBalance;
 
       const returnRate = calculateRoiBasedonCompound({ totalStakedAmount: total, totalSupply: totalSup, duration });
-      const expectedSeig = inputBalance * (Number(selectedModalData?.apy) / 100);
+      const rate = duration === '1-year' ? selectedModalData?.apy : returnRate
+      const expectedSeig = inputBalance * ( Number(rate) / 100);
 
       // const roi = returnRate.toLocaleString(undefined, { maximumFractionDigits: 2 });
       const rewardTON = expectedSeig.toLocaleString(undefined, { maximumFractionDigits: 2 });
@@ -69,7 +70,7 @@ function CalculatorModal() {
       setRewardUSD(rewardUSD);
       setRewardTON(rewardTON);
       setROI(
-        selectedModalData.apy ?? '-',
+        rate.toLocaleString(undefined, { maximumFractionDigits: 2 }) 
       );
       setType('result');
     }
