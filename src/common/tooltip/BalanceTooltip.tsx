@@ -43,7 +43,7 @@ export const BalanceTooltip = (args: BalanceTooltipProps) => {
   
   const labelDiv = (Number(label) / (types === 'ray' ? ray : wei)).toLocaleString(undefined, {maximumFractionDigits: 18});
   const usdValue = label ? ((+label * tonPriceUSD) / Math.pow(10, types === 'ray' ? 27 : 18)).toLocaleString(undefined, {maximumFractionDigits: 3}) : '0.00';
-
+  
   return (
     <Flex 
       flexDir={mobile ? 'row' : 'row'}
@@ -55,9 +55,11 @@ export const BalanceTooltip = (args: BalanceTooltipProps) => {
         placement={placement ?? "top"}
         pointerEvents={"all"}
         label={
-          // <Flex>
-            `${labelDiv}  |  ${usdValue}`
-          // </Flex>
+            labelDiv === '0' ?
+            '' :
+            <Flex>
+              {labelDiv}  |  ${usdValue}
+            </Flex>
         }
         borderRadius={"3px"}
         color={'#fff'}
@@ -75,7 +77,7 @@ export const BalanceTooltip = (args: BalanceTooltipProps) => {
           <Flex
             onMouseLeave={() => setIsLabelOpen(false)}
             onMouseEnter={() =>  setIsLabelOpen(true)}
-            cursor={'pointer'}
+            cursor={ labelDiv === '0' ? "normal" : 'pointer'}
           >
             {convertedNumber}
           </Flex>
