@@ -44,6 +44,8 @@ export const Unstake = (args: UnstakeProps) => {
   // const [disable, setDisable] = useState<boolean>(true);
   const { withdrawRequests } = useWithdrawRequests()
 
+  console.log(selectedModalData)
+
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIsChecked(e.target.checked);
 
@@ -129,10 +131,12 @@ export const Unstake = (args: UnstakeProps) => {
     }
   }, [DepositManager_CONTRACT, input, selectedModalData, setTx, setTxPending]);
 
+  const operatorBalance = Number(stakeOf.replace(/\,/g,'')) - 1000
+
   return (
     <Flex flexDir={'column'} w={'350px'} alignItems={'center'}>
       <UnstakeBalanceInput 
-        stakedAmount={stakeOf}
+        stakedAmount={selectedModalData.candidate === account?.toLowerCase() ? operatorBalance.toLocaleString(undefined, { maximumFractionDigits: 2 }) : stakeOf}
       />
       <Flex w={'100%'} h={'1px'} my={'25px'} bgColor={'#f4f6f8'} />
       <StakingCheckbox 
