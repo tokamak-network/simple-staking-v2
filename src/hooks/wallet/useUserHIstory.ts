@@ -57,7 +57,7 @@ export function useUserHistory () {
         myHistory = myHistory.sort(function (a: any, b: any) {
           return b.blockNumber - a.blockNumber
         })
-
+        
         if (users[0]) {
           const txData = getTransactionHistory({
             staked: fixedUnstaked,
@@ -78,6 +78,9 @@ export function useUserHistory () {
             datas.push(indexedData)
           }
           setUserHistory(datas)
+          setLoading(false)
+        } else {
+          setUserHistory([])
           setLoading(false)
         }
       }

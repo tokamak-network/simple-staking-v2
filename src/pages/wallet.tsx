@@ -78,7 +78,12 @@ function Wallet () {
               columns={historyColumns}
               data={userHistory}
               isLoading={tableLoading}
-            /> : ''
+            /> : 
+            (
+              <Flex mt={'80px'}>
+                No history
+              </Flex>
+            )
           }
         </Flex>
       </Flex>
