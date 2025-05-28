@@ -270,8 +270,6 @@ function WalletModal() {
     <Modal 
       isOpen={selectedModal === 'wallet'} 
       onClose={closeModal}
-      closeOnOverlayClick={false}
-      closeOnEsc={false}
     >
       {walletView === WALLET_VIEWS.ACCOUNT && account ? (
         <ModalContent
