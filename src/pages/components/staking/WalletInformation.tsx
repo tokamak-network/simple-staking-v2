@@ -118,7 +118,7 @@ export const WalletInformation: FC<WalletInformationProps> = ({
 
   useEffect(() => {
     // console.log(Number(candidateAmount), Number(candidateAmount) > 1000)
-    setMinimumAmount(Number(candidateAmount) > 1000)
+    setMinimumAmount(Number(candidateAmount) >= 1000)
     setMinimumAmountForButton(Number(candidateAmountForButton) > 1000)
 
   }, [account, candidateAmount])

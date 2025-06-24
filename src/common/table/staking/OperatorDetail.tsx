@@ -168,7 +168,7 @@ export const OperatorDetailInfo: FC<OperatorDetailProps> = ({
               color={'#2a72e5'}
               mx={'3px'}
             >
-              1,000.1 TON
+              1,000 TON
             </Link>
             on this layer2 before stakers can receive the staking reward. Users are unable to stake until this minimum collateral requirement is fulfilled.
           </Text>
