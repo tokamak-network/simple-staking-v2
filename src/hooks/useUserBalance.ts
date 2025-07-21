@@ -7,77 +7,71 @@ import { useRecoilState } from "recoil";
 import { txState } from "@/atom/global/transaction";
 
 const useUserBalance = (account: string | null | undefined) => {
-  const { library } = useWeb3React();
-  const {
-    TON_CONTRACT,
-    WTON_CONTRACT,
-  } = useCallContract();
-  const { blockNumber } = useBlockNumber();
-  const [txPending, setTxPending] = useRecoilState(txState);
+	const { library } = useWeb3React();
+	const { TON_CONTRACT, WTON_CONTRACT } = useCallContract();
+	const { blockNumber } = useBlockNumber();
+	const [txPending, setTxPending] = useRecoilState(txState);
 
-  const [userTonBalance, setUserTonBalance] = useState<string | undefined>(
-    undefined
-  );
-  const [userWTonBalance, setUserWTonBalance] = useState<string | undefined>(
-    undefined
-  );
-  
-  const [userETHBalance, setUserETHBalance] = useState<string | undefined>(
-    undefined
-  );
-  
-  useEffect(() => {
-    async function fetchBalance() {
-      try {
-        if (
-          !TON_CONTRACT ||
-          !WTON_CONTRACT
-        ) {
-          return;
-        }
-        const ton = await TON_CONTRACT.balanceOf(account);
-        const wton = await WTON_CONTRACT.balanceOf(account);
-        const eth = await library?.getBalance(account);
-        
-        const convertedTon = convertNumber({
-          amount: ton.toString(),
-          localeString: true,
-        });
-        const convertedWTon = convertNumber({
-          type: "ray",
-          amount: wton.toString(),
-          localeString: true,
-        });
-        const convertedEth = convertNumber({
-          amount: eth.toString(),
-          localeString: true,
-        });
-    
-        setUserTonBalance(convertedTon || "-");
-        setUserWTonBalance(convertedWTon || "-");
-        setUserETHBalance(convertedEth || "-");
-      } catch (e) {
-        console.log("*****fetch balance err*****");
-        console.log(e);
-      }
-    }
-    if (account) {
-      fetchBalance();
-    }
-  }, [
-    account,
-    TON_CONTRACT,
-    WTON_CONTRACT,
-    library,
-    txPending
-    // blockNumber,
-  ]);
+	const [userTonBalance, setUserTonBalance] = useState<string | undefined>(
+		undefined,
+	);
+	const [userWTonBalance, setUserWTonBalance] = useState<string | undefined>(
+		undefined,
+	);
 
-  return {
-    userTonBalance,
-    userWTonBalance,
-    userETHBalance,
-  };
+	const [userETHBalance, setUserETHBalance] = useState<string | undefined>(
+		undefined,
+	);
+
+	useEffect(() => {
+		async function fetchBalance() {
+			try {
+				if (!TON_CONTRACT || !WTON_CONTRACT) {
+					return;
+				}
+				const ton = await TON_CONTRACT.balanceOf(account);
+				const wton = await WTON_CONTRACT.balanceOf(account);
+				const eth = await library?.getBalance(account);
+
+				const convertedTon = convertNumber({
+					amount: ton.toString(),
+					localeString: true,
+				});
+				const convertedWTon = convertNumber({
+					type: "ray",
+					amount: wton.toString(),
+					localeString: true,
+				});
+				const convertedEth = convertNumber({
+					amount: eth.toString(),
+					localeString: true,
+				});
+
+				setUserTonBalance(convertedTon || "-");
+				setUserWTonBalance(convertedWTon || "-");
+				setUserETHBalance(convertedEth || "-");
+			} catch (e) {
+				console.log("*****fetch balance err*****");
+				console.log(e);
+			}
+		}
+		if (account) {
+			fetchBalance();
+		}
+	}, [
+		account,
+		TON_CONTRACT,
+		WTON_CONTRACT,
+		library,
+		txPending,
+		// blockNumber,
+	]);
+
+	return {
+		userTonBalance,
+		userWTonBalance,
+		userETHBalance,
+	};
 };
 
 export default useUserBalance;

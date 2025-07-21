@@ -5,29 +5,29 @@ import { InputKey } from "types/atom";
 import useStakeInput from "./staking/useStakingInput";
 
 function useInput(key: PageKey, subKey: InputKey) {
-  const { inputValue, value, setValue, resetValue } = useStakeInput(subKey);
-  // const {
-  //   inputValue: bondInputValue,
-  //   value: bondValue,
-  //   setValue: setBondvalue,
-  //   resetValue: setResetBondValue,
-  // } = useBondInput(subKey);
+	const { inputValue, value, setValue, resetValue } = useStakeInput(subKey);
+	// const {
+	//   inputValue: bondInputValue,
+	//   value: bondValue,
+	//   setValue: setBondvalue,
+	//   resetValue: setResetBondValue,
+	// } = useBondInput(subKey);
 
-  switch (key) {
-    case "Staking_screen":
-      return {
-        inputValue,
-        value,
-        setValue,
-        setResetValue: resetValue,
-      };
-    default:
-      return {
-        inputValue: undefined,
-        value: undefined,
-        setValue: undefined,
-      };
-  }
+	switch (key) {
+		case "Staking_screen":
+			return {
+				inputValue,
+				value,
+				setValue,
+				setResetValue: resetValue,
+			};
+		default:
+			return {
+				inputValue: undefined,
+				value: undefined,
+				setValue: undefined,
+			};
+	}
 }
 
 export default useInput;

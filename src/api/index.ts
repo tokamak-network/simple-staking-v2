@@ -1,126 +1,130 @@
-import axios from 'axios';
-import { API } from '@/constants';
-import { DEFAULT_NETWORK } from '@/constants/index';
-import { PRICE_API } from '@/constants'
+import axios from "axios";
+import { API } from "@/constants";
+import { DEFAULT_NETWORK } from "@/constants/index";
+import { PRICE_API } from "@/constants";
 
-function createInstatnceCandidate () {
-  return axios.create({
-    baseURL: API,
-  });
+function createInstatnceCandidate() {
+	return axios.create({
+		baseURL: API,
+	});
 }
 
-function priceInstance () {
-  return axios.create({
-    baseURL: PRICE_API,
-  })
+function priceInstance() {
+	return axios.create({
+		baseURL: PRICE_API,
+	});
 }
 
 const price = priceInstance();
 const candidate = createInstatnceCandidate();
 
 export async function getTONPrice() {
-  // const res = await axios.get('https://api.upbit.com/v1/ticker?markets=KRW-tokamak')
-  const res = await price.get('/tonprice')
-  
-  return res.data
+	// const res = await axios.get('https://api.upbit.com/v1/ticker?markets=KRW-tokamak')
+	const res = await price.get("/tonprice");
+
+	return res.data;
 }
 
-export async function getEvent (event: string) {
-  const events = [
-    'ChangedMember',
-    'ChangedSlotMaximum',
-  ];
-  const eventsString = events.join(',');
-  const res = await candidate.get('/events', {
-    params: {
-      chainId: DEFAULT_NETWORK,
-      page: 1,
-      pagesize: 1000,
-      eventNames: eventsString,
-    },
-  });
-  return res.data.datas;
+export async function getEvent(event: string) {
+	const events = ["ChangedMember", "ChangedSlotMaximum"];
+	const eventsString = events.join(",");
+	const res = await candidate.get("/events", {
+		params: {
+			chainId: DEFAULT_NETWORK,
+			page: 1,
+			pagesize: 1000,
+			eventNames: eventsString,
+		},
+	});
+	return res.data.datas;
 }
 
-export async function getDailyStakedTotal () {
-  const res = await candidate.get('/stakedtotals', {
-    params: {
-      chainId: DEFAULT_NETWORK,
-    },
-  });
-  return res.data === '' ? [] : res.data.datas;
+export async function getDailyStakedTotal() {
+	const res = await candidate.get("/stakedtotals", {
+		params: {
+			chainId: DEFAULT_NETWORK,
+		},
+	});
+	return res.data === "" ? [] : res.data.datas;
 }
 
-export async function getOperatorsInfo () {
-  const res = await candidate.get('/layer2s/operators', {
-    params: {
-      chainId: DEFAULT_NETWORK,
-    },
-  });
-  
-  return res.data === '' ? [] : res.data.datas;
+export async function getOperatorsInfo() {
+	const res = await candidate.get("/layer2s/operators", {
+		params: {
+			chainId: DEFAULT_NETWORK,
+		},
+	});
+
+	return res.data === "" ? [] : res.data.datas;
 }
 
-export async function getDailyWalletRewards (account: string, fromDate: string, toDate: string) {
-  const res = await candidate.get('/stakedl2accounts/rewards', {
-    params: {
-      chainId: DEFAULT_NETWORK, 
-      account: account.toLowerCase(),
-      fromDate: fromDate,
-      toDate: toDate,
-    },
-  });
+export async function getDailyWalletRewards(
+	account: string,
+	fromDate: string,
+	toDate: string,
+) {
+	const res = await candidate.get("/stakedl2accounts/rewards", {
+		params: {
+			chainId: DEFAULT_NETWORK,
+			account: account.toLowerCase(),
+			fromDate: fromDate,
+			toDate: toDate,
+		},
+	});
 
-  return res.data === '' ? [] : res.data.datas;
+	return res.data === "" ? [] : res.data.datas;
 }
 
-export async function getEventByLayer2 (layer2: string, eventName: string, pageNum?: number, pageSize?: number) {
-  const res = await candidate.get('/events', {
-    params: {
-      chainId: DEFAULT_NETWORK, 
-      layer2: layer2,
-      eventName: eventName,
-      page: pageNum,
-      pagesize: pageSize,
-    },
-  });
-  return res.data === '' ? [] : res.data.datas;
+export async function getEventByLayer2(
+	layer2: string,
+	eventName: string,
+	pageNum?: number,
+	pageSize?: number,
+) {
+	const res = await candidate.get("/events", {
+		params: {
+			chainId: DEFAULT_NETWORK,
+			layer2: layer2,
+			eventName: eventName,
+			page: pageNum,
+			pagesize: pageSize,
+		},
+	});
+	return res.data === "" ? [] : res.data.datas;
 }
 
-export async function getDepositTotal (account: string) {
-  const res = await candidate.get('/events',
-    {
-      params: {
-        chainId: DEFAULT_NETWORK, 
-        from: account.toLowerCase(),
-        eventName: 'Deposited',
-      },
-    });
-  return res.data === '' ? [] : res.data.datas;
+export async function getDepositTotal(account: string) {
+	const res = await candidate.get("/events", {
+		params: {
+			chainId: DEFAULT_NETWORK,
+			from: account.toLowerCase(),
+			eventName: "Deposited",
+		},
+	});
+	return res.data === "" ? [] : res.data.datas;
 }
 
-export async function getWithdrawTotal (account: string) {
-  const res = await candidate.get('/events',
-    {
-      params: {
-        chainId: DEFAULT_NETWORK, 
-        from: account.toLowerCase(),
-        eventName: 'WithdrawalRequested',
-      },
-    });
-  return res.data === '' ? [] : res.data.datas;
+export async function getWithdrawTotal(account: string) {
+	const res = await candidate.get("/events", {
+		params: {
+			chainId: DEFAULT_NETWORK,
+			from: account.toLowerCase(),
+			eventName: "WithdrawalRequested",
+		},
+	});
+	return res.data === "" ? [] : res.data.datas;
 }
 
-export async function getOperatorUserHistory (layer2: string, from?: string) {
-  const res = await candidate.get('/events', {
-    params: {
-      chainId: DEFAULT_NETWORK,
-      eventNames: 'Deposited,WithdrawalRequested,WithdrawalProcessed',
-      layer2: layer2,
-      from: from,
-    },
-  });
-  return res.data === '' ? [] : res.data.datas;
+export async function getOperatorUserHistory(layer2: string, from?: string) {
+	const res = await candidate.get("/events", {
+		params: {
+			chainId: DEFAULT_NETWORK,
+			eventNames: "Deposited,WithdrawalRequested,WithdrawalProcessed",
+			layer2: layer2,
+			from: from,
+		},
+	});
+	return res.data === "" ? [] : res.data.datas;
 }
 
 // export async function getCommitHistory (layer2: string) {
@@ -137,19 +141,20 @@ export async function getOperatorUserHistory (layer2: string, from?: string) {
 // }
 
 export async function getUSDInfo() {
-  const res = await axios.get('https://api.frankfurter.app/latest?from=KRW')
-  return res.data.rates.USD
+	const res = await axios.get("https://api.frankfurter.app/latest?from=KRW");
+	return res.data.rates.USD;
 }
 
-export async function getTotalSupply () {
-  const res =  await axios.get('https://price.api.tokamak.network/totalsupply');
-  return res.data;
+export async function getTotalSupply() {
+	const res = await axios.get("https://price.api.tokamak.network/totalsupply");
+	return res.data;
 }
 
 export async function getTotalStaked() {
-  const res = await axios.get('https://price.api.tokamak.network/staking/current');
-  return res.data;
-  
+	const res = await axios.get(
+		"https://price.api.tokamak.network/staking/current",
+	);
+	return res.data;
 }
 
 // export async function addHistory (user, history) {

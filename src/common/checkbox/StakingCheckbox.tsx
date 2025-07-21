@@ -1,38 +1,51 @@
-import { useWindowDimensions } from "@/hooks/useWindowDimensions"
-import { chakra, Checkbox, Flex, useCheckbox, Text, Box } from "@chakra-ui/react"
-import Image from "next/image"
-import TICK from '@/assets/images/Tick.svg'
+import { useWindowDimensions } from "@/hooks/useWindowDimensions";
+import {
+	chakra,
+	Checkbox,
+	Flex,
+	useCheckbox,
+	Text,
+	Box,
+} from "@chakra-ui/react";
+import Image from "next/image";
+import TICK from "@/assets/images/Tick.svg";
 
 type StakingCheckboxProps = {
-  content: string
-  handleCheckboxChange: any
-  isChecked: boolean
-}
+	content: string;
+	handleCheckboxChange: any;
+	isChecked: boolean;
+};
 
 export const StakingCheckbox = (args: StakingCheckboxProps) => {
-  const { content, handleCheckboxChange, isChecked } = args
-  
-  const [width] = useWindowDimensions();
-  const mobile = width && width < 1040;
+	const { content, handleCheckboxChange, isChecked } = args;
 
-  return (
-    <Flex w={mobile ? '100%' : ''} mt={mobile ? '24px' : ''}>
-      <Checkbox 
-        isChecked={isChecked}
-        bgColor={'#fff'} 
-        borderRadius={'4px'} 
-        border={'solid 1px #e7ebf2'} 
-        w={'18px'}
-        h={'18px'}
-        mt={'5px'}
-        onChange={handleCheckboxChange}
-      />
-      <Flex ml={'10px'} fontSize={'12px'} fontWeight={'normal'} color={'#3e495c'} w={mobile ? '90%' : '271px'}>
-        {content}
-      </Flex>
-    </Flex>
-  )
-}
+	const [width] = useWindowDimensions();
+	const mobile = width && width < 1040;
+
+	return (
+		<Flex w={mobile ? "100%" : ""} mt={mobile ? "24px" : ""}>
+			<Checkbox
+				isChecked={isChecked}
+				bgColor={"#fff"}
+				borderRadius={"4px"}
+				border={"solid 1px #e7ebf2"}
+				w={"18px"}
+				h={"18px"}
+				mt={"5px"}
+				onChange={handleCheckboxChange}
+			/>
+			<Flex
+				ml={"10px"}
+				fontSize={"12px"}
+				fontWeight={"normal"}
+				color={"#3e495c"}
+				w={mobile ? "90%" : "271px"}
+			>
+				{content}
+			</Flex>
+		</Flex>
+	);
+};
 
 // export const StakingCheckbox = (props: StakingCheckboxProps) => {
 //   const { content, handleCheckboxChange } = props
@@ -50,7 +63,7 @@ export const StakingCheckbox = (args: StakingCheckboxProps) => {
 //         alignItems='center'
 //         gridColumnGap={2}
 //         maxW='320px'
-        
+
 //         px={3}
 //         py={1}
 //         cursor='pointer'

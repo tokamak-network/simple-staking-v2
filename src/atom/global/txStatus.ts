@@ -1,21 +1,21 @@
-import { atom, selector } from 'recoil';
-import { v1 } from 'uuid';
+import { atom, selector } from "recoil";
+import { v1 } from "uuid";
 
 const txProcessState = atom({
-  key: `txProcessState/${v1()}`,
-  default: {
-    hash: '',
-    txType: '',
-  },
+	key: `txProcessState/${v1()}`,
+	default: {
+		hash: "",
+		txType: "",
+	},
 });
 
 const txProcessStatusState = selector({
-  key: `txStatus/${v1()}`, // unique ID (with respect to other atoms/selectors)
-  get: ({ get }) => {
-    const currentTxState = get(txProcessState);
+	key: `txStatus/${v1()}`, // unique ID (with respect to other atoms/selectors)
+	get: ({ get }) => {
+		const currentTxState = get(txProcessState);
 
-    return currentTxState;
-  },
+		return currentTxState;
+	},
 });
 
 export { txProcessState, txProcessStatusState };

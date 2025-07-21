@@ -1,13 +1,12 @@
-
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 import DesktopStaking from "./components/staking/DesktopStaking";
 import MobileStaking from "./components/staking/mobile/MobileStaking";
 
 function Staking() {
-  const [width] = useWindowDimensions();
-  const mobile = width && width < 1040;
+	const [width] = useWindowDimensions();
+	const mobile = width && width < 1040;
 
-  return <>{mobile ? <MobileStaking /> : <DesktopStaking />}</>;
+	return <>{mobile ? <MobileStaking /> : <DesktopStaking />}</>;
 }
 
 export default Staking;

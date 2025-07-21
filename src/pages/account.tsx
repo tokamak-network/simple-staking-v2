@@ -7,30 +7,21 @@ import AccountTab from "./components/account/AccountTab";
 import MyHistoryTable from "@/common/table/wallet/MyHistoryTable";
 import { MyHistoryTab } from "./components/account/MyHistoryTab";
 import {
-  Column,
-  useExpanded,
-  usePagination,
-  useTable,
-  useSortBy,
+	Column,
+	useExpanded,
+	usePagination,
+	useTable,
+	useSortBy,
 } from "react-table";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
-import AccountMobile from './components/account/AccountMobile';
-import Wallet from '@/pages/wallet';
+import AccountMobile from "./components/account/AccountMobile";
+import Wallet from "@/pages/wallet";
 
 function Account() {
-  const [width] = useWindowDimensions();
-  const mobile = width && width < 1040;
+	const [width] = useWindowDimensions();
+	const mobile = width && width < 1040;
 
-  return (
-    <>
-      {
-        !mobile ?
-        <Wallet /> :
-        <AccountMobile />              
-      }
-    </>
-  )
-  
+	return <>{!mobile ? <Wallet /> : <AccountMobile />}</>;
 }
 
 export default Account;

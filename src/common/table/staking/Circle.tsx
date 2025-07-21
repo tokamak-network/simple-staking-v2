@@ -1,38 +1,29 @@
-import { Box, Flex } from "@chakra-ui/react"
+import { Box, Flex } from "@chakra-ui/react";
 
 export const getCircle = (kind: string) => {
-  return (
-    <Flex alignContent={'center'} alignItems={'center'} mr={'10px'}>
-      {kind === 'layer2' ? (
-        <Flex flexDir={'column'}>
-          <Box
-            w={'8px'}
-            h={'8px'}
-            borderRadius={50}
-            bg={'#eb597b'}
-            mb={'4px'}
-          />
-          <Box
-            w={'8px'}
-            h={'8px'}
-            borderRadius={50}
-            bg={'#00c766'}
-          />
-        </Flex>
-      ) : (
-        <Box
-          w={'8px'}
-          h={'8px'}
-          borderRadius={50}
-          bg={
-            kind === 'member' 
-              ? '#2a72e5'
-              : '#00c766'  
-          } 
-        />
-      )}
-    </Flex>
-  )
-}
+	return (
+		<Flex alignContent={"center"} alignItems={"center"} mr={"10px"}>
+			{kind === "layer2" ? (
+				<Flex flexDir={"column"}>
+					<Box
+						w={"8px"}
+						h={"8px"}
+						borderRadius={50}
+						bg={"#eb597b"}
+						mb={"4px"}
+					/>
+					<Box w={"8px"} h={"8px"} borderRadius={50} bg={"#00c766"} />
+				</Flex>
+			) : (
+				<Box
+					w={"8px"}
+					h={"8px"}
+					borderRadius={50}
+					bg={kind === "member" ? "#2a72e5" : "#00c766"}
+				/>
+			)}
+		</Flex>
+	);
+};
 
-export default getCircle
+export default getCircle;

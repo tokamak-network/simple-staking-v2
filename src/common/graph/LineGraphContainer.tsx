@@ -1,42 +1,42 @@
-import { Flex, Text } from '@chakra-ui/react';
-import { FC } from 'react';
+import { Flex, Text } from "@chakra-ui/react";
+import { FC } from "react";
 
-import { Line } from 'react-chartjs-2';
+import { Line } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	PointElement,
+	LineElement,
+	Title,
+	Tooltip,
+	Legend,
+} from "chart.js";
 
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
+	CategoryScale,
+	LinearScale,
+	PointElement,
+	LineElement,
+	Title,
+	Tooltip,
+	Legend,
 );
 
 type LineGraphContainerProps = {
-  options: any;
-  data: any;
+	options: any;
+	data: any;
 };
 
 export const LineGraphContainer: FC<LineGraphContainerProps> = ({
-  options,
-  data,
+	options,
+	data,
 }) => {
-  return (
-    <Flex w={'982px'} p={'30px 30px 15px 30px'}>
-      <Line options={options} data={data} style={{ width: '854px' }} />
-    </Flex>
-  );
+	return (
+		<Flex w={"982px"} p={"30px 30px 15px 30px"}>
+			<Line options={options} data={data} style={{ width: "854px" }} />
+		</Flex>
+	);
 };
 
-export default LineGraphContainer
+export default LineGraphContainer;

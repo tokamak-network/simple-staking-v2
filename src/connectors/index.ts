@@ -8,62 +8,62 @@ import { TrezorConnector } from "@web3-react/trezor-connector";
 
 const POLLING_INTERVAL = 12000;
 const RPC_URLS = {
-  1: "https://mainnet.infura.io/v3/34448178b25e4fbda6d80f4da62afba2",
-  11155111: "https://sepolia.infura.io/v3/34448178b25e4fbda6d80f4da62afba2",
+	1: "https://mainnet.infura.io/v3/34448178b25e4fbda6d80f4da62afba2",
+	11155111: "https://sepolia.infura.io/v3/34448178b25e4fbda6d80f4da62afba2",
 };
 
 export const network = new NetworkConnector({
-  urls: { 1: RPC_URLS[1], 11155111: RPC_URLS[11155111] },
-  defaultChainId: 1,
+	urls: { 1: RPC_URLS[1], 11155111: RPC_URLS[11155111] },
+	defaultChainId: 1,
 });
 
 const newWalletConnect = () =>
-  new WalletConnectConnector({
-    rpc: { 1: RPC_URLS[1] },
-    bridge: "https://bridge.walletconnect.org",
-    qrcode: true,
-    //@ts-ignore
-    pollingInterval: POLLING_INTERVAL,
-  });
+	new WalletConnectConnector({
+		rpc: { 1: RPC_URLS[1] },
+		bridge: "https://bridge.walletconnect.org",
+		qrcode: true,
+		//@ts-ignore
+		pollingInterval: POLLING_INTERVAL,
+	});
 
 const newWalletLink = () =>
-  new WalletLinkConnector({
-    url: RPC_URLS[1],
-    appName: "",
-  });
+	new WalletLinkConnector({
+		url: RPC_URLS[1],
+		appName: "",
+	});
 
 export enum ImageFileType {
-  JPEG = ".jpg",
-  PNG = ".png",
-  SVG = ".svg",
+	JPEG = ".jpg",
+	PNG = ".png",
+	SVG = ".svg",
 }
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [1, 11155111, 5],
+	supportedChainIds: [1, 11155111, 5],
 });
 
 export enum SupportedChainId {
-  MAINNET = 1,
-  SEPOLIA = 11155111,
+	MAINNET = 1,
+	SEPOLIA = 11155111,
 }
 
 export interface SupportedChainProperties {
-  chainId: SupportedChainId;
-  chainName: keyof typeof SupportedChainId;
-  rpcAddress: string;
-  networkImage: ImageFileType;
-  isTokamak?: boolean;
-  layer: "L1" | "L2";
-  isTOP?: boolean;
-  isTestnet?: boolean;
+	chainId: SupportedChainId;
+	chainName: keyof typeof SupportedChainId;
+	rpcAddress: string;
+	networkImage: ImageFileType;
+	isTokamak?: boolean;
+	layer: "L1" | "L2";
+	isTOP?: boolean;
+	isTestnet?: boolean;
 }
 
 export const trazorConnector = new TrezorConnector({
-  chainId: 1,
-  url: RPC_URLS[1],
-  pollingInterval: POLLING_INTERVAL,
-  manifestEmail: "ale.s@onther.io",
-  manifestAppUrl: "http://localhost:3000",
+	chainId: 1,
+	url: RPC_URLS[1],
+	pollingInterval: POLLING_INTERVAL,
+	manifestEmail: "ale.s@onther.io",
+	manifestAppUrl: "http://localhost:3000",
 });
 
 // Fixes https://github.com/NoahZinsmeister/web3-react/issues/124
@@ -72,9 +72,9 @@ export let walletconnect = newWalletConnect();
 export let walletlink = newWalletLink();
 
 export const resetWalletConnect = () => {
-  walletconnect = newWalletConnect();
+	walletconnect = newWalletConnect();
 };
 
 export const resetWalletLink = () => {
-  walletlink = newWalletLink();
+	walletlink = newWalletLink();
 };

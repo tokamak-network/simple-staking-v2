@@ -1,17 +1,17 @@
-import { atom, selector } from 'recoil';
-import { v1 } from 'uuid';
+import { atom, selector } from "recoil";
+import { v1 } from "uuid";
 
 const toggleState = atom({
-  key: `checkValues/${v1()}`,
-  default: 'My',
+	key: `checkValues/${v1()}`,
+	default: "My",
 });
 
 const selectedToggleState = selector({
-  key: `selectedValues/${v1()}`, // unique ID (with respect to other atoms/selectors)
-  get: ({ get }) => {
-    const selectedToggleState = get(toggleState);
-    return selectedToggleState;
-  },
+	key: `selectedValues/${v1()}`, // unique ID (with respect to other atoms/selectors)
+	get: ({ get }) => {
+		const selectedToggleState = get(toggleState);
+		return selectedToggleState;
+	},
 });
 
 export { toggleState, selectedToggleState };

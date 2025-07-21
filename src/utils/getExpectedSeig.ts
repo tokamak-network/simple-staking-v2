@@ -8,99 +8,127 @@ const DEFAULT_PSEIG_RATE = toBN("400000000000000000000000000"); // 0.4 in ray
 const DEFAULT_TOTALSUPPLY_OF_TON = toBN("50000000000000000000000000000000000"); // 50,000,000 in ray
 
 export const calculateExpectedSeig = (
-  fromBlockNumber: BN,
-  toBlockNumber: BN,
-  userStakedAmount: BN,
-  totalStakedAmount: BN,
-  totalSupplyOfTON: BN,
-  pseigRate: BN
+	fromBlockNumber: BN,
+	toBlockNumber: BN,
+	userStakedAmount: BN,
+	totalStakedAmount: BN,
+	totalSupplyOfTON: BN,
+	pseigRate: BN,
 ): BN => {
-  const seigPerBlock = SEIG_PER_BLOCK;
-  const blockNumbers = toBlockNumber.sub(fromBlockNumber);
+	const seigPerBlock = SEIG_PER_BLOCK;
+	const blockNumbers = toBlockNumber.sub(fromBlockNumber);
 
-  const totalMaxSeig = seigPerBlock.mul(blockNumbers);
-  const totalBasicSeig = totalMaxSeig.mul(totalStakedAmount).div(totalSupplyOfTON);
-  const unstakedSeig = totalMaxSeig.sub(totalBasicSeig);
-  const totalPseig = unstakedSeig.mul(pseigRate).div(RAY);
+	const totalMaxSeig = seigPerBlock.mul(blockNumbers);
+	const totalBasicSeig = totalMaxSeig
+		.mul(totalStakedAmount)
+		.div(totalSupplyOfTON);
+	const unstakedSeig = totalMaxSeig.sub(totalBasicSeig);
+	const totalPseig = unstakedSeig.mul(pseigRate).div(RAY);
 
-  const userBasicSeig = totalBasicSeig.mul(userStakedAmount).div(totalStakedAmount);
-  const userPseig = totalPseig.mul(userStakedAmount).div(totalStakedAmount);
+	const userBasicSeig = totalBasicSeig
+		.mul(userStakedAmount)
+		.div(totalStakedAmount);
+	const userPseig = totalPseig.mul(userStakedAmount).div(totalStakedAmount);
 
-  return userBasicSeig.add(userPseig);
+	return userBasicSeig.add(userPseig);
 };
 
 export const calculateExpectedSeigWithCommission = (
-  fromBlockNumber: BN,
-  toBlockNumber: BN,
-  userStakedAmount: BN,
-  totalStakedAmount: BN,
-  totalSupplyOfTON: BN,
-  pseigRate: BN,
-  commissionRate: BN,
-  isCommissionRateNegative: boolean,
-  operatorStakedAmount: BN,
-  totalStakedAmountOnLayer2: BN,
-  isOperator: boolean
+	fromBlockNumber: BN,
+	toBlockNumber: BN,
+	userStakedAmount: BN,
+	totalStakedAmount: BN,
+	totalSupplyOfTON: BN,
+	pseigRate: BN,
+	commissionRate: BN,
+	isCommissionRateNegative: boolean,
+	operatorStakedAmount: BN,
+	totalStakedAmountOnLayer2: BN,
+	isOperator: boolean,
 ): BN => {
-  if (fromBlockNumber === toBlockNumber ||
-    totalStakedAmount === toBN("0") ||
-    totalStakedAmountOnLayer2 === toBN("0")) {
-    return toBN("0");
-  }
+	if (
+		fromBlockNumber === toBlockNumber ||
+		totalStakedAmount === toBN("0") ||
+		totalStakedAmountOnLayer2 === toBN("0")
+	) {
+		return toBN("0");
+	}
 
-  if (commissionRate === new BN("0")) {
-    const userSeig = calculateExpectedSeig(
-      fromBlockNumber,
-      toBlockNumber,
-      userStakedAmount,
-      totalStakedAmount,
-      totalSupplyOfTON,
-      pseigRate
-    );
+	if (commissionRate === new BN("0")) {
+		const userSeig = calculateExpectedSeig(
+			fromBlockNumber,
+			toBlockNumber,
+			userStakedAmount,
+			totalStakedAmount,
+			totalSupplyOfTON,
+			pseigRate,
+		);
 
-    return userSeig;
-  }
+		return userSeig;
+	}
 
-  const seigPerBlock = SEIG_PER_BLOCK;
-  const blockNumbers = toBlockNumber.sub(fromBlockNumber);
+	const seigPerBlock = SEIG_PER_BLOCK;
+	const blockNumbers = toBlockNumber.sub(fromBlockNumber);
 
-  const totalMaxSeig = seigPerBlock.mul(blockNumbers);
-  const totalBasicSeig = totalMaxSeig.mul(totalStakedAmount).div(totalSupplyOfTON);
-  const unstakedSeig = totalMaxSeig.sub(totalBasicSeig);
-  const totalPseig = unstakedSeig.mul(pseigRate).div(RAY);
+	const totalMaxSeig = seigPerBlock.mul(blockNumbers);
+	const totalBasicSeig = totalMaxSeig
+		.mul(totalStakedAmount)
+		.div(totalSupplyOfTON);
+	const unstakedSeig = totalMaxSeig.sub(totalBasicSeig);
+	const totalPseig = unstakedSeig.mul(pseigRate).div(RAY);
 
-  const totalSeigOnLayer2 = calculateExpectedSeig(
-    fromBlockNumber,
-    toBlockNumber,
-    totalStakedAmountOnLayer2,
-    totalStakedAmount,
-    totalSupplyOfTON,
-    pseigRate
-  );
+	const totalSeigOnLayer2 = calculateExpectedSeig(
+		fromBlockNumber,
+		toBlockNumber,
+		totalStakedAmountOnLayer2,
+		totalStakedAmount,
+		totalSupplyOfTON,
+		pseigRate,
+	);
 
-  if (isCommissionRateNegative === false) {
-    const commission = totalSeigOnLayer2.mul(commissionRate).div(RAY);
-    const restSeig = totalSeigOnLayer2.sub(commission);
+	if (isCommissionRateNegative === false) {
+		const commission = totalSeigOnLayer2.mul(commissionRate).div(RAY);
+		const restSeig = totalSeigOnLayer2.sub(commission);
 
-    if (isOperator === true) {
-      return restSeig.mul(operatorStakedAmount).div(totalStakedAmountOnLayer2).add(commission);
-    } else {
-      return restSeig.mul(userStakedAmount).div(totalStakedAmountOnLayer2);
-    }
-  } else {
-    const operatorRate = operatorStakedAmount.mul(RAY).div(totalStakedAmountOnLayer2);
-    const commission = totalSeigOnLayer2.mul(operatorRate).div(RAY).mul(commissionRate).div(RAY);
-    const delegatorSeigs = operatorRate === RAY
-      ? commission
-      : commission.mul(RAY).div(RAY.sub(operatorRate));
-    const burnAmount = operatorRate === RAY
-      ? commission
-      : commission.add(delegatorSeigs.mul(operatorRate).div(RAY));
+		if (isOperator === true) {
+			return restSeig
+				.mul(operatorStakedAmount)
+				.div(totalStakedAmountOnLayer2)
+				.add(commission);
+		} else {
+			return restSeig.mul(userStakedAmount).div(totalStakedAmountOnLayer2);
+		}
+	} else {
+		const operatorRate = operatorStakedAmount
+			.mul(RAY)
+			.div(totalStakedAmountOnLayer2);
+		const commission = totalSeigOnLayer2
+			.mul(operatorRate)
+			.div(RAY)
+			.mul(commissionRate)
+			.div(RAY);
+		const delegatorSeigs =
+			operatorRate === RAY
+				? commission
+				: commission.mul(RAY).div(RAY.sub(operatorRate));
+		const burnAmount =
+			operatorRate === RAY
+				? commission
+				: commission.add(delegatorSeigs.mul(operatorRate).div(RAY));
 
-    if (isOperator === true) {
-      return totalSeigOnLayer2.add(delegatorSeigs).mul(operatorStakedAmount).div(totalStakedAmountOnLayer2).sub(burnAmount);
-    } else {
-      return totalStakedAmountOnLayer2.add(totalSeigOnLayer2).add(delegatorSeigs).mul(userStakedAmount).div(totalStakedAmountOnLayer2).sub(userStakedAmount);
-    }
-  }
+		if (isOperator === true) {
+			return totalSeigOnLayer2
+				.add(delegatorSeigs)
+				.mul(operatorStakedAmount)
+				.div(totalStakedAmountOnLayer2)
+				.sub(burnAmount);
+		} else {
+			return totalStakedAmountOnLayer2
+				.add(totalSeigOnLayer2)
+				.add(delegatorSeigs)
+				.mul(userStakedAmount)
+				.div(totalStakedAmountOnLayer2)
+				.sub(userStakedAmount);
+		}
+	}
 };

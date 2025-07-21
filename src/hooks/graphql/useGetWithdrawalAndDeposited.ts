@@ -3,16 +3,17 @@ import { useQuery } from "@apollo/client";
 import ms from "ms";
 import { useMemo } from "react";
 
-export function useGetWithdrawalAndDeposited () {
-  const { data, loading, error } = useQuery(GET_WITHDRAWAL_AND_DEPOSITED, {
-    pollInterval: ms(`10s`),
-  });
+export function useGetWithdrawalAndDeposited() {
+	const { data, loading, error } = useQuery(GET_WITHDRAWAL_AND_DEPOSITED, {
+		pollInterval: ms(`10s`),
+	});
 
-  return useMemo(
-    () => ({
-      error,
-      loading,
-      withdrawalAndDepositeds: data?.withdrawalAndDepositeds
-    }), [data, error, loading]
-  )
+	return useMemo(
+		() => ({
+			error,
+			loading,
+			withdrawalAndDepositeds: data?.withdrawalAndDepositeds,
+		}),
+		[data, error, loading],
+	);
 }

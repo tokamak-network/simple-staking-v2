@@ -100,7 +100,7 @@ export const GET_MY_STAKED = gql`
       stakedAmount
     }
   }
-`
+`;
 
 export const GET_CHANGED_MEMBER = gql`
   query GetChangedMember($id: String) {    
@@ -111,4 +111,4 @@ export const GET_CHANGED_MEMBER = gql`
       timestamp
     }
 }
-`
+`;

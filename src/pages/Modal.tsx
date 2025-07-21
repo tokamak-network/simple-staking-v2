@@ -8,18 +8,18 @@ import CalculatorModal from "./components/staking/CalculatorModal";
 import StakeModal from "./components/staking/StakeModal";
 
 export default function Modals() {
-  // const { mobileView } = useMediaView();
+	// const { mobileView } = useMediaView();
 
-  return (
-    <>
-      <ConfirmationTX />
-      <StakeModal />
-      <WithdrawModal />
-      <WalletModal />
-      <CalculatorModal />
-      <WalletModal />
-      <ClaimModal />
-      <RestakeModal />
-    </>
-  );
+	return (
+		<>
+			<ConfirmationTX />
+			<StakeModal />
+			<WithdrawModal />
+			<WalletModal />
+			<CalculatorModal />
+			<WalletModal />
+			<ClaimModal />
+			<RestakeModal />
+		</>
+	);
 }

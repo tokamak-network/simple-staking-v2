@@ -1,8 +1,8 @@
-import { Global } from '@emotion/react'
+import { Global } from "@emotion/react";
 
 const Fonts = () => (
-  <Global 
-    styles={`
+	<Global
+		styles={`
       /* nanum */
       @font-face {
         font-family: 'NanumSquareEB',
@@ -11,7 +11,7 @@ const Fonts = () => (
         src: url('https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css') format('woff');
       }
     `}
-  />
-)
+	/>
+);
 
-export default Fonts
+export default Fonts;

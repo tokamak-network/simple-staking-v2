@@ -1,4 +1,4 @@
-import { orderBy } from 'lodash';
+import { orderBy } from "lodash";
 import { gql } from "@apollo/client";
 
 export const GET_GRAPH = gql`
@@ -20,4 +20,4 @@ query GetFactory($id: String) {
     numOfCandidate
   }
 }
-`
+`;
