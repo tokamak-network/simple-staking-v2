@@ -111,9 +111,9 @@ function L2Information({ data }: L2InformationProps) {
 			})
 		: "0.00";
 
-	//@ts-ignore
 	const stakableAmount =
-		floatParser(claimableAmount) + floatParser(expectedSeigs);
+		Number(floatParser(String(claimableAmount ?? "0")) || 0) +
+		Number(floatParser(String(expectedSeigs ?? "0")) || 0);
 	const stakable = stakableAmount.toLocaleString(undefined, {
 		maximumFractionDigits: 2,
 	});
