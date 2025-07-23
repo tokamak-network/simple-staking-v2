@@ -65,9 +65,7 @@ export function useDailyStaked() {
 				}
 			}
 			//@ts-ignore
-			const setData = [...new Set(filledData.map(JSON.stringify))].map(
-				JSON.parse,
-			);
+			const setData = [...new Set(filledData.map(JSON.stringify))].map((item) => JSON.parse(item));
 
 			const concatData = setData;
 			const graphdata = concatData?.map((item: any, index) => {
