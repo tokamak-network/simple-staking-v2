@@ -350,8 +350,6 @@ export const StakingInformation: FC<StakingInformationProps> = ({ data }) => {
 				)}
 			</Flex>
 
-			
-			{/* 커뮤니티 버전 안내 모달 */}
 			<Modal isOpen={showCommunityModal} onClose={() => setShowCommunityModal(false)} isCentered>
 				<ModalOverlay />
 				<ModalContent 
@@ -386,7 +384,7 @@ export const StakingInformation: FC<StakingInformationProps> = ({ data }) => {
 							>
 								Unstake & Withdraw are available on Community Version.
 							</Text>
-							<Link href={`https://community.staking.tokamak.network/${candidateContracts}`} isExternal>
+							<Link href={`https://community.staking.tokamak.network`} isExternal>
 								<Button
 									bg={"#2a72e5"}
 									color={"white"}

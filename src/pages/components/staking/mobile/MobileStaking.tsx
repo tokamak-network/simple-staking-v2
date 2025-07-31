@@ -16,7 +16,7 @@ function MobileStaking() {
 	const theme = useTheme();
 	const [selectedTab, setSelectedTab] = useState("Stake");
 	const { candidateList } = useCandidateList();
-	console.log(candidateList);
+	
 	const [, setValue] = useRecoilState(inputState);
 	// const { account } = useWeb3React();
 
