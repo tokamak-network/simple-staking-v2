@@ -7,6 +7,11 @@ import {
 	Link,
 	RadioGroup,
 	Radio,
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalBody,
+	Box,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import useUserBalance from "@/hooks/useUserBalance";
@@ -42,6 +47,7 @@ import { SelectOperator } from "./components/SelectOperators";
 import { BalanceDisplay } from "./components/BalanceDisplay";
 import { selectedModalData } from "@/atom/global/modal";
 import RestakeDrawer from "./MobileRestakeModal";
+import CLOSE_ICON from "assets/images/popup-close-icon.svg";
 
 function MobileStakingComponent(props: { operatorList: any; title: string }) {
 	const { account, library } = useWeb3React();
@@ -60,6 +66,7 @@ function MobileStakingComponent(props: { operatorList: any; title: string }) {
 	const [minimumAmount, setMinimumAmount] = useState<boolean>(true);
 	const [txPending, setTxPending] = useRecoilState(txState);
 	const [tx, setTx] = useState();
+	const [showCommunityModal, setShowCommunityModal] = useState(false);
 	const { withdrawable, withdrawableLength } = useWithdrawable(
 		selectedOp?.candidateContract,
 	);
@@ -166,31 +173,16 @@ function MobileStakingComponent(props: { operatorList: any; title: string }) {
 	}, [library, selectedOp]);
 
 	useEffect(() => {
-		let disable = true;
-		if (selectedOp) {
-			if (title === "Stake") {
-				disable =
+		const isDisabled = 
 					userTonBalance === "0.00" ||
 					userWTonBalance === "0.00" ||
 					amount === 0 ||
 					Number.isNaN(amount) ||
 					amount === undefined ||
-					(tonB && tokenType === "TON" && amount > tonB ? true : false) ||
-					(wtonB && tokenType === "WTON" && amount > wtonB ? true : false) ||
+					(tonB && tokenType === "TON" && amount > tonB) ||
+					(wtonB && tokenType === "WTON" && amount > wtonB) ||
 					!minimumAmount;
-			} else if (title === "Unstake") {
-				disable =
-					(staked ? amount > Number(staked) : false) ||
-					amount === 0 ||
-					Number.isNaN(amount) ||
-					amount === undefined;
-			} else if (title === "Restake") {
-				disable = pending === "0.00";
-			} else {
-				disable = withdrawable === "0.00" || selectedOp === undefined;
-			}
-		}
-		setDisabled(disable);
+		setDisabled(isDisabled);
 	}, [title, amount, tokenType, minimumAmount]);
 
 	const staked = selectedOp?.stakeOf
@@ -201,192 +193,231 @@ function MobileStakingComponent(props: { operatorList: any; title: string }) {
 			})
 		: "0.00";
 
+	const handleButtonClick = () => {
+		if (title === "Stake") {
+			// 커뮤니티 버전 안내 모달 표시
+			setShowCommunityModal(true);
+		} else {
+			// 기존 로직 (다른 기능들)
+			if (title === "Stake" && tokenType === "TON") {
+				staking(
+					userTonBalance,
+					TON_CONTRACT,
+					amount,
+					selectedOp.candidateContract,
+					setTxPending,
+					setTx,
+				);
+			} else if (title === "Stake" && tokenType === "WTON") {
+				staking(
+					userWTonBalance,
+					WTON_CONTRACT,
+					amount,
+					selectedOp.candidateContract,
+					setTxPending,
+					setTx,
+				);
+			}
+		}
+	};
+
 	return (
-		<Flex w="100%" px="20px" flexDir={"column"}>
-			{title === "Withdraw" ? (
-				<MobileWithdraw
+		<>
+			<Flex w="100%" px="20px" flexDir={"column"}>
+				{title === "Withdraw" ? (
+					<MobileWithdraw
+						operatorList={operatorList}
+						setSelectedOp={setSelectedOp}
+						selectedOp={selectedOp}
+					/>
+				) : (
+					<Flex
+						w="100%"
+						// h="205px"
+						border={"1px solid #e7ebf2"}
+						borderRadius="10px"
+						pt="10px"
+						pb="15px"
+						px="20px"
+						flexDir={"column"}
+					>
+						<BalanceDisplay
+							tonBalance={
+								title === "Stake"
+									? userTonBalance
+									: title === "Unstake"
+										? staked
+										: pending
+							}
+							wtonBalance={userWTonBalance}
+						/>
+						<MobileCustomInput
+							w={"147px"}
+							placeHolder={"0.00"}
+							type={title}
+							maxValue={
+								title === "Stake" && tokenType === "TON"
+									? userTonBalance
+									: title === "Stake" && tokenType === "WTON"
+										? userWTonBalance
+										: staked
+							}
+							setAmount={setAmount}
+							setTokenType={setTokenType}
+							tokenType={tokenType}
+							maxButton={true}
+						/>
+						<SelectOperator
+							selectedOp={selectedOp}
+							onOpen={onOpen}
+							setSelectedOp={setSelectedOp}
+							operatorList={operatorList}
+						/>
+						<Button
+							mt="15px"
+							bg="blue.200"
+							color={"white.100"}
+							_focus={{
+								bg: "blue.200",
+							}}
+							_active={{
+								bg: "blue.200",
+							}}
+							_hover={{
+								bg: "blue.200",
+							}}
+							isDisabled={disabled}
+							_disabled={{ bg: "#86929d", color: "#e9edf1" }}
+							onClick={handleButtonClick}
+						>
+							{title}
+						</Button>
+						<WarningMessage
+							title={title}
+							selectedOp={selectedOp}
+							minimumAmount={minimumAmount}
+							account={account}
+						/>
+					</Flex>
+				)}
+				{account ? (
+					<Flex flexDir={"column"}>
+						<MobileInfo
+							title={"Your Staked"}
+							value={stakedAmount ? stakedAmount : "0.00"}
+						/>
+						<MobileInfo
+							title={"Unclaimed Staking Reward"}
+							value={userExpectedSeig ? userExpectedSeig : "-"}
+						/>
+					</Flex>
+				) : (
+					""
+				)}
+				{userExpectedSeig && userExpectedSeig !== "0.00" && account ? (
+					<Flex
+						fontSize={"11px"}
+						color={"#2a72e5"}
+						cursor={"pointer"}
+						justifyContent={"end"}
+						mt={"12px"}
+						onClick={() => updateSeig()}
+					>
+						Update seigniorage
+					</Flex>
+				) : (
+					""
+				)}
+				{account ? (
+					<MobileInfo
+						title={"Pending Withdrawal"}
+						value={pending ? pending : "-"}
+					/>
+				) : (
+					""
+				)}
+				{pending && pending !== "0.00" && account ? (
+					<Flex
+						fontSize={"11px"}
+						color={"#2a72e5"}
+						cursor={"pointer"}
+						justifyContent={"end"}
+						mt={"12px"}
+						onClick={() => openDrawer("Restake")}
+					>
+						Restake
+					</Flex>
+				) : (
+					""
+				)}
+				<OperatorSelect
 					operatorList={operatorList}
+					onClose={onClose}
+					isOpen={isOpen}
 					setSelectedOp={setSelectedOp}
+				/>
+				<RestakeDrawer
+					onClose={onClose}
+					isOpen={isOpen}
+					type={type}
 					selectedOp={selectedOp}
 				/>
-			) : (
-				<Flex
-					w="100%"
-					// h="205px"
-					border={"1px solid #e7ebf2"}
-					borderRadius="10px"
-					pt="10px"
-					pb="15px"
-					px="20px"
-					flexDir={"column"}
+			</Flex>
+
+			{/* 커뮤니티 버전 안내 모달 */}
+			<Modal isOpen={showCommunityModal} onClose={() => setShowCommunityModal(false)} isCentered>
+				<ModalOverlay />
+				<ModalContent 
+					bg={"#fff"} 
+					w={"400px"} 
+					borderRadius={"15px"} 
+					boxShadow={"0 2px 6px 0 rgba(61, 73, 93, 0.1)"}
 				>
-					<BalanceDisplay
-						tonBalance={
-							title === "Stake"
-								? userTonBalance
-								: title === "Unstake"
-									? staked
-									: pending
-						}
-						wtonBalance={userWTonBalance}
-					/>
-					<MobileCustomInput
-						w={"147px"}
-						placeHolder={"0.00"}
-						type={title}
-						maxValue={
-							title === "Stake" && tokenType === "TON"
-								? userTonBalance
-								: title === "Stake" && tokenType === "WTON"
-									? userWTonBalance
-									: staked
-						}
-						setAmount={setAmount}
-						setTokenType={setTokenType}
-						tokenType={tokenType}
-						maxButton={true}
-					/>
-					<SelectOperator
-						selectedOp={selectedOp}
-						onOpen={onOpen}
-						setSelectedOp={setSelectedOp}
-						operatorList={operatorList}
-					/>
-					<Button
-						mt="15px"
-						bg="blue.200"
-						color={"white.100"}
-						_focus={{
-							bg: "blue.200",
-						}}
-						_active={{
-							bg: "blue.200",
-						}}
-						_hover={{
-							bg: "blue.200",
-						}}
-						isDisabled={disabled}
-						_disabled={{ bg: "#86929d", color: "#e9edf1" }}
-						onClick={() =>
-							title === "Stake" && tokenType === "TON"
-								? staking(
-										userTonBalance,
-										TON_CONTRACT,
-										amount,
-										selectedOp.candidateContract,
-										setTxPending,
-										setTx,
-									)
-								: title === "Stake" && tokenType === "WTON"
-									? staking(
-											userWTonBalance,
-											WTON_CONTRACT,
-											amount,
-											selectedOp.candidateContract,
-											setTxPending,
-											setTx,
-										)
-									: title === "Unstake"
-										? unstake(
-												account,
-												selectedOp.candidateContract,
-												DepositManager_CONTRACT,
-												setTxPending,
-												setTx,
-												amount,
-											)
-										: title === "Restake"
-											? reStaking(
-													account,
-													DepositManager_CONTRACT,
-													selectedOp.candidateContract,
-													setTxPending,
-													setTx,
-												)
-											: withdraw(
-													account,
-													selectedOp.candidateContract,
-													DepositManager_CONTRACT,
-													withdrawableLength,
-													tokenType === "TON" ? true : false,
-													setTxPending,
-													setTx,
-												)
-						}
-					>
-						{title}
-					</Button>
-					<WarningMessage
-						title={title}
-						selectedOp={selectedOp}
-						minimumAmount={minimumAmount}
-						account={account}
-					/>
-				</Flex>
-			)}
-			{account ? (
-				<Flex flexDir={"column"}>
-					<MobileInfo
-						title={"Your Staked"}
-						value={stakedAmount ? stakedAmount : "0.00"}
-					/>
-					<MobileInfo
-						title={"Unclaimed Staking Reward"}
-						value={userExpectedSeig ? userExpectedSeig : "-"}
-					/>
-				</Flex>
-			) : (
-				""
-			)}
-			{userExpectedSeig && userExpectedSeig !== "0.00" && account ? (
-				<Flex
-					fontSize={"11px"}
-					color={"#2a72e5"}
-					cursor={"pointer"}
-					justifyContent={"end"}
-					mt={"12px"}
-					onClick={() => updateSeig()}
-				>
-					Update seigniorage
-				</Flex>
-			) : (
-				""
-			)}
-			{account ? (
-				<MobileInfo
-					title={"Pending Withdrawal"}
-					value={pending ? pending : "-"}
-				/>
-			) : (
-				""
-			)}
-			{pending && pending !== "0.00" && account ? (
-				<Flex
-					fontSize={"11px"}
-					color={"#2a72e5"}
-					cursor={"pointer"}
-					justifyContent={"end"}
-					mt={"12px"}
-					onClick={() => openDrawer("Restake")}
-				>
-					Restake
-				</Flex>
-			) : (
-				""
-			)}
-			<OperatorSelect
-				operatorList={operatorList}
-				onClose={onClose}
-				isOpen={isOpen}
-				setSelectedOp={setSelectedOp}
-			/>
-			<RestakeDrawer
-				onClose={onClose}
-				isOpen={isOpen}
-				type={type}
-				selectedOp={selectedOp}
-			/>
-		</Flex>
+					<ModalBody py={"30px"} pos={"relative"}>
+						<Flex
+							pos={"absolute"}
+							right={"-30px"}
+							top={"-30px"}
+							cursor={"pointer"}
+							onClick={() => setShowCommunityModal(false)}
+						>
+							<Image src={CLOSE_ICON} alt={"CLOSE_ICON"} />
+						</Flex>
+						<Flex flexDir={"column"} alignItems={"center"} textAlign={"center"}>
+							<Text 
+								color={"#3d495d"} 
+								fontSize={"18px"} 
+								fontWeight={"bold"} 
+								mb={"15px"}
+							>
+								Tokamak Staking is transitioning to the Community Version.
+							</Text>
+							<Text 
+								color={"#86929d"} 
+								fontSize={"14px"} 
+								mb={"25px"}
+							>
+								Staking is available on Community Version.
+							</Text>
+							<Link href={`https://community.staking.tokamak.network`} isExternal>
+								<Button
+									bg={"#2a72e5"}
+									color={"white"}
+									_hover={{ bg: "#1e5bb8" }}
+									w={"200px"}
+									h={"40px"}
+									borderRadius={"8px"}
+									fontSize={"14px"}
+									fontWeight={500}
+								>
+									Go to Community Version
+								</Button>
+							</Link>
+						</Flex>
+					</ModalBody>
+				</ModalContent>
+			</Modal>
+		</>
 	);
 }
 
