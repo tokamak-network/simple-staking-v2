@@ -45,57 +45,57 @@ const dropdownList = [
 	},
 ];
 
-const navItemList = [
-	// {
-	//   link: "home",
-	//   name: "Home"
-	// },
-	{
-		link: "staking",
-		name: "Staking",
-	},
-	{
-		link: "account",
-		name: "Account",
-	},
-];
+// const navItemList = [
+// 	// {
+// 	//   link: "home",
+// 	//   name: "Home"
+// 	// },
+// 	// {
+// 	// 	link: "staking",
+// 	// 	name: "Staking",
+// 	// },
+// 	// {
+// 	// 	link: "account",
+// 	// 	name: "Account",
+// 	// },
+// ];
 
-const NavItem = () => {
-	const [isHover, setIsHover] = useState<number | undefined>(undefined);
-	const router = useRouter();
-	const { pathname } = router;
+// const NavItem = () => {
+// 	const [isHover, setIsHover] = useState<number | undefined>(undefined);
+// 	const router = useRouter();
+// 	const { pathname } = router;
 
-	return (
-		<>
-			{navItemList.map((item, index) => {
-				const capitalLinkName =
-					item.link.charAt(0).toUpperCase() + item.link.slice(1);
-				return (
-					<Link href={`${item.link}`} key={`nav-item-${index}`} passHref>
-						<Flex
-							alignItems="space-between"
-							justifyContent={"center"}
-							color={
-								isHover === index
-									? pathname === "/" + item.link
-										? "#2a72e5"
-										: "#3e495c"
-									: pathname === "/" + item.link
-										? "#2a72e5"
-										: "#3e495c"
-							}
-							cursor={"pointer"}
-							onMouseEnter={() => setIsHover(index)}
-							onMouseLeave={() => setIsHover(undefined)}
-						>
-							{item.name}
-						</Flex>
-					</Link>
-				);
-			})}
-		</>
-	);
-};
+// 	return (
+// 		<>
+// 			{navItemList.map((item, index) => {
+// 				const capitalLinkName =
+// 					item.link.charAt(0).toUpperCase() + item.link.slice(1);
+// 				return (
+// 					<Link href={`${item.link}`} key={`nav-item-${index}`} passHref>
+// 						<Flex
+// 							alignItems="space-between"
+// 							justifyContent={"center"}
+// 							color={
+// 								isHover === index
+// 									? pathname === "/" + item.link
+// 										? "#2a72e5"
+// 										: "#3e495c"
+// 									: pathname === "/" + item.link
+// 										? "#2a72e5"
+// 										: "#3e495c"
+// 							}
+// 							cursor={"pointer"}
+// 							onMouseEnter={() => setIsHover(index)}
+// 							onMouseLeave={() => setIsHover(undefined)}
+// 						>
+// 							{item.name}
+// 						</Flex>
+// 					</Link>
+// 				);
+// 			})}
+// 		</>
+// 	);
+// };
 
 const MenuLinks: React.FC<MenuLinksProps> = ({ account, walletopen }) => {
 	const theme = useTheme();
@@ -250,7 +250,7 @@ export const Header = () => {
 					w={"200px"}
 					mr={"15%"}
 				>
-					<NavItem />
+					{/* <NavItem /> */}
 					{/* <Menu 
             onClose={() => {
               setMenuState(false);

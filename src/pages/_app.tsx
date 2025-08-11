@@ -22,7 +22,6 @@ import { apolloClient } from "../apollo";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Modals from "./Modal";
 import "@/css/spinner.css";
-import Notice from "./components/layout/Notice";
 // import NetworkModal from './components/global/NetworkModal';
 // import 'css/gradient.css';
 // import 'css/modalOverlay.css';
@@ -63,7 +62,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 										alignItems={"center"}
 										justifyContent={"space-between"}
 									>
-										<Notice />
 										<Header
 										// walletopen={() => handleWalletModalOpen("wallet")}
 										/>
