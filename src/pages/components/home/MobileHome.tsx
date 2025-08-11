@@ -1,89 +1,68 @@
-import { Box, Flex, Text, useMediaQuery, useTheme } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, Link } from "@chakra-ui/react";
 import Image from "next/image";
-import Sub_Logo from "assets/images/Sub_Logo.png";
-import BalanceCard from "./BalanceCard";
-import useUserBalance from "@/hooks/useUserBalance";
-import { useWeb3React } from "@web3-react/core";
-import { useEffect, useState } from "react";
-import { convertNumber } from "utils/number";
-import { useCandidateList } from "../../../hooks/staking/useCandidateList";
+import CLOSE_ICON from "assets/images/popup-close-icon.svg";
 
 function MobileHome() {
-	const theme = useTheme();
-	const { account } = useWeb3React();
-
-	const { userTonBalance, userWTonBalance } = useUserBalance(account);
-	const { candidateList } = useCandidateList();
-	const [totalStaked, setTotalStaked] = useState("0");
-	const [expectedReward, setExpectedReward] = useState("0");
-
-	useEffect(() => {
-		const ops = candidateList;
-		if (account) {
-			const staked = ops.map((operator: any) => {
-				const convert = convertNumber({
-					amount: operator.stakeOf,
-					type: "ray",
-				});
-				return convert ? Number(convert) : 0;
-			});
-			const sum = staked.reduce((partialSum, a) => partialSum + a, 0);
-
-			setTotalStaked(
-				sum.toLocaleString(undefined, { maximumFractionDigits: 2 }),
-			);
-			const seigs = ops.map((candidate: any) => {
-				return candidate.expSeig;
-			});
-
-			const expected = seigs.reduce((partialSum, a) => partialSum + a, 0);
-
-			const convertedWTon = expected
-				? expected.toLocaleString(undefined, { maximumFractionDigits: 2 })
-				: "0.00";
-			convertedWTon && setExpectedReward(convertedWTon);
-		}
-	}, [candidateList, expectedReward]);
-
 	return (
 		<Flex
 			w="100%"
-			height={"100%"}
-			pt="40px"
-			alignItems={"center"}
+			h="100vh"
 			flexDir="column"
+			justifyContent="center"
+			alignItems="center"
+			bg="#f4f6f8"
+			px="20px"
 		>
-			<Image src={Sub_Logo} alt="Sub_Logo" height={60} width={170} />
-			<Text
-				fontSize={"24px"}
-				fontWeight={"bold"}
-				mt="25px"
-				color="gray.700"
-				fontFamily={theme.fonts.roboto}
-			>
-				Tokamak Network
-			</Text>
-			<Text
-				fontSize={"12px"}
+			<Box
+				bg="white"
+				w="100%"
+				maxW="400px"
+				borderRadius="16px"
+				boxShadow="0 4px 20px rgba(0, 0, 0, 0.1)"
+				p="30px"
 				textAlign="center"
-				mt="5px"
-				mb="30px"
-				w="200px"
-				color={"gray.300"}
 			>
-				Stake your TON to earn rewards
-			</Text>
-			<BalanceCard
-				title={"Your TON Balance"}
-				amount={userTonBalance ? userTonBalance : "0"}
-				wtonAmount={userWTonBalance ? userWTonBalance : "0"}
-			/>
-			<BalanceCard
-				title={"Total Staked Amount"}
-				subTitle={"Expected Rewards"}
-				amount={totalStaked.toString()}
-				subAmount={expectedReward}
-			/>
+				<Box mb="25px">
+					<Text
+						color="#3d495d"
+						fontSize="24px"
+						fontWeight="bold"
+						mb="12px"
+					>
+						Tokamak Staking Service
+					</Text>
+					<Text
+						color="#86929d"
+						fontSize="14px"
+						lineHeight="1.5"
+					>
+						This service has been discontinued and moved to the Community Version.
+					</Text>
+				</Box>
+
+				<Link href="https://community.staking.tokamak.network" isExternal>
+					<Button
+						bg="#2a72e5"
+						color="white"
+						_hover={{ bg: "#1e5bb8" }}
+						w="100%"
+						h="44px"
+						borderRadius="10px"
+						fontSize="15px"
+						fontWeight="600"
+						mb="16px"
+					>
+						Go to Community Version
+					</Button>
+				</Link>
+
+				<Text
+					color="#86929d"
+					fontSize="11px"
+				>
+					Thank you for using Tokamak Staking. We look forward to seeing you on the Community Version!
+				</Text>
+			</Box>
 		</Flex>
 	);
 }
